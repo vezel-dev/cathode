@@ -1,0 +1,6 @@
+*.user
+.vs
+.vscode
+/src/*/bin
+/src/*/obj
+/pkg

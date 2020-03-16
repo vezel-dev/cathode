@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "dotnet-format": {
+      "version": "3.3.111304",
+      "commands": [
+        "dotnet-format"
+      ]
+    },
+    "dotnet-sos": {
+      "version": "3.1.57502",
+      "commands": [
+        "dotnet-sos"
+      ]
+    },
+    "dotnet-symbol": {
+      "version": "1.0.105301",
+      "commands": [
+        "dotnet-symbol"
+      ]
+    },
+    "dotnet-trace": {
+      "version": "3.1.57502",
+      "commands": [
+        "dotnet-trace"
+      ]
+    }
+  }
+}

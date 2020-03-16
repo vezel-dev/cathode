@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>System.Terminal</AssemblyName>
+    <IsPackable>true</IsPackable>
+    <RootNamespace>System</RootNamespace>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\..\LICENSE.md; ..\..\README.md">
+      <Pack>true</Pack>
+      <PackagePath>%(Filename)%(Extension)</PackagePath>
+      <Visible>true</Visible>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub">
+      <PrivateAssets>all</PrivateAssets>
+      <Version>$(MicrosoftSourceLinkGitHubVersion)</Version>
+    </PackageReference>
+    <PackageReference Include="Mono.Posix.NETStandard">
+      <Version>$(MonoPosixNETStandardVersion)</Version>
+    </PackageReference>
+    <PackageReference Include="Vanara.PInvoke.Kernel32">
+      <Version>$(VanaraPInvokeKernel32)</Version>
+    </PackageReference>
+  </ItemGroup>
+</Project>

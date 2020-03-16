@@ -1,0 +1,38 @@
+<Project>
+  <PropertyGroup>
+    <Company>Alex Rønne Petersen</Company>
+    <Copyright>ISC License (No Attribution)</Copyright>
+    <Description>A terminal-centric replacement for System.Console.</Description>
+    <Product>System.Terminal</Product>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyVersion>0.1.0</AssemblyVersion>
+    <FileVersion>0.1.0</FileVersion>
+    <Version>0.1.0</Version>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+    <DebugType>portable</DebugType>
+    <Deterministic>true</Deterministic>
+    <LangVersion>preview</LangVersion>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Authors>$(Company)</Authors>
+    <IncludeSource>true</IncludeSource>
+    <IncludeSymbolsInSingleFile>true</IncludeSymbolsInSingleFile>
+    <IsPackable>false</IsPackable>
+    <IsPublishable>false</IsPublishable>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+  <PropertyGroup>
+    <MicrosoftSourceLinkGitHubVersion>1.0.0</MicrosoftSourceLinkGitHubVersion>
+    <MonoPosixNETStandardVersion>1.0.0</MonoPosixNETStandardVersion>
+    <VanaraPInvokeKernel32>3.2.0</VanaraPInvokeKernel32>
+  </PropertyGroup>
+</Project>

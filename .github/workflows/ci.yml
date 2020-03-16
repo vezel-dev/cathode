@@ -1,0 +1,42 @@
+name: CI
+on:
+  push:
+  pull_request:
+    types:
+    - edited
+    - opened
+    - reopened
+    - synchronize
+jobs:
+  ci:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        configuration:
+        - Debug
+        - Release
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@master
+    - name: Set up .NET Core
+      uses: actions/setup-dotnet@master
+      with:
+        dotnet-version: 3.1.102
+    - name: Install dependencies
+      shell: pwsh
+      run: |
+        npm install markdownlint-cli -g
+        dotnet tool restore
+        dotnet restore
+    - name: Lint Markdown files
+      shell: pwsh
+      run: |
+        markdownlint *.md
+    - name: Build project
+      shell: pwsh
+      run: |
+        dotnet build -c ${{ matrix.configuration }}
+    - name: Pack project
+      shell: pwsh
+      run: |
+        dotnet pack -c ${{ matrix.configuration }}
