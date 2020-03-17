@@ -9,12 +9,6 @@ namespace System
 
         public const int InvalidSize = -1;
 
-        public static Encoding InEncoding { get; } = Console.InputEncoding;
-
-        public static Encoding OutEncoding { get; } = Console.OutputEncoding;
-
-        public static Encoding ErrorEncoding { get; } = Console.OutputEncoding;
-
         public static void EncodeAndExecute(ReadOnlySpan<char> value, Encoding encoding, EncodedAction action)
         {
             var len = encoding.GetByteCount(value);

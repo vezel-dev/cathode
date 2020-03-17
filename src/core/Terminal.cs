@@ -57,21 +57,6 @@ namespace System
 
         static string _title = string.Empty;
 
-        static Terminal()
-        {
-            // Try to prevent Console/Terminal intermixing from breaking stuff. This should prevent
-            // basic read/write calls on Console from calling into internal classes like ConsolePal
-            // and StdInReader (which in turn call System.Native functions that, among other things,
-            // change terminal settings).
-            //
-            // There are still many problematic properties and methods beyond these, but there is
-            // not much we can do about those.
-
-            Console.SetIn(TextReader.Null);
-            Console.SetOut(TextWriter.Null);
-            Console.SetError(TextWriter.Null);
-        }
-
         static void Sequence(string value)
         {
             if (!StdOut.IsRedirected)

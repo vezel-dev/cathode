@@ -189,14 +189,11 @@ namespace System.IO
 
         public const int ErrorHandle = 2;
 
-        public ITerminalReader StdIn { get; } =
-            new UnixTerminalReader(InHandle, TerminalUtility.InEncoding, "input");
+        public ITerminalReader StdIn { get; } = new UnixTerminalReader(InHandle, _encoding, "input");
 
-        public ITerminalWriter StdOut { get; } =
-            new UnixTerminalWriter(OutHandle, TerminalUtility.OutEncoding, "output");
+        public ITerminalWriter StdOut { get; } = new UnixTerminalWriter(OutHandle, _encoding, "output");
 
-        public ITerminalWriter StdError { get; } =
-            new UnixTerminalWriter(ErrorHandle, TerminalUtility.ErrorEncoding, "error");
+        public ITerminalWriter StdError { get; } = new UnixTerminalWriter(ErrorHandle, _encoding, "error");
 
         public int Width { get; private set; } = TerminalUtility.InvalidSize;
 
@@ -204,6 +201,8 @@ namespace System.IO
 
         static readonly IUnixTerminalInterop _interop = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ?
             (IUnixTerminalInterop)new LinuxTerminalInterop() : new OSXTerminalInterop();
+
+        static readonly Encoding _encoding = Encoding.UTF8;
 
         readonly object _rawLock = new object();
 
