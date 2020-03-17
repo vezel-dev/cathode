@@ -9,6 +9,8 @@ namespace System
 
         public const int InvalidSize = -1;
 
+        public static Encoding Encoding { get; } = Encoding.UTF8;
+
         public static void EncodeAndExecute(ReadOnlySpan<char> value, Encoding encoding, EncodedAction action)
         {
             var len = encoding.GetByteCount(value);

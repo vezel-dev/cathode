@@ -187,20 +187,21 @@ namespace System.IO
 
         public static UnixTerminalDriver Instance { get; } = new UnixTerminalDriver();
 
-        public ITerminalReader StdIn { get; } = new UnixTerminalReader(InHandle, _encoding, "input");
+        public ITerminalReader StdIn { get; } =
+            new UnixTerminalReader(InHandle, TerminalUtility.Encoding, "input");
 
-        public ITerminalWriter StdOut { get; } = new UnixTerminalWriter(OutHandle, _encoding, "output");
+        public ITerminalWriter StdOut { get; } =
+            new UnixTerminalWriter(OutHandle, TerminalUtility.Encoding, "output");
 
-        public ITerminalWriter StdError { get; } = new UnixTerminalWriter(ErrorHandle, _encoding, "error");
+        public ITerminalWriter StdError { get; } =
+            new UnixTerminalWriter(ErrorHandle, TerminalUtility.Encoding, "error");
 
         public int Width { get; private set; } = TerminalUtility.InvalidSize;
 
         public int Height { get; private set; } = TerminalUtility.InvalidSize;
 
-        static readonly IUnixTerminalInterop _interop = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ?
+        readonly IUnixTerminalInterop _interop = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ?
             (IUnixTerminalInterop)LinuxTerminalInterop.Instance : OSXTerminalInterop.Instance;
-
-        static readonly Encoding _encoding = Encoding.UTF8;
 
         readonly object _rawLock = new object();
 

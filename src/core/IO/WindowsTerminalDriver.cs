@@ -191,13 +191,14 @@ namespace System.IO
             GetBufferInfo() is Kernel32.CONSOLE_SCREEN_BUFFER_INFO i ?
                 (_height = i.srWindow.Bottom - i.srWindow.Top + 1) : _height;
 
-        static readonly Encoding _encoding = Encoding.UTF8;
+        readonly WindowsTerminalReader _in =
+            new WindowsTerminalReader(InHandle, TerminalUtility.Encoding, "input");
 
-        readonly WindowsTerminalReader _in = new WindowsTerminalReader(InHandle, _encoding, "input");
+        readonly WindowsTerminalWriter _out =
+            new WindowsTerminalWriter(OutHandle, TerminalUtility.Encoding, "output");
 
-        readonly WindowsTerminalWriter _out = new WindowsTerminalWriter(OutHandle, _encoding, "output");
-
-        readonly WindowsTerminalWriter _error = new WindowsTerminalWriter(ErrorHandle, _encoding, "error");
+        readonly WindowsTerminalWriter _error =
+            new WindowsTerminalWriter(ErrorHandle, TerminalUtility.Encoding, "error");
 
         int _width = TerminalUtility.InvalidSize;
 
@@ -205,8 +206,10 @@ namespace System.IO
 
         WindowsTerminalDriver()
         {
-            _ = Kernel32.SetConsoleCP((uint)_encoding.CodePage);
-            _ = Kernel32.SetConsoleOutputCP((uint)_encoding.CodePage);
+            var encoding = TerminalUtility.Encoding;
+
+            _ = Kernel32.SetConsoleCP((uint)encoding.CodePage);
+            _ = Kernel32.SetConsoleOutputCP((uint)encoding.CodePage);
 
             var inMode =
                 Kernel32.CONSOLE_INPUT_MODE.ENABLE_PROCESSED_INPUT |
