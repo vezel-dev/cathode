@@ -30,9 +30,14 @@ namespace Sample
             Terminal.OutLine("Height: {0}", Terminal.Height);
             Terminal.OutLine();
 
-            Terminal.Out("Reading: ");
-            Terminal.OutLine("Result: {0}", Terminal.ReadLine());
-            Terminal.OutLine();
+            for (var i = 0; i < 2; i++)
+            {
+                Terminal.Out("Reading: ");
+                Terminal.OutLine("Result: {0}", Terminal.ReadLine());
+                Terminal.OutLine();
+            }
+
+            Terminal.Out("Switching to raw mode: ");
 
             Terminal.SetRawMode(true, true);
 
@@ -41,6 +46,8 @@ namespace Sample
 
             Terminal.SetRawMode(false, true);
 
+            Terminal.OutLine();
+            Terminal.OutLine();
             Terminal.OutLine("Exiting...");
 
             Thread.Sleep(1000);
