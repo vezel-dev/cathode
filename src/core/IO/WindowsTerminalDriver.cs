@@ -24,6 +24,21 @@ namespace System.IO
                 Name = name;
             }
 
+            protected static unsafe bool IsHandleValid(HFILE handle, bool write)
+            {
+                if (handle.IsNull || handle.IsInvalid)
+                    return false;
+
+                if (write)
+                {
+                    byte dummy = 0;
+
+                    return Kernel32.WriteFile(handle, (IntPtr)(&dummy), 0, out _, IntPtr.Zero);
+                }
+
+                return true;
+            }
+
             public Kernel32.CONSOLE_SCREEN_BUFFER_INFO? GetBufferInfo()
             {
                 return Kernel32.GetConsoleScreenBufferInfo(Handle, out var info) ? info : default;
@@ -42,7 +57,7 @@ namespace System.IO
                 : base(handle, encoding, name)
             {
                 Stream = new TerminalInputStream(this);
-                IsValid = IsValid(handle, false);
+                IsValid = IsHandleValid(handle, false);
             }
 
             public Kernel32.CONSOLE_INPUT_MODE? GetMode()
@@ -106,7 +121,7 @@ namespace System.IO
                 : base(handle, encoding, name)
             {
                 Stream = new TerminalOutputStream(this);
-                IsValid = IsValid(handle, true);
+                IsValid = IsHandleValid(handle, true);
             }
 
             public Kernel32.CONSOLE_OUTPUT_MODE? GetMode()
@@ -154,6 +169,8 @@ namespace System.IO
             }
         }
 
+        public static WindowsTerminalDriver Instance { get; } = new WindowsTerminalDriver();
+
         static HFILE InHandle => Kernel32.GetStdHandle(Kernel32.StdHandleType.STD_INPUT_HANDLE);
 
         static HFILE OutHandle => Kernel32.GetStdHandle(Kernel32.StdHandleType.STD_OUTPUT_HANDLE);
@@ -186,14 +203,11 @@ namespace System.IO
 
         int _height = TerminalUtility.InvalidSize;
 
-        static WindowsTerminalDriver()
+        WindowsTerminalDriver()
         {
             _ = Kernel32.SetConsoleCP((uint)_encoding.CodePage);
             _ = Kernel32.SetConsoleOutputCP((uint)_encoding.CodePage);
-        }
 
-        public WindowsTerminalDriver()
-        {
             var inMode =
                 Kernel32.CONSOLE_INPUT_MODE.ENABLE_PROCESSED_INPUT |
                 Kernel32.CONSOLE_INPUT_MODE.ENABLE_LINE_INPUT |
@@ -211,21 +225,6 @@ namespace System.IO
             // fail if there is no console attached, but that is OK.
             _ = _in.AddMode(inMode);
             _ = _out.AddMode(outMode) || _error.AddMode(outMode);
-        }
-
-        static unsafe bool IsValid(HFILE handle, bool write)
-        {
-            if (handle.IsNull || handle.IsInvalid)
-                return false;
-
-            if (write)
-            {
-                byte dummy = 0;
-
-                return Kernel32.WriteFile(handle, (IntPtr)(&dummy), 0, out _, IntPtr.Zero);
-            }
-
-            return true;
         }
 
         Kernel32.CONSOLE_SCREEN_BUFFER_INFO? GetBufferInfo()

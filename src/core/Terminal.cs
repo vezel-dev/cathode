@@ -44,7 +44,7 @@ namespace System
         }
 
         static readonly ITerminalDriver _driver = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ?
-            (ITerminalDriver)new WindowsTerminalDriver() : new UnixTerminalDriver();
+            (ITerminalDriver)WindowsTerminalDriver.Instance : UnixTerminalDriver.Instance;
 
         static readonly BufferedStream _rawStream = new BufferedStream(StdIn.Stream, ReaderBufferSize);
 

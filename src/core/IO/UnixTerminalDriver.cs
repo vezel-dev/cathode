@@ -8,26 +8,34 @@ namespace System.IO
 {
     sealed class UnixTerminalDriver : ITerminalDriver
     {
-        sealed class UnixTerminalReader : ITerminalReader
+        abstract class UnixTerminalHandle : ITerminalHandle
         {
             public int Handle { get; }
 
             public Encoding Encoding { get; }
 
-            public bool IsRedirected => IsRedirected(Handle);
+            public bool IsRedirected => !Syscall.isatty(Handle);
 
-            public TerminalInputStream Stream { get; }
+            protected string Name { get; }
 
-            readonly object _lock = new object();
+            protected object Lock { get; } = new object();
 
-            readonly string _name;
-
-            public UnixTerminalReader(int handle, Encoding encoding, string name)
+            protected UnixTerminalHandle(int handle, Encoding encoding, string name)
             {
-                Stream = new TerminalInputStream(this);
                 Handle = handle;
                 Encoding = encoding;
-                _name = name;
+                Name = name;
+            }
+        }
+
+        sealed class UnixTerminalReader : UnixTerminalHandle, ITerminalReader
+        {
+            public TerminalInputStream Stream { get; }
+
+            public UnixTerminalReader(int handle, Encoding encoding, string name)
+                : base(handle, encoding, name)
+            {
+                Stream = new TerminalInputStream(this);
             }
 
             public unsafe int Read(Span<byte> data)
@@ -37,7 +45,7 @@ namespace System.IO
 
                 long ret;
 
-                lock (_lock)
+                lock (Lock)
                 {
                     while (true)
                     {
@@ -87,7 +95,7 @@ namespace System.IO
                                 err = Errno.EBADF;
 
                             throw new TerminalException(
-                                $"Could not read from standard {_name}: {Stdlib.strerror(err)}");
+                                $"Could not read from standard {Name}: {Stdlib.strerror(err)}");
                         }
                     }
                 }
@@ -96,26 +104,14 @@ namespace System.IO
             }
         }
 
-        sealed class UnixTerminalWriter : ITerminalWriter
+        sealed class UnixTerminalWriter : UnixTerminalHandle, ITerminalWriter
         {
-            public int Handle { get; }
-
-            public Encoding Encoding { get; }
-
-            public bool IsRedirected => IsRedirected(Handle);
-
             public TerminalOutputStream Stream { get; }
 
-            readonly object _lock = new object();
-
-            readonly string _name;
-
             public UnixTerminalWriter(int handle, Encoding encoding, string name)
+                : base(handle, encoding, name)
             {
                 Stream = new TerminalOutputStream(this);
-                Handle = handle;
-                Encoding = encoding;
-                _name = name;
             }
 
             public unsafe void Write(ReadOnlySpan<byte> data)
@@ -123,7 +119,7 @@ namespace System.IO
                 if (data.IsEmpty)
                     return;
 
-                lock (_lock)
+                lock (Lock)
                 {
                     var progress = 0;
 
@@ -176,7 +172,7 @@ namespace System.IO
                                 continue;
                             }
 
-                            throw new TerminalException($"Could not write to standard {_name}: {Stdlib.strerror(err)}");
+                            throw new TerminalException($"Could not write to standard {Name}: {Stdlib.strerror(err)}");
                         }
                     }
                 }
@@ -189,6 +185,8 @@ namespace System.IO
 
         public const int ErrorHandle = 2;
 
+        public static UnixTerminalDriver Instance { get; } = new UnixTerminalDriver();
+
         public ITerminalReader StdIn { get; } = new UnixTerminalReader(InHandle, _encoding, "input");
 
         public ITerminalWriter StdOut { get; } = new UnixTerminalWriter(OutHandle, _encoding, "output");
@@ -200,13 +198,13 @@ namespace System.IO
         public int Height { get; private set; } = TerminalUtility.InvalidSize;
 
         static readonly IUnixTerminalInterop _interop = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ?
-            (IUnixTerminalInterop)new LinuxTerminalInterop() : new OSXTerminalInterop();
+            (IUnixTerminalInterop)LinuxTerminalInterop.Instance : OSXTerminalInterop.Instance;
 
         static readonly Encoding _encoding = Encoding.UTF8;
 
         readonly object _rawLock = new object();
 
-        public UnixTerminalDriver()
+        UnixTerminalDriver()
         {
             void RefreshWindowSize()
             {
@@ -245,11 +243,6 @@ namespace System.IO
                 IsBackground = true,
                 Name = $"Terminal Signal Listener",
             }.Start();
-        }
-
-        static bool IsRedirected(int handle)
-        {
-            return !Syscall.isatty(handle);
         }
 
         public void SetRawMode(bool raw, bool discard)

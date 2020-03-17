@@ -105,6 +105,8 @@ namespace System.IO
 
 #pragma warning restore IDE1006
 
+        public static OSXTerminalInterop Instance { get; } = new OSXTerminalInterop();
+
         public (int Width, int Height)? WindowSize =>
             ioctl(UnixTerminalDriver.OutHandle, (UIntPtr)TIOCGWINSZ, out var w) == 0 ? (w.ws_col, w.ws_row) : default;
 
@@ -112,10 +114,11 @@ namespace System.IO
 
         termios? _current;
 
-        public OSXTerminalInterop()
+        OSXTerminalInterop()
         {
             if (tcgetattr(UnixTerminalDriver.InHandle, out var settings) == 0)
             {
+                // These values are usually the default, but we set them just to be safe.
                 settings.c_cc[VTIME] = 0;
                 settings.c_cc[VMIN] = 1;
 
