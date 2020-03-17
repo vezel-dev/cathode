@@ -43,19 +43,46 @@ namespace System
             }
         }
 
-        static readonly ITerminalDriver _driver = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ?
-            (ITerminalDriver)WindowsTerminalDriver.Instance : UnixTerminalDriver.Instance;
+        static readonly ITerminalDriver _driver;
 
-        static readonly BufferedStream _rawStream = new BufferedStream(StdIn.Stream, ReaderBufferSize);
+        static readonly BufferedStream _rawStream;
 
-        static readonly StreamReader _lineReader =
-            new StreamReader(StdIn.Stream, StdIn.Encoding, false, ReaderBufferSize, true);
+        static readonly StreamReader _lineReader;
 
         static readonly object _titleLock = new object();
 
         static readonly object _readLock = new object();
 
         static string _title = string.Empty;
+
+        static Terminal()
+        {
+            // Accessing this property has no particularly important effect on Windows, but it does
+            // do something important on Unix: If a terminal is attached, it will force Console to
+            // initialize its System.Native portions, which includes signal handlers and terminal
+            // settings. Thus, by doing this here, we ensure that if a user accidentally accesses
+            // Console at some point later, it will not overwrite our signal handlers or terminal
+            // settings.
+            _ = Console.In;
+
+            // We initialize these fields here so that driver startup code runs after Console has
+            // been initialized (on Unix).
+            _driver = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ?
+                (ITerminalDriver)WindowsTerminalDriver.Instance : UnixTerminalDriver.Instance;
+            _rawStream = new BufferedStream(StdIn.Stream, ReaderBufferSize);
+            _lineReader = new StreamReader(StdIn.Stream, StdIn.Encoding, false, ReaderBufferSize, true);
+
+            // Try to prevent Console/Terminal intermixing from breaking stuff. This should prevent
+            // basic read/write calls on Console from calling into internal classes like ConsolePal
+            // and StdInReader (which in turn call System.Native functions that, among other things,
+            // change terminal settings).
+            //
+            // There are still many problematic properties and methods beyond these, but there is
+            // not much we can do about those.
+            Console.SetIn(TextReader.Null);
+            Console.SetOut(TextWriter.Null);
+            Console.SetError(TextWriter.Null);
+        }
 
         static void Sequence(string value)
         {
