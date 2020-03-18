@@ -219,7 +219,7 @@ namespace System.Drivers
 
             RefreshWindowSize();
 
-            TerminalUtility.StartThread("Terminal Signal Listener", () =>
+            _ = TerminalUtility.StartThread("Terminal Signal Listener", () =>
             {
                 // TODO: SIGCHLD?
 
@@ -254,7 +254,7 @@ namespace System.Drivers
                     {
                         // We do this in a separate thread so that signal handling does not get
                         // blocked if an event handler misbehaves.
-                        TerminalUtility.StartThread("Terminal Break Handler", () =>
+                        _ = TerminalUtility.StartThread("Terminal Break Handler", () =>
                         {
                             if (!Terminal.HandleBreak(sig == sigInt))
                             {

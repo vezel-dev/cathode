@@ -32,13 +32,17 @@ namespace System
             }
         }
 
-        public static void StartThread(string name, ThreadStart body)
+        public static Thread StartThread(string name, ThreadStart body)
         {
-            new Thread(body)
+            var thread = new Thread(body)
             {
                 IsBackground = true,
                 Name = name,
-            }.Start();
+            };
+
+            thread.Start();
+
+            return thread;
         }
     }
 }
