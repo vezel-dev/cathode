@@ -1,10 +1,12 @@
 using System.Buffers;
 using System.Text;
+using System.Threading;
 
 namespace System
 {
     static class TerminalUtility
     {
+        // We cannot use ReadOnlySpan as a type argument to Action.
         public delegate void EncodedAction(ReadOnlySpan<byte> data);
 
         public const int InvalidSize = -1;
@@ -28,6 +30,15 @@ namespace System
             {
                 ArrayPool<byte>.Shared.Return(array);
             }
+        }
+
+        public static void StartThread(string name, ThreadStart body)
+        {
+            new Thread(body)
+            {
+                IsBackground = true,
+                Name = name,
+            }.Start();
         }
     }
 }

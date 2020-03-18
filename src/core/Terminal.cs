@@ -7,6 +7,8 @@ namespace System
     {
         const int ReaderBufferSize = 4096;
 
+        public static event EventHandler<TerminalBreakEventArgs>? Break;
+
         public static ITerminalReader StdIn => _driver.StdIn;
 
         public static ITerminalWriter StdOut => _driver.StdOut;
@@ -82,6 +84,15 @@ namespace System
             Console.SetIn(TextReader.Null);
             Console.SetOut(TextWriter.Null);
             Console.SetError(TextWriter.Null);
+        }
+
+        internal static bool HandleBreak(bool interrupt)
+        {
+            var args = new TerminalBreakEventArgs(interrupt ? TerminalBreakKey.Interrupt : TerminalBreakKey.Quit);
+
+            Break?.Invoke(null, args);
+
+            return args.Cancel;
         }
 
         static void Sequence(string value)

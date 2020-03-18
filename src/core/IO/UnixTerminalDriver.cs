@@ -218,32 +218,55 @@ namespace System.IO
 
             RefreshWindowSize();
 
-            new Thread(() =>
+            TerminalUtility.StartThread("Terminal Signal Listener", () =>
             {
-                using var winch = new UnixSignal(Signum.SIGWINCH);
-                using var cont = new UnixSignal(Signum.SIGCONT);
+                // TODO: SIGCHLD?
 
-                var sigs = new[] { winch, cont };
+                using var sigWinch = new UnixSignal(Signum.SIGWINCH);
+                using var sigCont = new UnixSignal(Signum.SIGCONT);
+                using var sigInt = new UnixSignal(Signum.SIGINT);
+                using var sigQuit = new UnixSignal(Signum.SIGQUIT);
 
-                while (!Environment.HasShutdownStarted)
+                var sigs = new[] { sigWinch, sigCont, sigInt, sigQuit };
+
+                while (true)
                 {
                     var idx = UnixSignal.WaitAny(sigs);
 
+                    if (idx == -1)
+                        break;
+
+                    var sig = sigs[idx];
+
                     // If we are being restored from the background (SIGCONT), it is possible that
                     // terminal settings have been mangled, so restore them.
-                    if (idx == 1)
+                    if (sig == sigCont)
                         lock (_rawLock)
                             _interop.RefreshSettings();
 
                     // Terminal width/height might have changed for SIGCONT, and will definitely
                     // have changed for SIGWINCH.
-                    RefreshWindowSize();
+                    if (sig == sigCont || sig == sigWinch)
+                        RefreshWindowSize();
+
+                    if (sig == sigQuit || sig == sigInt)
+                    {
+                        // We do this in a separate thread so that signal handling does not get
+                        // blocked if an event handler misbehaves.
+                        TerminalUtility.StartThread("Terminal Break Handler", () =>
+                        {
+                            if (!Terminal.HandleBreak(sig == sigInt))
+                            {
+                                // Remove our signal handler and send the signal again. Since we
+                                // have overwritten the signal handlers in CoreCLR and
+                                // System.Native, this gives those handlers an opportunity to run.
+                                sig.Dispose();
+                                _ = Syscall.kill(Syscall.getpid(), sig.Signum);
+                            }
+                        });
+                    }
                 }
-            })
-            {
-                IsBackground = true,
-                Name = $"Terminal Signal Listener",
-            }.Start();
+            });
         }
 
         public void SetRawMode(bool raw, bool discard)

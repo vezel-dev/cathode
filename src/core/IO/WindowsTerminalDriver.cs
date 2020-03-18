@@ -204,6 +204,12 @@ namespace System.IO
 
         int _height = TerminalUtility.InvalidSize;
 
+#pragma warning disable IDE0052
+
+        readonly Kernel32.HandlerRoutine _handler;
+
+#pragma warning restore IDE0052
+
         WindowsTerminalDriver()
         {
             var encoding = TerminalUtility.Encoding;
@@ -228,6 +234,11 @@ namespace System.IO
             // fail if there is no console attached, but that is OK.
             _ = _in.AddMode(inMode);
             _ = _out.AddMode(outMode) || _error.AddMode(outMode);
+
+            // Keep the delegate alive by storing it in a field.
+            _handler = _handler = e => Terminal.HandleBreak(e == Kernel32.CTRL_EVENT.CTRL_C_EVENT);
+
+            _ = Kernel32.SetConsoleCtrlHandler(_handler, true);
         }
 
         Kernel32.CONSOLE_SCREEN_BUFFER_INFO? GetBufferInfo()

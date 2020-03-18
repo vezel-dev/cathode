@@ -9,6 +9,13 @@ namespace Sample
         {
             Terminal.Title = nameof(Sample);
 
+            Terminal.Break += (sender, e) =>
+            {
+                Terminal.OutLine("Received {0} event.", e.Key);
+
+                e.Cancel = true;
+            };
+
             Terminal.Clear();
 
             Terminal.OutLine("Hello.");
