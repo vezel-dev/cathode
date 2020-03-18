@@ -1,52 +1,38 @@
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using Mono.Unix;
 using Mono.Unix.Native;
 
 namespace System.Drivers
 {
-    sealed class UnixTerminalDriver : ITerminalDriver
+    sealed class UnixTerminalDriver : TerminalDriver
     {
-        abstract class UnixTerminalHandle : ITerminalHandle
+        sealed class UnixTerminalReader : TerminalReader
         {
             public int Handle { get; }
 
-            public Encoding Encoding { get; }
+            public override bool IsRedirected => IsRedirected(Handle);
 
-            public bool IsRedirected => !Syscall.isatty(Handle);
+            readonly object _lock = new object();
 
-            protected string Name { get; }
+            readonly string _name;
 
-            protected object Lock { get; } = new object();
-
-            protected UnixTerminalHandle(int handle, Encoding encoding, string name)
+            public UnixTerminalReader(TerminalDriver driver, int handle, string name)
+                : base(driver)
             {
                 Handle = handle;
-                Encoding = encoding;
-                Name = name;
-            }
-        }
-
-        sealed class UnixTerminalReader : UnixTerminalHandle, ITerminalReader
-        {
-            public TerminalInputStream Stream { get; }
-
-            public UnixTerminalReader(int handle, Encoding encoding, string name)
-                : base(handle, encoding, name)
-            {
-                Stream = new TerminalInputStream(this);
+                _name = name;
             }
 
-            public unsafe int Read(Span<byte> data)
+            public override unsafe int Read(Span<byte> data)
             {
                 if (data.IsEmpty)
                     return 0;
 
                 long ret;
 
-                lock (Lock)
+                lock (_lock)
                 {
                     while (true)
                     {
@@ -96,7 +82,7 @@ namespace System.Drivers
                                 err = Errno.EBADF;
 
                             throw new TerminalException(
-                                $"Could not read from standard {Name}: {Stdlib.strerror(err)}");
+                                $"Could not read from standard {_name}: {Stdlib.strerror(err)}");
                         }
                     }
                 }
@@ -105,22 +91,29 @@ namespace System.Drivers
             }
         }
 
-        sealed class UnixTerminalWriter : UnixTerminalHandle, ITerminalWriter
+        sealed class UnixTerminalWriter : TerminalWriter
         {
-            public TerminalOutputStream Stream { get; }
+            public int Handle { get; }
 
-            public UnixTerminalWriter(int handle, Encoding encoding, string name)
-                : base(handle, encoding, name)
+            public override bool IsRedirected => IsRedirected(Handle);
+
+            readonly object _lock = new object();
+
+            readonly string _name;
+
+            public UnixTerminalWriter(TerminalDriver driver, int handle, string name)
+                : base(driver)
             {
-                Stream = new TerminalOutputStream(this);
+                Handle = handle;
+                _name = name;
             }
 
-            public unsafe void Write(ReadOnlySpan<byte> data)
+            public override unsafe void Write(ReadOnlySpan<byte> data)
             {
                 if (data.IsEmpty)
                     return;
 
-                lock (Lock)
+                lock (_lock)
                 {
                     var progress = 0;
 
@@ -173,7 +166,7 @@ namespace System.Drivers
                                 continue;
                             }
 
-                            throw new TerminalException($"Could not write to standard {Name}: {Stdlib.strerror(err)}");
+                            throw new TerminalException($"Could not write to standard {_name}: {Stdlib.strerror(err)}");
                         }
                     }
                 }
@@ -188,33 +181,35 @@ namespace System.Drivers
 
         public static UnixTerminalDriver Instance { get; } = new UnixTerminalDriver();
 
-        public ITerminalReader StdIn { get; } =
-            new UnixTerminalReader(InHandle, TerminalUtility.Encoding, "input");
+        public override TerminalReader StdIn { get; }
 
-        public ITerminalWriter StdOut { get; } =
-            new UnixTerminalWriter(OutHandle, TerminalUtility.Encoding, "output");
+        public override TerminalWriter StdOut { get; }
 
-        public ITerminalWriter StdError { get; } =
-            new UnixTerminalWriter(ErrorHandle, TerminalUtility.Encoding, "error");
+        public override TerminalWriter StdError { get; }
 
-        public int Width { get; private set; } = TerminalUtility.InvalidSize;
-
-        public int Height { get; private set; } = TerminalUtility.InvalidSize;
+        public override (int Width, int Height) Size => _size switch
+        {
+            (int _, int _) s => s,
+            _ => throw new TerminalException("There is no terminal attached."),
+        };
 
         readonly IUnixTerminalInterop _interop = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ?
             (IUnixTerminalInterop)LinuxTerminalInterop.Instance : OSXTerminalInterop.Instance;
 
         readonly object _rawLock = new object();
 
+        (int, int)? _size;
+
         UnixTerminalDriver()
         {
+            StdIn = new UnixTerminalReader(this, InHandle, "input");
+            StdOut = new UnixTerminalWriter(this, OutHandle, "output");
+            StdError = new UnixTerminalWriter(this, ErrorHandle, "error");
+
             void RefreshWindowSize()
             {
-                if (_interop.WindowSize is (int w, int h))
-                {
-                    Width = w;
-                    Height = h;
-                }
+                if (_interop.Size is (int _, int _) s)
+                    _size = s;
             }
 
             RefreshWindowSize();
@@ -256,7 +251,7 @@ namespace System.Drivers
                         // blocked if an event handler misbehaves.
                         _ = TerminalUtility.StartThread("Terminal Break Handler", () =>
                         {
-                            if (!Terminal.HandleBreak(sig == sigInt))
+                            if (!HandleBreak(sig == sigInt))
                             {
                                 // Get the value early to avoid ObjectDisposedException.
                                 var num = sig.Signum;
@@ -273,7 +268,12 @@ namespace System.Drivers
             });
         }
 
-        public void SetRawMode(bool raw, bool discard)
+        static bool IsRedirected(int handle)
+        {
+            return !Syscall.isatty(handle);
+        }
+
+        protected override void SetRawModeCore(bool raw, bool discard)
         {
             lock (_rawLock)
                 if (!_interop.SetRawMode(raw, discard))

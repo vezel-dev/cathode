@@ -1,64 +1,28 @@
 using System.IO;
-using System.Text;
 using Vanara.PInvoke;
 
 namespace System.Drivers
 {
-    sealed class WindowsTerminalDriver : ITerminalDriver
+    sealed class WindowsTerminalDriver : TerminalDriver
     {
-        abstract class WindowsTerminalHandle : ITerminalHandle
+        sealed class WindowsTerminalReader : TerminalReader
         {
             public HFILE Handle { get; }
 
-            public Encoding Encoding { get; }
-
-            public virtual bool IsRedirected => !Kernel32.GetFileType(Handle).HasFlag(Kernel32.FileType.FILE_TYPE_CHAR);
-
-            protected string Name { get; }
-
-            protected object Lock { get; } = new object();
-
-            protected WindowsTerminalHandle(HFILE handle, Encoding encoding, string name)
-            {
-                Handle = handle;
-                Encoding = encoding;
-                Name = name;
-            }
-
-            protected static unsafe bool IsHandleValid(HFILE handle, bool write)
-            {
-                if (handle.IsNull || handle.IsInvalid)
-                    return false;
-
-                if (write)
-                {
-                    byte dummy = 0;
-
-                    return Kernel32.WriteFile(handle, (IntPtr)(&dummy), 0, out _, IntPtr.Zero);
-                }
-
-                return true;
-            }
-
-            public Kernel32.CONSOLE_SCREEN_BUFFER_INFO? GetBufferInfo()
-            {
-                return Kernel32.GetConsoleScreenBufferInfo(Handle, out var info) ? info : default;
-            }
-        }
-
-        sealed class WindowsTerminalReader : WindowsTerminalHandle, ITerminalReader
-        {
-            public TerminalInputStream Stream { get; }
-
             public bool IsValid { get; }
 
-            public override bool IsRedirected => base.IsRedirected || GetMode() == null;
+            public override bool IsRedirected => IsRedirected(Handle);
 
-            public WindowsTerminalReader(HFILE handle, Encoding encoding, string name)
-                : base(handle, encoding, name)
+            readonly object _lock = new object();
+
+            readonly string _name;
+
+            public WindowsTerminalReader(TerminalDriver driver, HFILE handle, string name)
+                : base(driver)
             {
-                Stream = new TerminalInputStream(this);
+                Handle = handle;
                 IsValid = IsHandleValid(handle, false);
+                _name = name;
             }
 
             public Kernel32.CONSOLE_INPUT_MODE? GetMode()
@@ -81,14 +45,14 @@ namespace System.Drivers
                 return GetMode() is Kernel32.CONSOLE_INPUT_MODE m && Kernel32.SetConsoleMode(Handle, m & ~mode);
             }
 
-            public unsafe int Read(Span<byte> data)
+            public override unsafe int Read(Span<byte> data)
             {
                 if (data.IsEmpty || !IsValid)
                     return 0;
 
                 uint ret;
 
-                lock (Lock)
+                lock (_lock)
                     fixed (byte* p = data)
                         if (Kernel32.ReadFile(Handle, (IntPtr)p, (uint)data.Length, out ret, IntPtr.Zero))
                             return (int)ret;
@@ -103,26 +67,31 @@ namespace System.Drivers
                     case Win32Error.ERROR_NO_DATA:
                         break;
                     default:
-                        throw new TerminalException($"Could not read from standard {Name}: {err.FormatMessage()}");
+                        throw new TerminalException($"Could not read from standard {_name}: {err.FormatMessage()}");
                 }
 
                 return (int)ret;
             }
         }
 
-        sealed class WindowsTerminalWriter : WindowsTerminalHandle, ITerminalWriter
+        sealed class WindowsTerminalWriter : TerminalWriter
         {
-            public TerminalOutputStream Stream { get; }
+            public HFILE Handle { get; }
 
             public bool IsValid { get; }
 
-            public override bool IsRedirected => base.IsRedirected || GetMode() == null;
+            public override bool IsRedirected => IsRedirected(Handle);
 
-            public WindowsTerminalWriter(HFILE handle, Encoding encoding, string name)
-                : base(handle, encoding, name)
+            readonly object _lock = new object();
+
+            readonly string _name;
+
+            public WindowsTerminalWriter(TerminalDriver driver, HFILE handle, string name)
+                : base(driver)
             {
-                Stream = new TerminalOutputStream(this);
+                Handle = handle;
                 IsValid = IsHandleValid(handle, true);
+                _name = name;
             }
 
             public Kernel32.CONSOLE_OUTPUT_MODE? GetMode()
@@ -145,12 +114,12 @@ namespace System.Drivers
                 return GetMode() is Kernel32.CONSOLE_OUTPUT_MODE m && Kernel32.SetConsoleMode(Handle, m & ~mode);
             }
 
-            public unsafe void Write(ReadOnlySpan<byte> data)
+            public override unsafe void Write(ReadOnlySpan<byte> data)
             {
                 if (data.IsEmpty || !IsValid)
                     return;
 
-                lock (Lock)
+                lock (_lock)
                     fixed (byte* p = data)
                         if (Kernel32.WriteFile(Handle, (IntPtr)p, (uint)data.Length, out _, IntPtr.Zero))
                             return;
@@ -165,7 +134,7 @@ namespace System.Drivers
                     case Win32Error.ERROR_NO_DATA:
                         break;
                     default:
-                        throw new TerminalException($"Could not write to standard {Name}: {err.FormatMessage()}");
+                        throw new TerminalException($"Could not write to standard {_name}: {err.FormatMessage()}");
                 }
             }
         }
@@ -178,32 +147,30 @@ namespace System.Drivers
 
         static HFILE ErrorHandle => Kernel32.GetStdHandle(Kernel32.StdHandleType.STD_ERROR_HANDLE);
 
-        public ITerminalReader StdIn => _in;
+        public override TerminalReader StdIn => _in;
 
-        public ITerminalWriter StdOut => _out;
+        public override TerminalWriter StdOut => _out;
 
-        public ITerminalWriter StdError => _error;
+        public override TerminalWriter StdError => _error;
 
-        public int Width =>
-            GetBufferInfo() is Kernel32.CONSOLE_SCREEN_BUFFER_INFO i ?
-                (_width = i.srWindow.Right - i.srWindow.Left + 1) : _width;
+        public override (int Width, int Height) Size
+        {
+            get
+            {
+                if (GetBufferInfo() is Kernel32.CONSOLE_SCREEN_BUFFER_INFO i)
+                    _size = (i.srWindow.Right - i.srWindow.Left + 1, i.srWindow.Bottom - i.srWindow.Top + 1);
 
-        public int Height =>
-            GetBufferInfo() is Kernel32.CONSOLE_SCREEN_BUFFER_INFO i ?
-                (_height = i.srWindow.Bottom - i.srWindow.Top + 1) : _height;
+                return _size ?? throw new TerminalException("There is no terminal attached.");
+            }
+        }
 
-        readonly WindowsTerminalReader _in =
-            new WindowsTerminalReader(InHandle, TerminalUtility.Encoding, "input");
+        readonly WindowsTerminalReader _in;
 
-        readonly WindowsTerminalWriter _out =
-            new WindowsTerminalWriter(OutHandle, TerminalUtility.Encoding, "output");
+        readonly WindowsTerminalWriter _out;
 
-        readonly WindowsTerminalWriter _error =
-            new WindowsTerminalWriter(ErrorHandle, TerminalUtility.Encoding, "error");
+        readonly WindowsTerminalWriter _error;
 
-        int _width = TerminalUtility.InvalidSize;
-
-        int _height = TerminalUtility.InvalidSize;
+        (int Width, int Height)? _size;
 
 #pragma warning disable IDE0052
 
@@ -213,10 +180,12 @@ namespace System.Drivers
 
         WindowsTerminalDriver()
         {
-            var encoding = TerminalUtility.Encoding;
+            _in = new WindowsTerminalReader(this, InHandle, "input");
+            _out = new WindowsTerminalWriter(this, OutHandle, "output");
+            _error = new WindowsTerminalWriter(this, ErrorHandle, "error");
 
-            _ = Kernel32.SetConsoleCP((uint)encoding.CodePage);
-            _ = Kernel32.SetConsoleOutputCP((uint)encoding.CodePage);
+            _ = Kernel32.SetConsoleCP((uint)Encoding.CodePage);
+            _ = Kernel32.SetConsoleOutputCP((uint)Encoding.CodePage);
 
             var inMode =
                 Kernel32.CONSOLE_INPUT_MODE.ENABLE_PROCESSED_INPUT |
@@ -237,18 +206,44 @@ namespace System.Drivers
             _ = _out.AddMode(outMode) || _error.AddMode(outMode);
 
             // Keep the delegate alive by storing it in a field.
-            _handler = _handler = e => Terminal.HandleBreak(e == Kernel32.CTRL_EVENT.CTRL_C_EVENT);
+            _handler = e => HandleBreak(e == Kernel32.CTRL_EVENT.CTRL_C_EVENT);
 
             _ = Kernel32.SetConsoleCtrlHandler(_handler, true);
         }
 
-        Kernel32.CONSOLE_SCREEN_BUFFER_INFO? GetBufferInfo()
+        static unsafe bool IsHandleValid(HFILE handle, bool write)
         {
-            // Try both handles in case only one of them has been redirected.
-            return _out.GetBufferInfo() ?? _error.GetBufferInfo();
+            if (handle.IsNull || handle.IsInvalid)
+                return false;
+
+            if (write)
+            {
+                byte dummy = 42;
+
+                return Kernel32.WriteFile(handle, (IntPtr)(&dummy), 0, out _, IntPtr.Zero);
+            }
+
+            return true;
         }
 
-        public void SetRawMode(bool raw, bool discard)
+        static bool IsRedirected(HFILE handle)
+        {
+            return !Kernel32.GetFileType(handle).HasFlag(Kernel32.FileType.FILE_TYPE_CHAR) ||
+                !Kernel32.GetConsoleMode(handle, out Kernel32.CONSOLE_INPUT_MODE _);
+        }
+
+        Kernel32.CONSOLE_SCREEN_BUFFER_INFO? GetBufferInfo()
+        {
+            static Kernel32.CONSOLE_SCREEN_BUFFER_INFO? GetBufferInfo(HFILE handle)
+            {
+                return Kernel32.GetConsoleScreenBufferInfo(handle, out var info) ? info : default;
+            }
+
+            // Try both handles in case only one of them has been redirected.
+            return GetBufferInfo(_out.Handle) ?? GetBufferInfo(_error.Handle);
+        }
+
+        protected override void SetRawModeCore(bool raw, bool discard)
         {
             if (!_in.IsValid || (!_out.IsValid && !_error.IsValid))
                 throw new TerminalException("There is no terminal attached.");

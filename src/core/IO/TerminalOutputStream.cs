@@ -2,7 +2,7 @@ namespace System.IO
 {
     public sealed class TerminalOutputStream : Stream
     {
-        public ITerminalWriter Writer { get; }
+        public TerminalWriter Writer { get; }
 
         public override bool CanRead => false;
 
@@ -18,7 +18,7 @@ namespace System.IO
             set => throw new NotSupportedException();
         }
 
-        internal TerminalOutputStream(ITerminalWriter writer)
+        internal TerminalOutputStream(TerminalWriter writer)
         {
             Writer = writer;
         }

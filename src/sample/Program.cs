@@ -32,9 +32,11 @@ namespace Sample
             Terminal.OutLine("StdError: IsRedirected = {0}, Encoding = '{1}'",
                 stderr.IsRedirected, stderr.Encoding.EncodingName);
 
+            var (width, height) = Terminal.Size;
+
             Terminal.OutLine();
-            Terminal.OutLine("Width: {0}", Terminal.Width);
-            Terminal.OutLine("Height: {0}", Terminal.Height);
+            Terminal.OutLine("Width: {0}", width);
+            Terminal.OutLine("Height: {0}", height);
             Terminal.OutLine();
 
             for (var i = 0; i < 2; i++)

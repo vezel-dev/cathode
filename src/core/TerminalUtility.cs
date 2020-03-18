@@ -9,10 +9,6 @@ namespace System
         // We cannot use ReadOnlySpan as a type argument to Action.
         public delegate void EncodedAction(ReadOnlySpan<byte> data);
 
-        public const int InvalidSize = -1;
-
-        public static Encoding Encoding { get; } = Encoding.UTF8;
-
         public static void EncodeAndExecute(ReadOnlySpan<char> value, Encoding encoding, EncodedAction action)
         {
             var len = encoding.GetByteCount(value);

@@ -109,7 +109,7 @@ namespace System.Drivers
 
         public static LinuxTerminalInterop Instance { get; } = new LinuxTerminalInterop();
 
-        public (int Width, int Height)? WindowSize =>
+        public (int Width, int Height)? Size =>
             ioctl(UnixTerminalDriver.OutHandle, (UIntPtr)TIOCGWINSZ, out var w) == 0 ? (w.ws_col, w.ws_row) : default;
 
         readonly termios? _original;

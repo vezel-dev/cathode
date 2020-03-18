@@ -2,7 +2,7 @@ namespace System.Drivers
 {
     interface IUnixTerminalInterop
     {
-        (int Width, int Height)? WindowSize { get; }
+        (int Width, int Height)? Size { get; }
 
         void RefreshSettings();
 
