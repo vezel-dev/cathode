@@ -78,12 +78,12 @@ namespace System
 
         public static void ForegroundColor(this TerminalWriter writer, byte r, byte g, byte b)
         {
-            WriteSequence(writer, $"{CSI}38;{r};{g};{b}m");
+            WriteSequence(writer, $"{CSI}38;2;{r};{g};{b}m");
         }
 
         public static void BackgroundColor(this TerminalWriter writer, byte r, byte g, byte b)
         {
-            WriteSequence(writer, $"{CSI}48;{r};{g};{b}m");
+            WriteSequence(writer, $"{CSI}48;2;{r};{g};{b}m");
         }
 
         public static void ResetAttributes(this TerminalWriter writer)

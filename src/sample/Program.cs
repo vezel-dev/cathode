@@ -39,13 +39,22 @@ namespace Sample
             Terminal.OutLine("Height: {0}", height);
             Terminal.OutLine();
 
+            Terminal.OutForegroundColor(byte.MaxValue, byte.MinValue, byte.MinValue);
+            Terminal.OutLine("This text is red.");
+            Terminal.OutForegroundColor(byte.MinValue, byte.MaxValue, byte.MinValue);
+            Terminal.OutLine("This text is green.");
+            Terminal.OutForegroundColor(byte.MinValue, byte.MinValue, byte.MaxValue);
+            Terminal.OutLine("This text is blue.");
+            Terminal.OutResetAttributes();
+
             for (var i = 0; i < 2; i++)
             {
+                Terminal.OutLine();
                 Terminal.Out("Reading: ");
                 Terminal.OutLine("Result: {0}", Terminal.ReadLine());
-                Terminal.OutLine();
             }
 
+            Terminal.OutLine();
             Terminal.Out("Switching to raw mode: ");
 
             Terminal.SetRawMode(true, true);
