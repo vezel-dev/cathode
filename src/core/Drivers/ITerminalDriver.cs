@@ -1,4 +1,6 @@
-namespace System.IO
+using System.IO;
+
+namespace System.Drivers
 {
     interface ITerminalDriver
     {

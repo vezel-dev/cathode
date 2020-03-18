@@ -1,7 +1,8 @@
+using System.IO;
 using System.Text;
 using Vanara.PInvoke;
 
-namespace System.IO
+namespace System.Drivers
 {
     sealed class WindowsTerminalDriver : ITerminalDriver
     {

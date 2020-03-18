@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
 using Mono.Unix.Native;
 
-namespace System.IO
+namespace System.Drivers
 {
     sealed class LinuxTerminalInterop : IUnixTerminalInterop
     {

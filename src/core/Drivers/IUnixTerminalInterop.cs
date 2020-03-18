@@ -1,4 +1,4 @@
-namespace System.IO
+namespace System.Drivers
 {
     interface IUnixTerminalInterop
     {

@@ -1,10 +1,11 @@
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using Mono.Unix;
 using Mono.Unix.Native;
 
-namespace System.IO
+namespace System.Drivers
 {
     sealed class UnixTerminalDriver : ITerminalDriver
     {
