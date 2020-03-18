@@ -115,5 +115,65 @@ namespace System
         {
             StdOut.ResetAttributes();
         }
+
+        public static void ErrorBinary(ReadOnlySpan<byte> value)
+        {
+            StdError.WriteBinary(value);
+        }
+
+        public static void ErrorText(ReadOnlySpan<char> value)
+        {
+            StdError.WriteText(value);
+        }
+
+        public static void Error(string? value)
+        {
+            StdError.Write(value);
+        }
+
+        public static void Error<T>(T value)
+        {
+            StdError.Write(value);
+        }
+
+        public static void Error(string format, params object?[] args)
+        {
+            StdError.Write(format, args);
+        }
+
+        public static void ErrorLine()
+        {
+            StdError.WriteLine();
+        }
+
+        public static void ErrorLine(string? value)
+        {
+            StdError.WriteLine(value);
+        }
+
+        public static void ErrorLine<T>(T value)
+        {
+            StdError.WriteLine(value);
+        }
+
+        public static void ErrorLine(string format, params object?[] args)
+        {
+            StdError.WriteLine(format, args);
+        }
+
+        public static void ErrorForegroundColor(byte r, byte g, byte b)
+        {
+            StdError.ForegroundColor(r, g, b);
+        }
+
+        public static void ErrorBackgroundColor(byte r, byte g, byte b)
+        {
+            StdError.BackgroundColor(r, g, b);
+        }
+
+        public static void ErrorResetAttributes()
+        {
+            StdError.ResetAttributes();
+        }
     }
 }
