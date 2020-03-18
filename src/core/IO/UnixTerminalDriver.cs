@@ -257,11 +257,14 @@ namespace System.IO
                         {
                             if (!Terminal.HandleBreak(sig == sigInt))
                             {
+                                // Get the value early to avoid ObjectDisposedException.
+                                var num = sig.Signum;
+
                                 // Remove our signal handler and send the signal again. Since we
                                 // have overwritten the signal handlers in CoreCLR and
                                 // System.Native, this gives those handlers an opportunity to run.
                                 sig.Dispose();
-                                _ = Syscall.kill(Syscall.getpid(), sig.Signum);
+                                _ = Syscall.kill(Syscall.getpid(), num);
                             }
                         });
                     }
