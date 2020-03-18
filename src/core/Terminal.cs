@@ -82,9 +82,9 @@ namespace System
             //
             // There are still many problematic properties and methods beyond these, but there is
             // not much we can do about those.
-            Console.SetIn(TextReader.Null);
-            Console.SetOut(TextWriter.Null);
-            Console.SetError(TextWriter.Null);
+            Console.SetIn(new InvalidTextReader());
+            Console.SetOut(new InvalidTextWriter());
+            Console.SetError(new InvalidTextWriter());
         }
 
         internal static bool HandleBreak(bool interrupt)
