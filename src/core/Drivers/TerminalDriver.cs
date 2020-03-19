@@ -178,6 +178,31 @@ namespace System.Drivers
             Sequence(BEL);
         }
 
+        public void Insert(int count)
+        {
+            Sequence($"{CSI}{count}@");
+        }
+
+        public void Delete(int count)
+        {
+            Sequence($"{CSI}{count}P");
+        }
+
+        public void Erase(int count)
+        {
+            Sequence($"{CSI}{count}X");
+        }
+
+        public void InsertLine(int count)
+        {
+            Sequence($"{CSI}{count}L");
+        }
+
+        public void DeleteLine(int count)
+        {
+            Sequence($"{CSI}{count}M");
+        }
+
         void Clear(char type, TerminalClearMode mode)
         {
             var m = mode switch

@@ -187,6 +187,31 @@ namespace System
             _driver.Beep();
         }
 
+        public static void Insert(int count = 1)
+        {
+            _driver.Insert(count);
+        }
+
+        public static void Delete(int count = 1)
+        {
+            _driver.Delete(count);
+        }
+
+        public static void Erase(int count = 1)
+        {
+            _driver.Erase(count);
+        }
+
+        public static void InsertLine(int count = 1)
+        {
+            _driver.InsertLine(count);
+        }
+
+        public static void DeleteLine(int count = 1)
+        {
+            _driver.DeleteLine(count);
+        }
+
         public static void ClearScreen(TerminalClearMode mode = TerminalClearMode.Full)
         {
             _driver.ClearScreen(mode);
