@@ -47,6 +47,31 @@ namespace Sample
             Terminal.OutLine("This text is blue.");
             Terminal.OutResetAttributes();
 
+            Terminal.OutDecorations(bold: true);
+            Terminal.OutLine("This text is bold.");
+            Terminal.OutResetAttributes();
+            Terminal.OutDecorations(faint: true);
+            Terminal.OutLine("This text is faint.");
+            Terminal.OutResetAttributes();
+            Terminal.OutDecorations(italic: true);
+            Terminal.OutLine("This text is in italics.");
+            Terminal.OutResetAttributes();
+            Terminal.OutDecorations(underline: true);
+            Terminal.OutLine("This text is underlined.");
+            Terminal.OutResetAttributes();
+            Terminal.OutDecorations(blink: true);
+            Terminal.OutLine("This text is blinking.");
+            Terminal.OutResetAttributes();
+            Terminal.OutDecorations(invert: true);
+            Terminal.OutLine("This text is inverted.");
+            Terminal.OutResetAttributes();
+            Terminal.OutDecorations(invisible: true);
+            Terminal.OutLine("This text is invisible.");
+            Terminal.OutResetAttributes();
+            Terminal.OutDecorations(strike: true);
+            Terminal.OutLine("This text is struck through.");
+            Terminal.OutResetAttributes();
+
             for (var i = 0; i < 2; i++)
             {
                 Terminal.OutLine();

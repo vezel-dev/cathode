@@ -111,6 +111,13 @@ namespace System
             StdOut.BackgroundColor(r, g, b);
         }
 
+        public static void OutDecorations(bool bold = false, bool faint = false, bool italic = false,
+            bool underline = false, bool blink = false, bool invert = false, bool invisible = false,
+            bool strike = false)
+        {
+            StdOut.Decorations(bold, faint, italic, underline, blink, invert, invisible, strike);
+        }
+
         public static void OutResetAttributes()
         {
             StdOut.ResetAttributes();
@@ -169,6 +176,13 @@ namespace System
         public static void ErrorBackgroundColor(byte r, byte g, byte b)
         {
             StdError.BackgroundColor(r, g, b);
+        }
+
+        public static void ErrorDecorations(bool bold = false, bool faint = false, bool italic = false,
+            bool underline = false, bool blink = false, bool invert = false, bool invisible = false,
+            bool strike = false)
+        {
+            StdError.Decorations(bold, faint, italic, underline, blink, invert, invisible, strike);
         }
 
         public static void ErrorResetAttributes()
