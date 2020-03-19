@@ -19,7 +19,8 @@ namespace Sample
 
             Terminal.Break += OnBreak;
 
-            Terminal.Clear();
+            Terminal.ClearScreen();
+            Terminal.MoveCursorTo(0, 0);
 
             Terminal.OutLine("Hello.");
             Terminal.OutLine();
@@ -42,38 +43,38 @@ namespace Sample
             Terminal.OutLine("Height: {0}", height);
             Terminal.OutLine();
 
-            Terminal.OutForegroundColor(byte.MaxValue, byte.MinValue, byte.MinValue);
+            Terminal.ForegroundColor(byte.MaxValue, byte.MinValue, byte.MinValue);
             Terminal.OutLine("This text is red.");
-            Terminal.OutForegroundColor(byte.MinValue, byte.MaxValue, byte.MinValue);
+            Terminal.ForegroundColor(byte.MinValue, byte.MaxValue, byte.MinValue);
             Terminal.OutLine("This text is green.");
-            Terminal.OutForegroundColor(byte.MinValue, byte.MinValue, byte.MaxValue);
+            Terminal.ForegroundColor(byte.MinValue, byte.MinValue, byte.MaxValue);
             Terminal.OutLine("This text is blue.");
-            Terminal.OutResetAttributes();
+            Terminal.ResetAttributes();
 
-            Terminal.OutDecorations(bold: true);
+            Terminal.Decorations(bold: true);
             Terminal.OutLine("This text is bold.");
-            Terminal.OutResetAttributes();
-            Terminal.OutDecorations(faint: true);
+            Terminal.ResetAttributes();
+            Terminal.Decorations(faint: true);
             Terminal.OutLine("This text is faint.");
-            Terminal.OutResetAttributes();
-            Terminal.OutDecorations(italic: true);
+            Terminal.ResetAttributes();
+            Terminal.Decorations(italic: true);
             Terminal.OutLine("This text is in italics.");
-            Terminal.OutResetAttributes();
-            Terminal.OutDecorations(underline: true);
+            Terminal.ResetAttributes();
+            Terminal.Decorations(underline: true);
             Terminal.OutLine("This text is underlined.");
-            Terminal.OutResetAttributes();
-            Terminal.OutDecorations(blink: true);
+            Terminal.ResetAttributes();
+            Terminal.Decorations(blink: true);
             Terminal.OutLine("This text is blinking.");
-            Terminal.OutResetAttributes();
-            Terminal.OutDecorations(invert: true);
+            Terminal.ResetAttributes();
+            Terminal.Decorations(invert: true);
             Terminal.OutLine("This text is inverted.");
-            Terminal.OutResetAttributes();
-            Terminal.OutDecorations(invisible: true);
+            Terminal.ResetAttributes();
+            Terminal.Decorations(invisible: true);
             Terminal.OutLine("This text is invisible.");
-            Terminal.OutResetAttributes();
-            Terminal.OutDecorations(strike: true);
+            Terminal.ResetAttributes();
+            Terminal.Decorations(strike: true);
             Terminal.OutLine("This text is struck through.");
-            Terminal.OutResetAttributes();
+            Terminal.ResetAttributes();
 
             for (var i = 0; i < 2; i++)
             {
@@ -99,8 +100,6 @@ namespace Sample
             Terminal.Break -= OnBreak;
 
             Thread.Sleep(2500);
-
-            Terminal.Clear();
 
             TerminalHost.CreateDefaultBuilder().RunTerminalAsync().GetAwaiter().GetResult();
         }

@@ -20,30 +20,66 @@ namespace System
 
         public static bool IsRawMode => _driver.IsRawMode;
 
-        public static (int Width, int Height) Size => _driver.Size;
-
         public static string Title
         {
             get => _driver.Title;
             set => _driver.Title = value;
         }
 
+        public static (int Width, int Height) Size => _driver.Size;
+
+        public static TerminalKeyMode CursorKeyMode
+        {
+            get => _driver.CursorKeyMode;
+            set => _driver.CursorKeyMode = value;
+        }
+
+        public static TerminalKeyMode NumericKeyMode
+        {
+            get => _driver.NumericKeyMode;
+            set => _driver.NumericKeyMode = value;
+        }
+
+        public static bool IsCursorVisible
+        {
+            get => Screen.IsCursorVisible;
+            set => Screen.IsCursorVisible = value;
+        }
+
+        public static bool IsCursorBlinking
+        {
+            get => Screen.IsCursorBlinking;
+            set => Screen.IsCursorBlinking = value;
+        }
+
+        public static bool IsGraphicsEnabled
+        {
+            get => _driver.IsGraphicsEnabled;
+            set => _driver.IsGraphicsEnabled = value;
+        }
+
+        public static TerminalScreen MainScreen { get; }
+
+        public static TerminalScreen AlternateScreen { get; }
+
+        public static TerminalScreen Screen { get; internal set; }
+
         static readonly TerminalDriver _driver = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ?
             (TerminalDriver)WindowsTerminalDriver.Instance : UnixTerminalDriver.Instance;
+
+        static Terminal()
+        {
+            MainScreen = new TerminalScreen(_driver, true);
+            AlternateScreen = new TerminalScreen(_driver, false);
+            Screen = MainScreen;
+
+            // Reset all terminal state to sane values.
+            _driver.ResetAll();
+        }
 
         public static void SetRawMode(bool raw, bool discard)
         {
             _driver.SetRawMode(raw, discard);
-        }
-
-        public static void Clear(bool cursor = true)
-        {
-            _driver.Clear(cursor);
-        }
-
-        public static void Beep()
-        {
-            _driver.Beep();
         }
 
         public static byte? ReadRaw()
@@ -101,28 +137,6 @@ namespace System
             StdOut.WriteLine(format, args);
         }
 
-        public static void OutForegroundColor(byte r, byte g, byte b)
-        {
-            StdOut.ForegroundColor(r, g, b);
-        }
-
-        public static void OutBackgroundColor(byte r, byte g, byte b)
-        {
-            StdOut.BackgroundColor(r, g, b);
-        }
-
-        public static void OutDecorations(bool bold = false, bool faint = false, bool italic = false,
-            bool underline = false, bool blink = false, bool invert = false, bool invisible = false,
-            bool strike = false)
-        {
-            StdOut.Decorations(bold, faint, italic, underline, blink, invert, invisible, strike);
-        }
-
-        public static void OutResetAttributes()
-        {
-            StdOut.ResetAttributes();
-        }
-
         public static void ErrorBinary(ReadOnlySpan<byte> value)
         {
             StdError.WriteBinary(value);
@@ -168,26 +182,91 @@ namespace System
             StdError.WriteLine(format, args);
         }
 
-        public static void ErrorForegroundColor(byte r, byte g, byte b)
+        public static void Beep()
         {
-            StdError.ForegroundColor(r, g, b);
+            _driver.Beep();
         }
 
-        public static void ErrorBackgroundColor(byte r, byte g, byte b)
+        public static void ClearScreen(TerminalClearMode mode = TerminalClearMode.Full)
         {
-            StdError.BackgroundColor(r, g, b);
+            _driver.ClearScreen(mode);
         }
 
-        public static void ErrorDecorations(bool bold = false, bool faint = false, bool italic = false,
+        public static void ClearLine(TerminalClearMode mode = TerminalClearMode.Full)
+        {
+            _driver.ClearLine(mode);
+        }
+
+        public static void SetScrollRegion(int top, int bottom)
+        {
+            _driver.SetScrollRegion(top, bottom);
+        }
+
+        public static void MoveBufferUp(int count = 1)
+        {
+            _driver.MoveBufferUp(count);
+        }
+
+        public static void MoveBufferDown(int count = 1)
+        {
+            _driver.MoveBufferDown(count);
+        }
+
+        public static void MoveCursorTo(int row, int column)
+        {
+            _driver.MoveCursorTo(row, column);
+        }
+
+        public static void MoveCursorUp(int count = 1)
+        {
+            _driver.MoveCursorUp(count);
+        }
+
+        public static void MoveCursorDown(int count = 1)
+        {
+            _driver.MoveCursorDown(count);
+        }
+
+        public static void MoveCursorLeft(int count = 1)
+        {
+            _driver.MoveCursorLeft(count);
+        }
+
+        public static void MoveCursorRight(int count = 1)
+        {
+            _driver.MoveCursorRight(count);
+        }
+
+        public static void SaveCursorPosition()
+        {
+            _driver.SaveCursorPosition();
+        }
+
+        public static void RestoreCursorPosition()
+        {
+            _driver.RestoreCursorPosition();
+        }
+
+        public static void ForegroundColor(byte r, byte g, byte b)
+        {
+            _driver.ForegroundColor(r, g, b);
+        }
+
+        public static void BackgroundColor(byte r, byte g, byte b)
+        {
+            _driver.BackgroundColor(r, g, b);
+        }
+
+        public static void Decorations(bool bold = false, bool faint = false, bool italic = false,
             bool underline = false, bool blink = false, bool invert = false, bool invisible = false,
             bool strike = false)
         {
-            StdError.Decorations(bold, faint, italic, underline, blink, invert, invisible, strike);
+            _driver.Decorations(bold, faint, italic, underline, blink, invert, invisible, strike);
         }
 
-        public static void ErrorResetAttributes()
+        public static void ResetAttributes()
         {
-            StdError.ResetAttributes();
+            _driver.ResetAttributes();
         }
     }
 }

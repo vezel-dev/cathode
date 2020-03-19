@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.IO;
-using static System.TerminalConstants;
 
 namespace System
 {
@@ -67,53 +65,6 @@ namespace System
         public static void WriteLine(this TerminalWriter writer, string format, params object?[] args)
         {
             writer.WriteLine(string.Format(format, args));
-        }
-
-        static void WriteSequence(TerminalWriter writer, string value)
-        {
-            _ = writer ?? throw new ArgumentNullException(nameof(writer));
-
-            if (!writer.IsRedirected)
-                writer.Write(value);
-        }
-
-        public static void ForegroundColor(this TerminalWriter writer, byte r, byte g, byte b)
-        {
-            WriteSequence(writer, $"{CSI}38;2;{r};{g};{b}m");
-        }
-
-        public static void BackgroundColor(this TerminalWriter writer, byte r, byte g, byte b)
-        {
-            WriteSequence(writer, $"{CSI}48;2;{r};{g};{b}m");
-        }
-
-        public static void Decorations(this TerminalWriter writer, bool bold = false, bool faint = false,
-            bool italic = false, bool underline = false, bool blink = false, bool invert = false,
-            bool invisible = false, bool strike = false)
-        {
-            var dict = new Dictionary<byte, bool>
-            {
-                [1] = bold,
-                [2] = faint,
-                [3] = italic,
-                [4] = underline,
-                [5] = blink,
-                [7] = invert,
-                [8] = invisible,
-                [9] = strike,
-            };
-            var seqs = new List<string>(dict.Count);
-
-            foreach (var (code, enabled) in dict)
-                if (enabled)
-                    seqs.Add(code.ToString());
-
-            WriteSequence(writer, $"{CSI}{string.Join(';', seqs)}m");
-        }
-
-        public static void ResetAttributes(this TerminalWriter writer)
-        {
-            WriteSequence(writer, $"{CSI}0m");
         }
     }
 }

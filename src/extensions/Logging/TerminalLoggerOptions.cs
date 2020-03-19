@@ -7,19 +7,24 @@ namespace Microsoft.Extensions.Logging.Terminal
     {
         readonly ref struct Decorator
         {
-            readonly TerminalWriter _writer;
+            readonly bool _set;
 
-            public Decorator(TerminalWriter writer, (byte R, byte G, byte B)? colors)
+            public Decorator((byte R, byte G, byte B)? colors)
             {
-                _writer = writer;
-
                 if (colors is (byte r, byte g, byte b))
-                    writer.ForegroundColor(r, g, b);
+                {
+                    _set = true;
+
+                    System.Terminal.ForegroundColor(r, g, b);
+                }
+                else
+                    _set = false;
             }
 
             public void Dispose()
             {
-                _writer?.ResetAttributes();
+                if (_set)
+                    System.Terminal.ResetAttributes();
             }
         }
 
@@ -48,7 +53,7 @@ namespace Microsoft.Extensions.Logging.Terminal
         {
             Decorator Decorate((byte R, byte G, byte B)? colors)
             {
-                return !options.DisableColors && colors != null ? new Decorator(writer, colors.Value) : default;
+                return !options.DisableColors && colors != null ? new Decorator(colors.Value) : default;
             }
 
             writer.Write("[");

@@ -2,10 +2,12 @@ namespace System
 {
     static class TerminalConstants
     {
-        public const string Escape = "\x1b";
+        public const string ESC = "\x1b";
 
-        public const string CSI = Escape + "[";
+        public const string CSI = ESC + "[";
 
-        public const string OSC = Escape + "]";
+        public const string OSC = ESC + "]";
+
+        public const string BEL = "\a";
     }
 }
