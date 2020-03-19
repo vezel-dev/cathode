@@ -4,12 +4,13 @@ using System.Runtime.InteropServices;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.EventLog;
+using Microsoft.Extensions.Logging.Terminal;
 
 namespace Microsoft.Extensions.Hosting
 {
     public static class TerminalHost
     {
-        public static IHostBuilder CreateDefaultBuilder(string[]? args)
+        public static IHostBuilder CreateDefaultBuilder(string[]? args = null)
         {
             return new HostBuilder()
                 .UseContentRoot(Environment.CurrentDirectory)

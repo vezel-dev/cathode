@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using Microsoft.Extensions.Hosting;
 
 namespace Sample
 {
@@ -7,14 +8,16 @@ namespace Sample
     {
         static void Main(string[] args)
         {
-            Terminal.Title = nameof(Sample);
-
-            Terminal.Break += (sender, e) =>
+            static void OnBreak(object? sender, TerminalBreakEventArgs e)
             {
                 Terminal.OutLine("Received {0} event.", e.Key);
 
                 e.Cancel = true;
-            };
+            }
+
+            Terminal.Title = nameof(Sample);
+
+            Terminal.Break += OnBreak;
 
             Terminal.Clear();
 
@@ -91,9 +94,15 @@ namespace Sample
 
             Terminal.OutLine();
             Terminal.OutLine();
-            Terminal.OutLine("Exiting...");
+            Terminal.OutLine("Starting host...");
 
-            Thread.Sleep(1000);
+            Terminal.Break -= OnBreak;
+
+            Thread.Sleep(2500);
+
+            Terminal.Clear();
+
+            TerminalHost.CreateDefaultBuilder().RunTerminalAsync().GetAwaiter().GetResult();
         }
     }
 }

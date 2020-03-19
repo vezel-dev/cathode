@@ -1,6 +1,6 @@
 using System;
 
-namespace Microsoft.Extensions.Logging
+namespace Microsoft.Extensions.Logging.Terminal
 {
     sealed class NullScope : IDisposable
     {

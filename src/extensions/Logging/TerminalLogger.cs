@@ -1,20 +1,19 @@
 using System;
 
-namespace Microsoft.Extensions.Logging
+namespace Microsoft.Extensions.Logging.Terminal
 {
     sealed class TerminalLogger : ILogger
     {
-        public TerminalLoggerOptions Options { get; set; }
-
         public IExternalScopeProvider ScopeProvider { get; set; }
+
+        readonly string _name;
 
         readonly TerminalLoggerProcessor _processor;
 
-        public TerminalLogger(TerminalLoggerOptions options, IExternalScopeProvider scopeProvider,
-            TerminalLoggerProcessor processor)
+        public TerminalLogger(IExternalScopeProvider scopeProvider, string name, TerminalLoggerProcessor processor)
         {
-            Options = options;
             ScopeProvider = scopeProvider;
+            _name = name;
             _processor = processor;
         }
 
@@ -36,8 +35,12 @@ namespace Microsoft.Extensions.Logging
             if (!IsEnabled(logLevel))
                 return;
 
-            // TODO
-            throw new NotImplementedException();
+            var opts = _processor.Options;
+            var now = opts.UseUtcTimestamp ? DateTime.UtcNow : DateTime.Now;
+            var msg = formatter(state, exception);
+
+            if (!string.IsNullOrEmpty(msg) || exception != null)
+                _processor.Enqueue(new TerminalLoggerEntry(opts, now, logLevel, _name, eventId, msg, exception));
         }
     }
 }
