@@ -34,6 +34,6 @@
     <MicrosoftExtensionsHostingVersion>3.1.2</MicrosoftExtensionsHostingVersion>
     <MicrosoftSourceLinkGitHubVersion>1.0.0</MicrosoftSourceLinkGitHubVersion>
     <MonoPosixNETStandardVersion>1.0.0</MonoPosixNETStandardVersion>
-    <VanaraPInvokeKernel32>3.2.0</VanaraPInvokeKernel32>
+    <VanaraPInvokeKernel32>3.2.1</VanaraPInvokeKernel32>
   </PropertyGroup>
 </Project>
