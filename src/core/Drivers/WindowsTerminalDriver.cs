@@ -269,7 +269,7 @@ namespace System.Drivers
             if (!(raw ? _in.RemoveMode(inMode) && (_out.RemoveMode(outMode) || _error.RemoveMode(outMode)) :
                 _in.AddMode(inMode) && (_out.AddMode(outMode) || _error.AddMode(outMode))))
                 throw new TerminalException(
-                    $"Could not switch to raw mode: {Win32Error.GetLastError().FormatMessage()}");
+                    $"Could not change raw mode setting: {Win32Error.GetLastError().FormatMessage()}");
         }
     }
 }
