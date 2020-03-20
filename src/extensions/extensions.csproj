@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <AssemblyName>System.Terminal.Extensions</AssemblyName>
+    <AssemblyName>Terminal.Extensions</AssemblyName>
     <IsPackable>true</IsPackable>
     <RootNamespace>Microsoft.Extensions</RootNamespace>
     <TargetFramework>netcoreapp3.1</TargetFramework>

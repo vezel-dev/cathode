@@ -20,10 +20,10 @@ future releases of `System.Terminal`.
 
 ## Usage
 
-To install the core package, run `dotnet add package System.Terminal`. If you
-are developing an application that uses the .NET Generic Host (with e.g. ASP.NET
+To install the core package, run `dotnet add package Terminal`. If you are
+developing an application that uses the .NET Generic Host (with e.g. ASP.NET
 Core or Orleans), you can instead install the extensions package by running
-`dotnet add package System.Terminal.Extensions`.
+`dotnet add package Terminal.Extensions`.
 
 See the [sample program](src/sample) for examples of what the API can do.
 

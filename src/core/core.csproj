@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <AssemblyName>System.Terminal</AssemblyName>
+    <AssemblyName>Terminal</AssemblyName>
     <IsPackable>true</IsPackable>
     <RootNamespace>System</RootNamespace>
     <TargetFramework>netcoreapp3.1</TargetFramework>
