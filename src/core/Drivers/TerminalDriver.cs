@@ -144,6 +144,8 @@ namespace System.Drivers
             return args.Cancel;
         }
 
+        public abstract void GenerateSuspendSignal();
+
         public void SetRawMode(bool raw, bool discard)
         {
             lock (_lock)

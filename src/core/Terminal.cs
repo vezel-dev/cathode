@@ -82,6 +82,11 @@ namespace System
             _driver.GenerateBreakSignal(signal);
         }
 
+        public static void GenerateSuspendSignal()
+        {
+            _driver.GenerateSuspendSignal();
+        }
+
         public static void SetRawMode(bool raw, bool discard)
         {
             _driver.SetRawMode(raw, discard);

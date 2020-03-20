@@ -221,6 +221,11 @@ namespace System.Drivers
             }, 0);
         }
 
+        public override void GenerateSuspendSignal()
+        {
+            // Windows does not have an equivalent of SIGTSTP.
+        }
+
         static unsafe bool IsHandleValid(HFILE handle, bool write)
         {
             if (handle.IsNull || handle.IsInvalid)

@@ -278,6 +278,11 @@ namespace System.Drivers
             });
         }
 
+        public override void GenerateSuspendSignal()
+        {
+            _ = Syscall.kill(Syscall.getpid(), Signum.SIGTSTP);
+        }
+
         static bool IsRedirected(int handle)
         {
             return !Syscall.isatty(handle);
