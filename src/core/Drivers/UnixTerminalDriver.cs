@@ -270,7 +270,7 @@ namespace System.Drivers
 
         public override void GenerateBreakSignal(TerminalBreakSignal signal)
         {
-            _ = Syscall.kill(Syscall.getpid(), signal switch
+            _ = Syscall.kill(0, signal switch
             {
                 TerminalBreakSignal.Interrupt => Signum.SIGINT,
                 TerminalBreakSignal.Quit => Signum.SIGQUIT,
@@ -280,7 +280,7 @@ namespace System.Drivers
 
         public override void GenerateSuspendSignal()
         {
-            _ = Syscall.kill(Syscall.getpid(), Signum.SIGTSTP);
+            _ = Syscall.kill(0, Signum.SIGTSTP);
         }
 
         static bool IsRedirected(int handle)
