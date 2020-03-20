@@ -6,10 +6,10 @@ namespace System
 {
     public static class Terminal
     {
-        public static event EventHandler<TerminalBreakEventArgs>? Break
+        public static event EventHandler<TerminalBreakSignalEventArgs>? BreakSignal
         {
-            add => _driver.Break += value;
-            remove => _driver.Break -= value;
+            add => _driver.BreakSignal += value;
+            remove => _driver.BreakSignal -= value;
         }
 
         public static TerminalReader StdIn => _driver.StdIn;
@@ -75,6 +75,11 @@ namespace System
 
             // Reset all terminal state to sane values.
             _driver.ResetAll();
+        }
+
+        public static void GenerateBreakSignal(TerminalBreakSignal signal)
+        {
+            _driver.GenerateBreakSignal(signal);
         }
 
         public static void SetRawMode(bool raw, bool discard)

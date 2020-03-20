@@ -1,14 +1,14 @@
 namespace System
 {
-    public sealed class TerminalBreakEventArgs : EventArgs
+    public sealed class TerminalBreakSignalEventArgs : EventArgs
     {
-        public TerminalBreakKey Key { get; }
+        public TerminalBreakSignal Signal { get; }
 
         public bool Cancel { get; set; }
 
-        internal TerminalBreakEventArgs(TerminalBreakKey key)
+        internal TerminalBreakSignalEventArgs(TerminalBreakSignal signal)
         {
-            Key = key;
+            Signal = signal;
         }
     }
 }

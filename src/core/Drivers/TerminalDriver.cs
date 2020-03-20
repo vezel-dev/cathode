@@ -9,7 +9,7 @@ namespace System.Drivers
     {
         const int ReadBufferSize = 4096;
 
-        public event EventHandler<TerminalBreakEventArgs>? Break;
+        public event EventHandler<TerminalBreakSignalEventArgs>? BreakSignal;
 
         public static Encoding Encoding { get; } = Encoding.UTF8;
 
@@ -132,11 +132,14 @@ namespace System.Drivers
             Console.SetError(new InvalidTextWriter());
         }
 
-        protected bool HandleBreak(bool interrupt)
-        {
-            var args = new TerminalBreakEventArgs(interrupt ? TerminalBreakKey.Interrupt : TerminalBreakKey.Quit);
+        public abstract void GenerateBreakSignal(TerminalBreakSignal signal);
 
-            Break?.Invoke(null, args);
+        protected bool HandleBreakSignal(bool interrupt)
+        {
+            var args = new TerminalBreakSignalEventArgs(interrupt ?
+                TerminalBreakSignal.Interrupt : TerminalBreakSignal.Quit);
+
+            BreakSignal?.Invoke(null, args);
 
             return args.Cancel;
         }

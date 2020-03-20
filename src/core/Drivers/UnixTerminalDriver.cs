@@ -251,7 +251,7 @@ namespace System.Drivers
                         // blocked if an event handler misbehaves.
                         _ = TerminalUtility.StartThread("Terminal Break Handler", () =>
                         {
-                            if (!HandleBreak(sig == sigInt))
+                            if (!HandleBreakSignal(sig == sigInt))
                             {
                                 // Get the value early to avoid ObjectDisposedException.
                                 var num = sig.Signum;
@@ -265,6 +265,16 @@ namespace System.Drivers
                         });
                     }
                 }
+            });
+        }
+
+        public override void GenerateBreakSignal(TerminalBreakSignal signal)
+        {
+            _ = Syscall.kill(Syscall.getpid(), signal switch
+            {
+                TerminalBreakSignal.Interrupt => Signum.SIGINT,
+                TerminalBreakSignal.Quit => Signum.SIGQUIT,
+                _ => throw new ArgumentOutOfRangeException(nameof(signal)),
             });
         }
 

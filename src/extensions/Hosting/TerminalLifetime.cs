@@ -48,13 +48,13 @@ namespace Microsoft.Extensions.Hosting
             _disposeEvent.Set();
 
             AppDomain.CurrentDomain.ProcessExit -= OnProcessExit;
-            Terminal.Break -= OnBreak;
+            Terminal.BreakSignal -= OnBreakSignal;
 
             _stopping.Dispose();
             _started.Dispose();
         }
 
-        void OnBreak(object? sender, TerminalBreakEventArgs e)
+        void OnBreakSignal(object? sender, TerminalBreakSignalEventArgs e)
         {
             // We will shut down gracefully.
             e.Cancel = true;
@@ -93,7 +93,7 @@ namespace Microsoft.Extensions.Hosting
                     _logger.LogInformation("Application is shutting down..."));
             }
 
-            Terminal.Break += OnBreak;
+            Terminal.BreakSignal += OnBreakSignal;
             AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
 
             return Task.CompletedTask;

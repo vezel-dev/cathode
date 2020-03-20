@@ -206,9 +206,19 @@ namespace System.Drivers
             _ = _out.AddMode(outMode) || _error.AddMode(outMode);
 
             // Keep the delegate alive by storing it in a field.
-            _handler = e => HandleBreak(e == Kernel32.CTRL_EVENT.CTRL_C_EVENT);
+            _handler = e => HandleBreakSignal(e == Kernel32.CTRL_EVENT.CTRL_C_EVENT);
 
             _ = Kernel32.SetConsoleCtrlHandler(_handler, true);
+        }
+
+        public override void GenerateBreakSignal(TerminalBreakSignal signal)
+        {
+            _ = Kernel32.GenerateConsoleCtrlEvent(signal switch
+            {
+                TerminalBreakSignal.Interrupt => Kernel32.CTRL_EVENT.CTRL_C_EVENT,
+                TerminalBreakSignal.Quit => Kernel32.CTRL_EVENT.CTRL_BREAK_EVENT,
+                _ => throw new ArgumentOutOfRangeException(nameof(signal)),
+            }, 0);
         }
 
         static unsafe bool IsHandleValid(HFILE handle, bool write)

@@ -1,6 +1,6 @@
 namespace System
 {
-    public enum TerminalBreakKey
+    public enum TerminalBreakSignal
     {
         Interrupt,
         Quit,

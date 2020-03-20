@@ -8,16 +8,16 @@ namespace Sample
     {
         static void Main(string[] args)
         {
-            static void OnBreak(object? sender, TerminalBreakEventArgs e)
+            static void OnBreakSignal(object? sender, TerminalBreakSignalEventArgs e)
             {
-                Terminal.OutLine("Received {0} event.", e.Key);
+                Terminal.OutLine("Received {0} event.", e.Signal);
 
                 e.Cancel = true;
             }
 
             Terminal.Title = nameof(Sample);
 
-            Terminal.Break += OnBreak;
+            Terminal.BreakSignal += OnBreakSignal;
 
             Terminal.ClearScreen();
             Terminal.MoveCursorTo(0, 0);
@@ -97,7 +97,7 @@ namespace Sample
             Terminal.OutLine();
             Terminal.OutLine("Starting host...");
 
-            Terminal.Break -= OnBreak;
+            Terminal.BreakSignal -= OnBreakSignal;
 
             Thread.Sleep(2500);
 
