@@ -15,7 +15,7 @@
       ]
     },
     "dotnet-symbol": {
-      "version": "1.0.105301",
+      "version": "1.0.115903",
       "commands": [
         "dotnet-symbol"
       ]
