@@ -263,8 +263,7 @@ namespace System.Drivers
                 Kernel32.CONSOLE_INPUT_MODE.ENABLE_LINE_INPUT |
                 Kernel32.CONSOLE_INPUT_MODE.ENABLE_ECHO_INPUT;
             var outMode =
-                Kernel32.CONSOLE_OUTPUT_MODE.ENABLE_PROCESSED_OUTPUT |
-                Kernel32.CONSOLE_OUTPUT_MODE.ENABLE_WRAP_AT_EOL_OUTPUT;
+                Kernel32.CONSOLE_OUTPUT_MODE.ENABLE_PROCESSED_OUTPUT;
 
             // TODO: Respect discard somehow?
             if (!(raw ? _in.RemoveMode(inMode) && (_out.RemoveMode(outMode) || _error.RemoveMode(outMode)) :
