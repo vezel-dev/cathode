@@ -267,11 +267,8 @@ namespace System.Drivers
                 Kernel32.CONSOLE_INPUT_MODE.ENABLE_PROCESSED_INPUT |
                 Kernel32.CONSOLE_INPUT_MODE.ENABLE_LINE_INPUT |
                 Kernel32.CONSOLE_INPUT_MODE.ENABLE_ECHO_INPUT;
-            var outMode =
-                Kernel32.CONSOLE_OUTPUT_MODE.ENABLE_PROCESSED_OUTPUT;
 
-            if (!(raw ? _in.RemoveMode(inMode) && (_out.RemoveMode(outMode) || _error.RemoveMode(outMode)) :
-                _in.AddMode(inMode) && (_out.AddMode(outMode) || _error.AddMode(outMode))))
+            if (!(raw ? _in.RemoveMode(inMode) : _in.AddMode(inMode)))
                 throw new TerminalException(
                     $"Could not change raw mode setting: {Win32Error.GetLastError().FormatMessage()}");
 
