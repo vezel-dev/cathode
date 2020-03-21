@@ -270,11 +270,14 @@ namespace System.Drivers
             var outMode =
                 Kernel32.CONSOLE_OUTPUT_MODE.ENABLE_PROCESSED_OUTPUT;
 
-            // TODO: Respect discard somehow?
             if (!(raw ? _in.RemoveMode(inMode) && (_out.RemoveMode(outMode) || _error.RemoveMode(outMode)) :
                 _in.AddMode(inMode) && (_out.AddMode(outMode) || _error.AddMode(outMode))))
                 throw new TerminalException(
                     $"Could not change raw mode setting: {Win32Error.GetLastError().FormatMessage()}");
+
+            if (!Kernel32.FlushConsoleInputBuffer(InHandle))
+                throw new TerminalException(
+                    $"Could not flush input buffer: {Win32Error.GetLastError().FormatMessage()}");
         }
     }
 }
