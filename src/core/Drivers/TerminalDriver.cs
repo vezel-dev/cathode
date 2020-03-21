@@ -253,7 +253,8 @@ namespace System.Drivers
         {
             _ = count >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(count));
 
-            Sequence($"{CSI}{count}{type}");
+            if (count != 0)
+                Sequence($"{CSI}{count}{type}");
         }
 
         public void MoveBufferUp(int count)
@@ -271,14 +272,15 @@ namespace System.Drivers
             _ = row >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(row));
             _ = column >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(column));
 
-            Sequence($"{CSI}{column};{row}H");
+            Sequence($"{CSI}{column + 1};{row + 1}H");
         }
 
         void MoveCursor(char type, int count)
         {
             _ = count >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(count));
 
-            Sequence($"{CSI}{count}{type}");
+            if (count != 0)
+                Sequence($"{CSI}{count}{type}");
         }
 
         public void MoveCursorUp(int count)
