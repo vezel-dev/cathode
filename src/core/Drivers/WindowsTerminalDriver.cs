@@ -197,8 +197,7 @@ namespace System.Drivers
             var outMode =
                 Kernel32.CONSOLE_OUTPUT_MODE.ENABLE_PROCESSED_OUTPUT |
                 Kernel32.CONSOLE_OUTPUT_MODE.ENABLE_WRAP_AT_EOL_OUTPUT |
-                Kernel32.CONSOLE_OUTPUT_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING |
-                Kernel32.CONSOLE_OUTPUT_MODE.DISABLE_NEWLINE_AUTO_RETURN;
+                Kernel32.CONSOLE_OUTPUT_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING;
 
             // Set modes on all handles in case one of them has been redirected. These calls can
             // fail if there is no console attached, but that is OK.
@@ -267,8 +266,11 @@ namespace System.Drivers
                 Kernel32.CONSOLE_INPUT_MODE.ENABLE_PROCESSED_INPUT |
                 Kernel32.CONSOLE_INPUT_MODE.ENABLE_LINE_INPUT |
                 Kernel32.CONSOLE_INPUT_MODE.ENABLE_ECHO_INPUT;
+            var outMode =
+                Kernel32.CONSOLE_OUTPUT_MODE.DISABLE_NEWLINE_AUTO_RETURN;
 
-            if (!(raw ? _in.RemoveMode(inMode) : _in.AddMode(inMode)))
+            if (!(raw ? _in.RemoveMode(inMode) && (_out.RemoveMode(outMode) || _error.RemoveMode(outMode)) :
+                _in.AddMode(inMode) && (_out.AddMode(outMode) || _error.AddMode(outMode))))
                 throw new TerminalException(
                     $"Could not change raw mode setting: {Win32Error.GetLastError().FormatMessage()}");
 
