@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.IO;
 
 namespace System
@@ -29,7 +30,21 @@ namespace System
         {
             _ = writer ?? throw new ArgumentNullException(nameof(writer));
 
-            TerminalUtility.EncodeAndExecute(value, writer.Encoding, span => writer.WriteBinary(span));
+            var len = writer.Encoding.GetByteCount(value);
+            var array = ArrayPool<byte>.Shared.Rent(len);
+
+            try
+            {
+                var span = array.AsSpan(0, len);
+
+                _ = writer.Encoding.GetBytes(value, span);
+
+                writer.WriteBinary(span);
+            }
+            finally
+            {
+                ArrayPool<byte>.Shared.Return(array);
+            }
         }
 
         public static void Write(this TerminalWriter writer, string? value)
