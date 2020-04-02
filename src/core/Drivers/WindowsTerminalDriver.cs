@@ -222,7 +222,11 @@ namespace System.Drivers
                     // HandleResize will check whether the size is actually different from the last
                     // time the event was fired.
                     if (GetSize() is TerminalSize s)
+                    {
+                        _size = s;
+
                         HandleResize(s);
+                    }
 
                     // TODO: Do we need to make this configurable?
                     Thread.Sleep(100);
