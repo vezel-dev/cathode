@@ -59,9 +59,14 @@ namespace System.IO
             Write(buffer.AsSpan(offset, count));
         }
 
-        public override unsafe void WriteByte(byte value)
+        public override void WriteByte(byte value)
         {
-            Write(new ReadOnlySpan<byte>(&value, 1));
+            ReadOnlySpan<byte> span = stackalloc byte[1]
+            {
+                value,
+            };
+
+            Write(span);
         }
     }
 }

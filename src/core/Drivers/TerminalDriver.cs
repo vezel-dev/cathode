@@ -158,11 +158,11 @@ namespace System.Drivers
 
         protected abstract void SetRawModeCore(bool raw, bool discard);
 
-        public unsafe byte? ReadRaw()
+        public byte? ReadRaw()
         {
-            byte value;
+            Span<byte> span = stackalloc byte[1];
 
-            return StdIn.Stream.Read(new Span<byte>(&value, 1)) == 1 ? value : default;
+            return StdIn.Stream.Read(span) == 1 ? span[0] : default;
         }
 
         public string? ReadLine()
