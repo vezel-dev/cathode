@@ -1,4 +1,5 @@
 using System.IO;
+using System.Threading;
 using Vanara.PInvoke;
 
 namespace System.Drivers
@@ -153,16 +154,18 @@ namespace System.Drivers
 
         public override TerminalWriter StdError => _error;
 
-        public override (int Width, int Height) Size
+        public override TerminalSize Size
         {
             get
             {
-                if (GetBufferInfo() is Kernel32.CONSOLE_SCREEN_BUFFER_INFO i)
-                    _size = (i.srWindow.Right - i.srWindow.Left + 1, i.srWindow.Bottom - i.srWindow.Top + 1);
+                if (GetSize() is TerminalSize s)
+                    _size = s;
 
                 return _size ?? throw new TerminalException("There is no terminal attached.");
             }
         }
+
+        readonly ManualResetEventSlim _event = new ManualResetEventSlim();
 
         readonly WindowsTerminalReader _in;
 
@@ -170,7 +173,7 @@ namespace System.Drivers
 
         readonly WindowsTerminalWriter _error;
 
-        (int Width, int Height)? _size;
+        TerminalSize? _size;
 
 #pragma warning disable IDE0052
 
@@ -208,6 +211,31 @@ namespace System.Drivers
             _handler = e => HandleBreakSignal(e == Kernel32.CTRL_EVENT.CTRL_C_EVENT);
 
             _ = Kernel32.SetConsoleCtrlHandler(_handler, true);
+
+            // Windows currently has no SIGWINCH equivalent, so we have to poll for size changes.
+            _ = TerminalUtility.StartThread("Terminal Resize Listener", () =>
+            {
+                while (true)
+                {
+                    _event.Wait();
+
+                    // HandleResize will check whether the size is actually different from the last
+                    // time the event was fired.
+                    if (GetSize() is TerminalSize s)
+                        HandleResize(s);
+
+                    // TODO: Do we need to make this configurable?
+                    Thread.Sleep(100);
+                }
+            });
+        }
+
+        protected override void ToggleResizeEvent(bool enable)
+        {
+            if (enable)
+                _event.Set();
+            else
+                _event.Reset();
         }
 
         public override void GenerateBreakSignal(TerminalBreakSignal signal)
@@ -246,15 +274,17 @@ namespace System.Drivers
                 !Kernel32.GetConsoleMode(handle, out Kernel32.CONSOLE_INPUT_MODE _);
         }
 
-        Kernel32.CONSOLE_SCREEN_BUFFER_INFO? GetBufferInfo()
+        TerminalSize? GetSize()
         {
-            static Kernel32.CONSOLE_SCREEN_BUFFER_INFO? GetBufferInfo(HFILE handle)
+            static Kernel32.CONSOLE_SCREEN_BUFFER_INFO? GetInfo(HFILE handle)
             {
                 return Kernel32.GetConsoleScreenBufferInfo(handle, out var info) ? info : default;
             }
 
             // Try both handles in case only one of them has been redirected.
-            return GetBufferInfo(_out.Handle) ?? GetBufferInfo(_error.Handle);
+            return (GetInfo(_out.Handle) ?? GetInfo(_error.Handle)) is Kernel32.CONSOLE_SCREEN_BUFFER_INFO i ?
+                new TerminalSize(i.srWindow.Right - i.srWindow.Left + 1, i.srWindow.Bottom - i.srWindow.Top + 1) :
+                default;
         }
 
         protected override void SetRawModeCore(bool raw, bool discard)

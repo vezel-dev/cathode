@@ -6,6 +6,12 @@ namespace System
 {
     public static class Terminal
     {
+        public static event EventHandler<TerminalResizeEventArgs>? Resize
+        {
+            add => _driver.Resize += value;
+            remove => _driver.Resize -= value;
+        }
+
         public static event EventHandler<TerminalBreakSignalEventArgs>? BreakSignal
         {
             add => _driver.BreakSignal += value;
@@ -26,7 +32,7 @@ namespace System
             set => _driver.Title = value;
         }
 
-        public static (int Width, int Height) Size => _driver.Size;
+        public static TerminalSize Size => _driver.Size;
 
         public static TerminalKeyMode CursorKeyMode
         {

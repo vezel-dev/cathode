@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading;
 using static System.TerminalConstants;
 
 namespace System.Drivers
@@ -8,6 +9,30 @@ namespace System.Drivers
     abstract class TerminalDriver
     {
         const int ReadBufferSize = 4096;
+
+        public event EventHandler<TerminalResizeEventArgs>? Resize
+        {
+            add
+            {
+                lock (_lock)
+                {
+                    _resize += value;
+
+                    if (_resize != null)
+                        ToggleResizeEvent(true);
+                }
+            }
+            remove
+            {
+                lock (_lock)
+                {
+                    _resize -= value;
+
+                    if (_resize == null)
+                        ToggleResizeEvent(false);
+                }
+            }
+        }
 
         public event EventHandler<TerminalBreakSignalEventArgs>? BreakSignal;
 
@@ -37,7 +62,7 @@ namespace System.Drivers
             }
         }
 
-        public abstract (int Width, int Height) Size { get; }
+        public abstract TerminalSize Size { get; }
 
         public TerminalKeyMode CursorKeyMode
         {
@@ -101,6 +126,10 @@ namespace System.Drivers
 
         string _title = string.Empty;
 
+        EventHandler<TerminalResizeEventArgs>? _resize;
+
+        TerminalSize? _lastResize;
+
         TerminalKeyMode _cursor;
 
         TerminalKeyMode _numeric;
@@ -130,6 +159,23 @@ namespace System.Drivers
             Console.SetIn(new InvalidTextReader());
             Console.SetOut(new InvalidTextWriter());
             Console.SetError(new InvalidTextWriter());
+        }
+
+        protected virtual void ToggleResizeEvent(bool enable)
+        {
+        }
+
+        protected void HandleResize(TerminalSize size)
+        {
+            if (size != _lastResize)
+            {
+                _lastResize = size;
+
+                // Do this on the thread pool to avoid breaking driver internals if an event handler
+                // misbehaves. Unlike a break signal, we do not need to use a dedicated thread since
+                // this event is relatively low priority.
+                _ = ThreadPool.QueueUserWorkItem(state => _resize?.Invoke(null, new TerminalResizeEventArgs(size)));
+            }
         }
 
         public abstract void GenerateBreakSignal(TerminalBreakSignal signal);
@@ -236,17 +282,17 @@ namespace System.Drivers
             _ = top >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(top));
             _ = bottom >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(bottom));
 
-            var (_, height) = Size;
+            var size = Size;
 
             // Most terminals will clamp the values so that there are at least
             // 2 lines of scrollable text: One for the last line written and one
             // for the current line. Enforce this. We throw TerminalException
             // instead of ArgumentException since the Size property could change
             // between the caller observing it and calling this method.
-            if (height - top - bottom < 2)
+            if (size.Height - top - bottom < 2)
                 throw new TerminalException("Scroll region is too small.");
 
-            Sequence($"{CSI}{top + 1};{height - bottom}r");
+            Sequence($"{CSI}{top + 1};{size.Height - bottom}r");
         }
 
         void MoveBuffer(char type, int count)

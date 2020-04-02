@@ -187,9 +187,9 @@ namespace System.Drivers
 
         public override TerminalWriter StdError { get; }
 
-        public override (int Width, int Height) Size => _size switch
+        public override TerminalSize Size => _size switch
         {
-            (int _, int _) s => s,
+            TerminalSize s => s,
             _ => throw new TerminalException("There is no terminal attached."),
         };
 
@@ -198,7 +198,7 @@ namespace System.Drivers
 
         readonly object _rawLock = new object();
 
-        (int, int)? _size;
+        TerminalSize? _size;
 
         UnixTerminalDriver()
         {
@@ -208,8 +208,16 @@ namespace System.Drivers
 
             void RefreshWindowSize()
             {
-                if (_interop.Size is (int _, int _) s)
+                if (_interop.Size is TerminalSize s)
+                {
                     _size = s;
+
+                    // We currently trust that SIGWINCH will always be delivered when the terminal
+                    // size changes. If this ever turns out to be false somewhere/somehow, we may
+                    // need to use a background thread to also poll for size changes like in the
+                    // Windows driver.
+                    HandleResize(s);
+                }
             }
 
             RefreshWindowSize();
