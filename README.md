@@ -20,16 +20,20 @@ future releases of `System.Terminal`.
 
 ## Usage
 
-To install the core package, run `dotnet add package Terminal`. If you are
-developing an application that uses the .NET Generic Host (with e.g. ASP.NET
-Core or Orleans), you can instead install the extensions package by running
-`dotnet add package Terminal.Extensions`.
+This project provides the following packages:
+
+* [Terminal](https://www.nuget.org/packages/Terminal): Provides the core
+  terminal API.
+* [Terminal.Extensions](https://www.nuget.org/packages/Terminal.Extensions):
+  Provides terminal hosting and logging for the .NET Generic Host.
+
+To install a package, run `dotnet add package <name>`.
 
 See the [sample program](src/sample) for examples of what the API can do.
 
 ## Resources
 
-These are useful resources used in the development of `System.Terminal`:
+These are helpful resources used in the development of `System.Terminal`:
 
 * <https://www.ecma-international.org/publications/standards/Ecma-048.htm>
 * <https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences>
