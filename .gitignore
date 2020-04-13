@@ -1,6 +1,6 @@
-*.user
-.vs
-.vscode
+/pkg
 /src/*/bin
 /src/*/obj
-/pkg
+*.user
+.vscode
+.vs
