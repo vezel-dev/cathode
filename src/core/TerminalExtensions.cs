@@ -1,4 +1,5 @@
 using System.Buffers;
+using System.Globalization;
 using System.IO;
 
 namespace System
@@ -59,7 +60,7 @@ namespace System
 
         public static void Write(this TerminalWriter writer, string format, params object?[] args)
         {
-            writer.Write(string.Format(format, args));
+            writer.Write(string.Format(CultureInfo.CurrentCulture, format, args));
         }
 
         public static void WriteLine(this TerminalWriter writer)
@@ -79,7 +80,7 @@ namespace System
 
         public static void WriteLine(this TerminalWriter writer, string format, params object?[] args)
         {
-            writer.WriteLine(string.Format(format, args));
+            writer.WriteLine(string.Format(CultureInfo.CurrentCulture, format, args));
         }
     }
 }

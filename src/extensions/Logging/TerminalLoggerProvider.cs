@@ -20,6 +20,8 @@ namespace Microsoft.Extensions.Logging.Terminal
 
         public TerminalLoggerProvider(IOptionsMonitor<TerminalLoggerOptions> options)
         {
+            _ = options ?? throw new ArgumentNullException(nameof(options));
+
             _options = options;
             _processor = new TerminalLoggerProcessor(options.CurrentValue);
             _reload = options.OnChange(opts => _processor.Options = opts);

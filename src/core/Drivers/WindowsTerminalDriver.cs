@@ -4,6 +4,8 @@ using Vanara.PInvoke;
 
 namespace System.Drivers
 {
+#pragma warning disable CA1001
+
     sealed class WindowsTerminalDriver : TerminalDriver
     {
         sealed class WindowsTerminalReader : TerminalReader
@@ -313,4 +315,6 @@ namespace System.Drivers
                     $"Could not flush input buffer: {Win32Error.GetLastError().FormatMessage()}");
         }
     }
+
+#pragma warning restore CA1001
 }

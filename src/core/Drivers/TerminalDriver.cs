@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -156,9 +157,13 @@ namespace System.Drivers
             //
             // There are still many problematic properties and methods beyond these, but there is
             // not much we can do about those.
+#pragma warning disable CA2000
+
             Console.SetIn(new InvalidTextReader());
             Console.SetOut(new InvalidTextWriter());
             Console.SetError(new InvalidTextWriter());
+
+#pragma warning restore CA2000
         }
 
         protected virtual void ToggleResizeEvent(bool enable)
@@ -389,7 +394,7 @@ namespace System.Drivers
 
             foreach (var (code, enabled) in dict)
                 if (enabled)
-                    seqs.Add(code.ToString());
+                    seqs.Add(code.ToString(CultureInfo.InvariantCulture));
 
             Sequence($"{CSI}{string.Join(';', seqs)}m");
         }

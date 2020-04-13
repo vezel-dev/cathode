@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.IO;
 
 namespace Microsoft.Extensions.Logging.Terminal
@@ -51,6 +52,9 @@ namespace Microsoft.Extensions.Logging.Terminal
         public static void DefaultWriter(TerminalLoggerOptions options, TerminalWriter writer,
             in TerminalLoggerEntry entry)
         {
+            _ = options ?? throw new ArgumentNullException(nameof(options));
+            _ = writer ?? throw new ArgumentNullException(nameof(writer));
+
             Decorator Decorate((byte R, byte G, byte B)? colors)
             {
                 return !options.DisableColors && colors != null ? new Decorator(colors.Value) : default;
@@ -59,7 +63,7 @@ namespace Microsoft.Extensions.Logging.Terminal
             writer.Write("[");
 
             using (_ = Decorate((127, 127, 127)))
-                writer.Write(entry.Timestamp.ToString("HH:mm:ss.fff"));
+                writer.Write(entry.Timestamp.ToString("HH:mm:ss.fff", CultureInfo.CurrentCulture));
 
             writer.Write("][");
 

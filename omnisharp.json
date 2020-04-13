@@ -1,5 +1,9 @@
 {
   "FormattingOptions": {
     "EnableEditorConfigSupport": true
+  },
+  "RoslynExtensionsOptions": {
+    "EnableAnalyzersSupport": false,
+    "EnableDecompilationSupport": true
   }
 }

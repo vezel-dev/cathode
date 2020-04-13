@@ -25,12 +25,18 @@ namespace Microsoft.Extensions.Logging.Terminal
                     foreach (var msg in _queue.GetConsumingEnumerable())
                         Write(msg);
                 }
-                finally
+                catch (Exception)
                 {
-                    // If for some reason we encounter an exception in this
-                    // thread, we need to mark the queue as completed so that
-                    // subsequent writes will at least happen in Enqueue.
-                    _queue.CompleteAdding();
+                    // The writer method has failed somehow. Ensure that
+                    // subsequent writes at least happen in Enqueue.
+
+                    try
+                    {
+                        _queue.CompleteAdding();
+                    }
+                    catch (ObjectDisposedException)
+                    {
+                    }
                 }
             });
         }
@@ -41,7 +47,7 @@ namespace Microsoft.Extensions.Logging.Terminal
             {
                 _queue.Add(entry);
             }
-            catch (InvalidOperationException)
+            catch (Exception ex) when (ex is InvalidOperationException || ex is ObjectDisposedException)
             {
                 // The processor thread is gone, so just write it directly.
                 Write(entry);
@@ -56,7 +62,16 @@ namespace Microsoft.Extensions.Logging.Terminal
 
         public void Dispose()
         {
-            _queue.CompleteAdding();
+            try
+            {
+                _queue.CompleteAdding();
+            }
+            catch (ObjectDisposedException)
+            {
+                // It might already be completed due to a writer method failure.
+            }
+
+            _queue.Dispose();
 
             _ = _thread.Join(1500);
         }

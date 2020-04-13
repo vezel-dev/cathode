@@ -10,8 +10,9 @@ namespace Microsoft.Extensions.Logging.Terminal
         public static ILoggingBuilder AddTerminal(this ILoggingBuilder builder,
             Action<TerminalLoggerOptions>? configureOptions = null)
         {
-            builder.AddConfiguration();
+            _ = builder ?? throw new ArgumentNullException(nameof(builder));
 
+            builder.AddConfiguration();
             builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerProvider, TerminalLoggerProvider>());
             LoggerProviderOptions.RegisterProviderOptions<TerminalLoggerOptions, TerminalLoggerProvider>(
                 builder.Services);

@@ -37,7 +37,8 @@ namespace Sample
             }
 
             var name = args[0].ToLowerInvariant();
-            var t = GetScenarios().FirstOrDefault(x => x.Name.ToLowerInvariant().StartsWith(name.ToLowerInvariant()));
+            var t = GetScenarios().FirstOrDefault(x =>
+                x.Name.StartsWith(name, StringComparison.InvariantCultureIgnoreCase));
 
             if (t == null)
             {
@@ -57,7 +58,7 @@ namespace Sample
             Terminal.ClearScreen();
             Terminal.MoveCursorTo(0, 0);
 
-            await ((IScenario)Activator.CreateInstance(t)!).RunAsync();
+            await ((IScenario)Activator.CreateInstance(t)!).RunAsync().ConfigureAwait(false);
 
             return 0;
         }

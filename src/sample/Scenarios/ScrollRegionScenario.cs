@@ -34,7 +34,8 @@ namespace Sample.Scenarios
                     Terminal.ClearLine();
 
                     Terminal.ForegroundColor(PickRandom(), PickRandom(), PickRandom());
-                    Terminal.Out("Last string: {0}", str.Replace("\n", string.Empty).Replace("\r", string.Empty));
+                    Terminal.Out("Last string: {0}", str.Replace("\n", string.Empty, StringComparison.Ordinal)
+                        .Replace("\r", string.Empty, StringComparison.Ordinal));
                     Terminal.ResetAttributes();
 
                     Terminal.RestoreCursorPosition();

@@ -7,9 +7,11 @@ using Microsoft.Extensions.Options;
 
 namespace Microsoft.Extensions.Hosting
 {
+#pragma warning disable CA2213
+
     public sealed class TerminalLifetime : IHostLifetime, IDisposable
     {
-        readonly ManualResetEventSlim _disposeEvent = new ManualResetEventSlim(false);
+        readonly ManualResetEventSlim _disposeEvent = new ManualResetEventSlim();
 
         readonly TerminalLifetimeOptions _options;
 
@@ -70,6 +72,7 @@ namespace Microsoft.Extensions.Hosting
                 _logger.LogInformation("Waiting for the host to be disposed; this is taking longer than expected.");
 
             _disposeEvent.Wait();
+            _disposeEvent.Dispose();
 
             // CoreCLR sets a non-zero exit code for SIGTERM. We shut down gracefully, so revert it.
             Environment.ExitCode = 0;
@@ -104,4 +107,6 @@ namespace Microsoft.Extensions.Hosting
             return Task.CompletedTask;
         }
     }
+
+#pragma warning restore CA2213
 }
