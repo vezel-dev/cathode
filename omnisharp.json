@@ -3,7 +3,7 @@
     "EnableEditorConfigSupport": true
   },
   "RoslynExtensionsOptions": {
-    "EnableAnalyzersSupport": false,
+    "EnableAnalyzersSupport": true,
     "EnableDecompilationSupport": true
   }
 }
