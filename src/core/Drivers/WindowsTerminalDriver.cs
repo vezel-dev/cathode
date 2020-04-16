@@ -175,13 +175,13 @@ namespace System.Drivers
 
         readonly WindowsTerminalWriter _error;
 
-        TerminalSize? _size;
-
 #pragma warning disable IDE0052
 
         readonly Kernel32.HandlerRoutine _handler;
 
 #pragma warning restore IDE0052
+
+        TerminalSize? _size;
 
         WindowsTerminalDriver()
         {

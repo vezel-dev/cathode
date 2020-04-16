@@ -6,6 +6,9 @@ namespace System.Drivers
     sealed class LinuxTerminalInterop : IUnixTerminalInterop
     {
 #pragma warning disable IDE1006
+#pragma warning disable SA1300
+#pragma warning disable SA1307
+#pragma warning disable SA1310
 
         struct termios
         {
@@ -105,6 +108,9 @@ namespace System.Drivers
         [DllImport("libc")]
         static extern int ioctl(int fd, UIntPtr request, out winsize argp);
 
+#pragma warning disable SA1310
+#pragma warning disable SA1307
+#pragma warning disable SA1300
 #pragma warning restore IDE1006
 
         public static LinuxTerminalInterop Instance { get; } = new LinuxTerminalInterop();
@@ -134,26 +140,6 @@ namespace System.Drivers
             }
         }
 
-        bool UpdateSettings(int mode, in termios settings)
-        {
-            int ret;
-
-            while ((ret = tcsetattr(UnixTerminalDriver.InHandle, mode, settings)) == -1 &&
-                Stdlib.GetLastError() == Errno.EINTR)
-            {
-                // Retry in case we get interrupted by a signal.
-            }
-
-            if (ret == 0)
-            {
-                _current = settings;
-
-                return true;
-            }
-
-            return false;
-        }
-
         public void RefreshSettings()
         {
             // This call can fail if the terminal is detached, but that is OK.
@@ -178,6 +164,26 @@ namespace System.Drivers
             return UpdateSettings(discard ? TCSAFLUSH : TCSANOW, settings) ? true :
                 throw new TerminalException(
                     $"Could not change raw mode setting: {Stdlib.strerror(Stdlib.GetLastError())}");
+        }
+
+        bool UpdateSettings(int mode, in termios settings)
+        {
+            int ret;
+
+            while ((ret = tcsetattr(UnixTerminalDriver.InHandle, mode, settings)) == -1 &&
+                Stdlib.GetLastError() == Errno.EINTR)
+            {
+                // Retry in case we get interrupted by a signal.
+            }
+
+            if (ret == 0)
+            {
+                _current = settings;
+
+                return true;
+            }
+
+            return false;
         }
     }
 }

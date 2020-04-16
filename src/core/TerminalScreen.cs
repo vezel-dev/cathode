@@ -19,6 +19,13 @@ namespace System
                 Switch(screen);
             }
 
+            public void Dispose()
+            {
+                // We might be default-initialized.
+                if (OldScreen != null)
+                    Switch(OldScreen);
+            }
+
             void Switch(TerminalScreen screen)
             {
                 lock (_lock)
@@ -27,13 +34,6 @@ namespace System
 
                     Terminal.Screen = screen;
                 }
-            }
-
-            public void Dispose()
-            {
-                // We might be default-initialized.
-                if (OldScreen != null)
-                    Switch(OldScreen);
             }
         }
 
@@ -87,15 +87,15 @@ namespace System
             _driver = driver;
         }
 
+        public ScreenActivator Activate()
+        {
+            return new ScreenActivator(this);
+        }
+
         void CheckActive()
         {
             if (!IsActive)
                 throw new InvalidOperationException("This screen is inactive.");
-        }
-
-        public ScreenActivator Activate()
-        {
-            return new ScreenActivator(this);
         }
     }
 }
