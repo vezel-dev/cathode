@@ -1,8 +1,9 @@
 # System.Terminal
 
-[![Latest Release](https://img.shields.io/github/release/alexrp/system-terminal/all.svg)](https://github.com/alexrp/system-terminal/releases)
-[![NuGet Package](https://img.shields.io/nuget/v/Terminal.svg)](https://www.nuget.org/packages/Terminal)
 [![Build Status](https://github.com/alexrp/system-terminal/workflows/CI/badge.svg)](https://github.com/alexrp/system-terminal/actions?workflow=CI)
+[![Latest Release](https://img.shields.io/github/release/alexrp/system-terminal/all.svg?label=Latest%20Release)](https://github.com/alexrp/system-terminal/releases)
+[![Terminal](https://img.shields.io/nuget/v/Terminal.svg?label=Terminal)](https://www.nuget.org/packages/Terminal)
+[![Terminal.Extensions](https://img.shields.io/nuget/v/Terminal.Extensions.svg?label=Terminal.Extensions)](https://www.nuget.org/packages/Terminal.Extensions)
 
 `System.Terminal` is a terminal-centric replacement for `System.Console`.
 
@@ -20,7 +21,7 @@ future releases of `System.Terminal`.
 
 ## Usage
 
-This project provides the following packages:
+This project offers the following packages:
 
 * [Terminal](https://www.nuget.org/packages/Terminal): Provides the core
   terminal API.
