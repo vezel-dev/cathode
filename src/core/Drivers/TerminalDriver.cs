@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -359,26 +357,33 @@ namespace System.Drivers
         public void Decorations(bool bold = false, bool faint = false, bool italic = false, bool underline = false,
             bool blink = false, bool invert = false, bool invisible = false, bool strike = false)
         {
-            // TODO: Avoid the allocations here, even if the code gets a bit ugly.
+            Span<char> codes = stackalloc char[16];
 
-            var dict = new Dictionary<byte, bool>
+            codes.Clear();
+
+            var i = 0;
+
+            void Handle(Span<char> codes, char code, bool value)
             {
-                [1] = bold,
-                [2] = faint,
-                [3] = italic,
-                [4] = underline,
-                [5] = blink,
-                [7] = invert,
-                [8] = invisible,
-                [9] = strike,
-            };
-            var seqs = new List<string>(dict.Count);
+                if (!value)
+                    return;
 
-            foreach (var (code, enabled) in dict)
-                if (enabled)
-                    seqs.Add(code.ToString(CultureInfo.InvariantCulture));
+                if (i != 0)
+                    codes[i++] = ';';
 
-            Sequence($"{CSI}{string.Join(';', seqs)}m");
+                codes[i++] = code;
+            }
+
+            Handle(codes, '1', bold);
+            Handle(codes, '2', faint);
+            Handle(codes, '3', italic);
+            Handle(codes, '4', underline);
+            Handle(codes, '5', blink);
+            Handle(codes, '7', invert);
+            Handle(codes, '8', invisible);
+            Handle(codes, '9', strike);
+
+            Sequence($"{CSI}{codes.TrimEnd(char.MinValue).ToString()}m");
         }
 
         public void ResetAttributes()
