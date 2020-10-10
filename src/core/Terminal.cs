@@ -58,12 +58,6 @@ namespace System
             set => Screen.IsCursorBlinking = value;
         }
 
-        public static bool IsGraphicsEnabled
-        {
-            get => _driver.IsGraphicsEnabled;
-            set => _driver.IsGraphicsEnabled = value;
-        }
-
         public static TerminalScreen MainScreen { get; }
 
         public static TerminalScreen AlternateScreen { get; }

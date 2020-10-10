@@ -108,20 +108,6 @@ namespace System.Drivers
             }
         }
 
-        public bool IsGraphicsEnabled
-        {
-            get => _graphics;
-            set
-            {
-                lock (_lock)
-                {
-                    Sequence($"{ESC}({(value ? '0' : 'B')}");
-
-                    _graphics = value;
-                }
-            }
-        }
-
         readonly object _lock = new object();
 
         readonly Lazy<StreamReader> _reader;
@@ -135,8 +121,6 @@ namespace System.Drivers
         TerminalKeyMode _cursor;
 
         TerminalKeyMode _numeric;
-
-        bool _graphics;
 
         [SuppressMessage("Microsoft.Reliability", "CA2000", Justification = "Intentional.")]
         protected TerminalDriver()
