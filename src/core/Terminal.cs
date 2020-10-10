@@ -303,5 +303,15 @@ namespace System
         {
             _driver.ResetAttributes();
         }
+
+        public static void OpenHyperlink(Uri uri, string? id = null)
+        {
+            _driver.OpenHyperlink(uri, id);
+        }
+
+        public static void CloseHyperlink()
+        {
+            _driver.CloseHyperlink();
+        }
     }
 }

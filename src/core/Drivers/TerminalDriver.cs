@@ -388,6 +388,21 @@ namespace System.Drivers
             Sequence($"{CSI}0m");
         }
 
+        public void OpenHyperlink(Uri uri, string? id = null)
+        {
+            _ = uri ?? throw new ArgumentNullException(nameof(uri));
+
+            if (id != null)
+                id = $"id={id}";
+
+            Sequence($"{OSC}8;{id};{uri}{BEL}");
+        }
+
+        public void CloseHyperlink()
+        {
+            Sequence($"{OSC}8;;{BEL}");
+        }
+
         public void ResetAll()
         {
             Sequence($"{CSI}!p");

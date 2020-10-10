@@ -53,6 +53,14 @@ namespace Sample.Scenarios
             Terminal.OutLine("This text is struck through.");
             Terminal.ResetAttributes();
 
+            Terminal.OpenHyperlink(new("https://google.com"));
+            Terminal.OutLine("This is a hyperlink.");
+            Terminal.CloseHyperlink();
+
+            Terminal.OpenHyperlink(new("https://google.com"), "google");
+            Terminal.OutLine("This is a hyperlink with an ID.");
+            Terminal.CloseHyperlink();
+
             return Task.CompletedTask;
         }
     }
