@@ -108,11 +108,11 @@ namespace System.Drivers
         [DllImport("libc")]
         static extern int ioctl(int fd, UIntPtr request, out winsize argp);
 
-        public static LinuxTerminalInterop Instance { get; } = new LinuxTerminalInterop();
+        public static LinuxTerminalInterop Instance { get; } = new();
 
         public TerminalSize? Size =>
             ioctl(UnixTerminalDriver.OutHandle, (UIntPtr)TIOCGWINSZ, out var w) == 0 ?
-                new TerminalSize(w.ws_col, w.ws_row) : default;
+                new(w.ws_col, w.ws_row) : default;
 
         readonly termios? _original;
 

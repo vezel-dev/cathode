@@ -40,7 +40,7 @@ namespace Microsoft.Extensions.Logging.Terminal
             var msg = formatter(state, exception);
 
             if (!string.IsNullOrEmpty(msg) || exception != null)
-                _processor.Enqueue(new TerminalLoggerEntry(opts, now, logLevel, _name, eventId, msg, exception));
+                _processor.Enqueue(new(opts, now, logLevel, _name, eventId, msg, exception));
         }
     }
 }

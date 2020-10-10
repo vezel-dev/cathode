@@ -16,7 +16,7 @@ namespace System.Drivers
 
             public override bool IsRedirected => IsRedirected(Handle);
 
-            readonly object _lock = new object();
+            readonly object _lock = new();
 
             readonly string _name;
 
@@ -85,7 +85,7 @@ namespace System.Drivers
 
             public override bool IsRedirected => IsRedirected(Handle);
 
-            readonly object _lock = new object();
+            readonly object _lock = new();
 
             readonly string _name;
 
@@ -142,7 +142,7 @@ namespace System.Drivers
             }
         }
 
-        public static WindowsTerminalDriver Instance { get; } = new WindowsTerminalDriver();
+        public static WindowsTerminalDriver Instance { get; } = new();
 
         static HFILE InHandle => Kernel32.GetStdHandle(Kernel32.StdHandleType.STD_INPUT_HANDLE);
 
@@ -167,7 +167,7 @@ namespace System.Drivers
             }
         }
 
-        readonly ManualResetEventSlim _event = new ManualResetEventSlim();
+        readonly ManualResetEventSlim _event = new();
 
         readonly WindowsTerminalReader _in;
 
@@ -181,9 +181,9 @@ namespace System.Drivers
 
         WindowsTerminalDriver()
         {
-            _in = new WindowsTerminalReader(this, InHandle, "input");
-            _out = new WindowsTerminalWriter(this, OutHandle, "output");
-            _error = new WindowsTerminalWriter(this, ErrorHandle, "error");
+            _in = new(this, InHandle, "input");
+            _out = new(this, OutHandle, "output");
+            _error = new(this, ErrorHandle, "error");
 
             _ = Kernel32.SetConsoleCP((uint)Encoding.CodePage);
             _ = Kernel32.SetConsoleOutputCP((uint)Encoding.CodePage);
@@ -285,8 +285,7 @@ namespace System.Drivers
 
             // Try both handles in case only one of them has been redirected.
             return (GetInfo(_out.Handle) ?? GetInfo(_error.Handle)) is Kernel32.CONSOLE_SCREEN_BUFFER_INFO i ?
-                new TerminalSize(i.srWindow.Right - i.srWindow.Left + 1, i.srWindow.Bottom - i.srWindow.Top + 1) :
-                default;
+                new(i.srWindow.Right - i.srWindow.Left + 1, i.srWindow.Bottom - i.srWindow.Top + 1) : default;
         }
 
         protected override void SetRawModeCore(bool raw, bool discard)

@@ -106,7 +106,7 @@ namespace System.Drivers
             }
         }
 
-        readonly object _lock = new object();
+        readonly object _lock = new();
 
         readonly Lazy<StreamReader> _reader;
 
@@ -123,8 +123,7 @@ namespace System.Drivers
         [SuppressMessage("Microsoft.Reliability", "CA2000", Justification = "Intentional.")]
         protected TerminalDriver()
         {
-            _reader = new Lazy<StreamReader>(
-                () => new StreamReader(StdIn.Stream, StdIn.Encoding, false, ReadBufferSize, true));
+            _reader = new(() => new(StdIn.Stream, StdIn.Encoding, false, ReadBufferSize, true));
 
             // Accessing this property has no particularly important effect on Windows, but it does
             // do something important on Unix: If a terminal is attached, it will force Console to
@@ -159,7 +158,7 @@ namespace System.Drivers
                 // Do this on the thread pool to avoid breaking driver internals if an event handler
                 // misbehaves. Unlike a break signal, we do not need to use a dedicated thread since
                 // this event is relatively low priority.
-                _ = ThreadPool.QueueUserWorkItem(state => _resize?.Invoke(null, new TerminalResizeEventArgs(size)));
+                _ = ThreadPool.QueueUserWorkItem(state => _resize?.Invoke(null, new(size)));
             }
         }
 

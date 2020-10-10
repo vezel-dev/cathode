@@ -122,6 +122,7 @@ dotnet_diagnostic.IDE0050.severity = none
 # Reference: https://github.com/DotNetAnalyzers/StyleCopAnalyzers/tree/master/documentation
 [*.cs]
 dotnet_diagnostic.SA0001.severity = none
+dotnet_diagnostic.SA1000.severity = none
 dotnet_diagnostic.SA1101.severity = none
 dotnet_diagnostic.SA1116.severity = none
 dotnet_diagnostic.SA1117.severity = none

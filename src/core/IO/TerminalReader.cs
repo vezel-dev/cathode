@@ -9,7 +9,7 @@ namespace System.IO
         private protected TerminalReader(TerminalDriver driver)
             : base(driver)
         {
-            Stream = new TerminalInputStream(this);
+            Stream = new(this);
         }
 
         public abstract int Read(Span<byte> data);

@@ -11,7 +11,7 @@ namespace Microsoft.Extensions.Hosting
     public sealed class TerminalLifetime : IHostLifetime, IDisposable
     {
         [SuppressMessage("Microsoft.Usage", "CA2213", Justification = "Intentional.")]
-        readonly ManualResetEventSlim _disposeEvent = new ManualResetEventSlim();
+        readonly ManualResetEventSlim _disposeEvent = new();
 
         readonly TerminalLifetimeOptions _options;
 

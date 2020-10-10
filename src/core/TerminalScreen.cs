@@ -73,7 +73,7 @@ namespace System
             }
         }
 
-        static readonly object _lock = new object();
+        static readonly object _lock = new();
 
         readonly TerminalDriver _driver;
 
@@ -89,7 +89,7 @@ namespace System
 
         public ScreenActivator Activate()
         {
-            return new ScreenActivator(this);
+            return new(this);
         }
 
         void CheckActive()

@@ -7,12 +7,9 @@ namespace Microsoft.Extensions.Logging.Terminal
 {
     sealed class TerminalLoggerProcessor : IDisposable
     {
-        const int QueueSize = 4096;
-
         public TerminalLoggerOptions Options { get; set; }
 
-        readonly BlockingCollection<TerminalLoggerEntry> _queue =
-            new BlockingCollection<TerminalLoggerEntry>(QueueSize);
+        readonly BlockingCollection<TerminalLoggerEntry> _queue = new(4096); // TODO: Make configurable.
 
         readonly Thread _thread;
 
@@ -49,7 +46,7 @@ namespace Microsoft.Extensions.Logging.Terminal
             {
                 _queue.Add(entry);
             }
-            catch (Exception ex) when (ex is InvalidOperationException || ex is ObjectDisposedException)
+            catch (Exception ex) when (ex is InvalidOperationException or ObjectDisposedException)
             {
                 // The processor thread is gone, so just write it directly.
                 Write(entry);

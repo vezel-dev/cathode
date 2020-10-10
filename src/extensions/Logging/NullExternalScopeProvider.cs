@@ -4,7 +4,7 @@ namespace Microsoft.Extensions.Logging.Terminal
 {
     sealed class NullExternalScopeProvider : IExternalScopeProvider
     {
-        public static IExternalScopeProvider Instance { get; } = new NullExternalScopeProvider();
+        public static NullExternalScopeProvider Instance { get; } = new();
 
         NullExternalScopeProvider()
         {

@@ -14,7 +14,7 @@ namespace System.Drivers
 
             public override bool IsRedirected => IsRedirected(Handle);
 
-            readonly object _lock = new object();
+            readonly object _lock = new();
 
             readonly string _name;
 
@@ -97,7 +97,7 @@ namespace System.Drivers
 
             public override bool IsRedirected => IsRedirected(Handle);
 
-            readonly object _lock = new object();
+            readonly object _lock = new();
 
             readonly string _name;
 
@@ -179,7 +179,7 @@ namespace System.Drivers
 
         public const int ErrorHandle = 2;
 
-        public static UnixTerminalDriver Instance { get; } = new UnixTerminalDriver();
+        public static UnixTerminalDriver Instance { get; } = new();
 
         public override TerminalReader StdIn { get; }
 
@@ -196,7 +196,7 @@ namespace System.Drivers
         readonly IUnixTerminalInterop _interop = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ?
             (IUnixTerminalInterop)LinuxTerminalInterop.Instance : OSXTerminalInterop.Instance;
 
-        readonly object _rawLock = new object();
+        readonly object _rawLock = new();
 
         TerminalSize? _size;
 

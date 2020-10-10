@@ -16,7 +16,7 @@ namespace Sample.Scenarios
                 Terminal.Decorations(bold: true);
                 Terminal.OutLine("The last string entered will be displayed here.");
                 Terminal.ResetAttributes();
-                Terminal.OutLine(new string('-', Terminal.Size.Width));
+                Terminal.OutLine(new('-', Terminal.Size.Width));
 
                 var rng = new Random();
 
