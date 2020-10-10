@@ -9,7 +9,7 @@ namespace Microsoft.Extensions.Logging.Terminal
     {
         public TerminalLoggerOptions Options { get; set; }
 
-        readonly BlockingCollection<TerminalLoggerEntry> _queue = new(4096); // TODO: Make configurable.
+        readonly BlockingCollection<TerminalLoggerEntry> _queue;
 
         readonly Thread _thread;
 
@@ -17,6 +17,7 @@ namespace Microsoft.Extensions.Logging.Terminal
         public TerminalLoggerProcessor(TerminalLoggerOptions options)
         {
             Options = options;
+            _queue = new(options.LogQueueSize);
             _thread = TerminalUtility.StartThread("Terminal Log Processor", () =>
             {
                 try

@@ -29,8 +29,6 @@ namespace Microsoft.Extensions.Logging.Terminal
             }
         }
 
-        LogLevel _logToStandardErrorThreshold;
-
         public LogLevel LogToStandardErrorThreshold
         {
             get => _logToStandardErrorThreshold;
@@ -43,11 +41,27 @@ namespace Microsoft.Extensions.Logging.Terminal
             }
         }
 
+        public int LogQueueSize
+        {
+            get => _logQueueSize;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException(nameof(value));
+
+                _logQueueSize = value;
+            }
+        }
+
         public bool DisableColors { get; set; }
 
         public bool UseUtcTimestamp { get; set; }
 
         public TerminalLoggerWriter Writer { get; set; } = DefaultWriter;
+
+        LogLevel _logToStandardErrorThreshold;
+
+        int _logQueueSize = 4096;
 
         public static void DefaultWriter(TerminalLoggerOptions options, TerminalWriter writer,
             in TerminalLoggerEntry entry)
