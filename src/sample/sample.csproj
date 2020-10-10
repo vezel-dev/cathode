@@ -4,7 +4,7 @@
     <Deterministic>false</Deterministic>
     <OutputType>Exe</OutputType>
     <RootNamespace>Sample</RootNamespace>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\extensions\extensions.csproj" />

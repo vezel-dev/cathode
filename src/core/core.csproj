@@ -14,7 +14,7 @@ centered around a full-featured VT100 terminal and works on all platforms that
 This package provides the core terminal API.
     </PackageDescription>
     <RootNamespace>System</RootNamespace>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\..\LICENSE.md; ..\..\README.md">
