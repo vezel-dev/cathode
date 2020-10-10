@@ -8,8 +8,6 @@ namespace System.Drivers
 {
     abstract class TerminalDriver
     {
-        const int ReadBufferSize = 4096;
-
         public event EventHandler<TerminalResizeEventArgs>? Resize
         {
             add
@@ -123,7 +121,7 @@ namespace System.Drivers
         [SuppressMessage("Microsoft.Reliability", "CA2000", Justification = "Intentional.")]
         protected TerminalDriver()
         {
-            _reader = new(() => new(StdIn.Stream, StdIn.Encoding, false, ReadBufferSize, true));
+            _reader = new(() => new(StdIn.Stream, StdIn.Encoding, false, Environment.SystemPageSize, true));
 
             // Accessing this property has no particularly important effect on Windows, but it does
             // do something important on Unix: If a terminal is attached, it will force Console to
