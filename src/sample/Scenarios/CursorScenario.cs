@@ -12,7 +12,7 @@ namespace Sample.Scenarios
             Terminal.OutLine("Available commands:");
             Terminal.OutLine();
             Terminal.OutLine("  visible: Toggle cursor visibility.");
-            Terminal.OutLine("  blinking: Toggle cursor blinking.");
+            Terminal.OutLine("  <style>: Set cursor style to the given style.");
             Terminal.OutLine();
 
             while (true)
@@ -26,12 +26,10 @@ namespace Sample.Scenarios
 
                         Terminal.OutLine("Cursor is now {0}.", visible ? "visible" : "invisible");
                         break;
-                    case "blinking":
-                        var blinking = Terminal.IsCursorBlinking = !Terminal.IsCursorBlinking;
-
-                        Terminal.OutLine("Cursor is now {0}.", blinking ? "blinking" : "static");
-                        break;
                     case null:
+                        break;
+                    case var style when Enum.TryParse<TerminalCursorStyle>(style, true, out var s):
+                        Terminal.OutLine("Cursor style is now {0}.", Terminal.CursorStyle = s);
                         break;
                     case var cmd:
                         Terminal.OutLine("Unknown command '{0}'.", cmd);

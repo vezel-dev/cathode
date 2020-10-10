@@ -57,18 +57,30 @@ namespace System
             }
         }
 
-        public bool IsCursorBlinking
+        public TerminalCursorStyle CursorStyle
         {
-            get => _blinking;
+            get => _style;
             set
             {
+                var type = value switch
+                {
+                    TerminalCursorStyle.Default => '0',
+                    TerminalCursorStyle.BlockStatic => '2',
+                    TerminalCursorStyle.BlockBlinking => '1',
+                    TerminalCursorStyle.UnderlineStatic => '4',
+                    TerminalCursorStyle.UnderlineBlinking => '3',
+                    TerminalCursorStyle.BarStatic => '6',
+                    TerminalCursorStyle.BarBlinking => '5',
+                    _ => throw new ArgumentOutOfRangeException(nameof(value)),
+                };
+
                 lock (_lock)
                 {
                     CheckActive();
 
-                    _driver.Sequence($"{CSI}?12{(value ? 'h' : 'l')}");
+                    _driver.Sequence($"{CSI}{type} q");
 
-                    _blinking = value;
+                    _style = value;
                 }
             }
         }
@@ -79,7 +91,7 @@ namespace System
 
         bool _visible = true;
 
-        bool _blinking = true;
+        TerminalCursorStyle _style;
 
         internal TerminalScreen(TerminalDriver driver, bool main)
         {

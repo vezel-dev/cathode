@@ -52,10 +52,10 @@ namespace System
             set => Screen.IsCursorVisible = value;
         }
 
-        public static bool IsCursorBlinking
+        public static TerminalCursorStyle CursorStyle
         {
-            get => Screen.IsCursorBlinking;
-            set => Screen.IsCursorBlinking = value;
+            get => Screen.CursorStyle;
+            set => Screen.CursorStyle = value;
         }
 
         public static TerminalScreen MainScreen { get; }
