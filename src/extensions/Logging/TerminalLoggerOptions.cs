@@ -57,7 +57,7 @@ namespace Microsoft.Extensions.Logging.Terminal
 
             Decorator Decorate((byte R, byte G, byte B)? colors)
             {
-                return !options.DisableColors && colors != null ? new(colors.Value) : default;
+                return !options.DisableColors && colors is not null and var c ? new(c) : default;
             }
 
             writer.Write("[");
