@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <AssemblyName>Terminal.Extensions</AssemblyName>
-    <IsPackable>true</IsPackable>
-    <PackageDescription>
+    <PropertyGroup>
+        <AssemblyName>Terminal.Extensions</AssemblyName>
+        <IsPackable>true</IsPackable>
+        <PackageDescription>
 System.Terminal is a terminal-centric replacement for System.Console.
 
 With the Windows console host now supporting VT100 sequences, it makes little
@@ -12,28 +12,16 @@ centered around a full-featured VT100 terminal and works on all platforms that
 .NET Core supports.
 
 This package provides terminal hosting and logging for the .NET Generic Host.
-    </PackageDescription>
-    <RootNamespace>Microsoft.Extensions</RootNamespace>
-    <TargetFramework>net5.0</TargetFramework>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="..\core\TerminalUtility.cs" />
-    <None Include="..\..\LICENSE.md; ..\..\README.md">
-      <Pack>true</Pack>
-      <PackagePath>%(Filename)%(Extension)</PackagePath>
-      <Visible>true</Visible>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\core\core.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Hosting">
-      <Version>$(MicrosoftExtensionsHostingVersion)</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.SourceLink.GitHub">
-      <PrivateAssets>all</PrivateAssets>
-      <Version>$(MicrosoftSourceLinkGitHubVersion)</Version>
-    </PackageReference>
-  </ItemGroup>
+        </PackageDescription>
+        <RootNamespace>Microsoft.Extensions</RootNamespace>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\core\core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Hosting" />
+    </ItemGroup>
 </Project>

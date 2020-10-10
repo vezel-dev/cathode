@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Drivers;
 using System.Text;
 
@@ -7,11 +8,8 @@ namespace System.IO
     {
         internal TerminalDriver Driver { get; }
 
-#pragma warning disable CA1822
-
+        [SuppressMessage("Microsoft.Performance", "CA1822", Justification = "Intentional.")]
         public Encoding Encoding => TerminalDriver.Encoding;
-
-#pragma warning restore CA1822
 
         public abstract bool IsRedirected { get; }
 

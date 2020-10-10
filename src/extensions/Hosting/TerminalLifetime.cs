@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -7,10 +8,9 @@ using Microsoft.Extensions.Options;
 
 namespace Microsoft.Extensions.Hosting
 {
-#pragma warning disable CA2213
-
     public sealed class TerminalLifetime : IHostLifetime, IDisposable
     {
+        [SuppressMessage("Microsoft.Usage", "CA2213", Justification = "Intentional.")]
         readonly ManualResetEventSlim _disposeEvent = new ManualResetEventSlim();
 
         readonly TerminalLifetimeOptions _options;
@@ -107,6 +107,4 @@ namespace Microsoft.Extensions.Hosting
             return Task.CompletedTask;
         }
     }
-
-#pragma warning restore CA2213
 }

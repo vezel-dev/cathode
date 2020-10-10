@@ -1,9 +1,11 @@
+// Reference: https://github.com/OmniSharp/omnisharp-roslyn/wiki/Configuration-Options
+
 {
-  "FormattingOptions": {
-    "EnableEditorConfigSupport": true
-  },
-  "RoslynExtensionsOptions": {
-    "EnableAnalyzersSupport": true,
-    "EnableDecompilationSupport": true
-  }
+    "FormattingOptions": {
+        "EnableEditorConfigSupport": true
+    },
+    "RoslynExtensionsOptions": {
+        "EnableAnalyzersSupport": true,
+        "EnableDecompilationSupport": true
+    }
 }

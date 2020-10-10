@@ -1,5 +1,6 @@
 root = true
 
+# Reference: https://github.com/editorconfig/editorconfig/wiki/EditorConfig-Properties
 [*]
 charset = utf-8
 indent_size = 4
@@ -9,9 +10,7 @@ max_line_length = off
 tab_width = 4
 trim_trailing_whitespace = true
 
-[*.config]
-indent_size = 2
-
+# Reference: https://aka.ms/editorconfigdocs
 [*.cs]
 csharp_indent_block_contents = true
 csharp_indent_braces = false
@@ -38,6 +37,7 @@ csharp_space_after_colon_in_inheritance_clause = true
 csharp_space_after_comma = true
 csharp_space_after_dot = false
 csharp_space_after_keywords_in_control_flow_statements = true
+csharp_space_after_semicolon_in_for_statement = true
 csharp_space_around_binary_operators = before_and_after
 csharp_space_around_declaration_statements = false
 csharp_space_before_colon_in_inheritance_clause = true
@@ -96,7 +96,7 @@ dotnet_style_prefer_auto_properties = true : error
 dotnet_style_prefer_compound_assignment = true : error
 dotnet_style_prefer_conditional_expression_over_assignment = true : error
 dotnet_style_prefer_conditional_expression_over_return = true : error
-dotnet_style_prefer_inferred_anonymous_type_member_names = true : error
+dotnet_style_prefer_inferred_anonymous_type_member_names = false : error
 dotnet_style_prefer_inferred_tuple_names = true : error
 dotnet_style_prefer_is_null_check_over_reference_equality_method = true : error
 dotnet_style_qualification_for_event = false : error
@@ -106,20 +106,39 @@ dotnet_style_qualification_for_property = false : error
 dotnet_style_readonly_field = true : error
 dotnet_style_require_accessibility_modifiers = omit_if_default : error
 
-[*.csproj]
-indent_size = 2
+# Reference: https://docs.microsoft.com/en-us/visualstudio/code-quality/code-analysis-warnings-for-managed-code-by-checkid
+[*.cs]
+dotnet_diagnostic.CA1034.severity = none
+dotnet_diagnostic.CA1815.severity = none
+dotnet_diagnostic.CA2000.severity = none # TODO: Re-enable when fixed for discards.
+dotnet_diagnostic.CA2208.severity = none
 
-[*.json]
-indent_size = 2
+[*.cs]
+dotnet_diagnostic.IDE0011.severity = none
+dotnet_diagnostic.IDE0045.severity = silent
+dotnet_diagnostic.IDE0046.severity = silent
+dotnet_diagnostic.IDE0050.severity = none
 
-[*.props]
-indent_size = 2
+# Reference: https://github.com/DotNetAnalyzers/StyleCopAnalyzers/tree/master/documentation
+[*.cs]
+dotnet_diagnostic.SA0001.severity = none
+dotnet_diagnostic.SA1101.severity = none
+dotnet_diagnostic.SA1116.severity = none
+dotnet_diagnostic.SA1117.severity = none
+dotnet_diagnostic.SA1118.severity = none
+dotnet_diagnostic.SA1200.severity = none
+dotnet_diagnostic.SA1201.severity = none
+dotnet_diagnostic.SA1202.severity = none
+dotnet_diagnostic.SA1309.severity = none
+dotnet_diagnostic.SA1400.severity = none
+dotnet_diagnostic.SA1503.severity = none
+dotnet_diagnostic.SA1512.severity = none
+dotnet_diagnostic.SA1516.severity = none
+dotnet_diagnostic.SA1519.severity = none
+dotnet_diagnostic.SA1520.severity = none
+dotnet_diagnostic.SA1600.severity = none
+dotnet_diagnostic.SA1602.severity = none
+dotnet_diagnostic.SA1633.severity = none
 
 [*.sln]
 indent_style = tab
-
-[*.targets]
-indent_size = 2
-
-[*.yml]
-indent_size = 2

@@ -36,14 +36,14 @@ namespace Sample
                 return 1;
             }
 
-            var name = args[0].ToLowerInvariant();
+            var name = args[0].ToUpperInvariant();
             var t = GetScenarios().FirstOrDefault(x =>
                 x.Name.StartsWith(name, StringComparison.InvariantCultureIgnoreCase));
 
             if (t == null)
             {
                 Terminal.ForegroundColor(255, 0, 0);
-                Terminal.ErrorLine("Could not find a scenario matching '{0}'.", name);
+                Terminal.ErrorLine("Could not find a scenario matching '{0}'.", args[0]);
                 Terminal.ResetAttributes();
 
                 return 1;

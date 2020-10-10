@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -137,6 +138,7 @@ namespace System.Drivers
 
         bool _graphics;
 
+        [SuppressMessage("Microsoft.Reliability", "CA2000", Justification = "Intentional.")]
         protected TerminalDriver()
         {
             _reader = new Lazy<StreamReader>(
@@ -157,13 +159,9 @@ namespace System.Drivers
             //
             // There are still many problematic properties and methods beyond these, but there is
             // not much we can do about those.
-#pragma warning disable CA2000
-
             Console.SetIn(new InvalidTextReader());
             Console.SetOut(new InvalidTextWriter());
             Console.SetError(new InvalidTextWriter());
-
-#pragma warning restore CA2000
         }
 
         protected virtual void ToggleResizeEvent(bool enable)

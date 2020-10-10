@@ -1,15 +1,15 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using Mono.Unix.Native;
 
 namespace System.Drivers
 {
+    [SuppressMessage("Style", "IDE1006", Justification = "P/Invoke.")]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300", Justification = "P/Invoke.")]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1307", Justification = "P/Invoke.")]
+    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310", Justification = "P/Invoke.")]
     sealed class OSXTerminalInterop : IUnixTerminalInterop
     {
-#pragma warning disable IDE1006
-#pragma warning disable SA1300
-#pragma warning disable SA1307
-#pragma warning disable SA1310
-
         struct termios
         {
             public UIntPtr c_iflag;
@@ -106,11 +106,6 @@ namespace System.Drivers
         [DllImport("libc")]
         static extern int ioctl(int fildes, UIntPtr request, out winsize argp);
 
-#pragma warning disable SA1310
-#pragma warning disable SA1307
-#pragma warning disable SA1300
-#pragma warning restore IDE1006
-
         public static OSXTerminalInterop Instance { get; } = new OSXTerminalInterop();
 
         public TerminalSize? Size =>
@@ -147,7 +142,7 @@ namespace System.Drivers
 
         public bool SetRawMode(bool raw, bool discard)
         {
-            if (!(_original is termios settings))
+            if (_original is not termios settings)
                 return false;
 
             if (raw)

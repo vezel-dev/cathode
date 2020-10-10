@@ -1,8 +1,10 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Sample.Scenarios
 {
+    [SuppressMessage("Microsoft.Performance", "CA1812", Justification = "Used.")]
     sealed class CursorScenario : IScenario
     {
         public Task RunAsync()

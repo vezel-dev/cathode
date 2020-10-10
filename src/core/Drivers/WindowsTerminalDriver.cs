@@ -1,11 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
 using Vanara.PInvoke;
 
 namespace System.Drivers
 {
-#pragma warning disable CA1001
-
+    [SuppressMessage("Microsoft.Usage", "CA1001", Justification = "Intentional.")]
     sealed class WindowsTerminalDriver : TerminalDriver
     {
         sealed class WindowsTerminalReader : TerminalReader
@@ -63,7 +63,7 @@ namespace System.Drivers
                 var err = Win32Error.GetLastError();
 
                 // See comments in UnixTerminalReader for the error handling rationale.
-                switch ((int)err)
+                switch ((uint)err)
                 {
                     case Win32Error.ERROR_HANDLE_EOF:
                     case Win32Error.ERROR_BROKEN_PIPE:
@@ -130,7 +130,7 @@ namespace System.Drivers
                 var err = Win32Error.GetLastError();
 
                 // See comments in UnixTerminalWriter for the error handling rationale.
-                switch ((int)err)
+                switch ((uint)err)
                 {
                     case Win32Error.ERROR_HANDLE_EOF:
                     case Win32Error.ERROR_BROKEN_PIPE:
@@ -175,11 +175,7 @@ namespace System.Drivers
 
         readonly WindowsTerminalWriter _error;
 
-#pragma warning disable IDE0052
-
         readonly Kernel32.HandlerRoutine _handler;
-
-#pragma warning restore IDE0052
 
         TerminalSize? _size;
 
@@ -315,6 +311,4 @@ namespace System.Drivers
                     $"Could not flush input buffer: {Win32Error.GetLastError().FormatMessage()}");
         }
     }
-
-#pragma warning restore CA1001
 }

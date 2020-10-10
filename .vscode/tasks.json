@@ -1,0 +1,53 @@
+// Reference: https://code.visualstudio.com/docs/editor/tasks
+
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "type": "process",
+            "command": "dotnet",
+            "args": [
+                "build",
+                "-clp:NoSummary",
+                "-p:GenerateFullPaths=true"
+            ],
+            "runOptions": {
+                "instanceLimit": 1
+            },
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "panel": "dedicated",
+                "reveal": "silent",
+                "revealProblems": "onProblem",
+                "showReuseMessage": false,
+                "clear": true
+            }
+        },
+        {
+            "label": "clean",
+            "type": "process",
+            "command": "dotnet",
+            "args": [
+                "clean",
+                "-clp:NoSummary",
+                "-p:GenerateFullPaths=true"
+            ],
+            "runOptions": {
+                "instanceLimit": 1
+            },
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "panel": "dedicated",
+                "reveal": "silent",
+                "revealProblems": "onProblem",
+                "showReuseMessage": false,
+                "clear": true
+            }
+        }
+    ]
+}

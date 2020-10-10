@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 namespace Microsoft.Extensions.Logging.Terminal
@@ -15,6 +16,7 @@ namespace Microsoft.Extensions.Logging.Terminal
 
         readonly Thread _thread;
 
+        [SuppressMessage("Microsoft.Design", "CA1031", Justification = "Intentional.")]
         public TerminalLoggerProcessor(TerminalLoggerOptions options)
         {
             Options = options;

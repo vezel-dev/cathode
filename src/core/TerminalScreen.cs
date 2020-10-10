@@ -26,7 +26,7 @@ namespace System
                     Switch(OldScreen);
             }
 
-            void Switch(TerminalScreen screen)
+            static void Switch(TerminalScreen screen)
             {
                 lock (_lock)
                 {

@@ -1,52 +1,42 @@
 <Project>
-  <PropertyGroup>
-    <Company>Alex Rønne Petersen</Company>
-    <Copyright>ISC License (No Attribution)</Copyright>
-    <Description>A terminal-centric replacement for System.Console.</Description>
-    <Product>System.Terminal</Product>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyVersion>0.2.0</AssemblyVersion>
-    <FileVersion>0.2.0</FileVersion>
-    <Version>0.2.0</Version>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)System.Terminal.ruleset</CodeAnalysisRuleSet>
-    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
-    <DebugType>portable</DebugType>
-    <Deterministic>true</Deterministic>
-    <LangVersion>preview</LangVersion>
-    <Nullable>enable</Nullable>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-  <PropertyGroup>
-    <Authors>$(Company)</Authors>
-    <IncludeSource>true</IncludeSource>
-    <IncludeSymbolsInSingleFile>true</IncludeSymbolsInSingleFile>
-    <IsPackable>false</IsPackable>
-    <IsPublishable>false</IsPublishable>
-    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-  </PropertyGroup>
-  <PropertyGroup>
-    <MicrosoftCodeAnalysisFxCopAnalyzersVersion>2.9.8</MicrosoftCodeAnalysisFxCopAnalyzersVersion>
-    <MicrosoftExtensionsHostingVersion>3.1.3</MicrosoftExtensionsHostingVersion>
-    <MicrosoftSourceLinkGitHubVersion>1.0.0</MicrosoftSourceLinkGitHubVersion>
-    <MonoPosixNETStandardVersion>1.0.0</MonoPosixNETStandardVersion>
-    <StyleCopAnalyzersVersion>1.1.118</StyleCopAnalyzersVersion>
-    <VanaraPInvokeKernel32>3.2.3</VanaraPInvokeKernel32>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers">
-      <Version>$(MicrosoftCodeAnalysisFxCopAnalyzersVersion)</Version>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="StyleCop.Analyzers">
-      <Version>$(StyleCopAnalyzersVersion)</Version>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
+    <PropertyGroup>
+        <Company>Alex Rønne Petersen</Company>
+        <Copyright>ISC License (No Attribution)</Copyright>
+        <Description>A terminal-centric replacement for System.Console.</Description>
+        <Product>System.Terminal</Product>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+        <DebugType>portable</DebugType>
+        <Deterministic>true</Deterministic>
+        <EmbedAllSources>true</EmbedAllSources>
+        <LangVersion>preview</LangVersion>
+        <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
+        <Nullable>enable</Nullable>
+        <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Authors>$(Company)</Authors>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSource>true</IncludeSource>
+        <IsPackable>false</IsPackable>
+        <IsPublishable>false</IsPublishable>
+        <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <MicrosoftCodeAnalysisFxCopAnalyzersVersion>2.9.8</MicrosoftCodeAnalysisFxCopAnalyzersVersion>
+        <MicrosoftExtensionsHostingVersion>3.1.3</MicrosoftExtensionsHostingVersion>
+        <MicrosoftSourceLinkGitHubVersion>1.0.0</MicrosoftSourceLinkGitHubVersion>
+        <MonoPosixNETStandardVersion>1.0.0</MonoPosixNETStandardVersion>
+        <StyleCopAnalyzersVersion>1.1.118</StyleCopAnalyzersVersion>
+        <VanaraPInvokeKernel32>3.2.3</VanaraPInvokeKernel32>
+    </PropertyGroup>
 </Project>

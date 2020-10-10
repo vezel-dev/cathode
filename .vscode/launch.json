@@ -1,0 +1,33 @@
+// Reference: https://code.visualstudio.com/docs/editor/debugging#_launchjson-attributes
+
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": ".NET Core: Start",
+            "preLaunchTask": "build",
+            "type": "coreclr",
+            "request": "launch",
+            "suppressJITOptimizations": true,
+            "justMyCode": false,
+            "symbolOptions": {
+                "searchMicrosoftSymbolServer": true,
+                "searchNuGetOrgSymbolServer": true
+            },
+            "cwd": "${workspaceFolder}/src/sample",
+            "program": "${workspaceFolder}/src/sample/bin/Debug/sample.dll"
+        },
+        {
+            "name": ".NET Core: Attach",
+            "type": "coreclr",
+            "request": "attach",
+            "suppressJITOptimizations": true,
+            "justMyCode": false,
+            "symbolOptions": {
+                "searchMicrosoftSymbolServer": true,
+                "searchNuGetOrgSymbolServer": true
+            },
+            "processId": "${command:pickProcess}"
+        }
+    ]
+}

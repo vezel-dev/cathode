@@ -1,28 +1,31 @@
+// Reference: https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+
 {
-  "MD003": {
-    "style": "atx"
-  },
-  "MD004": {
-    "style": "asterisk"
-  },
-  "MD007": {
-    "indent": 4
-  },
-  "MD009": {
-    "br_spaces": 0
-  },
-  "MD013": {
-    "code_blocks": false,
-    "headings": false,
-    "tables": false
-  },
-  "MD025": {
-    "front_matter_title": ""
-  },
-  "MD029": {
-    "style": "ordered"
-  },
-  "MD035": {
-    "style": "---"
-  }
+    "MD003": {
+        "style": "atx"
+    },
+    "MD004": {
+        "style": "asterisk"
+    },
+    "MD007": {
+        "indent": 4
+    },
+    "MD009": {
+        "br_spaces": 0
+    },
+    "MD013": {
+        "code_blocks": false,
+        "headings": false,
+        "tables": false
+    },
+    "MD025": {
+        "front_matter_title": ""
+    },
+    "MD029": {
+        "style": "ordered"
+    },
+    "MD033": false,
+    "MD035": {
+        "style": "---"
+    }
 }

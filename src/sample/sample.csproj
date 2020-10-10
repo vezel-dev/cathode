@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <AssemblyName>sample</AssemblyName>
-    <Deterministic>false</Deterministic>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>Sample</RootNamespace>
-    <TargetFramework>net5.0</TargetFramework>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\extensions\extensions.csproj" />
-  </ItemGroup>
+    <PropertyGroup>
+        <AssemblyName>sample</AssemblyName>
+        <OutputType>Exe</OutputType>
+        <RootNamespace>Sample</RootNamespace>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\extensions\extensions.csproj" />
+    </ItemGroup>
 </Project>

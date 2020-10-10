@@ -1,0 +1,15 @@
+// Reference: https://code.visualstudio.com/docs/editor/extension-gallery#_workspace-recommended-extensions
+
+{
+    "recommendations": [
+        "codezombiech.gitignore",
+        "DavidAnson.vscode-markdownlint",
+        "DotJoshJohnson.xml",
+        "EditorConfig.EditorConfig",
+        "fernandoescolar.vscode-solution-explorer",
+        "GitHub.vscode-pull-request-github",
+        "hashhar.gitattributes",
+        "ms-dotnettools.csharp",
+        "redhat.vscode-yaml"
+    ]
+}
