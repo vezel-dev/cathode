@@ -53,6 +53,14 @@ namespace Sample.Scenarios
             Terminal.OutLine("This text is struck through.");
             Terminal.ResetAttributes();
 
+            Terminal.Decorations(overline: true);
+            Terminal.OutLine("This text is overlined.");
+            Terminal.ResetAttributes();
+
+            Terminal.Decorations(doubleUnderline: true);
+            Terminal.OutLine("This text is doubly underlined.");
+            Terminal.ResetAttributes();
+
             Terminal.OpenHyperlink(new("https://google.com"));
             Terminal.OutLine("This is a hyperlink.");
             Terminal.CloseHyperlink();

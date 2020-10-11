@@ -294,9 +294,10 @@ namespace System
 
         public static void Decorations(bool bold = false, bool faint = false, bool italic = false,
             bool underline = false, bool blink = false, bool invert = false, bool invisible = false,
-            bool strike = false)
+            bool strike = false, bool doubleUnderline = false, bool overline = false)
         {
-            _driver.Decorations(bold, faint, italic, underline, blink, invert, invisible, strike);
+            _driver.Decorations(bold, faint, italic, underline, blink, invert, invisible, strike, doubleUnderline,
+                overline);
         }
 
         public static void ResetAttributes()

@@ -352,15 +352,16 @@ namespace System.Drivers
         }
 
         public void Decorations(bool bold = false, bool faint = false, bool italic = false, bool underline = false,
-            bool blink = false, bool invert = false, bool invisible = false, bool strike = false)
+            bool blink = false, bool invert = false, bool invisible = false, bool strike = false,
+            bool doubleUnderline = false, bool overline = false)
         {
-            Span<char> codes = stackalloc char[16];
+            Span<char> codes = stackalloc char[64];
 
             codes.Clear();
 
             var i = 0;
 
-            void Handle(Span<char> codes, char code, bool value)
+            void Handle(Span<char> codes, string code, bool value)
             {
                 if (!value)
                     return;
@@ -368,17 +369,21 @@ namespace System.Drivers
                 if (i != 0)
                     codes[i++] = ';';
 
-                codes[i++] = code;
+                code.AsSpan().CopyTo(codes[i..code.Length]);
+
+                i += code.Length;
             }
 
-            Handle(codes, '1', bold);
-            Handle(codes, '2', faint);
-            Handle(codes, '3', italic);
-            Handle(codes, '4', underline);
-            Handle(codes, '5', blink);
-            Handle(codes, '7', invert);
-            Handle(codes, '8', invisible);
-            Handle(codes, '9', strike);
+            Handle(codes, "1", bold);
+            Handle(codes, "2", faint);
+            Handle(codes, "3", italic);
+            Handle(codes, "4", underline);
+            Handle(codes, "5", blink);
+            Handle(codes, "7", invert);
+            Handle(codes, "8", invisible);
+            Handle(codes, "9", strike);
+            Handle(codes, "21", doubleUnderline);
+            Handle(codes, "53", overline);
 
             Sequence($"{CSI}{codes.TrimEnd(char.MinValue).ToString()}m");
         }
