@@ -361,15 +361,15 @@ namespace System.Drivers
 
             var i = 0;
 
-            void Handle(Span<char> codes, string code, bool value)
+            void Handle(Span<char> result, ReadOnlySpan<char> code, bool value)
             {
                 if (!value)
                     return;
 
                 if (i != 0)
-                    codes[i++] = ';';
+                    result[i++] = ';';
 
-                code.AsSpan().CopyTo(codes[i..code.Length]);
+                code.CopyTo(result[i..code.Length]);
 
                 i += code.Length;
             }
