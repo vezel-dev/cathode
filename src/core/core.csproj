@@ -16,6 +16,16 @@ This package provides the core terminal API.
     </ItemGroup>
 
     <ItemGroup>
+        <Content Include="BannedSymbols.txt; Terminal.targets">
+            <Pack>true</Pack>
+            <PackagePath>buildTransitive</PackagePath>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers">
+            <PrivateAssets>none</PrivateAssets>
+        </PackageReference>
         <PackageReference Include="Mono.Posix.NETStandard" />
         <PackageReference Include="Vanara.PInvoke.Kernel32" />
     </ItemGroup>

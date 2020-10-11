@@ -121,6 +121,7 @@ namespace System.Drivers
         TerminalKeyMode _numeric;
 
         [SuppressMessage("Microsoft.Reliability", "CA2000", Justification = "Intentional.")]
+        [SuppressMessage("ApiDesign", "RS0030", Justification = "Needed.")]
         protected TerminalDriver()
         {
             _reader = new(() => new(StdIn.Stream, StdIn.Encoding, false, Environment.SystemPageSize, true));
