@@ -32,7 +32,7 @@
             <Version>5.20.1-preview</Version>
         </PackageReference>
         <PackageReference Update="Nerdbank.GitVersioning">
-            <Version>3.2.31</Version>
+            <Version>3.3.37</Version>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Update="StyleCop.Analyzers">

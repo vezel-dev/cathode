@@ -33,7 +33,7 @@
             ]
         },
         "dotnet-symbol": {
-            "version": "1.0.142101",
+            "version": "1.0.147902",
             "commands": [
               "dotnet-symbol"
             ]
@@ -45,13 +45,13 @@
             ]
         },
         "gpr": {
-            "version": "0.1.240",
+            "version": "0.1.257",
             "commands": [
                 "gpr"
             ]
         },
         "nbgv": {
-            "version": "3.2.31",
+            "version": "3.3.37",
             "commands": [
                 "nbgv"
             ]
