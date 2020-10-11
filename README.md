@@ -17,7 +17,11 @@ Please note that intermixing usage of `System.Terminal` and `System.Console` is
 *not* guaranteed to work, even if certain usage patterns of that sort happen to
 do so currently. An application using `System.Terminal` should avoid
 `System.Console` *entirely* to ensure that it will work correctly with all
-future releases of `System.Terminal`.
+future releases of `System.Terminal`. A project that directly or indirectly
+references `System.Terminal` will pull in a
+[Roslyn analyzer](https://github.com/dotnet/roslyn-analyzers/blob/master/README.md#microsoftcodeanalysisbannedapianalyzers)
+which diagnoses [uses](src/core/BannedSymbols.txt) of `System.Console` and
+related APIs.
 
 ## Usage
 
