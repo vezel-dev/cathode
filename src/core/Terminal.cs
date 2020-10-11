@@ -26,6 +26,8 @@ namespace System
 
         public static bool IsRawMode => _driver.IsRawMode;
 
+        public static TerminalMouseEvents MouseEvents => _driver.MouseEvents;
+
         public static string Title
         {
             get => _driver.Title;
@@ -90,6 +92,11 @@ namespace System
         public static void SetRawMode(bool raw, bool discard)
         {
             _driver.SetRawMode(raw, discard);
+        }
+
+        public static void SetMouseEvents(TerminalMouseEvents events)
+        {
+            _driver.SetMouseEvents(events);
         }
 
         public static byte? ReadRaw()

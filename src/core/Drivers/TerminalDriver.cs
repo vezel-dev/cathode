@@ -44,6 +44,8 @@ namespace System.Drivers
 
         public bool IsRawMode { get; private set; }
 
+        public TerminalMouseEvents MouseEvents { get; private set; }
+
         public string Title
         {
             get => _title;
@@ -180,11 +182,33 @@ namespace System.Drivers
             {
                 SetRawModeCore(raw, discard);
 
+                if (!raw)
+                {
+                    Sequence($"{CSI}?1003l");
+                    Sequence($"{CSI}?1006l");
+
+                    MouseEvents = TerminalMouseEvents.None;
+                }
+
                 IsRawMode = raw;
             }
         }
 
         protected abstract void SetRawModeCore(bool raw, bool discard);
+
+        public void SetMouseEvents(TerminalMouseEvents events)
+        {
+            lock (_lock)
+            {
+                if (!IsRawMode)
+                    throw new TerminalException("Terminal is not in raw mode.");
+
+                Sequence($"{CSI}?1003{(events.HasFlag(TerminalMouseEvents.Movement) ? 'h' : 'l')}");
+                Sequence($"{CSI}?1006{(events.HasFlag(TerminalMouseEvents.Buttons) ? 'h' : 'l')}");
+
+                MouseEvents = events;
+            }
+        }
 
         public byte? ReadRaw()
         {

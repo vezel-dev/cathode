@@ -13,10 +13,11 @@ namespace Sample.Scenarios
             Terminal.OutLine();
 
             Terminal.SetRawMode(true, true);
+            Terminal.SetMouseEvents(TerminalMouseEvents.All);
 
             try
             {
-                for (var i = 0; i < 25; i++)
+                for (var i = 0; i < 1000; i++)
                 {
                     Terminal.Out("0x{0:x2}", Terminal.ReadRaw());
                     Terminal.Out("\r\n");
