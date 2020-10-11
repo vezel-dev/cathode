@@ -69,8 +69,8 @@ namespace System
 
         static Terminal()
         {
-            MainScreen = new(_driver, true);
-            AlternateScreen = new(_driver, false);
+            MainScreen = new(_driver);
+            AlternateScreen = new(_driver);
             Screen = MainScreen;
 
             // Reset all terminal state to sane values.

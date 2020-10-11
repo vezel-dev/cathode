@@ -37,9 +37,11 @@ namespace System
             }
         }
 
-        public bool IsMain { get; }
+        public bool IsMain => this == Terminal.MainScreen;
 
-        public bool IsActive => Terminal.Screen == this;
+        public bool IsAlternate => this == Terminal.AlternateScreen;
+
+        public bool IsActive => this == Terminal.Screen;
 
         public bool IsCursorVisible
         {
@@ -93,9 +95,8 @@ namespace System
 
         TerminalCursorStyle _style;
 
-        internal TerminalScreen(TerminalDriver driver, bool main)
+        internal TerminalScreen(TerminalDriver driver)
         {
-            IsMain = main;
             _driver = driver;
         }
 
