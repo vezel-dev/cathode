@@ -36,11 +36,13 @@ See the [sample program](src/sample) for examples of what the API can do.
 
 These are helpful resources used in the development of `System.Terminal`:
 
-* <https://www.ecma-international.org/publications/standards/Ecma-048.htm>
 * <https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences>
+* <https://github.com/chromium/hterm/blob/master/doc/ControlSequences.md>
 * <https://invisible-island.net/xterm/ctlseqs/ctlseqs.html>
 * <https://linux.die.net/man/4/console_codes>
+* <https://terminalguide.namepad.de>
 * <https://vt100.net/docs>
+* <https://www.ecma-international.org/publications/standards/Ecma-048.htm>
 
 ## License
 
