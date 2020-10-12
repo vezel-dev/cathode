@@ -1,4 +1,4 @@
-# System.Terminal [![Latest Release](https://img.shields.io/github/release/alexrp/system-terminal/all.svg?label=Latest%20Release)](https://github.com/alexrp/system-terminal/releases) [![Build Status](https://github.com/alexrp/system-terminal/workflows/CI/badge.svg)](https://github.com/alexrp/system-terminal/actions?workflow=CI)
+# System.Terminal [![Build Status](https://github.com/alexrp/system-terminal/workflows/CI/badge.svg)](https://github.com/alexrp/system-terminal/actions?workflow=CI)
 
 [![Terminal](https://img.shields.io/nuget/v/Terminal.svg?label=Terminal)](https://www.nuget.org/packages/Terminal)
 [![Terminal.Extensions](https://img.shields.io/nuget/v/Terminal.Extensions.svg?label=Terminal.Extensions)](https://www.nuget.org/packages/Terminal.Extensions)
