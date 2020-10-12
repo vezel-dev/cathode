@@ -6,6 +6,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "core", "src\core\core.cspro
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "extensions", "src\extensions\extensions.csproj", "{C1B60D56-EDD5-45A8-BFA1-8E5D5B4D31DC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "input", "src\input\input.csproj", "{FD9D8433-1D09-4E62-8FA2-8F68450C0789}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sample", "src\sample\sample.csproj", "{D34C7BFA-C459-40B6-95D5-C7A98DB21D53}"
 EndProject
 Global
@@ -22,6 +24,10 @@ Global
 		{C1B60D56-EDD5-45A8-BFA1-8E5D5B4D31DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1B60D56-EDD5-45A8-BFA1-8E5D5B4D31DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1B60D56-EDD5-45A8-BFA1-8E5D5B4D31DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD9D8433-1D09-4E62-8FA2-8F68450C0789}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD9D8433-1D09-4E62-8FA2-8F68450C0789}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD9D8433-1D09-4E62-8FA2-8F68450C0789}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD9D8433-1D09-4E62-8FA2-8F68450C0789}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D34C7BFA-C459-40B6-95D5-C7A98DB21D53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D34C7BFA-C459-40B6-95D5-C7A98DB21D53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D34C7BFA-C459-40B6-95D5-C7A98DB21D53}.Release|Any CPU.ActiveCfg = Release|Any CPU

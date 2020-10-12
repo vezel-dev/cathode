@@ -8,5 +8,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\extensions\extensions.csproj" />
+        <ProjectReference Include="..\input\input.csproj" />
     </ItemGroup>
 </Project>
