@@ -109,6 +109,7 @@ dotnet_style_require_accessibility_modifiers = omit_if_default : error
 # Reference: https://docs.microsoft.com/en-us/visualstudio/code-quality/code-analysis-warnings-for-managed-code-by-checkid
 [*.cs]
 dotnet_diagnostic.CA1034.severity = none
+dotnet_diagnostic.CA1716.severity = none
 dotnet_diagnostic.CA1815.severity = none
 dotnet_diagnostic.CA2000.severity = none # TODO: Re-enable when fixed for discards.
 dotnet_diagnostic.CA2208.severity = none
