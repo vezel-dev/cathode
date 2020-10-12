@@ -4,6 +4,7 @@
 [![Latest Release](https://img.shields.io/github/release/alexrp/system-terminal/all.svg?label=Latest%20Release)](https://github.com/alexrp/system-terminal/releases)
 [![Terminal](https://img.shields.io/nuget/v/Terminal.svg?label=Terminal)](https://www.nuget.org/packages/Terminal)
 [![Terminal.Extensions](https://img.shields.io/nuget/v/Terminal.Extensions.svg?label=Terminal.Extensions)](https://www.nuget.org/packages/Terminal.Extensions)
+[![Terminal.Input](https://img.shields.io/nuget/v/Terminal.Input.svg?label=Terminal.Input)](https://www.nuget.org/packages/Terminal.Input)
 
 `System.Terminal` is a terminal-centric replacement for `System.Console`.
 
@@ -31,6 +32,8 @@ This project offers the following packages:
   terminal API.
 * [Terminal.Extensions](https://www.nuget.org/packages/Terminal.Extensions):
   Provides terminal hosting and logging for the .NET Generic Host.
+* [Terminal.Input](https://www.nuget.org/packages/Terminal.Input): Provides an
+  interactive line editor.
 
 To install a package, run `dotnet add package <name>`.
 
