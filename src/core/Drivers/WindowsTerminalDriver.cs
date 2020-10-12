@@ -30,7 +30,7 @@ namespace System.Drivers
 
             public Kernel32.CONSOLE_INPUT_MODE? GetMode()
             {
-                return Kernel32.GetConsoleMode(Handle, out Kernel32.CONSOLE_INPUT_MODE m) ? m : default;
+                return Kernel32.GetConsoleMode(Handle, out Kernel32.CONSOLE_INPUT_MODE m) ? m : null;
             }
 
             public bool SetMode(Kernel32.CONSOLE_INPUT_MODE mode)
@@ -99,7 +99,7 @@ namespace System.Drivers
 
             public Kernel32.CONSOLE_OUTPUT_MODE? GetMode()
             {
-                return Kernel32.GetConsoleMode(Handle, out Kernel32.CONSOLE_OUTPUT_MODE m) ? m : default;
+                return Kernel32.GetConsoleMode(Handle, out Kernel32.CONSOLE_OUTPUT_MODE m) ? m : null;
             }
 
             public bool SetMode(Kernel32.CONSOLE_OUTPUT_MODE mode)
@@ -280,12 +280,12 @@ namespace System.Drivers
         {
             static Kernel32.CONSOLE_SCREEN_BUFFER_INFO? GetInfo(HFILE handle)
             {
-                return Kernel32.GetConsoleScreenBufferInfo(handle, out var info) ? info : default;
+                return Kernel32.GetConsoleScreenBufferInfo(handle, out var info) ? info : null;
             }
 
             // Try both handles in case only one of them has been redirected.
             return (GetInfo(_out.Handle) ?? GetInfo(_error.Handle)) is Kernel32.CONSOLE_SCREEN_BUFFER_INFO i ?
-                new(i.srWindow.Right - i.srWindow.Left + 1, i.srWindow.Bottom - i.srWindow.Top + 1) : default;
+                new(i.srWindow.Right - i.srWindow.Left + 1, i.srWindow.Bottom - i.srWindow.Top + 1) : null;
         }
 
         protected override void SetRawModeCore(bool raw, bool discard)

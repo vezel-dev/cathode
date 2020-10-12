@@ -109,8 +109,7 @@ namespace System.Drivers
         public static OSXTerminalInterop Instance { get; } = new();
 
         public TerminalSize? Size =>
-            ioctl(UnixTerminalDriver.OutHandle, (UIntPtr)TIOCGWINSZ, out var w) == 0 ?
-                new(w.ws_col, w.ws_row) : default;
+            ioctl(UnixTerminalDriver.OutHandle, (UIntPtr)TIOCGWINSZ, out var w) == 0 ? new(w.ws_col, w.ws_row) : null;
 
         readonly termios? _original;
 
