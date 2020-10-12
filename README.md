@@ -1,28 +1,26 @@
-# System.Terminal
+# System.Terminal [![Latest Release](https://img.shields.io/github/release/alexrp/system-terminal/all.svg?label=Latest%20Release)](https://github.com/alexrp/system-terminal/releases) [![Build Status](https://github.com/alexrp/system-terminal/workflows/CI/badge.svg)](https://github.com/alexrp/system-terminal/actions?workflow=CI)
 
-[![Build Status](https://github.com/alexrp/system-terminal/workflows/CI/badge.svg)](https://github.com/alexrp/system-terminal/actions?workflow=CI)
-[![Latest Release](https://img.shields.io/github/release/alexrp/system-terminal/all.svg?label=Latest%20Release)](https://github.com/alexrp/system-terminal/releases)
 [![Terminal](https://img.shields.io/nuget/v/Terminal.svg?label=Terminal)](https://www.nuget.org/packages/Terminal)
 [![Terminal.Extensions](https://img.shields.io/nuget/v/Terminal.Extensions.svg?label=Terminal.Extensions)](https://www.nuget.org/packages/Terminal.Extensions)
 [![Terminal.Input](https://img.shields.io/nuget/v/Terminal.Input.svg?label=Terminal.Input)](https://www.nuget.org/packages/Terminal.Input)
 
-`System.Terminal` is a terminal-centric replacement for `System.Console`.
+`System.Terminal` is a toolkit for writing terminal-based applications. It is
+effectively a complete replacement for `System.Console`.
 
-With the Windows console host now supporting VT100 sequences, it makes little
-sense for console interaction to still be centered around the old Windows
-console host and the many limitations it had. `System.Terminal` provides an API
-centered around a [full-featured VT100 terminal](https://vt100.net) and works on
-all platforms that .NET Core supports.
+With the Windows console host now supporting virtual terminal sequences, it
+makes little sense for console interaction to still be centered around the old
+Windows console host and the many idiosyncrasies it had. `System.Terminal`
+provides an API centered around a [VT100 terminal](https://vt100.net) (with
+various modern and widely supported extensions) and works on all platforms that
+.NET 5.0+ supports.
 
 Please note that intermixing usage of `System.Terminal` and `System.Console` is
-*not* guaranteed to work, even if certain usage patterns of that sort happen to
-do so currently. An application using `System.Terminal` should avoid
-`System.Console` *entirely* to ensure that it will work correctly with all
-future releases of `System.Terminal`. A project that directly or indirectly
-references `System.Terminal` will pull in a
-[Roslyn analyzer](https://github.com/dotnet/roslyn-analyzers/blob/master/README.md#microsoftcodeanalysisbannedapianalyzers)
-which diagnoses [uses](src/core/BannedSymbols.txt) of `System.Console` and
-related APIs.
+*not* supported; an application using `System.Terminal` should avoid using
+`System.Console` entirely. A project that directly or indirectly references
+`System.Terminal` will pull in
+[a Roslyn analyzer](https://github.com/dotnet/roslyn-analyzers/blob/master/README.md#microsoftcodeanalysisbannedapianalyzers)
+which diagnoses [problematic uses](src/core/BannedSymbols.txt) of
+`System.Console` and related APIs.
 
 ## Usage
 
