@@ -183,14 +183,6 @@ namespace System.Drivers
             {
                 SetRawModeCore(raw, discard);
 
-                if (!raw)
-                {
-                    Sequence($"{CSI}?1003l");
-                    Sequence($"{CSI}?1006l");
-
-                    MouseEvents = TerminalMouseEvents.None;
-                }
-
                 IsRawMode = raw;
             }
         }
@@ -201,9 +193,6 @@ namespace System.Drivers
         {
             lock (_lock)
             {
-                if (!IsRawMode)
-                    throw new TerminalException("Terminal is not in raw mode.");
-
                 Sequence($"{CSI}?1003{(events.HasFlag(TerminalMouseEvents.Movement) ? 'h' : 'l')}");
                 Sequence($"{CSI}?1006{(events.HasFlag(TerminalMouseEvents.Buttons) ? 'h' : 'l')}");
 
@@ -215,7 +204,7 @@ namespace System.Drivers
         {
             Span<byte> span = stackalloc byte[1];
 
-            return StdIn.Stream.Read(span) == 1 ? span[0] : default;
+            return StdIn.Stream.Read(span) == 1 ? span[0] : null;
         }
 
         public string? ReadLine()
