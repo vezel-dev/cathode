@@ -4,8 +4,6 @@ namespace Microsoft.Extensions.Logging.Terminal
 {
     public readonly struct TerminalLoggerEntry
     {
-        public TerminalLoggerOptions Options { get; }
-
         public DateTime Timestamp { get; }
 
         public LogLevel LogLevel { get; }
@@ -18,10 +16,9 @@ namespace Microsoft.Extensions.Logging.Terminal
 
         public Exception? Exception { get; }
 
-        internal TerminalLoggerEntry(TerminalLoggerOptions options, DateTime timestamp, LogLevel logLevel,
-            string categoryName, EventId eventId, string? message, Exception? exception)
+        internal TerminalLoggerEntry(DateTime timestamp, LogLevel logLevel, string categoryName, EventId eventId,
+            string? message, Exception? exception)
         {
-            Options = options;
             Timestamp = timestamp;
             LogLevel = logLevel;
             CategoryName = categoryName;

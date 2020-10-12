@@ -9,8 +9,6 @@ namespace Microsoft.Extensions.Logging.Terminal
     {
         readonly ConcurrentDictionary<string, TerminalLogger> _loggers = new();
 
-        readonly IOptionsMonitor<TerminalLoggerOptions> _options;
-
         readonly TerminalLoggerProcessor _processor;
 
         readonly IDisposable _reload;
@@ -21,7 +19,6 @@ namespace Microsoft.Extensions.Logging.Terminal
         {
             _ = options ?? throw new ArgumentNullException(nameof(options));
 
-            _options = options;
             _processor = new(options.CurrentValue);
             _reload = options.OnChange(opts => _processor.Options = opts);
         }
@@ -42,8 +39,8 @@ namespace Microsoft.Extensions.Logging.Terminal
         {
             _scopeProvider = scopeProvider ?? throw new ArgumentNullException(nameof(scopeProvider));
 
-            foreach (var logger in _loggers)
-                logger.Value.ScopeProvider = _scopeProvider;
+            foreach (var (_, logger) in _loggers)
+                logger.ScopeProvider = _scopeProvider;
         }
     }
 }

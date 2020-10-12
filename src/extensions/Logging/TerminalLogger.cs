@@ -35,12 +35,11 @@ namespace Microsoft.Extensions.Logging.Terminal
             if (!IsEnabled(logLevel))
                 return;
 
-            var opts = _processor.Options;
-            var now = opts.UseUtcTimestamp ? DateTime.UtcNow : DateTime.Now;
+            var now = _processor.Options.UseUtcTimestamp ? DateTime.UtcNow : DateTime.Now;
             var msg = formatter(state, exception);
 
             if (!string.IsNullOrEmpty(msg) || exception != null)
-                _processor.Enqueue(new(opts, now, logLevel, _name, eventId, msg, exception));
+                _processor.Enqueue(new(now, logLevel, _name, eventId, msg, exception));
         }
     }
 }

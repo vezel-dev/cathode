@@ -1,6 +1,5 @@
 using System;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.EventLog;
@@ -24,10 +23,11 @@ namespace Microsoft.Extensions.Hosting
                 .ConfigureAppConfiguration((ctx, cfg) =>
                 {
                     var env = ctx.HostingEnvironment;
+                    var reload = ctx.Configuration.GetValue("hostBuilder:reloadConfigOnChange", true);
 
                     _ = cfg
-                        .AddJsonFile("appsettings.json", true, true)
-                        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true);
+                        .AddJsonFile("appsettings.json", true, reload)
+                        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, reload);
 
                     if (env.IsDevelopment() && !string.IsNullOrEmpty(env.ApplicationName))
                     {
@@ -44,7 +44,7 @@ namespace Microsoft.Extensions.Hosting
                 })
                 .ConfigureLogging((ctx, log) =>
                 {
-                    var win = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+                    var win = OperatingSystem.IsWindows();
 
                     if (win)
                         _ = log.AddFilter<EventLogLoggerProvider>(lvl => lvl >= LogLevel.Warning);
@@ -57,6 +57,12 @@ namespace Microsoft.Extensions.Hosting
 
                     if (win)
                         _ = log.AddEventLog();
+
+                    _ = log.Configure(opts =>
+                        opts.ActivityTrackingOptions =
+                            ActivityTrackingOptions.SpanId |
+                            ActivityTrackingOptions.TraceId |
+                            ActivityTrackingOptions.ParentId);
                 })
                 .UseDefaultServiceProvider((ctx, opts) =>
                 {
