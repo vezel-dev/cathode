@@ -30,17 +30,17 @@ jobs:
         steps:
             - uses: xt0rted/markdownlint-problem-matcher@v1
             - name: Clone repository
-              uses: actions/checkout@v2.3.2
+              uses: actions/checkout@v2.3.4
               with:
                   fetch-depth: 0
             - name: Set up Node.js
-              uses: actions/setup-node@v1.4.3
+              uses: actions/setup-node@v2.1.2
             - name: Extract .NET version
               id: dotnet
               run: |
                   echo ::set-output name=version::$(tail -n +2 global.json | jq .sdk.version -r)
             - name: Set up .NET
-              uses: actions/setup-dotnet@v1.6.0
+              uses: actions/setup-dotnet@v1.7.2
               with:
                   dotnet-version: ${{ steps.dotnet.outputs.version }}
             - name: Install dependencies
