@@ -29,7 +29,7 @@ jobs:
                     - Release
         runs-on: ${{ matrix.os }}
         steps:
-            - uses: xt0rted/markdownlint-problem-matcher@v1
+            - uses: xt0rted/markdownlint-problem-matcher@v1.0.0
             - name: Clone repository
               uses: actions/checkout@v2.3.4
               with:
