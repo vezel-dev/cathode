@@ -7,6 +7,7 @@ namespace Sample.Scenarios
     [SuppressMessage("Microsoft.Performance", "CA1812", Justification = "Used.")]
     sealed class ScrollRegionScenario : IScenario
     {
+        [SuppressMessage("Microsoft.Security", "CA5394", Justification = "Intentional.")]
         public Task RunAsync()
         {
             Terminal.SetScrollRegion(2, 0);

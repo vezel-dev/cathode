@@ -8,11 +8,14 @@
 
     <PropertyGroup>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <AnalysisMode>AllEnabledByDefault</AnalysisMode>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
         <DebugType>portable</DebugType>
         <Deterministic>true</Deterministic>
         <EmbedAllSources>true</EmbedAllSources>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        <Features>strict</Features>
         <LangVersion>preview</LangVersion>
         <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
         <Nullable>enable</Nullable>

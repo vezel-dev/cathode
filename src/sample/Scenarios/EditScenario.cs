@@ -8,6 +8,7 @@ namespace Sample.Scenarios
     [SuppressMessage("Microsoft.Performance", "CA1812", Justification = "Used.")]
     sealed class EditScenario : IScenario
     {
+        [SuppressMessage("Microsoft.Maintainability", "CA1508", Justification = "TODO: False positive.")]
         public Task RunAsync()
         {
             var history = new MemoryTerminalHistory();

@@ -7,7 +7,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" />
         <PackageReference Include="Microsoft.SourceLink.GitHub" />
         <PackageReference Include="Nerdbank.GitVersioning" />
         <PackageReference Include="StyleCop.Analyzers" />
@@ -16,10 +15,6 @@
     <ItemGroup>
         <PackageReference Update="Microsoft.CodeAnalysis.BannedApiAnalyzers">
             <Version>3.3.1</Version>
-        </PackageReference>
-        <PackageReference Update="Microsoft.CodeAnalysis.FxCopAnalyzers">
-            <Version>3.3.1</Version>
-            <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Update="Microsoft.Extensions.Hosting">
             <Version>5.0.0</Version>
