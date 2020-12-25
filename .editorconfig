@@ -114,6 +114,7 @@ dotnet_diagnostic.CA1716.severity = none
 dotnet_diagnostic.CA1815.severity = none
 dotnet_diagnostic.CA2000.severity = none # TODO: Re-enable when fixed for discards.
 dotnet_diagnostic.CA2208.severity = none
+dotnet_diagnostic.CA5392.severity = none
 
 [*.cs]
 dotnet_diagnostic.IDE0011.severity = none
