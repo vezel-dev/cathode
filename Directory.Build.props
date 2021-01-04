@@ -17,6 +17,7 @@
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
         <Features>strict</Features>
         <LangVersion>preview</LangVersion>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
         <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
         <Nullable>enable</Nullable>
         <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>

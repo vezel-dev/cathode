@@ -1,0 +1,25 @@
+<Project>
+    <ItemGroup>
+        <PackageVersion Include="Microsoft.CodeAnalysis.BannedApiAnalyzers">
+            <Version>3.3.2</Version>
+        </PackageVersion>
+        <PackageVersion Include="Microsoft.Extensions.Hosting">
+            <Version>5.0.0</Version>
+        </PackageVersion>
+        <PackageVersion Include="Microsoft.SourceLink.GitHub">
+            <Version>1.1.0-beta-20204-02</Version>
+        </PackageVersion>
+        <PackageVersion Include="Mono.Posix.NETStandard">
+            <Version>5.20.1-preview</Version>
+        </PackageVersion>
+        <PackageVersion Include="Nerdbank.GitVersioning">
+            <Version>3.3.37</Version>
+        </PackageVersion>
+        <PackageVersion Include="StyleCop.Analyzers">
+            <Version>1.2.0-beta.312</Version>
+        </PackageVersion>
+        <PackageVersion Include="Vanara.PInvoke.Kernel32">
+            <Version>3.2.20</Version>
+        </PackageVersion>
+    </ItemGroup>
+</Project>
