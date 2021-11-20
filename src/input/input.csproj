@@ -1,9 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <AssemblyName>Terminal.Input</AssemblyName>
+        <AssemblyName>System.Terminal.Input</AssemblyName>
         <PackageDescription>$(PackageDescription)
 
 This package provides an interactive line editor.</PackageDescription>
+        <PackageId>Terminal.Input</PackageId>
         <RootNamespace>System.Input</RootNamespace>
     </PropertyGroup>
 

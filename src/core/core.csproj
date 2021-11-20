@@ -1,10 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <AssemblyName>Terminal</AssemblyName>
+        <AssemblyName>System.Terminal</AssemblyName>
         <IsPackable>true</IsPackable>
         <PackageDescription>$(PackageDescription)
 
 This package provides the core terminal API.</PackageDescription>
+        <PackageId>Terminal</PackageId>
         <RootNamespace>System</RootNamespace>
     </PropertyGroup>
 
@@ -13,7 +14,7 @@ This package provides the core terminal API.</PackageDescription>
     </ItemGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="Terminal.Extensions" />
+        <InternalsVisibleTo Include="System.Terminal.Extensions" />
     </ItemGroup>
 
     <ItemGroup>
