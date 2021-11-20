@@ -1,24 +1,19 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
+namespace Sample.Scenarios;
 
-namespace Sample.Scenarios
+[SuppressMessage("Performance", "CA1812")]
+sealed class FullScreenScenario : IScenario
 {
-    [SuppressMessage("Microsoft.Performance", "CA1812", Justification = "Used.")]
-    sealed class FullScreenScenario : IScenario
+    public Task RunAsync()
     {
-        public Task RunAsync()
+        using (_ = Terminal.AlternateScreen.Activate())
         {
-            using (_ = Terminal.AlternateScreen.Activate())
-            {
-                Terminal.OutLine("This text is rendered in the alternate screen buffer.");
-                Terminal.OutLine();
-                Terminal.OutLine("Press Enter to return to the main screen buffer.");
+            Terminal.OutLine("This text is rendered in the alternate screen buffer.");
+            Terminal.OutLine();
+            Terminal.OutLine("Press Enter to return to the main screen buffer.");
 
-                _ = Terminal.ReadLine();
-            }
-
-            return Task.CompletedTask;
+            _ = Terminal.ReadLine();
         }
+
+        return Task.CompletedTask;
     }
 }

@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json.schemastore.org/vsconfig.json",
+  "version": "1.0",
+  "components": [
+    "Microsoft.VisualStudio.Workload.CoreEditor",
+    "Microsoft.VisualStudio.Workload.ManagedDesktop"
+  ]
+}

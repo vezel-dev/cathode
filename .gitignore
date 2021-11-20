@@ -1,7 +1,6 @@
-# Reference: https://git-scm.com/docs/gitignore
-
-/pkg
-/src/*/bin
-/src/*/obj
-*.user
 .vs
+*.user
+/pkg/cache/*/*
+/pkg/feed/*.nupkg
+bin
+obj

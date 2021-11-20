@@ -1,10 +1,9 @@
-namespace System.Diagnostics
+namespace System.Diagnostics;
+
+public class TerminalTraceListener : TextWriterTraceListener
 {
-    public class TerminalTraceListener : TextWriterTraceListener
+    public TerminalTraceListener(bool stdError = false)
+        : base((stdError ? Terminal.StdError : Terminal.StdOut).Stream)
     {
-        public TerminalTraceListener(bool stdError = false)
-            : base((stdError ? Terminal.StdError : Terminal.StdOut).Stream)
-        {
-        }
     }
 }

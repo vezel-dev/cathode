@@ -3,11 +3,14 @@
         <AssemblyName>sample</AssemblyName>
         <OutputType>Exe</OutputType>
         <RootNamespace>Sample</RootNamespace>
-        <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\extensions\extensions.csproj" />
-        <ProjectReference Include="..\input\input.csproj" />
+        <Using Include="System.Input" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../extensions/extensions.csproj" />
+        <ProjectReference Include="../input/input.csproj" />
     </ItemGroup>
 </Project>

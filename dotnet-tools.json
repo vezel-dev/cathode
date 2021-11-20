@@ -1,66 +1,66 @@
 {
-    "version": 1,
-    "isRoot": true,
-    "tools": {
-        "dotnet-counters": {
-            "version": "5.0.152202",
-            "commands": [
-              "dotnet-counters"
-            ]
-        },
-        "dotnet-dump": {
-            "version": "5.0.152202",
-            "commands": [
-              "dotnet-dump"
-            ]
-        },
-        "dotnet-format": {
-            "version": "4.1.131201",
-            "commands": [
-              "dotnet-format"
-            ]
-        },
-        "dotnet-gcdump": {
-            "version": "5.0.152202",
-            "commands": [
-              "dotnet-gcdump"
-            ]
-        },
-        "dotnet-sos": {
-            "version": "5.0.152202",
-            "commands": [
-              "dotnet-sos"
-            ]
-        },
-        "dotnet-symbol": {
-            "version": "1.0.155902",
-            "commands": [
-              "dotnet-symbol"
-            ]
-        },
-        "dotnet-trace": {
-            "version": "5.0.152202",
-            "commands": [
-              "dotnet-trace"
-            ]
-        },
-        "gpr": {
-            "version": "0.1.257",
-            "commands": [
-                "gpr"
-            ]
-        },
-        "nbgv": {
-            "version": "3.3.37",
-            "commands": [
-                "nbgv"
-            ]
-        },
-        "sourcelink": {
-            "version": "3.1.1",
-            "commands": [
-              "sourcelink"
-            ]
-        }
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "dotnet-counters": {
+      "version": "5.0.251802",
+      "commands": [
+        "dotnet-counters"
+      ]
+    },
+    "dotnet-dump": {
+      "version": "5.0.251802",
+      "commands": [
+        "dotnet-dump"
+      ]
+    },
+    "dotnet-gcdump": {
+      "version": "5.0.251802",
+      "commands": [
+        "dotnet-gcdump"
+      ]
+    },
+    "dotnet-sos": {
+      "version": "5.0.251802",
+      "commands": [
+        "dotnet-sos"
+      ]
+    },
+    "dotnet-stack": {
+      "version": "5.0.251802",
+      "commands": [
+        "dotnet-stack"
+      ]
+    },
+    "dotnet-symbol": {
+      "version": "1.0.252801",
+      "commands": [
+        "dotnet-symbol"
+      ]
+    },
+    "dotnet-trace": {
+      "version": "5.0.251802",
+      "commands": [
+        "dotnet-trace"
+      ]
+    },
+    "nbgv": {
+      "version": "3.5.50-alpha",
+      "commands": [
+        "nbgv"
+      ]
+    },
+    "nuke.globaltool": {
+      "version": "5.3.0",
+      "commands": [
+        "nuke"
+      ]
+    },
+    "sourcelink": {
+      "version": "3.1.1",
+      "commands": [
+        "sourcelink"
+      ]
     }
+  }
 }

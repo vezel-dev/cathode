@@ -1,35 +1,25 @@
 <Project>
     <PropertyGroup>
-        <Company>Alex Rønne Petersen</Company>
-        <Copyright>ISC License (No Attribution)</Copyright>
-        <Description>A terminal-centric replacement for System.Console.</Description>
         <Product>System.Terminal</Product>
+        <Description>A terminal-centric replacement for System.Console.</Description>
+        <Authors>The $(Product) Maintainers</Authors>
+        <Copyright>Copyright © $(Authors)</Copyright>
     </PropertyGroup>
 
     <PropertyGroup>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+        <AnalysisLevel>latest-all</AnalysisLevel>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
-        <DebugType>portable</DebugType>
-        <Deterministic>true</Deterministic>
-        <EmbedAllSources>true</EmbedAllSources>
+        <DebugType>none</DebugType>
+        <EnablePackageValidation>true</EnablePackageValidation>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-        <Features>strict</Features>
-        <LangVersion>preview</LangVersion>
-        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-        <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
-        <Nullable>enable</Nullable>
-        <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    </PropertyGroup>
-
-    <PropertyGroup>
-        <Authors>$(Company)</Authors>
-        <EmbedUntrackedSources>true</EmbedUntrackedSources>
-        <IncludeSource>true</IncludeSource>
+        <ImplicitUsings>true</ImplicitUsings>
         <IsPackable>false</IsPackable>
         <IsPublishable>false</IsPublishable>
+        <LangVersion>preview</LangVersion>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+        <Nullable>enable</Nullable>
         <PackageDescription>
 System.Terminal is a terminal-centric replacement for System.Console.
 
@@ -39,8 +29,12 @@ console host and the many limitations it had. System.Terminal provides an API
 centered around a full-featured VT100 terminal and works on all platforms that
 .NET Core supports.
         </PackageDescription>
-        <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+        <PackageLicenseExpression>ISC</PackageLicenseExpression>
+        <PackageOutputPath>$(MSBuildThisFileDirectory)pkg/feed/</PackageOutputPath>
+        <PackageProjectUrl>https://github.com/alexrp/system-terminal</PackageProjectUrl>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <RepositoryUrl>https://github.com/alexrp/system-terminal.git</RepositoryUrl>
+        <TargetFramework>net6.0</TargetFramework>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
 </Project>

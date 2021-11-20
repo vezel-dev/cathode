@@ -1,13 +1,12 @@
-namespace System
+namespace System;
+
+public enum TerminalCursorStyle
 {
-    public enum TerminalCursorStyle
-    {
-        Default,
-        BlockStatic,
-        BlockBlinking,
-        UnderlineStatic,
-        UnderlineBlinking,
-        BarStatic,
-        BarBlinking,
-    }
+    Default,
+    BlockStatic,
+    BlockBlinking,
+    UnderlineStatic,
+    UnderlineBlinking,
+    BarStatic,
+    BarBlinking,
 }

@@ -1,7 +1,0 @@
-<Project>
-    <ItemGroup>
-        <AdditionalFiles Include="$(MSBuildThisFileDirectory)BannedSymbols.txt">
-            <Visible>false</Visible>
-        </AdditionalFiles>
-    </ItemGroup>
-</Project>

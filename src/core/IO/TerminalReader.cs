@@ -1,17 +1,14 @@
-using System.Drivers;
+namespace System.IO;
 
-namespace System.IO
+public abstract class TerminalReader : TerminalHandle
 {
-    public abstract class TerminalReader : TerminalHandle
+    public TerminalInputStream Stream { get; }
+
+    private protected TerminalReader(TerminalDriver driver)
+        : base(driver)
     {
-        public TerminalInputStream Stream { get; }
-
-        private protected TerminalReader(TerminalDriver driver)
-            : base(driver)
-        {
-            Stream = new(this);
-        }
-
-        public abstract int Read(Span<byte> data);
+        Stream = new(this);
     }
+
+    public abstract int Read(Span<byte> data);
 }

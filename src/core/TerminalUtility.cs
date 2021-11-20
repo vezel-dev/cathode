@@ -1,20 +1,17 @@
-using System.Threading;
+namespace System;
 
-namespace System
+static class TerminalUtility
 {
-    static class TerminalUtility
+    public static Thread StartThread(string name, ThreadStart body)
     {
-        public static Thread StartThread(string name, ThreadStart body)
+        var thread = new Thread(body)
         {
-            var thread = new Thread(body)
-            {
-                IsBackground = true,
-                Name = name,
-            };
+            IsBackground = true,
+            Name = name,
+        };
 
-            thread.Start();
+        thread.Start();
 
-            return thread;
-        }
+        return thread;
     }
 }

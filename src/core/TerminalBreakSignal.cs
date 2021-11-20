@@ -1,8 +1,7 @@
-namespace System
+namespace System;
+
+public enum TerminalBreakSignal
 {
-    public enum TerminalBreakSignal
-    {
-        Interrupt,
-        Quit,
-    }
+    Interrupt,
+    Quit,
 }

@@ -1,0 +1,27 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskLabel": "Build",
+      "contextType": "build",
+      "appliesTo": "/",
+      "type": "launch",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "-clp:NoSummary"
+      ]
+    },
+    {
+      "taskLabel": "Clean",
+      "contextType": "clean",
+      "appliesTo": "/",
+      "type": "launch",
+      "command": "dotnet",
+      "args": [
+        "clean",
+        "-clp:NoSummary"
+      ]
+    }
+  ]
+}

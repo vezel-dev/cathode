@@ -1,86 +1,81 @@
-using System.Buffers;
-using System.Globalization;
-using System.IO;
+namespace System;
 
-namespace System
+public static class TerminalExtensions
 {
-    public static class TerminalExtensions
+    public static byte? ReadRaw(this TerminalReader reader)
     {
-        public static byte? ReadRaw(this TerminalReader reader)
+        _ = reader ?? throw new ArgumentNullException(nameof(reader));
+
+        return reader.Driver.ReadRaw();
+    }
+
+    public static string? ReadLine(this TerminalReader reader)
+    {
+        _ = reader ?? throw new ArgumentNullException(nameof(reader));
+
+        return reader.Driver.ReadLine();
+    }
+
+    public static void WriteBinary(this TerminalWriter writer, ReadOnlySpan<byte> value)
+    {
+        _ = writer ?? throw new ArgumentNullException(nameof(writer));
+
+        writer.Write(value);
+    }
+
+    public static void WriteText(this TerminalWriter writer, ReadOnlySpan<char> value)
+    {
+        _ = writer ?? throw new ArgumentNullException(nameof(writer));
+
+        var len = writer.Encoding.GetByteCount(value);
+        var array = ArrayPool<byte>.Shared.Rent(len);
+
+        try
         {
-            _ = reader ?? throw new ArgumentNullException(nameof(reader));
+            var span = array.AsSpan(0, len);
 
-            return reader.Driver.ReadRaw();
+            _ = writer.Encoding.GetBytes(value, span);
+
+            writer.WriteBinary(span);
         }
-
-        public static string? ReadLine(this TerminalReader reader)
+        finally
         {
-            _ = reader ?? throw new ArgumentNullException(nameof(reader));
-
-            return reader.Driver.ReadLine();
+            ArrayPool<byte>.Shared.Return(array);
         }
+    }
 
-        public static void WriteBinary(this TerminalWriter writer, ReadOnlySpan<byte> value)
-        {
-            _ = writer ?? throw new ArgumentNullException(nameof(writer));
+    public static void Write(this TerminalWriter writer, string? value)
+    {
+        writer.WriteText(value.AsSpan());
+    }
 
-            writer.Write(value);
-        }
+    public static void Write<T>(this TerminalWriter writer, T value)
+    {
+        writer.Write(value?.ToString());
+    }
 
-        public static void WriteText(this TerminalWriter writer, ReadOnlySpan<char> value)
-        {
-            _ = writer ?? throw new ArgumentNullException(nameof(writer));
+    public static void Write(this TerminalWriter writer, string format, params object?[] args)
+    {
+        writer.Write(string.Format(CultureInfo.CurrentCulture, format, args));
+    }
 
-            var len = writer.Encoding.GetByteCount(value);
-            var array = ArrayPool<byte>.Shared.Rent(len);
+    public static void WriteLine(this TerminalWriter writer)
+    {
+        writer.Write(Environment.NewLine);
+    }
 
-            try
-            {
-                var span = array.AsSpan(0, len);
+    public static void WriteLine(this TerminalWriter writer, string? value)
+    {
+        writer.Write(value + Environment.NewLine);
+    }
 
-                _ = writer.Encoding.GetBytes(value, span);
+    public static void WriteLine<T>(this TerminalWriter writer, T value)
+    {
+        writer.WriteLine(value?.ToString());
+    }
 
-                writer.WriteBinary(span);
-            }
-            finally
-            {
-                ArrayPool<byte>.Shared.Return(array);
-            }
-        }
-
-        public static void Write(this TerminalWriter writer, string? value)
-        {
-            writer.WriteText(value.AsSpan());
-        }
-
-        public static void Write<T>(this TerminalWriter writer, T value)
-        {
-            writer.Write(value?.ToString());
-        }
-
-        public static void Write(this TerminalWriter writer, string format, params object?[] args)
-        {
-            writer.Write(string.Format(CultureInfo.CurrentCulture, format, args));
-        }
-
-        public static void WriteLine(this TerminalWriter writer)
-        {
-            writer.Write(Environment.NewLine);
-        }
-
-        public static void WriteLine(this TerminalWriter writer, string? value)
-        {
-            writer.Write(value + Environment.NewLine);
-        }
-
-        public static void WriteLine<T>(this TerminalWriter writer, T value)
-        {
-            writer.WriteLine(value?.ToString());
-        }
-
-        public static void WriteLine(this TerminalWriter writer, string format, params object?[] args)
-        {
-            writer.WriteLine(string.Format(CultureInfo.CurrentCulture, format, args));
-        }
+    public static void WriteLine(this TerminalWriter writer, string format, params object?[] args)
+    {
+        writer.WriteLine(string.Format(CultureInfo.CurrentCulture, format, args));
     }
 }

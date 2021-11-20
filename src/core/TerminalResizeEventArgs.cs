@@ -1,12 +1,11 @@
-namespace System
-{
-    public sealed class TerminalResizeEventArgs : EventArgs
-    {
-        public TerminalSize Size { get; }
+namespace System;
 
-        internal TerminalResizeEventArgs(TerminalSize size)
-        {
-            Size = size;
-        }
+public sealed class TerminalResizeEventArgs : EventArgs
+{
+    public TerminalSize Size { get; }
+
+    internal TerminalResizeEventArgs(TerminalSize size)
+    {
+        Size = size;
     }
 }

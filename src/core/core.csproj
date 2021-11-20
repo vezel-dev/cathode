@@ -8,25 +8,30 @@ $(PackageDescription)
 This package provides the core terminal API.
         </PackageDescription>
         <RootNamespace>System</RootNamespace>
-        <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
+
+    <ItemGroup>
+        <Using Include="System.Drivers" />
+    </ItemGroup>
 
     <ItemGroup>
         <InternalsVisibleTo Include="Terminal.Extensions" />
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="BannedSymbols.txt; Terminal.targets">
-            <Pack>true</Pack>
-            <PackagePath>buildTransitive</PackagePath>
-        </Content>
+        <None Include="buildTransitive/**"
+              Pack="true"
+              PackagePath="%(Identity)" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers">
-            <PrivateAssets>none</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="Mono.Posix.NETStandard" />
-        <PackageReference Include="Vanara.PInvoke.Kernel32" />
+        <PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers"
+                          PrivateAssets="none" />
+        <PackageReference Include="Microsoft.Windows.CsWin32" />
+        <PackageReference Include="Microsoft.Windows.SDK.Win32Docs" />
+        <PackageReference Include="Microsoft.Windows.SDK.Win32Metadata" />
+        <PackageReference Include="Mono.Unix" />
+        <PackageReference Include="TermInfo" />
+        <PackageReference Include="Wcwidth" />
     </ItemGroup>
 </Project>

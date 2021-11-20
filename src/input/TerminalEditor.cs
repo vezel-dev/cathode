@@ -1,122 +1,116 @@
-using System.Buffers;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+namespace System.Input;
 
-namespace System.Input
+public sealed class TerminalEditor
 {
-    public sealed class TerminalEditor
+    public TerminalEditorOptions Options { get; }
+
+    readonly object _lock = new();
+
+    public TerminalEditor(TerminalEditorOptions options)
     {
-        public TerminalEditorOptions Options { get; }
+        Options = options ?? throw new ArgumentNullException(nameof(options));
+    }
 
-        readonly object _lock = new();
-
-        public TerminalEditor(TerminalEditorOptions options)
+    public string? ReadLine(string prompt, string? initial = null)
+    {
+        lock (_lock)
         {
-            Options = options ?? throw new ArgumentNullException(nameof(options));
-        }
+            var raw = Terminal.IsRawMode;
+            var events = Terminal.MouseEvents;
 
-        public string? ReadLine(string prompt, string? initial = null)
-        {
-            lock (_lock)
+            Terminal.SetMouseEvents(TerminalMouseEvents.None);
+            Terminal.SetRawMode(true, true);
+
+            try
             {
-                var raw = Terminal.IsRawMode;
-                var events = Terminal.MouseEvents;
+                Terminal.Out(prompt);
+                Terminal.Out(initial);
 
-                Terminal.SetMouseEvents(TerminalMouseEvents.None);
-                Terminal.SetRawMode(true, true);
-
-                try
+                static Rune? ReadRune()
                 {
-                    Terminal.Out(prompt);
-                    Terminal.Out(initial);
-
-                    static Rune? ReadRune()
-                    {
-                        Span<byte> bytes = stackalloc byte[Terminal.StdIn.Encoding.GetMaxByteCount(1)];
-                        var length = 0;
-
-                        while (true)
-                        {
-                            if (Rune.DecodeFromUtf8(bytes[0..length], out var rune, out _) ==
-                                OperationStatus.NeedMoreData)
-                            {
-                                if (Terminal.ReadRaw() is not byte b)
-                                    return null;
-
-                                bytes[length++] = b;
-
-                                continue;
-                            }
-
-                            return rune;
-                        }
-                    }
-
-                    var list = new List<Rune>(Environment.SystemPageSize);
-
-                    if (initial != null)
-                        list.AddRange(initial.EnumerateRunes());
+                    Span<byte> bytes = stackalloc byte[Terminal.StdIn.Encoding.GetMaxByteCount(1)];
+                    var length = 0;
 
                     while (true)
                     {
-                        // EOF. Let the caller know.
-                        if (ReadRune() is not Rune rune)
-                            return null;
+                        if (Rune.DecodeFromUtf8(bytes[0..length], out var rune, out _) ==
+                            OperationStatus.NeedMoreData)
+                        {
+                            if (Terminal.ReadRaw() is not byte b)
+                                return null;
 
-                        // Malformed UTF-8. Skip this rune and hope we recover.
-                        if (rune == Rune.ReplacementChar)
+                            bytes[length++] = b;
+
                             continue;
-
-                        var cp = rune.Value;
-
-                        // Ctrl-C and Ctrl-Break/Ctrl-\
-                        if (cp == 0x3)
-                        {
-                            Terminal.GenerateBreakSignal(TerminalBreakSignal.Interrupt);
-
-                            return null;
                         }
 
-                        // Enter
-                        if (cp == 0xd)
-                        {
-                            Terminal.Out("\r\n");
+                        return rune;
+                    }
+                }
 
-                            break;
-                        }
+                var list = new List<Rune>(Environment.SystemPageSize);
 
-                        // Escape
-                        if (cp == 0x1b)
-                        {
-                            // TODO: Actual editing logic.
-                        }
+                if (initial != null)
+                    list.AddRange(initial.EnumerateRunes());
 
-                        // Control runes we do not recognize. Skip.
-                        if (Rune.IsControl(rune))
-                            continue;
+                while (true)
+                {
+                    // EOF. Let the caller know.
+                    if (ReadRune() is not Rune rune)
+                        return null;
 
-                        Terminal.Out(rune);
-                        list.Add(rune);
+                    // Malformed UTF-8. Skip this rune and hope we recover.
+                    if (rune == Rune.ReplacementChar)
+                        continue;
+
+                    var cp = rune.Value;
+
+                    // Ctrl-C and Ctrl-Break/Ctrl-\
+                    if (cp == 0x3)
+                    {
+                        Terminal.GenerateBreakSignal(TerminalBreakSignal.Interrupt);
+
+                        return null;
                     }
 
-                    var chars = new char[list.Aggregate(0, (acc, r) => acc + r.Utf16SequenceLength)].AsSpan();
-                    var offset = 0;
+                    // Enter
+                    if (cp == 0xd)
+                    {
+                        Terminal.Out("\r\n");
 
-                    foreach (var rune in list)
-                        offset += rune.EncodeToUtf16(chars[offset..]);
+                        break;
+                    }
 
-                    var str = new string(chars);
+                    // Escape
+                    if (cp == 0x1b)
+                    {
+                        // TODO: Actual editing logic.
+                    }
 
-                    Options.History.Add(str);
+                    // Control runes we do not recognize. Skip.
+                    if (Rune.IsControl(rune))
+                        continue;
 
-                    return str;
+                    Terminal.Out(rune);
+                    list.Add(rune);
                 }
-                finally
-                {
-                    Terminal.SetRawMode(raw, true);
-                    Terminal.SetMouseEvents(events);
-                }
+
+                var chars = new char[list.Aggregate(0, (acc, r) => acc + r.Utf16SequenceLength)].AsSpan();
+                var offset = 0;
+
+                foreach (var rune in list)
+                    offset += rune.EncodeToUtf16(chars[offset..]);
+
+                var str = new string(chars);
+
+                Options.History.Add(str);
+
+                return str;
+            }
+            finally
+            {
+                Terminal.SetRawMode(raw, true);
+                Terminal.SetMouseEvents(events);
             }
         }
     }

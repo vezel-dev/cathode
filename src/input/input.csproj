@@ -1,17 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <AssemblyName>Terminal.Input</AssemblyName>
-        <IsPackable>true</IsPackable>
         <PackageDescription>
 $(PackageDescription)
 
 This package provides an interactive line editor.
         </PackageDescription>
         <RootNamespace>System.Input</RootNamespace>
-        <TargetFramework>netcoreapp5.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\core\core.csproj" />
+        <ProjectReference Include="../core/core.csproj" />
     </ItemGroup>
 </Project>

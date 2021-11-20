@@ -1,23 +1,18 @@
-// Reference: https://github.com/dotnet/Nerdbank.GitVersioning/blob/master/doc/versionJson.md
-
 {
-    "$schema": "https://raw.githubusercontent.com/dotnet/Nerdbank.GitVersioning/master/src/NerdBank.GitVersioning/version.schema.json",
-    "version": "0.3-dev",
-    "publicReleaseRefSpec": [
-        "^refs/heads/release/.*$"
-    ],
-    "release": {
-        "branchName": "release/v{version}",
-        "firstUnstableTag": "dev"
-    },
-    "nugetPackageVersion": {
-        "semVer": 2
-    },
-    "cloudBuild": {
-        "buildNumber": {
-            "enabled": true,
-            "setVersionVariables": true,
-            "setAllVariables": true
-        }
-    }
+  "$schema": "https://raw.githubusercontent.com/dotnet/Nerdbank.GitVersioning/master/src/NerdBank.GitVersioning/version.schema.json",
+  "version": "0.3-dev",
+  "nuGetPackageVersion": {
+    "semVer": 2.0
+  },
+  "publicReleaseRefSpec": [
+    "^refs/tags/.*$"
+  ],
+  "cloudBuild": {
+    "setVersionVariables": false,
+    "buildNumber": null
+  },
+  "release": {
+    "branchName": "release/v{version}",
+    "firstUnstableTag": "dev"
+  }
 }

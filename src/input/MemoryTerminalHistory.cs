@@ -1,52 +1,48 @@
-using System.Collections.Generic;
-using System.Linq;
+namespace System.Input;
 
-namespace System.Input
+public class MemoryTerminalHistory : TerminalHistory
 {
-    public class MemoryTerminalHistory : TerminalHistory
+    public override int Count => _history.Count;
+
+    readonly List<string> _history = new();
+
+    public override void Add(string value)
     {
-        public override int Count => _history.Count;
+        _history.Add(value);
+    }
 
-        readonly List<string> _history = new();
+    public override bool Remove(int index)
+    {
+        if (index < _history.Count)
+            return false;
 
-        public override void Add(string value)
-        {
-            _history.Add(value);
-        }
+        _history.RemoveAt(_history.Count - index);
 
-        public override bool Remove(int index)
-        {
-            if (index < _history.Count)
-                return false;
+        return true;
+    }
 
-            _history.RemoveAt(_history.Count - index);
+    public override string? Get(int index)
+    {
+        return index < _history.Count ? _history[^index] : null;
+    }
 
-            return true;
-        }
+    public override bool Set(int index, string value)
+    {
+        if (index < _history.Count)
+            return false;
 
-        public override string? Get(int index)
-        {
-            return index < _history.Count ? _history[^index] : null;
-        }
+        _history[^index] = value;
 
-        public override bool Set(int index, string value)
-        {
-            if (index < _history.Count)
-                return false;
+        return true;
+    }
 
-            _history[^index] = value;
+    public override void Clear()
+    {
+        _history.Clear();
+    }
 
-            return true;
-        }
-
-        public override void Clear()
-        {
-            _history.Clear();
-        }
-
-        public override IEnumerator<string> GetEnumerator()
-        {
-            return _history.AsEnumerable().Reverse().GetEnumerator();
-        }
+    public override IEnumerator<string> GetEnumerator()
+    {
+        return _history.AsEnumerable().Reverse().GetEnumerator();
     }
 }

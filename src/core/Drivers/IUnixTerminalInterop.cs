@@ -1,11 +1,10 @@
-namespace System.Drivers
+namespace System.Drivers;
+
+interface IUnixTerminalInterop
 {
-    interface IUnixTerminalInterop
-    {
-        TerminalSize? Size { get; }
+    TerminalSize? Size { get; }
 
-        void RefreshSettings();
+    void RefreshSettings();
 
-        bool SetRawMode(bool raw, bool discard);
-    }
+    bool SetRawMode(bool raw, bool discard);
 }

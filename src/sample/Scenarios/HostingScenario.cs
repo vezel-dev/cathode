@@ -1,15 +1,12 @@
-using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 
-namespace Sample.Scenarios
+namespace Sample.Scenarios;
+
+[SuppressMessage("Performance", "CA1812")]
+sealed class HostingScenario : IScenario
 {
-    [SuppressMessage("Microsoft.Performance", "CA1812", Justification = "Used.")]
-    sealed class HostingScenario : IScenario
+    public Task RunAsync()
     {
-        public Task RunAsync()
-        {
-            return TerminalHost.CreateDefaultBuilder().RunTerminalAsync();
-        }
+        return TerminalHost.CreateDefaultBuilder().RunTerminalAsync();
     }
 }

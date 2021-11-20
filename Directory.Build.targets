@@ -1,22 +1,73 @@
 <Project>
-    <ItemGroup Condition="$(IsPackable) == 'true'">
-        <None Include="$(MSBuildThisFileDirectory)LICENSE.md; $(MSBuildThisFileDirectory)README.md">
-            <Pack>true</Pack>
-            <PackagePath></PackagePath>
-        </None>
-    </ItemGroup>
+    <PropertyGroup Condition="'$(DebugSymbols)' == 'true'">
+        <DebugType>embedded</DebugType>
+        <EmbedAllSources>true</EmbedAllSources>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(IsPackable)' == 'true'">
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.SourceLink.GitHub">
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="Nerdbank.GitVersioning">
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="StyleCop.Analyzers">
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
+        <Using Include="System.Buffers" />
+        <Using Include="System.Collections" />
+        <Using Include="System.Collections.Concurrent" />
+        <Using Include="System.Diagnostics.CodeAnalysis" />
+        <Using Include="System.Globalization" />
+        <Using Include="System.Reflection" />
+        <Using Include="System.Runtime.InteropServices" />
+        <Using Include="System.Runtime.Serialization" />
+        <Using Include="System.Runtime.Versioning" />
+        <Using Include="System.Text" />
     </ItemGroup>
 
-    <Import Project="src\core\Terminal.targets" />
+    <Choose>
+        <When Condition="'$(IsPackable)' == 'true'">
+            <PropertyGroup>
+                <PackageReadmeFile>README.md</PackageReadmeFile>
+            </PropertyGroup>
+
+            <ItemGroup>
+                <None Include="$(MSBuildThisFileDirectory)README.md"
+                      Pack="true"
+                      PackagePath=""
+                      Visible="false" />
+            </ItemGroup>
+        </When>
+    </Choose>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.SourceLink.GitHub"
+                          PrivateAssets="all" />
+        <PackageReference Include="Nerdbank.GitVersioning"
+                          PrivateAssets="all" />
+        <PackageReference Include="StyleCop.Analyzers"
+                          PrivateAssets="all" />
+    </ItemGroup>
+
+    <Target Name="_SetReleaseNotes"
+            DependsOnTargets="GetBuildVersion"
+            BeforeTargets="GenerateNuspec"
+            Condition="'$(IsPackable)' == 'true'">
+        <PropertyGroup>
+            <PackageReleaseNotes>https://github.com/alexrp/system-terminal/releases/tag/v$(Version)</PackageReleaseNotes>
+        </PropertyGroup>
+    </Target>
+
+    <!--
+    Get rid of the restored package(s) in the repository's local package cache.
+    This ensures that people will not have to fiddle around with removing these
+    manually when iterating on changes locally.
+    -->
+    <Target Name="_ClearPackageCache"
+            AfterTargets="Clean; Pack"
+            Condition="'$(IsPackable)' == 'true'">
+        <ItemGroup>
+            <_CachedFiles Include="$(NuGetPackageRoot)/$(PackageId.ToLowerInvariant())/**" />
+        </ItemGroup>
+
+        <Delete Files="@(_CachedFiles)" />
+    </Target>
+
+    <Import Project="src/core/buildTransitive/Terminal.targets" />
 </Project>

@@ -1,13 +1,12 @@
-namespace System
+namespace System;
+
+static class TerminalConstants
 {
-    static class TerminalConstants
-    {
-        public const string ESC = "\x1b";
+    public const string ESC = "\x1b";
 
-        public const string CSI = ESC + "[";
+    public const string CSI = ESC + "[";
 
-        public const string OSC = ESC + "]";
+    public const string OSC = ESC + "]";
 
-        public const string BEL = "\a";
-    }
+    public const string BEL = "\a";
 }

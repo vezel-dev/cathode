@@ -1,9 +1,6 @@
-using System.Threading.Tasks;
+namespace Sample;
 
-namespace Sample
+interface IScenario
 {
-    interface IScenario
-    {
-        Task RunAsync();
-    }
+    Task RunAsync();
 }

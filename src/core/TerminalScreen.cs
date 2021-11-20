@@ -1,114 +1,113 @@
-using System.Drivers;
 using static System.TerminalConstants;
 
-namespace System
+namespace System;
+
+public sealed class TerminalScreen
 {
-    public sealed class TerminalScreen
+    [SuppressMessage("Performance", "CA1815")]
+    public readonly struct ScreenActivator : IDisposable
     {
-        public readonly struct ScreenActivator : IDisposable
+        public TerminalScreen NewScreen { get; }
+
+        public TerminalScreen OldScreen { get; }
+
+        internal ScreenActivator(TerminalScreen screen)
         {
-            public TerminalScreen NewScreen { get; }
+            NewScreen = screen;
+            OldScreen = Terminal.Screen;
 
-            public TerminalScreen OldScreen { get; }
+            Switch(screen);
+        }
 
-            internal ScreenActivator(TerminalScreen screen)
+        public void Dispose()
+        {
+            // We might be default-initialized.
+            if (OldScreen != null)
+                Switch(OldScreen);
+        }
+
+        static void Switch(TerminalScreen screen)
+        {
+            lock (_lock)
             {
-                NewScreen = screen;
-                OldScreen = Terminal.Screen;
+                screen._driver.Sequence($"{CSI}?1049{(screen.IsMain ? 'l' : 'h')}");
 
-                Switch(screen);
-            }
-
-            public void Dispose()
-            {
-                // We might be default-initialized.
-                if (OldScreen != null)
-                    Switch(OldScreen);
-            }
-
-            static void Switch(TerminalScreen screen)
-            {
-                lock (_lock)
-                {
-                    screen._driver.Sequence($"{CSI}?1049{(screen.IsMain ? 'l' : 'h')}");
-
-                    Terminal.Screen = screen;
-                }
+                Terminal.Screen = screen;
             }
         }
+    }
 
-        public bool IsMain => this == Terminal.MainScreen;
+    public bool IsMain => this == Terminal.MainScreen;
 
-        public bool IsAlternate => this == Terminal.AlternateScreen;
+    public bool IsAlternate => this == Terminal.AlternateScreen;
 
-        public bool IsActive => this == Terminal.Screen;
+    public bool IsActive => this == Terminal.Screen;
 
-        public bool IsCursorVisible
+    public bool IsCursorVisible
+    {
+        get => _visible;
+        set
         {
-            get => _visible;
-            set
+            lock (_lock)
             {
-                lock (_lock)
-                {
-                    CheckActive();
+                CheckActive();
 
-                    _driver.Sequence($"{CSI}?25{(value ? 'h' : 'l')}");
+                _driver.Sequence($"{CSI}?25{(value ? 'h' : 'l')}");
 
-                    _visible = value;
-                }
+                _visible = value;
             }
         }
+    }
 
-        public TerminalCursorStyle CursorStyle
+    public TerminalCursorStyle CursorStyle
+    {
+        get => _style;
+        set
         {
-            get => _style;
-            set
+            var type = value switch
             {
-                var type = value switch
-                {
-                    TerminalCursorStyle.Default => '0',
-                    TerminalCursorStyle.BlockStatic => '2',
-                    TerminalCursorStyle.BlockBlinking => '1',
-                    TerminalCursorStyle.UnderlineStatic => '4',
-                    TerminalCursorStyle.UnderlineBlinking => '3',
-                    TerminalCursorStyle.BarStatic => '6',
-                    TerminalCursorStyle.BarBlinking => '5',
-                    _ => throw new ArgumentOutOfRangeException(nameof(value)),
-                };
+                TerminalCursorStyle.Default => '0',
+                TerminalCursorStyle.BlockStatic => '2',
+                TerminalCursorStyle.BlockBlinking => '1',
+                TerminalCursorStyle.UnderlineStatic => '4',
+                TerminalCursorStyle.UnderlineBlinking => '3',
+                TerminalCursorStyle.BarStatic => '6',
+                TerminalCursorStyle.BarBlinking => '5',
+                _ => throw new ArgumentOutOfRangeException(nameof(value)),
+            };
 
-                lock (_lock)
-                {
-                    CheckActive();
+            lock (_lock)
+            {
+                CheckActive();
 
-                    _driver.Sequence($"{CSI}{type} q");
+                _driver.Sequence($"{CSI}{type} q");
 
-                    _style = value;
-                }
+                _style = value;
             }
         }
+    }
 
-        static readonly object _lock = new();
+    static readonly object _lock = new();
 
-        readonly TerminalDriver _driver;
+    readonly TerminalDriver _driver;
 
-        bool _visible = true;
+    bool _visible = true;
 
-        TerminalCursorStyle _style;
+    TerminalCursorStyle _style;
 
-        internal TerminalScreen(TerminalDriver driver)
-        {
-            _driver = driver;
-        }
+    internal TerminalScreen(TerminalDriver driver)
+    {
+        _driver = driver;
+    }
 
-        public ScreenActivator Activate()
-        {
-            return new(this);
-        }
+    public ScreenActivator Activate()
+    {
+        return new(this);
+    }
 
-        void CheckActive()
-        {
-            if (!IsActive)
-                throw new InvalidOperationException("This screen is inactive.");
-        }
+    void CheckActive()
+    {
+        if (!IsActive)
+            throw new InvalidOperationException("This screen is inactive.");
     }
 }

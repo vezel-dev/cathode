@@ -1,8 +1,7 @@
-namespace System
+namespace System;
+
+public enum TerminalKeyMode
 {
-    public enum TerminalKeyMode
-    {
-        Normal,
-        Application,
-    }
+    Normal,
+    Application,
 }

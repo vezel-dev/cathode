@@ -1,9 +1,8 @@
-namespace System
+namespace System;
+
+public enum TerminalClearMode
 {
-    public enum TerminalClearMode
-    {
-        Before,
-        After,
-        Full,
-    }
+    Before,
+    After,
+    Full,
 }

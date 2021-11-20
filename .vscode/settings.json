@@ -1,11 +1,9 @@
-// Reference: https://code.visualstudio.com/docs/getstarted/settings
-
 {
-    "files.exclude": {
-        "pkg": true,
-        "src/*/bin": true,
-        "src/*/obj": true,
-        "**/*.user": true,
-        "**/.vs": true
-    }
+  "files.exclude": {
+    "**/.vs": true,
+    "pkg/cache/*[!_._]": true,
+    "pkg/feed/*.nupkg": true,
+    "**/bin": true,
+    "**/obj": true
+  }
 }
