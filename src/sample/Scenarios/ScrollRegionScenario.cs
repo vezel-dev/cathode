@@ -33,8 +33,7 @@ sealed class ScrollRegionScenario : IScenario
                 Terminal.ClearLine();
 
                 Terminal.ForegroundColor(PickRandom(), PickRandom(), PickRandom());
-                Terminal.Out("Last string: {0}", str.Replace("\n", string.Empty, StringComparison.Ordinal)
-                    .Replace("\r", string.Empty, StringComparison.Ordinal));
+                Terminal.Out("Last string: {0}", str.ReplaceLineEndings(string.Empty));
                 Terminal.ResetAttributes();
 
                 Terminal.RestoreCursorPosition();
