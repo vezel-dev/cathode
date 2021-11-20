@@ -8,9 +8,9 @@ effectively a complete replacement for `System.Console`.
 
 With the Windows console host now supporting virtual terminal sequences, it
 makes little sense for console interaction to still be centered around the old
-Windows console host and the many idiosyncrasies it had. `System.Terminal`
-provides an API centered around a [VT100 terminal](https://vt100.net) (with
-various modern and widely supported extensions) and works on all platforms that
+Windows console host and the many limitations it had. `System.Terminal` provides
+an API centered around a [VT100 terminal](https://vt100.net) (with various
+modern and widely supported extensions) and works on all desktop platforms that
 .NET 6+ supports.
 
 Please note that intermixing usage of `System.Terminal` and `System.Console` is

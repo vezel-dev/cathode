@@ -2,11 +2,9 @@
     <PropertyGroup>
         <AssemblyName>Terminal</AssemblyName>
         <IsPackable>true</IsPackable>
-        <PackageDescription>
-$(PackageDescription)
+        <PackageDescription>$(PackageDescription)
 
-This package provides the core terminal API.
-        </PackageDescription>
+This package provides the core terminal API.</PackageDescription>
         <RootNamespace>System</RootNamespace>
     </PropertyGroup>
 
