@@ -106,6 +106,12 @@ abstract class TerminalDriver
 
     readonly Lazy<StreamReader> _reader;
 
+    [SuppressMessage("Style", "IDE0052")]
+    readonly PosixSignalRegistration _sigInt;
+
+    [SuppressMessage("Style", "IDE0052")]
+    readonly PosixSignalRegistration _sigQuit;
+
     string _title = string.Empty;
 
     EventHandler<TerminalResizeEventArgs>? _resize;
@@ -140,6 +146,15 @@ abstract class TerminalDriver
         Console.SetIn(new InvalidTextReader());
         Console.SetOut(new InvalidTextWriter());
         Console.SetError(new InvalidTextWriter());
+
+        void HandleSignal(PosixSignalContext context)
+        {
+            context.Cancel = HandleBreakSignal(context.Signal == PosixSignal.SIGINT);
+        }
+
+        // Keep the registrations alive by storing them in fields.
+        _sigInt = PosixSignalRegistration.Create(PosixSignal.SIGINT, HandleSignal);
+        _sigQuit = PosixSignalRegistration.Create(PosixSignal.SIGQUIT, HandleSignal);
     }
 
     protected virtual void ToggleResizeEvent(bool enable)

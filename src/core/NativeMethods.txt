@@ -7,9 +7,9 @@ GetStdHandle
 ReadConsole
 ReadFile
 SetConsoleCP
-SetConsoleCtrlHandler
 SetConsoleMode
 SetConsoleOutputCP
+WriteConsole
 WriteFile
 
 WIN32_ERROR

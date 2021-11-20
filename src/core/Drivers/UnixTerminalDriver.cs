@@ -1,4 +1,3 @@
-using Mono.Unix;
 using Mono.Unix.Native;
 
 namespace System.Drivers;
@@ -196,6 +195,12 @@ sealed class UnixTerminalDriver : TerminalDriver
     readonly UnixTerminalInterop _interop =
         OperatingSystem.IsMacOS() ? MacOSTerminalInterop.Instance : LinuxTerminalInterop.Instance;
 
+    [SuppressMessage("Style", "IDE0052")]
+    readonly PosixSignalRegistration _sigWinch;
+
+    [SuppressMessage("Style", "IDE0052")]
+    readonly PosixSignalRegistration _sigCont;
+
     readonly object _rawLock = new();
 
     TerminalSize? _size;
@@ -222,58 +227,24 @@ sealed class UnixTerminalDriver : TerminalDriver
 
         RefreshWindowSize();
 
-        _ = TerminalUtility.StartThread("Terminal Signal Listener", () =>
+        void HandleSignal(PosixSignalContext context)
         {
-            // TODO: SIGCHLD?
+            // If we are being restored from the background (SIGCONT), it is possible that
+            // terminal settings have been mangled, so restore them.
+            if (context.Signal == PosixSignal.SIGCONT)
+                lock (_rawLock)
+                    _interop.RefreshSettings();
 
-            using var sigWinch = new UnixSignal(Signum.SIGWINCH);
-            using var sigCont = new UnixSignal(Signum.SIGCONT);
-            using var sigInt = new UnixSignal(Signum.SIGINT);
-            using var sigQuit = new UnixSignal(Signum.SIGQUIT);
+            // Terminal width/height might have changed for SIGCONT, and will definitely
+            // have changed for SIGWINCH.
+            RefreshWindowSize();
+        }
 
-            var sigs = new[] { sigWinch, sigCont, sigInt, sigQuit };
+        // Keep the registrations alive by storing them in fields.
+        _sigWinch = PosixSignalRegistration.Create(PosixSignal.SIGWINCH, HandleSignal);
+        _sigCont = PosixSignalRegistration.Create(PosixSignal.SIGCONT, HandleSignal);
 
-            while (true)
-            {
-                var idx = UnixSignal.WaitAny(sigs);
-
-                if (idx == -1)
-                    break;
-
-                var sig = sigs[idx];
-
-                // If we are being restored from the background (SIGCONT), it is possible that
-                // terminal settings have been mangled, so restore them.
-                if (sig == sigCont)
-                    lock (_rawLock)
-                        _interop.RefreshSettings();
-
-                // Terminal width/height might have changed for SIGCONT, and will definitely
-                // have changed for SIGWINCH.
-                if (sig == sigCont || sig == sigWinch)
-                    RefreshWindowSize();
-
-                if (sig == sigQuit || sig == sigInt)
-                {
-                    // We do this in a separate thread so that signal handling does not get
-                    // blocked if an event handler misbehaves.
-                    _ = TerminalUtility.StartThread("Terminal Break Handler", () =>
-                    {
-                        if (!HandleBreakSignal(sig == sigInt))
-                        {
-                            // Get the value early to avoid ObjectDisposedException.
-                            var num = sig.Signum;
-
-                            // Remove our signal handler and send the signal again. Since we
-                            // have overwritten the signal handlers in CoreCLR and
-                            // System.Native, this gives those handlers an opportunity to run.
-                            sig.Dispose();
-                            _ = Syscall.kill(Syscall.getpid(), num);
-                        }
-                    });
-                }
-            }
-        });
+        // TODO: SIGCHLD?
     }
 
     public override void GenerateBreakSignal(TerminalBreakSignal signal)
