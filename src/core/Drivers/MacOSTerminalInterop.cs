@@ -6,24 +6,24 @@ namespace System.Drivers;
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300")]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1307")]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310")]
-sealed class MacOSTerminalInterop : IUnixTerminalInterop
+sealed class MacOSTerminalInterop : UnixTerminalInterop
 {
     struct termios
     {
-        public UIntPtr c_iflag;
+        public nuint c_iflag;
 
-        public UIntPtr c_oflag;
+        public nuint c_oflag;
 
-        public UIntPtr c_cflag;
+        public nuint c_cflag;
 
-        public UIntPtr c_lflag;
+        public nuint c_lflag;
 
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         public byte[] c_cc;
 
-        public UIntPtr c_ispeed;
+        public nuint c_ispeed;
 
-        public UIntPtr c_ospeed;
+        public nuint c_ospeed;
     }
 
     struct winsize
@@ -39,45 +39,45 @@ sealed class MacOSTerminalInterop : IUnixTerminalInterop
 
     // c_iflag
 
-    const uint IGNBRK = 0x1;
+    const nuint IGNBRK = 0x1;
 
-    const uint BRKINT = 0x2;
+    const nuint BRKINT = 0x2;
 
-    const uint PARMRK = 0x8;
+    const nuint PARMRK = 0x8;
 
-    const uint ISTRIP = 0x20;
+    const nuint ISTRIP = 0x20;
 
-    const uint INLCR = 0x40;
+    const nuint INLCR = 0x40;
 
-    const uint IGNCR = 0x80;
+    const nuint IGNCR = 0x80;
 
-    const uint ICRNL = 0x100;
+    const nuint ICRNL = 0x100;
 
-    const uint IXON = 0x200;
+    const nuint IXON = 0x200;
 
     // c_oflag
 
-    const uint OPOST = 0x1;
+    const nuint OPOST = 0x1;
 
     // c_cflag
 
-    const uint CSIZE = 0x300;
+    const nuint CSIZE = 0x300;
 
-    const uint CS8 = 0x300;
+    const nuint CS8 = 0x300;
 
-    const uint PARENB = 0x1000;
+    const nuint PARENB = 0x1000;
 
     // c_lflag
 
-    const uint ECHO = 0x8;
+    const nuint ECHO = 0x8;
 
-    const uint ECHONL = 0x10;
+    const nuint ECHONL = 0x10;
 
-    const uint ISIG = 0x80;
+    const nuint ISIG = 0x80;
 
-    const uint ICANON = 0x100;
+    const nuint ICANON = 0x100;
 
-    const uint IEXTEN = 0x400;
+    const nuint IEXTEN = 0x400;
 
     // c_cc
 
@@ -93,21 +93,21 @@ sealed class MacOSTerminalInterop : IUnixTerminalInterop
 
     // request
 
-    const uint TIOCGWINSZ = 0x40087468;
+    const nuint TIOCGWINSZ = 0x40087468;
 
-    [DllImport("libc", SetLastError = true)]
+    [DllImport("c", SetLastError = true)]
     static extern int tcgetattr(int fd, out termios termios_p);
 
-    [DllImport("libc", SetLastError = true)]
+    [DllImport("c", SetLastError = true)]
     static extern int tcsetattr(int fd, int optional_actions, in termios termios_p);
 
-    [DllImport("libc", SetLastError = true)]
-    static extern int ioctl(int fildes, UIntPtr request, out winsize argp);
+    [DllImport("c", SetLastError = true)]
+    static extern int ioctl(int fildes, nuint request, out winsize argp);
 
     public static MacOSTerminalInterop Instance { get; } = new();
 
-    public TerminalSize? Size =>
-        ioctl(UnixTerminalDriver.OutHandle, (UIntPtr)TIOCGWINSZ, out var w) == 0 ? new(w.ws_col, w.ws_row) : null;
+    public override TerminalSize? Size =>
+        ioctl(UnixTerminalDriver.OutHandle, TIOCGWINSZ, out var w) == 0 ? new(w.ws_col, w.ws_row) : null;
 
     readonly termios? _original;
 
@@ -130,35 +130,25 @@ sealed class MacOSTerminalInterop : IUnixTerminalInterop
         }
     }
 
-    public void RefreshSettings()
+    public override void RefreshSettings()
     {
         // This call can fail if the terminal is detached, but that is OK.
         if (_current is termios c)
             _ = UpdateSettings(TCSANOW, c);
     }
 
-    public bool SetRawMode(bool raw, bool discard)
+    public override bool SetRawMode(bool raw, bool discard)
     {
         if (_original is not termios settings)
             return false;
 
         if (raw)
         {
-            var iflag = (uint)settings.c_iflag;
-            var oflag = (uint)settings.c_oflag;
-            var cflag = (uint)settings.c_cflag;
-            var lflag = (uint)settings.c_lflag;
-
-            iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
-            oflag &= ~OPOST;
-            cflag &= ~(CSIZE | PARENB);
-            cflag |= CS8;
-            lflag &= ~(ISIG | ICANON | ECHO | ECHONL | IEXTEN);
-
-            settings.c_iflag = (UIntPtr)iflag;
-            settings.c_oflag = (UIntPtr)oflag;
-            settings.c_cflag = (UIntPtr)cflag;
-            settings.c_lflag = (UIntPtr)lflag;
+            settings.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
+            settings.c_oflag &= ~OPOST;
+            settings.c_cflag &= ~(CSIZE | PARENB);
+            settings.c_cflag |= CS8;
+            settings.c_lflag &= ~(ISIG | ICANON | ECHO | ECHONL | IEXTEN);
         }
 
         return UpdateSettings(discard ? TCSAFLUSH : TCSANOW, settings) ? true :

@@ -193,7 +193,7 @@ sealed class UnixTerminalDriver : TerminalDriver
     public override TerminalSize Size =>
         _size is TerminalSize s ? s : throw new TerminalException("There is no terminal attached.");
 
-    readonly IUnixTerminalInterop _interop =
+    readonly UnixTerminalInterop _interop =
         OperatingSystem.IsMacOS() ? MacOSTerminalInterop.Instance : LinuxTerminalInterop.Instance;
 
     readonly object _rawLock = new();

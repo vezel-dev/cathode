@@ -6,7 +6,7 @@ namespace System.Drivers;
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300")]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1307")]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310")]
-sealed class LinuxTerminalInterop : IUnixTerminalInterop
+sealed class LinuxTerminalInterop : UnixTerminalInterop
 {
     struct termios
     {
@@ -95,21 +95,21 @@ sealed class LinuxTerminalInterop : IUnixTerminalInterop
 
     // request
 
-    const uint TIOCGWINSZ = 0x5413;
+    const nuint TIOCGWINSZ = 0x5413;
 
-    [DllImport("libc", SetLastError = true)]
+    [DllImport("c", SetLastError = true)]
     static extern int tcgetattr(int fd, out termios termios_p);
 
-    [DllImport("libc", SetLastError = true)]
+    [DllImport("c", SetLastError = true)]
     static extern int tcsetattr(int fd, int optional_actions, in termios termios_p);
 
-    [DllImport("libc", SetLastError = true)]
-    static extern int ioctl(int fd, UIntPtr request, out winsize argp);
+    [DllImport("c", SetLastError = true)]
+    static extern int ioctl(int fd, nuint request, out winsize argp);
 
     public static LinuxTerminalInterop Instance { get; } = new();
 
-    public TerminalSize? Size =>
-        ioctl(UnixTerminalDriver.OutHandle, (UIntPtr)TIOCGWINSZ, out var w) == 0 ? new(w.ws_col, w.ws_row) : null;
+    public override TerminalSize? Size =>
+        ioctl(UnixTerminalDriver.OutHandle, TIOCGWINSZ, out var w) == 0 ? new(w.ws_col, w.ws_row) : null;
 
     readonly termios? _original;
 
@@ -132,14 +132,14 @@ sealed class LinuxTerminalInterop : IUnixTerminalInterop
         }
     }
 
-    public void RefreshSettings()
+    public override void RefreshSettings()
     {
         // This call can fail if the terminal is detached, but that is OK.
         if (_current is termios c)
             _ = UpdateSettings(TCSANOW, c);
     }
 
-    public bool SetRawMode(bool raw, bool discard)
+    public override bool SetRawMode(bool raw, bool discard)
     {
         if (_original is not termios settings)
             return false;
