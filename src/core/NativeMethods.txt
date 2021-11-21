@@ -4,12 +4,11 @@ GetConsoleMode
 GetConsoleScreenBufferInfo
 GetFileType
 GetStdHandle
-ReadConsole
+ReadConsoleW
 ReadFile
 SetConsoleCP
 SetConsoleMode
 SetConsoleOutputCP
-WriteConsole
 WriteFile
 
 WIN32_ERROR

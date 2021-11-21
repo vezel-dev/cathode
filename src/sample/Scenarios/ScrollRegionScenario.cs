@@ -26,7 +26,8 @@ sealed class ScrollRegionScenario : IScenario
             {
                 Terminal.Out("String: ");
 
-                var str = Terminal.ReadLine() ?? string.Empty;
+                if (Terminal.ReadLine() is not string str)
+                    break;
 
                 Terminal.SaveCursorPosition();
                 Terminal.MoveCursorTo(0, 0);
@@ -41,7 +42,11 @@ sealed class ScrollRegionScenario : IScenario
         }
         finally
         {
+            Terminal.SaveCursorPosition();
             Terminal.SetScrollRegion(0, 0);
+            Terminal.RestoreCursorPosition();
         }
+
+        return Task.CompletedTask;
     }
 }

@@ -30,7 +30,7 @@ abstract class TerminalDriver
 
     public event EventHandler<TerminalBreakSignalEventArgs>? BreakSignal;
 
-    public static Encoding Encoding { get; } = Encoding.UTF8;
+    public static Encoding Encoding { get; } = new UTF8Encoding(false);
 
     public abstract TerminalReader StdIn { get; }
 
