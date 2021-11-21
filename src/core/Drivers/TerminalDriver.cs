@@ -170,7 +170,7 @@ abstract class TerminalDriver
             // Do this on the thread pool to avoid breaking driver internals if an event handler
             // misbehaves. Unlike a break signal, we do not need to use a dedicated thread since
             // this event is relatively low priority.
-            _ = ThreadPool.QueueUserWorkItem(state => _resize?.Invoke(null, new(size)));
+            _ = ThreadPool.UnsafeQueueUserWorkItem(state => _resize?.Invoke(null, new(size)), null);
         }
     }
 
