@@ -45,11 +45,11 @@ sealed class UnixTerminalDriver : TerminalDriver
 
                         var err = Stdlib.GetLastError();
 
-                        // The descriptor was probably redirected to a program that ended. Just
-                        // silently ignore this situation.
+                        // The descriptor was probably redirected to a program that ended. Just silently ignore this
+                        // situation.
                         //
-                        // The strange condition where errno is zero happens e.g. on Linux if
-                        // the process is killed while blocking in the read system call.
+                        // The strange condition where errno is zero happens e.g. on Linux if the process is killed
+                        // while blocking in the read system call.
                         if (err is 0 or Errno.EPIPE)
                         {
                             ret = 0;
@@ -57,9 +57,8 @@ sealed class UnixTerminalDriver : TerminalDriver
                             break;
                         }
 
-                        // The file descriptor has been configured as non-blocking. Instead of
-                        // busily trying to read over and over, poll until we can write and then
-                        // try again.
+                        // The file descriptor has been configured as non-blocking. Instead of busily trying to read
+                        // over and over, poll until we can write and then try again.
                         if (err == Errno.EAGAIN)
                         {
                             _ = Syscall.poll(
@@ -129,8 +128,7 @@ sealed class UnixTerminalDriver : TerminalDriver
                         {
                         }
 
-                        // The descriptor has been closed by someone else. Just silently ignore
-                        // this situation.
+                        // The descriptor has been closed by someone else. Just silently ignore this situation.
                         if (ret == 0)
                             break;
 
@@ -143,14 +141,13 @@ sealed class UnixTerminalDriver : TerminalDriver
 
                         var err = Stdlib.GetLastError();
 
-                        // The descriptor was probably redirected to a program that ended. Just
-                        // silently ignore this situation.
+                        // The descriptor was probably redirected to a program that ended. Just silently ignore this
+                        // situation.
                         if (err == Errno.EPIPE)
                             break;
 
-                        // The file descriptor has been configured as non-blocking. Instead of
-                        // busily trying to write over and over, poll until we can write and
-                        // then try again.
+                        // The file descriptor has been configured as non-blocking. Instead of busily trying to write
+                        // over and over, poll until we can write and then try again.
                         if (err == Errno.EAGAIN)
                         {
                             _ = Syscall.poll(
@@ -217,10 +214,6 @@ sealed class UnixTerminalDriver : TerminalDriver
             {
                 _size = s;
 
-                // We currently trust that SIGWINCH will always be delivered when the terminal
-                // size changes. If this ever turns out to be false somewhere/somehow, we may
-                // need to use a background thread to also poll for size changes like in the
-                // Windows driver.
                 HandleResize(s);
             }
         }
@@ -229,14 +222,17 @@ sealed class UnixTerminalDriver : TerminalDriver
 
         void HandleSignal(PosixSignalContext context)
         {
-            // If we are being restored from the background (SIGCONT), it is possible that
-            // terminal settings have been mangled, so restore them.
+            // If we are being restored from the background (SIGCONT), it is possible and likely that terminal settings
+            // have been mangled, so restore them.
             if (context.Signal == PosixSignal.SIGCONT)
                 lock (_rawLock)
                     _interop.RefreshSettings();
 
-            // Terminal width/height might have changed for SIGCONT, and will definitely
-            // have changed for SIGWINCH.
+            // Terminal width/height might have changed for SIGCONT, and will definitely have changed for SIGWINCH.
+            //
+            // We currently trust that SIGWINCH will always be delivered when the terminal size changes. If this ever
+            // turns out to be false somewhere/somehow, we may need to use a background thread to also poll for size
+            // changes like in the Windows driver.
             RefreshWindowSize();
         }
 

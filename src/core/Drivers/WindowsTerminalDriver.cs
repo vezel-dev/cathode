@@ -269,8 +269,8 @@ sealed class WindowsTerminalDriver : TerminalDriver
             CONSOLE_MODE.ENABLE_WRAP_AT_EOL_OUTPUT |
             CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING;
 
-        // Set modes on all handles in case one of them has been redirected. These calls can
-        // fail if there is no console attached, but that is OK.
+        // Set modes on all handles in case one of them has been redirected. These calls can fail if there is no console
+        // attached, but that is OK.
         _ = _in.AddMode(inMode);
         _ = _out.AddMode(outMode) || _error.AddMode(outMode);
 
@@ -284,8 +284,8 @@ sealed class WindowsTerminalDriver : TerminalDriver
             }
         }
 
-        // We need to grab the window size at least once upfront so that adding an event handler
-        // to the Resize event does not immediately cause the event to be fired.
+        // We need to grab the window size at least once upfront so that adding an event handler to the Resize event
+        // does not immediately cause the event to be fired.
         RefreshWindowSize();
 
         // Windows currently has no SIGWINCH equivalent, so we have to poll for size changes.
@@ -295,8 +295,7 @@ sealed class WindowsTerminalDriver : TerminalDriver
             {
                 _event.Wait();
 
-                // HandleResize will check whether the size is actually different from the last
-                // time the event was fired.
+                // HandleResize will check that the size is actually different from the last time the event was fired.
                 RefreshWindowSize();
 
                 // TODO: Do we need to make this configurable?

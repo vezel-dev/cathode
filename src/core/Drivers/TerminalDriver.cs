@@ -128,21 +128,18 @@ abstract class TerminalDriver
     {
         _reader = new(() => new(StdIn.Stream, StdIn.Encoding, false, Environment.SystemPageSize, true));
 
-        // Accessing this property has no particularly important effect on Windows, but it does
-        // do something important on Unix: If a terminal is attached, it will force Console to
-        // initialize its System.Native portions, which includes signal handlers and terminal
-        // settings. Thus, by doing this here, we ensure that if a user accidentally accesses
-        // Console at some point later, it will not overwrite our signal handlers or terminal
-        // settings.
+        // Accessing this property has no particularly important effect on Windows, but it does do something important
+        // on Unix: If a terminal is attached, it will force Console to initialize its System.Native portions, which
+        // includes terminal settings. Thus, by doing this here, we ensure that if a user accidentally accesses Console
+        // at some point later, it will not overwrite our terminal settings.
         _ = Console.In;
 
-        // Try to prevent Console/Terminal intermixing from breaking stuff. This should prevent
-        // basic read/write calls on Console from calling into internal classes like ConsolePal
-        // and StdInReader (which in turn call System.Native functions that, among other things,
-        // change terminal settings).
+        // Try to prevent Console/Terminal intermixing from breaking stuff. This should prevent basic read/write calls
+        // on Console from calling into internal classes like ConsolePal and StdInReader (which in turn call
+        // System.Native functions that, among other things, change terminal settings).
         //
-        // There are still many problematic properties and methods beyond these, but there is
-        // not much we can do about those.
+        // There are still many problematic properties and methods beyond these, but there is  not much we can do about
+        // those.
         Console.SetIn(new InvalidTextReader());
         Console.SetOut(new InvalidTextWriter());
         Console.SetError(new InvalidTextWriter());
@@ -167,9 +164,9 @@ abstract class TerminalDriver
         {
             _lastResize = size;
 
-            // Do this on the thread pool to avoid breaking driver internals if an event handler
-            // misbehaves. Unlike a break signal, we do not need to use a dedicated thread since
-            // this event is relatively low priority.
+            // Do this on the thread pool to avoid breaking driver internals if an event handler misbehaves. This event
+            // is also relatively low priority, so we do not care too much if the thread pool takes a bit of time to get
+            // around to it.
             _ = ThreadPool.UnsafeQueueUserWorkItem(state => _resize?.Invoke(null, new(size)), null);
         }
     }
@@ -291,11 +288,10 @@ abstract class TerminalDriver
 
         var size = Size;
 
-        // Most terminals will clamp the values so that there are at least
-        // 2 lines of scrollable text: One for the last line written and one
-        // for the current line. Enforce this. We throw TerminalException
-        // instead of ArgumentException since the Size property could change
-        // between the caller observing it and calling this method.
+        // Most terminals will clamp the values so that there are at least 2 lines of scrollable text: One for the last
+        // line written and one for the current line. Enforce this. We throw TerminalException instead of
+        // ArgumentException since the Size property could change between the caller observing it and calling this
+        // method, so it would be somewhat inaccurate to call this condition a programmer error.
         if (size.Height - top - bottom < 2)
             throw new TerminalException("Scroll region is too small.");
 

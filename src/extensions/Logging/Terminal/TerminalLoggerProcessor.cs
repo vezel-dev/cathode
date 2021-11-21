@@ -22,8 +22,7 @@ sealed class TerminalLoggerProcessor : IDisposable
             }
             catch (Exception)
             {
-                // The writer method has failed somehow. Ensure that
-                // subsequent writes at least happen in Enqueue.
+                // The writer method has failed somehow. Ensure that subsequent writes at least happen in Enqueue.
 
                 try
                 {

@@ -125,8 +125,8 @@ sealed class LinuxTerminalInterop : UnixTerminalInterop
 
             _original = settings;
 
-            // We might get really unlucky and fail to apply the settings right after the call
-            // above. We should still assign _current so we can apply it later.
+            // We might get really unlucky and fail to apply the settings right after the call above. We should still
+            // assign _current so we can apply it later.
             if (!UpdateSettings(TCSANOW, settings))
                 _current = settings;
         }
