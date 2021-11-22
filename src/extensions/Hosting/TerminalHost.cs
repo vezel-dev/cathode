@@ -32,7 +32,7 @@ public static class TerminalHost
                     var asm = Assembly.Load(new AssemblyName(env.ApplicationName));
 
                     if (asm != null)
-                        _ = cfg.AddUserSecrets(asm, true);
+                        _ = cfg.AddUserSecrets(asm, true, reload);
                 }
 
                 _ = cfg.AddEnvironmentVariables();

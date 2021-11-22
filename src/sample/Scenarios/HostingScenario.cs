@@ -7,6 +7,6 @@ sealed class HostingScenario : IScenario
 {
     public Task RunAsync()
     {
-        return TerminalHost.CreateDefaultBuilder().RunTerminalAsync();
+        return TerminalHost.CreateDefaultBuilder().RunConsoleAsync();
     }
 }

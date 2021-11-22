@@ -1,8 +1,3 @@
-M:Microsoft.Extensions.Hosting.HostingHostBuilderExtensions.UseConsoleLifetime(Microsoft.Extensions.Hosting.IHostBuilder)
-M:Microsoft.Extensions.Hosting.HostingHostBuilderExtensions.UseConsoleLifetime(Microsoft.Extensions.Hosting.IHostBuilder,System.Action{Microsoft.Extensions.Hosting.ConsoleLifetimeOptions})
-M:Microsoft.Extensions.Hosting.HostingHostBuilderExtensions.RunConsoleAsync(Microsoft.Extensions.Hosting.IHostBuilder,System.Threading.CancellationToken)
-M:Microsoft.Extensions.Hosting.HostingHostBuilderExtensions.RunConsoleAsync(Microsoft.Extensions.Hosting.IHostBuilder,System.Action{Microsoft.Extensions.Hosting.ConsoleLifetimeOptions},System.Threading.CancellationToken)
-T:Microsoft.Extensions.Hosting.ConsoleLifetimeOptions
 T:Microsoft.Extensions.Logging.Console.ConsoleFormatter
 T:Microsoft.Extensions.Logging.Console.ConsoleFormatterNames
 T:Microsoft.Extensions.Logging.Console.ConsoleFormatterOptions
