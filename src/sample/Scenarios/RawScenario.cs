@@ -8,7 +8,7 @@ sealed class RawScenario : Scenario
         Terminal.OutLine("Entering raw mode.");
         Terminal.OutLine();
 
-        Terminal.SetRawMode(true, true);
+        Terminal.EnableRawMode();
         Terminal.SetMouseEvents(TerminalMouseEvents.All);
 
         try
@@ -21,7 +21,7 @@ sealed class RawScenario : Scenario
         }
         finally
         {
-            Terminal.SetRawMode(false, true);
+            Terminal.DisableRawMode();
         }
 
         return Task.CompletedTask;

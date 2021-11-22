@@ -1,8 +1,9 @@
-using Mono.Unix.Native;
+using static System.Unix.UnixConstants;
+using static System.Unix.UnixPInvoke;
 
 namespace System.Drivers;
 
-sealed class UnixTerminalDriver : TerminalDriver
+abstract class UnixTerminalDriver : TerminalDriver
 {
     sealed class UnixTerminalReader : TerminalReader
     {
@@ -34,8 +35,8 @@ sealed class UnixTerminalDriver : TerminalDriver
                 {
                     fixed (byte* p = data)
                     {
-                        while ((ret = Syscall.read(Handle, p, (ulong)data.Length)) == -1 &&
-                            Stdlib.GetLastError() == Errno.EINTR)
+                        while ((ret = read(Handle, p, (nuint)data.Length)) == -1 &&
+                            Marshal.GetLastPInvokeError() == EINTR)
                         {
                             // Retry in case we get interrupted by a signal.
                         }
@@ -43,14 +44,14 @@ sealed class UnixTerminalDriver : TerminalDriver
                         if (ret != -1)
                             break;
 
-                        var err = Stdlib.GetLastError();
+                        var err = Marshal.GetLastPInvokeError();
 
                         // The descriptor was probably redirected to a program that ended. Just silently ignore this
                         // situation.
                         //
                         // The strange condition where errno is zero happens e.g. on Linux if the process is killed
                         // while blocking in the read system call.
-                        if (err is 0 or Errno.EPIPE)
+                        if (err is 0 or EPIPE)
                         {
                             ret = 0;
 
@@ -59,28 +60,10 @@ sealed class UnixTerminalDriver : TerminalDriver
 
                         // The file descriptor has been configured as non-blocking. Instead of busily trying to read
                         // over and over, poll until we can write and then try again.
-                        if (err == Errno.EAGAIN)
-                        {
-                            _ = Syscall.poll(
-                                new[]
-                                {
-                                    new Pollfd
-                                    {
-                                        fd = Handle,
-                                        events = PollEvents.POLLIN,
-                                    },
-                                },
-                                1,
-                                Timeout.Infinite);
-
+                        if (((UnixTerminalDriver)Driver).PollHandle(err, Handle, POLLIN))
                             continue;
-                        }
 
-                        if (err == 0)
-                            err = Errno.EBADF;
-
-                        throw new TerminalException(
-                            $"Could not read from standard {_name}: {Stdlib.strerror(err)}");
+                        throw new TerminalException($"Could not read from standard {_name}: {err}");
                     }
                 }
             }
@@ -123,8 +106,8 @@ sealed class UnixTerminalDriver : TerminalDriver
                     {
                         long ret;
 
-                        while ((ret = Syscall.write(Handle, p + progress, (ulong)(len - progress))) == -1 &&
-                            Stdlib.GetLastError() == Errno.EINTR)
+                        while ((ret = write(Handle, p + progress, (nuint)(len - progress))) == -1 &&
+                            Marshal.GetLastPInvokeError() == EINTR)
                         {
                         }
 
@@ -139,58 +122,30 @@ sealed class UnixTerminalDriver : TerminalDriver
                             continue;
                         }
 
-                        var err = Stdlib.GetLastError();
+                        var err = Marshal.GetLastPInvokeError();
 
                         // The descriptor was probably redirected to a program that ended. Just silently ignore this
                         // situation.
-                        if (err == Errno.EPIPE)
+                        if (err == EPIPE)
                             break;
 
                         // The file descriptor has been configured as non-blocking. Instead of busily trying to write
                         // over and over, poll until we can write and then try again.
-                        if (err == Errno.EAGAIN)
-                        {
-                            _ = Syscall.poll(
-                                new[]
-                                {
-                                    new Pollfd
-                                    {
-                                        fd = Handle,
-                                        events = PollEvents.POLLOUT,
-                                    },
-                                },
-                                1,
-                                Timeout.Infinite);
-
+                        if (((UnixTerminalDriver)Driver).PollHandle(err, Handle, POLLOUT))
                             continue;
-                        }
 
-                        throw new TerminalException($"Could not write to standard {_name}: {Stdlib.strerror(err)}");
+                        throw new TerminalException($"Could not write to standard {_name}: {err}");
                     }
                 }
             }
         }
     }
 
-    public const int InHandle = 0;
-
-    public const int OutHandle = 1;
-
-    public const int ErrorHandle = 2;
-
-    public static UnixTerminalDriver Instance { get; } = new();
-
     public override TerminalReader StdIn { get; }
 
     public override TerminalWriter StdOut { get; }
 
     public override TerminalWriter StdError { get; }
-
-    public override TerminalSize Size =>
-        _size is TerminalSize s ? s : throw new TerminalException("There is no terminal attached.");
-
-    readonly UnixTerminalInterop _interop =
-        OperatingSystem.IsMacOS() ? MacOSTerminalInterop.Instance : LinuxTerminalInterop.Instance;
 
     [SuppressMessage("Style", "IDE0052")]
     readonly PosixSignalRegistration _sigWinch;
@@ -200,25 +155,13 @@ sealed class UnixTerminalDriver : TerminalDriver
 
     readonly object _rawLock = new();
 
-    TerminalSize? _size;
-
-    UnixTerminalDriver()
+    protected UnixTerminalDriver()
     {
-        StdIn = new UnixTerminalReader(this, InHandle, "input");
-        StdOut = new UnixTerminalWriter(this, OutHandle, "output");
-        StdError = new UnixTerminalWriter(this, ErrorHandle, "error");
+        StdIn = new UnixTerminalReader(this, STDIN_FILENO, "input");
+        StdOut = new UnixTerminalWriter(this, STDOUT_FILENO, "output");
+        StdError = new UnixTerminalWriter(this, STDERR_FILENO, "error");
 
-        void RefreshWindowSize()
-        {
-            if (_interop.Size is TerminalSize s)
-            {
-                _size = s;
-
-                HandleResize(s);
-            }
-        }
-
-        RefreshWindowSize();
+        RefreshSize();
 
         void HandleSignal(PosixSignalContext context)
         {
@@ -226,14 +169,14 @@ sealed class UnixTerminalDriver : TerminalDriver
             // have been mangled, so restore them.
             if (context.Signal == PosixSignal.SIGCONT)
                 lock (_rawLock)
-                    _interop.RefreshSettings();
+                    RefreshSettings();
 
             // Terminal width/height might have changed for SIGCONT, and will definitely have changed for SIGWINCH.
             //
             // We currently trust that SIGWINCH will always be delivered when the terminal size changes. If this ever
             // turns out to be false somewhere/somehow, we may need to use a background thread to also poll for size
             // changes like in the Windows driver.
-            RefreshWindowSize();
+            RefreshSize();
         }
 
         // Keep the registrations alive by storing them in fields.
@@ -243,32 +186,33 @@ sealed class UnixTerminalDriver : TerminalDriver
         // TODO: SIGCHLD?
     }
 
+    static bool IsRedirected(int handle)
+    {
+        return isatty(handle) == 0;
+    }
+
     public override void GenerateBreakSignal(TerminalBreakSignal signal)
     {
-        _ = Syscall.kill(
+        _ = kill(
             0,
             signal switch
             {
-                TerminalBreakSignal.Interrupt => Signum.SIGINT,
-                TerminalBreakSignal.Quit => Signum.SIGQUIT,
+                TerminalBreakSignal.Interrupt => SIGINT,
+                TerminalBreakSignal.Quit => SIGQUIT,
                 _ => throw new ArgumentOutOfRangeException(nameof(signal)),
             });
     }
 
-    public override void GenerateSuspendSignal()
-    {
-        _ = Syscall.kill(0, Signum.SIGTSTP);
-    }
+    protected abstract void RefreshSettings();
 
-    static bool IsRedirected(int handle)
-    {
-        return !Syscall.isatty(handle);
-    }
-
-    protected override void SetRawModeCore(bool raw, bool discard)
+    protected override void SetRawMode(bool raw)
     {
         lock (_rawLock)
-            if (!_interop.SetRawMode(raw, discard))
+            if (!SetRawModeCore(raw))
                 throw new TerminalException("There is no terminal attached.");
     }
+
+    protected abstract bool SetRawModeCore(bool raw);
+
+    public abstract bool PollHandle(int error, int handle, short events);
 }

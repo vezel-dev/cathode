@@ -32,7 +32,6 @@ This package provides the core terminal API.</PackageDescription>
                           PrivateAssets="all" />
         <PackageReference Include="Microsoft.Windows.SDK.Win32Metadata"
                           PrivateAssets="all" />
-        <PackageReference Include="Mono.Unix" />
         <PackageReference Include="TermInfo" />
         <PackageReference Include="Wcwidth" />
     </ItemGroup>

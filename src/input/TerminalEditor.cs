@@ -21,7 +21,7 @@ public sealed class TerminalEditor
             var events = Terminal.MouseEvents;
 
             Terminal.SetMouseEvents(TerminalMouseEvents.None);
-            Terminal.SetRawMode(true, true);
+            Terminal.EnableRawMode();
 
             try
             {
@@ -111,7 +111,7 @@ public sealed class TerminalEditor
             }
             finally
             {
-                Terminal.SetRawMode(raw, true);
+                Terminal.DisableRawMode();
                 Terminal.SetMouseEvents(events);
             }
         }

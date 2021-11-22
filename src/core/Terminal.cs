@@ -63,7 +63,10 @@ public static class Terminal
     public static TerminalScreen Screen { get; internal set; }
 
     static readonly TerminalDriver _driver =
-        OperatingSystem.IsWindows() ? WindowsTerminalDriver.Instance : UnixTerminalDriver.Instance;
+        OperatingSystem.IsWindows() ? WindowsTerminalDriver.Instance :
+        OperatingSystem.IsLinux() ? LinuxTerminalDriver.Instance :
+        OperatingSystem.IsMacOS() ? MacOSTerminalDriver.Instance :
+        throw new TerminalException("This platforms is not supported.");
 
     static Terminal()
     {
@@ -85,9 +88,14 @@ public static class Terminal
         _driver.GenerateSuspendSignal();
     }
 
-    public static void SetRawMode(bool raw, bool discard)
+    public static void EnableRawMode()
     {
-        _driver.SetRawMode(raw, discard);
+        _driver.EnableRawMode();
+    }
+
+    public static void DisableRawMode()
+    {
+        _driver.DisableRawMode();
     }
 
     public static void SetMouseEvents(TerminalMouseEvents events)

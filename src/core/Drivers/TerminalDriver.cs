@@ -58,7 +58,16 @@ abstract class TerminalDriver
         }
     }
 
-    public abstract TerminalSize Size { get; }
+    public TerminalSize Size
+    {
+        get
+        {
+            if (GetSize() is TerminalSize s)
+                _size = s;
+
+            return _size ?? throw new TerminalException("There is no terminal attached.");
+        }
+    }
 
     public TerminalKeyMode CursorKeyMode
     {
@@ -114,6 +123,8 @@ abstract class TerminalDriver
 
     string _title = string.Empty;
 
+    TerminalSize? _size;
+
     EventHandler<TerminalResizeEventArgs>? _resize;
 
     TerminalSize? _lastResize;
@@ -154,21 +165,28 @@ abstract class TerminalDriver
         _sigQuit = PosixSignalRegistration.Create(PosixSignal.SIGQUIT, HandleSignal);
     }
 
-    protected virtual void ToggleResizeEvent(bool enable)
+    protected void RefreshSize()
     {
+        if (GetSize() is TerminalSize size)
+        {
+            _size = size;
+
+            if (size != _lastResize)
+            {
+                _lastResize = size;
+
+                // Do this on the thread pool to avoid breaking driver internals if an event handler misbehaves. This
+                // event is also relatively low priority, so we do not care too much if the thread pool takes a bit of
+                // time to get around to it.
+                _ = ThreadPool.UnsafeQueueUserWorkItem(state => _resize?.Invoke(null, new(size)), null);
+            }
+        }
     }
 
-    protected void HandleResize(TerminalSize size)
-    {
-        if (size != _lastResize)
-        {
-            _lastResize = size;
+    protected abstract TerminalSize? GetSize();
 
-            // Do this on the thread pool to avoid breaking driver internals if an event handler misbehaves. This event
-            // is also relatively low priority, so we do not care too much if the thread pool takes a bit of time to get
-            // around to it.
-            _ = ThreadPool.UnsafeQueueUserWorkItem(state => _resize?.Invoke(null, new(size)), null);
-        }
+    protected virtual void ToggleResizeEvent(bool enable)
+    {
     }
 
     public abstract void GenerateBreakSignal(TerminalBreakSignal signal);
@@ -185,17 +203,19 @@ abstract class TerminalDriver
 
     public abstract void GenerateSuspendSignal();
 
-    public void SetRawMode(bool raw, bool discard)
+    public void EnableRawMode()
     {
         lock (_lock)
-        {
-            SetRawModeCore(raw, discard);
-
-            IsRawMode = raw;
-        }
+            SetRawMode(IsRawMode = true);
     }
 
-    protected abstract void SetRawModeCore(bool raw, bool discard);
+    public void DisableRawMode()
+    {
+        lock (_lock)
+            SetRawMode(IsRawMode = false);
+    }
+
+    protected abstract void SetRawMode(bool raw);
 
     public void SetMouseEvents(TerminalMouseEvents events)
     {

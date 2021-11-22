@@ -12,8 +12,6 @@
                         Version="0.1.7-alpha" />
         <PackageVersion Include="Microsoft.Windows.SDK.Win32Metadata"
                         Version="15.0.2-preview" />
-        <PackageVersion Include="Mono.Unix"
-                        Version="7.1.0-final.1.21458.1" />
         <PackageVersion Include="Nerdbank.GitVersioning"
                         Version="3.5.50-alpha" />
         <PackageVersion Include="StyleCop.Analyzers"

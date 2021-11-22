@@ -1,6 +1,7 @@
-using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.Console;
+using static Windows.Win32.Constants;
+using static Windows.Win32.WindowsPInvoke;
 
 namespace System.Drivers;
 
@@ -33,22 +34,22 @@ sealed class WindowsTerminalDriver : TerminalDriver
 
         public CONSOLE_MODE? GetMode()
         {
-            return PInvoke.GetConsoleMode(Handle, out var m) ? m : null;
+            return GetConsoleMode(Handle, out var m) ? m : null;
         }
 
         public bool SetMode(CONSOLE_MODE mode)
         {
-            return PInvoke.SetConsoleMode(Handle, mode);
+            return SetConsoleMode(Handle, mode);
         }
 
         public bool AddMode(CONSOLE_MODE mode)
         {
-            return GetMode() is CONSOLE_MODE m && PInvoke.SetConsoleMode(Handle, m | mode);
+            return GetMode() is CONSOLE_MODE m && SetConsoleMode(Handle, m | mode);
         }
 
         public bool RemoveMode(CONSOLE_MODE mode)
         {
-            return GetMode() is CONSOLE_MODE m && PInvoke.SetConsoleMode(Handle, m & ~mode);
+            return GetMode() is CONSOLE_MODE m && SetConsoleMode(Handle, m & ~mode);
         }
 
         public override unsafe int Read(Span<byte> data)
@@ -79,7 +80,7 @@ sealed class WindowsTerminalDriver : TerminalDriver
                             bool ret;
                             uint read = 0;
 
-                            while ((ret = PInvoke.ReadConsoleW(Handle, p, 1, out read, null)) &&
+                            while ((ret = ReadConsoleW(Handle, p, 1, out read, null)) &&
                                 Marshal.GetLastSystemError() == (int)WIN32_ERROR.ERROR_OPERATION_ABORTED)
                             {
                                 // Retry in case we get interrupted by a signal.
@@ -108,7 +109,7 @@ sealed class WindowsTerminalDriver : TerminalDriver
                             // for passing the lone surrogate through unmodified or simply discarding it...
                             if (char.IsHighSurrogate(units[0]))
                             {
-                                while ((ret = PInvoke.ReadConsoleW(Handle, p + 1, 1, out read, null)) &&
+                                while ((ret = ReadConsoleW(Handle, p + 1, 1, out read, null)) &&
                                     Marshal.GetLastSystemError() == (int)WIN32_ERROR.ERROR_OPERATION_ABORTED)
                                 {
                                     // Retry in case we get interrupted by a signal.
@@ -143,7 +144,7 @@ sealed class WindowsTerminalDriver : TerminalDriver
 
                 lock (_lock)
                     fixed (byte* p = data)
-                        if (PInvoke.ReadFile(Handle, p, (uint)data.Length, &ret, null))
+                        if (ReadFile(Handle, p, (uint)data.Length, &ret, null))
                             return (int)ret;
 
                 return HandleError(ret, $"Could not read from standard {_name}");
@@ -173,22 +174,22 @@ sealed class WindowsTerminalDriver : TerminalDriver
 
         public CONSOLE_MODE? GetMode()
         {
-            return PInvoke.GetConsoleMode(Handle, out var m) ? m : null;
+            return GetConsoleMode(Handle, out var m) ? m : null;
         }
 
         public bool SetMode(CONSOLE_MODE mode)
         {
-            return PInvoke.SetConsoleMode(Handle, mode);
+            return SetConsoleMode(Handle, mode);
         }
 
         public bool AddMode(CONSOLE_MODE mode)
         {
-            return GetMode() is CONSOLE_MODE m && PInvoke.SetConsoleMode(Handle, m | mode);
+            return GetMode() is CONSOLE_MODE m && SetConsoleMode(Handle, m | mode);
         }
 
         public bool RemoveMode(CONSOLE_MODE mode)
         {
-            return GetMode() is CONSOLE_MODE m && PInvoke.SetConsoleMode(Handle, m & ~mode);
+            return GetMode() is CONSOLE_MODE m && SetConsoleMode(Handle, m & ~mode);
         }
 
         public override unsafe void Write(ReadOnlySpan<byte> data)
@@ -202,7 +203,7 @@ sealed class WindowsTerminalDriver : TerminalDriver
                 {
                     uint dummy;
 
-                    if (PInvoke.WriteFile(Handle, p, (uint)data.Length, &dummy, null))
+                    if (WriteFile(Handle, p, (uint)data.Length, &dummy, null))
                         return;
                 }
             }
@@ -213,28 +214,11 @@ sealed class WindowsTerminalDriver : TerminalDriver
 
     public static WindowsTerminalDriver Instance { get; } = new();
 
-    static SafeHandle InHandle => PInvoke.GetStdHandle_SafeHandle(STD_HANDLE.STD_INPUT_HANDLE);
-
-    static SafeHandle OutHandle => PInvoke.GetStdHandle_SafeHandle(STD_HANDLE.STD_OUTPUT_HANDLE);
-
-    static SafeHandle ErrorHandle => PInvoke.GetStdHandle_SafeHandle(STD_HANDLE.STD_ERROR_HANDLE);
-
     public override TerminalReader StdIn => _in;
 
     public override TerminalWriter StdOut => _out;
 
     public override TerminalWriter StdError => _error;
-
-    public override TerminalSize Size
-    {
-        get
-        {
-            if (GetSize() is TerminalSize s)
-                _size = s;
-
-            return _size ?? throw new TerminalException("There is no terminal attached.");
-        }
-    }
 
     readonly ManualResetEventSlim _event = new();
 
@@ -244,18 +228,16 @@ sealed class WindowsTerminalDriver : TerminalDriver
 
     readonly WindowsTerminalWriter _error;
 
-    TerminalSize? _size;
-
     WindowsTerminalDriver()
     {
-        _in = new(this, InHandle, "input");
-        _out = new(this, OutHandle, "output");
-        _error = new(this, ErrorHandle, "error");
+        _in = new(this, GetStdHandle_SafeHandle(STD_HANDLE.STD_INPUT_HANDLE), "input");
+        _out = new(this, GetStdHandle_SafeHandle(STD_HANDLE.STD_OUTPUT_HANDLE), "output");
+        _error = new(this, GetStdHandle_SafeHandle(STD_HANDLE.STD_ERROR_HANDLE), "error");
 
         // Input needs to be UTF-16, but we make it appear as if it is UTF-8 to users of the library. See the comments
         // in WindowsTerminalReader for the gory details.
-        _ = PInvoke.SetConsoleCP((uint)Encoding.Unicode.CodePage);
-        _ = PInvoke.SetConsoleOutputCP((uint)Encoding.UTF8.CodePage);
+        _ = SetConsoleCP((uint)Encoding.Unicode.CodePage);
+        _ = SetConsoleOutputCP((uint)Encoding.UTF8.CodePage);
 
         var inMode =
             CONSOLE_MODE.ENABLE_PROCESSED_INPUT |
@@ -274,19 +256,9 @@ sealed class WindowsTerminalDriver : TerminalDriver
         _ = _in.AddMode(inMode);
         _ = _out.AddMode(outMode) || _error.AddMode(outMode);
 
-        void RefreshWindowSize()
-        {
-            if (GetSize() is TerminalSize s)
-            {
-                _size = s;
-
-                HandleResize(s);
-            }
-        }
-
         // We need to grab the window size at least once upfront so that adding an event handler to the Resize event
         // does not immediately cause the event to be fired.
-        RefreshWindowSize();
+        RefreshSize();
 
         // Windows currently has no SIGWINCH equivalent, so we have to poll for size changes.
         _ = TerminalUtility.StartThread("Terminal Resize Listener", () =>
@@ -295,38 +267,12 @@ sealed class WindowsTerminalDriver : TerminalDriver
             {
                 _event.Wait();
 
-                // HandleResize will check that the size is actually different from the last time the event was fired.
-                RefreshWindowSize();
+                RefreshSize();
 
                 // TODO: Do we need to make this configurable?
                 Thread.Sleep(100);
             }
         });
-    }
-
-    protected override void ToggleResizeEvent(bool enable)
-    {
-        if (enable)
-            _event.Set();
-        else
-            _event.Reset();
-    }
-
-    public override void GenerateBreakSignal(TerminalBreakSignal signal)
-    {
-        _ = PInvoke.GenerateConsoleCtrlEvent(
-            signal switch
-            {
-                TerminalBreakSignal.Interrupt => Constants.CTRL_C_EVENT,
-                TerminalBreakSignal.Quit => Constants.CTRL_BREAK_EVENT,
-                _ => throw new ArgumentOutOfRangeException(nameof(signal)),
-            },
-            0);
-    }
-
-    public override void GenerateSuspendSignal()
-    {
-        // Windows does not have an equivalent of SIGTSTP.
     }
 
     static unsafe bool IsHandleValid(SafeHandle handle, bool write)
@@ -338,7 +284,7 @@ sealed class WindowsTerminalDriver : TerminalDriver
         {
             uint dummy = 42;
 
-            return PInvoke.WriteFile(handle, &dummy, 0, &dummy, null);
+            return WriteFile(handle, &dummy, 0, &dummy, null);
         }
 
         return true;
@@ -346,7 +292,7 @@ sealed class WindowsTerminalDriver : TerminalDriver
 
     static bool IsRedirected(SafeHandle handle)
     {
-        return PInvoke.GetFileType(handle) != Constants.FILE_TYPE_CHAR || !PInvoke.GetConsoleMode(handle, out _);
+        return GetFileType(handle) != FILE_TYPE_CHAR || !GetConsoleMode(handle, out _);
     }
 
     static int HandleError(uint result, string message)
@@ -362,11 +308,36 @@ sealed class WindowsTerminalDriver : TerminalDriver
         };
     }
 
-    TerminalSize? GetSize()
+    protected override void ToggleResizeEvent(bool enable)
+    {
+        if (enable)
+            _event.Set();
+        else
+            _event.Reset();
+    }
+
+    public override void GenerateBreakSignal(TerminalBreakSignal signal)
+    {
+        _ = GenerateConsoleCtrlEvent(
+            signal switch
+            {
+                TerminalBreakSignal.Interrupt => CTRL_C_EVENT,
+                TerminalBreakSignal.Quit => CTRL_BREAK_EVENT,
+                _ => throw new ArgumentOutOfRangeException(nameof(signal)),
+            },
+            0);
+    }
+
+    public override void GenerateSuspendSignal()
+    {
+        // TODO: Windows does not have an equivalent of SIGTSTP. Should we throw?
+    }
+
+    protected override TerminalSize? GetSize()
     {
         static CONSOLE_SCREEN_BUFFER_INFO? GetInfo(SafeHandle handle)
         {
-            return PInvoke.GetConsoleScreenBufferInfo(handle, out var info) ? info : null;
+            return GetConsoleScreenBufferInfo(handle, out var info) ? info : null;
         }
 
         // Try both handles in case only one of them has been redirected.
@@ -374,7 +345,7 @@ sealed class WindowsTerminalDriver : TerminalDriver
             new(i.srWindow.Right - i.srWindow.Left + 1, i.srWindow.Bottom - i.srWindow.Top + 1) : null;
     }
 
-    protected override void SetRawModeCore(bool raw, bool discard)
+    protected override void SetRawMode(bool raw)
     {
         if (!_in.IsValid || (!_out.IsValid && !_error.IsValid))
             throw new TerminalException("There is no terminal attached.");
@@ -391,7 +362,7 @@ sealed class WindowsTerminalDriver : TerminalDriver
             throw new TerminalException(
                 $"Could not change raw mode setting: {(WIN32_ERROR)Marshal.GetLastSystemError()}");
 
-        if (!PInvoke.FlushConsoleInputBuffer(InHandle))
+        if (!FlushConsoleInputBuffer(_in.Handle))
             throw new TerminalException(
                 $"Could not flush input buffer: {(WIN32_ERROR)Marshal.GetLastSystemError()}");
     }
