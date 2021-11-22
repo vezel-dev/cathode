@@ -1,9 +1,9 @@
 namespace Sample.Scenarios;
 
 [SuppressMessage("Performance", "CA1812")]
-sealed class AttributeScenario : IScenario
+sealed class AttributeScenario : Scenario
 {
-    public Task RunAsync()
+    public override Task RunAsync()
     {
         Terminal.ForegroundColor(255, 0, 0);
         Terminal.OutLine("This text is red.");

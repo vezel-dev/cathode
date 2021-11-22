@@ -1,9 +1,9 @@
 namespace Sample.Scenarios;
 
 [SuppressMessage("Performance", "CA1812")]
-sealed class ResizeScenario : IScenario
+sealed class ResizeScenario : Scenario
 {
-    public Task RunAsync()
+    public override Task RunAsync()
     {
         Terminal.OutLine("Listening for resize events.");
         Terminal.OutLine();

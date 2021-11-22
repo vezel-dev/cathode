@@ -1,16 +1,26 @@
+using Sample.Scenarios;
+
 namespace Sample;
 
 static class Program
 {
+    static readonly IEnumerable<Scenario> _scenarios = new Scenario[]
+    {
+        new AttributeScenario(),
+        new CursorScenario(),
+        new EditScenario(),
+        new FullScreenScenario(),
+        new HostingScenario(),
+        new RawScenario(),
+        new ResizeScenario(),
+        new ScrollRegionScenario(),
+        new SignalScenario(),
+        new WidthScenario(),
+    }.OrderBy(s => s.Name).ToArray();
+
     static async Task<int> Main(string[] args)
     {
         Terminal.Title = nameof(Sample);
-
-        static IEnumerable<Type> GetScenarios()
-        {
-            return Assembly.GetExecutingAssembly().DefinedTypes.Where(
-                x => x.ImplementedInterfaces.Contains(typeof(IScenario))).OrderBy(x => x.Name);
-        }
 
         if (args.Length == 0 || string.IsNullOrWhiteSpace(args[0]))
         {
@@ -22,19 +32,17 @@ static class Program
             Terminal.ErrorLine("Available scenarios:");
             Terminal.ErrorLine();
 
-            foreach (var type in GetScenarios())
-                Terminal.ErrorLine("  {0}", new string(type.Name.SkipLast("Scenario".Length).ToArray()));
+            foreach (var scenario in _scenarios)
+                Terminal.ErrorLine("  {0}", scenario.Name);
 
             Terminal.ErrorLine();
 
             return 1;
         }
 
-        var name = args[0].ToUpperInvariant();
-        var t = GetScenarios().FirstOrDefault(x =>
-            x.Name.StartsWith(name, StringComparison.InvariantCultureIgnoreCase));
+        var match = _scenarios.FirstOrDefault(s => s.Name.StartsWith(args[0], StringComparison.OrdinalIgnoreCase));
 
-        if (t == null)
+        if (match == null)
         {
             Terminal.ForegroundColor(255, 0, 0);
             Terminal.ErrorLine("Could not find a scenario matching '{0}'.", args[0]);
@@ -44,7 +52,7 @@ static class Program
         }
 
         Terminal.ForegroundColor(0, 255, 0);
-        Terminal.OutLine("Press Enter to run {0}.", t.Name);
+        Terminal.OutLine("Press Enter to run the {0} scenario.", match.Name);
         Terminal.ResetAttributes();
 
         _ = Terminal.ReadLine();
@@ -52,7 +60,7 @@ static class Program
         Terminal.ClearScreen();
         Terminal.MoveCursorTo(0, 0);
 
-        await ((IScenario)Activator.CreateInstance(t)!).RunAsync().ConfigureAwait(false);
+        await match.RunAsync().ConfigureAwait(false);
 
         return 0;
     }

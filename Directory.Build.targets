@@ -4,6 +4,10 @@
         <EmbedAllSources>true</EmbedAllSources>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(OutputType)' == 'Library'">
+        <IsTrimmable>true</IsTrimmable>
+    </PropertyGroup>
+
     <PropertyGroup Condition="'$(IsPackable)' == 'true'">
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>

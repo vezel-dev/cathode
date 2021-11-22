@@ -3,9 +3,9 @@ using Microsoft.Extensions.Hosting;
 namespace Sample.Scenarios;
 
 [SuppressMessage("Performance", "CA1812")]
-sealed class HostingScenario : IScenario
+sealed class HostingScenario : Scenario
 {
-    public Task RunAsync()
+    public override Task RunAsync()
     {
         return TerminalHost.CreateDefaultBuilder().RunConsoleAsync();
     }

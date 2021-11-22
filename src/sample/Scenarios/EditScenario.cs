@@ -1,9 +1,9 @@
 namespace Sample.Scenarios;
 
 [SuppressMessage("Performance", "CA1812")]
-sealed class EditScenario : IScenario
+sealed class EditScenario : Scenario
 {
-    public Task RunAsync()
+    public override Task RunAsync()
     {
         var history = new MemoryTerminalHistory();
         var editor = new TerminalEditor(new(history));

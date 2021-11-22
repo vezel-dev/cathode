@@ -20,8 +20,15 @@ public static class TerminalHost
             })
             .ConfigureAppConfiguration((ctx, cfg) =>
             {
+                [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2026")]
+                static T GetConfigurationValue<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+                    HostBuilderContext context, string key, T defaultValue)
+                {
+                    return context.Configuration.GetValue(key, defaultValue);
+                }
+
+                var reload = GetConfigurationValue(ctx, "hostBuilder:reloadConfigOnChange", true);
                 var env = ctx.HostingEnvironment;
-                var reload = ctx.Configuration.GetValue("hostBuilder:reloadConfigOnChange", true);
 
                 _ = cfg
                     .AddJsonFile("appsettings.json", true, reload)

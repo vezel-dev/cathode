@@ -1,9 +1,9 @@
 namespace Sample.Scenarios;
 
 [SuppressMessage("Performance", "CA1812")]
-sealed class FullScreenScenario : IScenario
+sealed class FullScreenScenario : Scenario
 {
-    public Task RunAsync()
+    public override Task RunAsync()
     {
         using (_ = Terminal.AlternateScreen.Activate())
         {

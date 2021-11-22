@@ -1,9 +1,9 @@
 namespace Sample.Scenarios;
 
 [SuppressMessage("Performance", "CA1812")]
-sealed class WidthScenario : IScenario
+sealed class WidthScenario : Scenario
 {
-    public Task RunAsync()
+    public override Task RunAsync()
     {
         while (true)
         {

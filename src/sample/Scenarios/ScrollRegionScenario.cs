@@ -1,10 +1,10 @@
 namespace Sample.Scenarios;
 
 [SuppressMessage("Performance", "CA1812")]
-sealed class ScrollRegionScenario : IScenario
+sealed class ScrollRegionScenario : Scenario
 {
     [SuppressMessage("Security", "CA5394")]
-    public Task RunAsync()
+    public override Task RunAsync()
     {
         Terminal.SetScrollRegion(2, 0);
 

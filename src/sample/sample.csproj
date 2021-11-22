@@ -1,12 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <AssemblyName>sample</AssemblyName>
+        <IsPublishable>true</IsPublishable>
         <OutputType>Exe</OutputType>
+        <PublishTrimmed>true</PublishTrimmed>
         <RootNamespace>Sample</RootNamespace>
+        <TrimmerDefaultAction>link</TrimmerDefaultAction>
+        <UseCurrentRuntimeIdentifier>true</UseCurrentRuntimeIdentifier>
     </PropertyGroup>
 
     <ItemGroup>
         <Using Include="System.Input" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <TrimmerRootAssembly Include="System.Terminal" />
+        <TrimmerRootAssembly Include="System.Terminal.Extensions" />
+        <TrimmerRootAssembly Include="System.Terminal.Input" />
     </ItemGroup>
 
     <ItemGroup>

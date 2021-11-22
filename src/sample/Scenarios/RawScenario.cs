@@ -1,9 +1,9 @@
 namespace Sample.Scenarios;
 
 [SuppressMessage("Performance", "CA1812")]
-sealed class RawScenario : IScenario
+sealed class RawScenario : Scenario
 {
-    public Task RunAsync()
+    public override Task RunAsync()
     {
         Terminal.OutLine("Entering raw mode.");
         Terminal.OutLine();

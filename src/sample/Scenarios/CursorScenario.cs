@@ -1,9 +1,9 @@
 namespace Sample.Scenarios;
 
 [SuppressMessage("Performance", "CA1812")]
-sealed class CursorScenario : IScenario
+sealed class CursorScenario : Scenario
 {
-    public Task RunAsync()
+    public override Task RunAsync()
     {
         Terminal.OutLine("Available commands:");
         Terminal.OutLine();
