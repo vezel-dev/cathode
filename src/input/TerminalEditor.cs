@@ -8,7 +8,9 @@ public sealed class TerminalEditor
 
     public TerminalEditor(TerminalEditorOptions options)
     {
-        Options = options ?? throw new ArgumentNullException(nameof(options));
+        ArgumentNullException.ThrowIfNull(options);
+
+        Options = options;
     }
 
     public string? ReadLine(string prompt, string? initial = null)

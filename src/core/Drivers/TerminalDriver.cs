@@ -47,7 +47,7 @@ abstract class TerminalDriver
         get => _title;
         set
         {
-            _ = value ?? throw new ArgumentNullException(nameof(value));
+            ArgumentNullException.ThrowIfNull(value);
 
             lock (_lock)
             {
@@ -424,7 +424,7 @@ abstract class TerminalDriver
 
     public void OpenHyperlink(Uri uri, string? id = null)
     {
-        _ = uri ?? throw new ArgumentNullException(nameof(uri));
+        ArgumentNullException.ThrowIfNull(uri);
 
         if (id != null)
             id = $"id={id}";

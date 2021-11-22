@@ -4,28 +4,28 @@ public static class TerminalExtensions
 {
     public static byte? ReadRaw(this TerminalReader reader)
     {
-        _ = reader ?? throw new ArgumentNullException(nameof(reader));
+        ArgumentNullException.ThrowIfNull(reader);
 
         return reader.Driver.ReadRaw();
     }
 
     public static string? ReadLine(this TerminalReader reader)
     {
-        _ = reader ?? throw new ArgumentNullException(nameof(reader));
+        ArgumentNullException.ThrowIfNull(reader);
 
         return reader.Driver.ReadLine();
     }
 
     public static void WriteBinary(this TerminalWriter writer, ReadOnlySpan<byte> value)
     {
-        _ = writer ?? throw new ArgumentNullException(nameof(writer));
+        ArgumentNullException.ThrowIfNull(writer);
 
         writer.Write(value);
     }
 
     public static void WriteText(this TerminalWriter writer, ReadOnlySpan<char> value)
     {
-        _ = writer ?? throw new ArgumentNullException(nameof(writer));
+        ArgumentNullException.ThrowIfNull(writer);
 
         var len = writer.Encoding.GetByteCount(value);
         var array = ArrayPool<byte>.Shared.Rent(len);

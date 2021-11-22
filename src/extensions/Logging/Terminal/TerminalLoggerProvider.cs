@@ -15,7 +15,7 @@ public sealed class TerminalLoggerProvider : ILoggerProvider, ISupportExternalSc
 
     public TerminalLoggerProvider(IOptionsMonitor<TerminalLoggerOptions> options)
     {
-        _ = options ?? throw new ArgumentNullException(nameof(options));
+        ArgumentNullException.ThrowIfNull(options);
 
         _processor = new(options.CurrentValue);
         _reload = options.OnChange(opts => _processor.Options = opts);
@@ -29,14 +29,16 @@ public sealed class TerminalLoggerProvider : ILoggerProvider, ISupportExternalSc
 
     public ILogger CreateLogger(string categoryName)
     {
-        return _loggers.GetOrAdd(
-            categoryName ?? throw new ArgumentNullException(nameof(categoryName)),
-            name => new(_scopeProvider, name, _processor));
+        ArgumentNullException.ThrowIfNull(categoryName);
+
+        return _loggers.GetOrAdd(categoryName, name => new(_scopeProvider, name, _processor));
     }
 
     public void SetScopeProvider(IExternalScopeProvider scopeProvider)
     {
-        _scopeProvider = scopeProvider ?? throw new ArgumentNullException(nameof(scopeProvider));
+        ArgumentNullException.ThrowIfNull(scopeProvider);
+
+        _scopeProvider = scopeProvider;
 
         foreach (var (_, logger) in _loggers)
             logger.ScopeProvider = _scopeProvider;

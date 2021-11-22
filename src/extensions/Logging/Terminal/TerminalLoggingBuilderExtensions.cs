@@ -10,12 +10,11 @@ public static class TerminalLoggingBuilderExtensions
         this ILoggingBuilder builder,
         Action<TerminalLoggerOptions>? configureOptions = null)
     {
-        _ = builder ?? throw new ArgumentNullException(nameof(builder));
+        ArgumentNullException.ThrowIfNull(builder);
 
         builder.AddConfiguration();
         builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerProvider, TerminalLoggerProvider>());
-        LoggerProviderOptions.RegisterProviderOptions<TerminalLoggerOptions, TerminalLoggerProvider>(
-            builder.Services);
+        LoggerProviderOptions.RegisterProviderOptions<TerminalLoggerOptions, TerminalLoggerProvider>(builder.Services);
 
         if (configureOptions != null)
             _ = builder.Services.Configure(configureOptions);

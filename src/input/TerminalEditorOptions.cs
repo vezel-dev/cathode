@@ -6,6 +6,8 @@ public sealed class TerminalEditorOptions
 
     public TerminalEditorOptions(TerminalHistory history)
     {
-        History = history ?? throw new ArgumentNullException(nameof(history));
+        ArgumentNullException.ThrowIfNull(history);
+
+        History = history;
     }
 }

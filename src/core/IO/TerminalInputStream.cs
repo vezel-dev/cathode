@@ -36,10 +36,10 @@ public sealed class TerminalInputStream : Stream
 
     public override int Read(byte[] buffer, int offset, int count)
     {
-        _ = buffer ?? throw new ArgumentNullException(nameof(buffer));
+        ArgumentNullException.ThrowIfNull(buffer);
         _ = offset >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(offset));
         _ = count >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(count));
-        _ = offset + count <= buffer.Length ? true : throw new ArgumentException();
+        _ = offset + count <= buffer.Length ? true : throw new ArgumentException(null, nameof(buffer));
 
         return Read(buffer.AsSpan(offset, count));
     }

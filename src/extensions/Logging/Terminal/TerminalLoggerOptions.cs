@@ -64,8 +64,12 @@ public sealed class TerminalLoggerOptions
         TerminalWriter writer,
         in TerminalLoggerEntry entry)
     {
-        _ = options ?? throw new ArgumentNullException(nameof(options));
-        _ = writer ?? throw new ArgumentNullException(nameof(writer));
+        ArgumentNullException.ThrowIfNull(options);
+        ArgumentNullException.ThrowIfNull(writer);
+
+        // Is it default-initialized?
+        if (entry.CategoryName == null)
+            throw new ArgumentException(null, nameof(entry));
 
         Decorator Decorate((byte R, byte G, byte B)? colors)
         {
