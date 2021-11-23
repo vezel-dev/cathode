@@ -1,21 +1,21 @@
 using System.Unix;
-using System.Unix.MacOS;
-using static System.Unix.MacOS.MacOSConstants;
-using static System.Unix.MacOS.MacOSPInvoke;
+using System.Unix.Linux;
+using static System.Unix.Linux.LinuxConstants;
+using static System.Unix.Linux.LinuxPInvoke;
 using static System.Unix.UnixConstants;
 using static System.Unix.UnixPInvoke;
 
-namespace System.Drivers;
+namespace System.Drivers.Unix;
 
-sealed class MacOSTerminalDriver : UnixTerminalDriver
+sealed class LinuxTerminalDriver : UnixTerminalDriver
 {
-    public static MacOSTerminalDriver Instance { get; } = new();
+    public static LinuxTerminalDriver Instance { get; } = new();
 
     readonly termios? _original;
 
     termios? _current;
 
-    MacOSTerminalDriver()
+    LinuxTerminalDriver()
     {
         if (tcgetattr(STDIN_FILENO, out var settings) == 0)
         {

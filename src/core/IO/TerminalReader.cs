@@ -2,13 +2,24 @@ namespace System.IO;
 
 public abstract class TerminalReader : TerminalHandle
 {
-    public TerminalInputStream Stream { get; }
+    readonly Lazy<StreamReader> _reader;
 
-    private protected TerminalReader(TerminalDriver driver)
-        : base(driver)
+    protected TerminalReader()
     {
-        Stream = new(this);
+        _reader = new(() => new(Stream, Terminal.Encoding, false, Environment.SystemPageSize, true));
     }
 
     public abstract int Read(Span<byte> data);
+
+    public byte? ReadRaw()
+    {
+        Span<byte> span = stackalloc byte[1];
+
+        return Read(span) == span.Length ? span[0] : null;
+    }
+
+    public string? ReadLine()
+    {
+        return _reader.Value.ReadLine();
+    }
 }

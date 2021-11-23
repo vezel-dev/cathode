@@ -1,3 +1,7 @@
+using System.Drivers;
+using System.Drivers.Unix;
+using System.Drivers.Windows;
+
 namespace System;
 
 public static class Terminal
@@ -13,6 +17,8 @@ public static class Terminal
         add => _driver.BreakSignal += value;
         remove => _driver.BreakSignal -= value;
     }
+
+    public static Encoding Encoding { get; } = new UTF8Encoding(false);
 
     public static TerminalReader StdIn => _driver.StdIn;
 
@@ -113,14 +119,14 @@ public static class Terminal
         return StdIn.ReadLine();
     }
 
-    public static void OutBinary(ReadOnlySpan<byte> value)
+    public static void Out(ReadOnlySpan<byte> value)
     {
-        StdOut.WriteBinary(value);
+        StdOut.Write(value);
     }
 
-    public static void OutText(ReadOnlySpan<char> value)
+    public static void Out(ReadOnlySpan<char> value)
     {
-        StdOut.WriteText(value);
+        StdOut.Write(value);
     }
 
     public static void Out(string? value)
@@ -158,14 +164,14 @@ public static class Terminal
         StdOut.WriteLine(format, args);
     }
 
-    public static void ErrorBinary(ReadOnlySpan<byte> value)
+    public static void Error(ReadOnlySpan<byte> value)
     {
-        StdError.WriteBinary(value);
+        StdError.Write(value);
     }
 
-    public static void ErrorText(ReadOnlySpan<char> value)
+    public static void Error(ReadOnlySpan<char> value)
     {
-        StdError.WriteText(value);
+        StdError.Write(value);
     }
 
     public static void Error(string? value)

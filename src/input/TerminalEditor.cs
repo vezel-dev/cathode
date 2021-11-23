@@ -30,7 +30,7 @@ public sealed class TerminalEditor
 
                 static Rune? ReadRune()
                 {
-                    Span<byte> bytes = stackalloc byte[Terminal.StdIn.Encoding.GetMaxByteCount(1)];
+                    Span<byte> bytes = stackalloc byte[Terminal.Encoding.GetMaxByteCount(1)];
                     var length = 0;
 
                     while (true)

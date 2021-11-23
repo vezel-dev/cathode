@@ -10,10 +10,6 @@ This package provides the core terminal API.</PackageDescription>
     </PropertyGroup>
 
     <ItemGroup>
-        <Using Include="System.Drivers" />
-    </ItemGroup>
-
-    <ItemGroup>
         <InternalsVisibleTo Include="System.Terminal.Extensions" />
     </ItemGroup>
 
