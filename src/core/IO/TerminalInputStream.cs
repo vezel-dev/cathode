@@ -17,6 +17,8 @@ public sealed class TerminalInputStream : TerminalStream
 
     public override int Read(Span<byte> buffer)
     {
-        return Reader.Read(buffer);
+        Reader.Read(buffer, out var count);
+
+        return count;
     }
 }

@@ -19,29 +19,32 @@ sealed class WindowsTerminalWriter : DefaultTerminalWriter
     {
         Handle = handle;
         IsValid = WindowsTerminalUtility.IsHandleValid(handle, true);
-        IsRedirected = WindowsTerminalUtility.IsRedirected(handle);
+        IsRedirected = WindowsTerminalUtility.IsHandleRedirected(handle);
         _name = name;
     }
 
-    protected override unsafe void WriteCore(ReadOnlySpan<byte> data)
+    protected override unsafe void WriteCore(ReadOnlySpan<byte> data, out int count)
     {
         if (data.IsEmpty || !IsValid)
-            return;
-
-        lock (_lock)
         {
-            fixed (byte* p = data)
-            {
-                uint dummy;
+            count = 0;
 
-                // Unlike Unix's write system call, if WriteFile returns a successful status, it means everything was
-                // written. So, we do not need to do this in a loop.
-                if (WriteFile(Handle, p, (uint)data.Length, &dummy, null))
-                    return;
-            }
+            return;
         }
 
-        _ = WindowsTerminalUtility.HandleError(0, $"Could not write to standard {_name}");
+        bool result;
+        uint written;
+
+        // Unlike Unix's write system call, if WriteFile returns a successful status, it means everything was written.
+        // So, we do not need to do this in a loop.
+        lock (_lock)
+            fixed (byte* p = data)
+                result = WriteFile(Handle, p, (uint)data.Length, &written, null);
+
+        count = (int)written;
+
+        if (!result)
+            WindowsTerminalUtility.ThrowIfUnexpected($"Could not write to standard {_name}");
     }
 
     public CONSOLE_MODE? GetMode()

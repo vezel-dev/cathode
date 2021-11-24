@@ -24,15 +24,19 @@ sealed class WindowsTerminalReader : DefaultTerminalReader
     {
         Handle = handle;
         IsValid = WindowsTerminalUtility.IsHandleValid(handle, false);
-        IsRedirected = WindowsTerminalUtility.IsRedirected(handle);
+        IsRedirected = WindowsTerminalUtility.IsHandleRedirected(handle);
         _driver = driver;
         _buffer = new byte[Terminal.Encoding.GetMaxByteCount(2)];
     }
 
-    protected override unsafe int ReadCore(Span<byte> data)
+    protected override unsafe void ReadCore(Span<byte> data, out int count)
     {
         if (data.IsEmpty || !IsValid)
-            return 0;
+        {
+            count = 0;
+
+            return;
+        }
 
         // The Windows console host is eventually going to support UTF-8 input via the ReadFile function. Sadly,
         // this does not work today; non-ASCII characters just turn into NULs. This means that we have to use the
@@ -50,7 +54,7 @@ sealed class WindowsTerminalReader : DefaultTerminalReader
                 if (_buffered.IsEmpty)
                 {
                     Span<char> units = stackalloc char[2];
-                    var count = 0;
+                    var chars = 0;
 
                     fixed (char* p = units)
                     {
@@ -64,10 +68,14 @@ sealed class WindowsTerminalReader : DefaultTerminalReader
                         }
 
                         if (!ret)
-                            return WindowsTerminalUtility.HandleError(read, $"Could not read from standard input");
+                            WindowsTerminalUtility.ThrowIfUnexpected($"Could not read from standard input");
 
                         if (read == 0)
-                            return 0;
+                        {
+                            count = 0;
+
+                            return;
+                        }
 
                         // There is a bug where ReadConsoleW will not process Ctrl-Z properly even though ReadFile
                         // will. The good news is that we can fairly easily emulate what the console host should be
@@ -75,9 +83,13 @@ sealed class WindowsTerminalReader : DefaultTerminalReader
                         //
                         // TODO: Review this for race conditions with changing raw mode.
                         if (!_driver.IsRawMode && units[0] == '\x1a')
-                            return 0;
+                        {
+                            count = 0;
 
-                        count++;
+                            return;
+                        }
+
+                        chars++;
 
                         // If we got a high surrogate, we expect to instantly see a low surrogate following it. In
                         // really bizarre situations (e.g. broken WriteConsoleInput calls), this might not be the
@@ -95,15 +107,15 @@ sealed class WindowsTerminalReader : DefaultTerminalReader
                             }
 
                             if (!ret)
-                                return WindowsTerminalUtility.HandleError(read, $"Could not read from standard input");
+                                WindowsTerminalUtility.ThrowIfUnexpected($"Could not read from standard input");
 
                             if (read != 0)
-                                count++;
+                                chars++;
                         }
 
                         // Encode the UTF-16 code unit(s) into UTF-8 and grab a slice of the buffer corresponding to
                         // just the portion used.
-                        _buffered = _buffer.AsMemory(0, Terminal.Encoding.GetBytes(units[0..count], _buffer));
+                        _buffered = _buffer.AsMemory(0, Terminal.Encoding.GetBytes(units[..chars], _buffer));
                     }
                 }
 
@@ -111,22 +123,25 @@ sealed class WindowsTerminalReader : DefaultTerminalReader
                 // caller and adjust our UTF-8 buffer accordingly. Be careful not to overrun either buffer.
                 var copied = Math.Min(_buffered.Length, data.Length);
 
-                _buffered.Span[0..copied].CopyTo(data[0..copied]);
+                _buffered.Span[..copied].CopyTo(data[..copied]);
                 _buffered = _buffered[copied..];
 
-                return copied;
+                count = copied;
             }
         }
         else
         {
-            uint ret;
+            bool result;
+            uint read;
 
             lock (_lock)
                 fixed (byte* p = data)
-                    if (ReadFile(Handle, p, (uint)data.Length, &ret, null))
-                        return (int)ret;
+                    result = ReadFile(Handle, p, (uint)data.Length, &read, null);
 
-            return WindowsTerminalUtility.HandleError(ret, $"Could not read from standard input");
+            count = (int)read;
+
+            if (!result)
+                WindowsTerminalUtility.ThrowIfUnexpected($"Could not read from standard input");
         }
     }
 

@@ -19,10 +19,14 @@ sealed class UnixTerminalReader : DefaultTerminalReader
         _driver = driver;
     }
 
-    protected override unsafe int ReadCore(Span<byte> data)
+    protected override unsafe void ReadCore(Span<byte> data, out int count)
     {
         if (data.IsEmpty)
-            return 0;
+        {
+            count = 0;
+
+            return;
+        }
 
         long ret;
 
@@ -46,8 +50,8 @@ sealed class UnixTerminalReader : DefaultTerminalReader
                     // The descriptor was probably redirected to a program that ended. Just silently ignore this
                     // situation.
                     //
-                    // The strange condition where errno is zero happens e.g. on Linux if the process is killed
-                    // while blocking in the read system call.
+                    // The strange condition where errno is zero happens e.g. on Linux if the process is killed while
+                    // blocking in the read system call.
                     if (err is 0 or EPIPE)
                     {
                         ret = 0;
@@ -55,8 +59,8 @@ sealed class UnixTerminalReader : DefaultTerminalReader
                         break;
                     }
 
-                    // The file descriptor has been configured as non-blocking. Instead of busily trying to read
-                    // over and over, poll until we can write and then try again.
+                    // The file descriptor has been configured as non-blocking. Instead of busily trying to read over
+                    // and over, poll until we can write and then try again.
                     if (_driver.PollHandle(err, Handle, POLLIN))
                         continue;
 
@@ -65,6 +69,6 @@ sealed class UnixTerminalReader : DefaultTerminalReader
             }
         }
 
-        return (int)ret;
+        count = (int)ret;
     }
 }

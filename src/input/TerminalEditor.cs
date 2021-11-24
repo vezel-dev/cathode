@@ -35,7 +35,7 @@ public sealed class TerminalEditor
 
                     while (true)
                     {
-                        if (Rune.DecodeFromUtf8(bytes[0..length], out var rune, out _) ==
+                        if (Rune.DecodeFromUtf8(bytes[..length], out var rune, out _) ==
                             OperationStatus.NeedMoreData)
                         {
                             if (Terminal.ReadRaw() is not byte b)

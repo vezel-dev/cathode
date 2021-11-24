@@ -4,13 +4,26 @@ public abstract class TerminalWriter : TerminalHandle
 {
     public event ReadOnlySpanAction<byte, TerminalWriter>? OutputWritten;
 
-    protected abstract void WriteCore(ReadOnlySpan<byte> data);
+    protected abstract void WriteCore(ReadOnlySpan<byte> data, out int count);
+
+    public void Write(ReadOnlySpan<byte> data, out int count)
+    {
+        count = 0;
+
+        // WriteCore is required to assign count appropriately for partial writes that fail.
+        try
+        {
+            WriteCore(data, out count);
+        }
+        finally
+        {
+            OutputWritten?.Invoke(data[..count], this);
+        }
+    }
 
     public void Write(ReadOnlySpan<byte> data)
     {
-        WriteCore(data);
-
-        OutputWritten?.Invoke(data, this);
+        Write(data, out _);
     }
 
     public void Write(ReadOnlySpan<char> value)

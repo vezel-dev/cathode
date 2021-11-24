@@ -11,22 +11,30 @@ public abstract class TerminalReader : TerminalHandle
         _reader = new(() => new(Stream, Terminal.Encoding, false, Environment.SystemPageSize, true));
     }
 
-    protected abstract int ReadCore(Span<byte> data);
+    protected abstract void ReadCore(Span<byte> data, out int count);
 
-    public int Read(Span<byte> data)
+    public void Read(Span<byte> data, out int count)
     {
-        var len = ReadCore(data);
+        count = 0;
 
-        InputRead?.Invoke(data[..len], this);
-
-        return len;
+        // ReadCore is required to assign count appropriately for partial reads that fail.
+        try
+        {
+            ReadCore(data, out count);
+        }
+        finally
+        {
+            InputRead?.Invoke(data[..count], this);
+        }
     }
 
     public byte? ReadRaw()
     {
         Span<byte> span = stackalloc byte[1];
 
-        return Read(span) == span.Length ? span[0] : null;
+        Read(span, out var count);
+
+        return count == span.Length ? span[0] : null;
     }
 
     public string? ReadLine()

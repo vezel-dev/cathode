@@ -22,24 +22,26 @@ sealed class UnixTerminalWriter : DefaultTerminalWriter
         _name = name;
     }
 
-    protected override unsafe void WriteCore(ReadOnlySpan<byte> data)
+    protected override unsafe void WriteCore(ReadOnlySpan<byte> data, out int count)
     {
         if (data.IsEmpty)
+        {
+            count = 0;
+
             return;
+        }
 
         lock (_lock)
         {
-            var progress = 0;
-
             fixed (byte* p = data)
             {
-                var len = data.Length;
+                count = 0;
 
-                while (progress < len)
+                while (count < data.Length)
                 {
                     long ret;
 
-                    while ((ret = write(Handle, p + progress, (nuint)(len - progress))) == -1 &&
+                    while ((ret = write(Handle, p + count, (nuint)(data.Length - count))) == -1 &&
                         Marshal.GetLastPInvokeError() == EINTR)
                     {
                     }
@@ -50,7 +52,7 @@ sealed class UnixTerminalWriter : DefaultTerminalWriter
 
                     if (ret != -1)
                     {
-                        progress += (int)ret;
+                        count += (int)ret;
 
                         continue;
                     }
@@ -62,8 +64,8 @@ sealed class UnixTerminalWriter : DefaultTerminalWriter
                     if (err == EPIPE)
                         break;
 
-                    // The file descriptor has been configured as non-blocking. Instead of busily trying to write
-                    // over and over, poll until we can write and then try again.
+                    // The file descriptor has been configured as non-blocking. Instead of busily trying to write over
+                    // and over, poll until we can write and then try again.
                     if (_driver.PollHandle(err, Handle, POLLOUT))
                         continue;
 
