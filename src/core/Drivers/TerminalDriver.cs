@@ -26,7 +26,7 @@ abstract partial class TerminalDriver
         }
     }
 
-    public event EventHandler<TerminalBreakSignalEventArgs>? BreakSignal;
+    public event EventHandler<TerminalSignalEventArgs>? Signal;
 
     public abstract TerminalReader StdIn { get; }
 
@@ -83,7 +83,19 @@ abstract partial class TerminalDriver
 
         void HandleSignal(PosixSignalContext context)
         {
-            context.Cancel = HandleBreakSignal(context.Signal == PosixSignal.SIGINT);
+            var args = new TerminalSignalEventArgs(
+                context.Signal switch
+                {
+                    PosixSignal.SIGHUP => TerminalSignal.Close,
+                    PosixSignal.SIGINT => TerminalSignal.Interrupt,
+                    PosixSignal.SIGQUIT => TerminalSignal.Quit,
+                    PosixSignal.SIGTERM => TerminalSignal.Terminate,
+                    _ => throw new TerminalException($"Received unexpected signal: {context.Signal}"),
+                });
+
+            Signal?.Invoke(null, args);
+
+            context.Cancel = args.Cancel;
         }
 
         // Keep the registrations alive by storing them in fields.
@@ -115,19 +127,7 @@ abstract partial class TerminalDriver
     {
     }
 
-    public abstract void GenerateBreakSignal(TerminalBreakSignal signal);
-
-    protected bool HandleBreakSignal(bool interrupt)
-    {
-        var args = new TerminalBreakSignalEventArgs(interrupt ?
-            TerminalBreakSignal.Interrupt : TerminalBreakSignal.Quit);
-
-        BreakSignal?.Invoke(null, args);
-
-        return args.Cancel;
-    }
-
-    public abstract void GenerateSuspendSignal();
+    public abstract void GenerateSignal(TerminalSignal signal);
 
     protected abstract void SetRawMode(bool raw);
 

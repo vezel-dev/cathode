@@ -9,8 +9,8 @@ T:Microsoft.Extensions.Logging.Console.LoggerColorBehavior;Use the Terminal.Exte
 T:Microsoft.Extensions.Logging.Console.SimpleConsoleFormatterOptions;Use the Terminal.Extensions package instead
 T:Microsoft.Extensions.Logging.ConsoleLoggerExtensions;Use the Terminal.Extensions package instead
 T:System.Console;Use System.Terminal instead
-T:System.ConsoleCancelEventArgs;Use System.Terminal.BreakSignal instead
-T:System.ConsoleCancelEventHandler;Use System.Terminal.BreakSignal instead
+T:System.ConsoleCancelEventArgs;Use System.Terminal.Signal instead
+T:System.ConsoleCancelEventHandler;Use System.Terminal.Signal instead
 T:System.ConsoleColor;Use System.Terminal instead
 T:System.ConsoleKey;Use System.Terminal instead
 T:System.ConsoleKeyInfo;Use System.Terminal instead

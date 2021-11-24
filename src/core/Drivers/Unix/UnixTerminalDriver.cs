@@ -50,14 +50,16 @@ abstract class UnixTerminalDriver : TerminalDriver
         // TODO: SIGCHLD?
     }
 
-    public override void GenerateBreakSignal(TerminalBreakSignal signal)
+    public override void GenerateSignal(TerminalSignal signal)
     {
         _ = kill(
             0,
             signal switch
             {
-                TerminalBreakSignal.Interrupt => SIGINT,
-                TerminalBreakSignal.Quit => SIGQUIT,
+                TerminalSignal.Close => SIGHUP,
+                TerminalSignal.Interrupt => SIGINT,
+                TerminalSignal.Quit => SIGQUIT,
+                TerminalSignal.Terminate => SIGTERM,
                 _ => throw new ArgumentOutOfRangeException(nameof(signal)),
             });
     }

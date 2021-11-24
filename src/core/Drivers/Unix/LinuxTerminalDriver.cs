@@ -56,11 +56,6 @@ sealed class LinuxTerminalDriver : UnixTerminalDriver
         return ioctl(STDOUT_FILENO, TIOCGWINSZ, out var w) == 0 ? new(w.ws_col, w.ws_row) : null;
     }
 
-    public override void GenerateSuspendSignal()
-    {
-        _ = kill(0, SIGTSTP);
-    }
-
     protected override void RefreshSettings()
     {
         // This call can fail if the terminal is detached, but that is OK.

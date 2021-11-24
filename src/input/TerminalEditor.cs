@@ -70,7 +70,7 @@ public sealed class TerminalEditor
                     // Ctrl-C and Ctrl-Break/Ctrl-\
                     if (cp == 0x3)
                     {
-                        Terminal.GenerateBreakSignal(TerminalBreakSignal.Interrupt);
+                        Terminal.GenerateSignal(TerminalSignal.Interrupt);
 
                         return null;
                     }

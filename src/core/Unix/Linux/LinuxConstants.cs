@@ -54,10 +54,6 @@ static class LinuxConstants
 
     public const nuint TIOCGWINSZ = 0x5413;
 
-    // sig
-
-    public const int SIGTSTP = 20;
-
     // errno
 
     public const int EAGAIN = 11;

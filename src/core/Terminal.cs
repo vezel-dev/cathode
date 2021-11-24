@@ -12,10 +12,10 @@ public static class Terminal
         remove => _driver.Resize -= value;
     }
 
-    public static event EventHandler<TerminalBreakSignalEventArgs>? BreakSignal
+    public static event EventHandler<TerminalSignalEventArgs>? Signal
     {
-        add => _driver.BreakSignal += value;
-        remove => _driver.BreakSignal -= value;
+        add => _driver.Signal += value;
+        remove => _driver.Signal -= value;
     }
 
     public static Encoding Encoding { get; } = new UTF8Encoding(false);
@@ -84,14 +84,9 @@ public static class Terminal
         _driver.ResetAll();
     }
 
-    public static void GenerateBreakSignal(TerminalBreakSignal signal)
+    public static void GenerateSignal(TerminalSignal signal)
     {
-        _driver.GenerateBreakSignal(signal);
-    }
-
-    public static void GenerateSuspendSignal()
-    {
-        _driver.GenerateSuspendSignal();
+        _driver.GenerateSignal(signal);
     }
 
     public static void EnableRawMode()

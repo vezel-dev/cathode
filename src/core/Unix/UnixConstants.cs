@@ -25,9 +25,13 @@ static class UnixConstants
 
     // sig
 
+    public const int SIGHUP = 1;
+
     public const int SIGINT = 2;
 
     public const int SIGQUIT = 3;
+
+    public const int SIGTERM = 15;
 
     // errno
 

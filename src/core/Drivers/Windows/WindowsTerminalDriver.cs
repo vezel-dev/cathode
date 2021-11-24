@@ -84,21 +84,18 @@ sealed class WindowsTerminalDriver : TerminalDriver
             _event.Reset();
     }
 
-    public override void GenerateBreakSignal(TerminalBreakSignal signal)
+    public override void GenerateSignal(TerminalSignal signal)
     {
         _ = GenerateConsoleCtrlEvent(
             signal switch
             {
-                TerminalBreakSignal.Interrupt => CTRL_C_EVENT,
-                TerminalBreakSignal.Quit => CTRL_BREAK_EVENT,
+                TerminalSignal.Close => CTRL_CLOSE_EVENT,
+                TerminalSignal.Interrupt => CTRL_C_EVENT,
+                TerminalSignal.Quit => CTRL_BREAK_EVENT,
+                TerminalSignal.Terminate => CTRL_SHUTDOWN_EVENT,
                 _ => throw new ArgumentOutOfRangeException(nameof(signal)),
             },
             0);
-    }
-
-    public override void GenerateSuspendSignal()
-    {
-        // TODO: Windows does not have an equivalent of SIGTSTP. Should we throw?
     }
 
     protected override void SetRawMode(bool raw)

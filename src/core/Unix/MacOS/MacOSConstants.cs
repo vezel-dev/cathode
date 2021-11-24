@@ -54,10 +54,6 @@ static class MacOSConstants
 
     public const nuint TIOCGWINSZ = 0x40087468;
 
-    // sig
-
-    public const int SIGTSTP = 18;
-
     // errno
 
     public const int EAGAIN = 35;
