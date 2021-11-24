@@ -29,7 +29,7 @@ sealed class WindowsTerminalReader : DefaultTerminalReader
         _buffer = new byte[Terminal.Encoding.GetMaxByteCount(2)];
     }
 
-    public override unsafe int Read(Span<byte> data)
+    protected override unsafe int ReadCore(Span<byte> data)
     {
         if (data.IsEmpty || !IsValid)
             return 0;

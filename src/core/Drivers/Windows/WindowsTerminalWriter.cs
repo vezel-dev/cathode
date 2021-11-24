@@ -23,7 +23,7 @@ sealed class WindowsTerminalWriter : DefaultTerminalWriter
         _name = name;
     }
 
-    public override unsafe void Write(ReadOnlySpan<byte> data)
+    protected override unsafe void WriteCore(ReadOnlySpan<byte> data)
     {
         if (data.IsEmpty || !IsValid)
             return;

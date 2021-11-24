@@ -2,6 +2,8 @@ namespace System.IO;
 
 public abstract class TerminalReader : TerminalHandle
 {
+    public event SpanAction<byte, TerminalReader>? InputRead;
+
     readonly Lazy<StreamReader> _reader;
 
     protected TerminalReader()
@@ -9,7 +11,16 @@ public abstract class TerminalReader : TerminalHandle
         _reader = new(() => new(Stream, Terminal.Encoding, false, Environment.SystemPageSize, true));
     }
 
-    public abstract int Read(Span<byte> data);
+    protected abstract int ReadCore(Span<byte> data);
+
+    public int Read(Span<byte> data)
+    {
+        var len = ReadCore(data);
+
+        InputRead?.Invoke(data[..len], this);
+
+        return len;
+    }
 
     public byte? ReadRaw()
     {

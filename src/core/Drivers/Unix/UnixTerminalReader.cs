@@ -19,7 +19,7 @@ sealed class UnixTerminalReader : DefaultTerminalReader
         _driver = driver;
     }
 
-    public override unsafe int Read(Span<byte> data)
+    protected override unsafe int ReadCore(Span<byte> data)
     {
         if (data.IsEmpty)
             return 0;

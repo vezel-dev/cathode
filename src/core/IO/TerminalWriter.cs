@@ -2,7 +2,16 @@ namespace System.IO;
 
 public abstract class TerminalWriter : TerminalHandle
 {
-    public abstract void Write(ReadOnlySpan<byte> data);
+    public event ReadOnlySpanAction<byte, TerminalWriter>? OutputWritten;
+
+    protected abstract void WriteCore(ReadOnlySpan<byte> data);
+
+    public void Write(ReadOnlySpan<byte> data)
+    {
+        WriteCore(data);
+
+        OutputWritten?.Invoke(data, this);
+    }
 
     public void Write(ReadOnlySpan<char> value)
     {
