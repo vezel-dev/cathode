@@ -36,4 +36,4 @@ jobs:
             - name: Build project
               run: |
                   dotnet tool restore
-                  dotnet build -c ${{ matrix.cfg }}
+                  dotnet publish -c ${{ matrix.cfg }}
