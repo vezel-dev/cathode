@@ -1,10 +1,10 @@
 using Wcwidth;
 
-namespace System;
+namespace System.Text;
 
 public static class TerminalWidth
 {
-    const Unicode Version = Unicode.Version_14_0_0;
+    const Wcwidth.Unicode Version = Wcwidth.Unicode.Version_14_0_0;
 
     public static int? Measure(Rune value)
     {
