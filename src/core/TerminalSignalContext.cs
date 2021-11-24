@@ -1,12 +1,12 @@
 namespace System;
 
-public sealed class TerminalSignalEventArgs : EventArgs
+public sealed class TerminalSignalContext
 {
     public TerminalSignal Signal { get; }
 
     public bool Cancel { get; set; }
 
-    internal TerminalSignalEventArgs(TerminalSignal signal)
+    internal TerminalSignalContext(TerminalSignal signal)
     {
         Signal = signal;
     }

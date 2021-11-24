@@ -2,7 +2,7 @@ namespace System.Drivers;
 
 abstract partial class TerminalDriver
 {
-    public event EventHandler<TerminalResizeEventArgs>? Resize
+    public event Action<TerminalSize>? Resize
     {
         add
         {
@@ -26,7 +26,7 @@ abstract partial class TerminalDriver
         }
     }
 
-    public event EventHandler<TerminalSignalEventArgs>? Signal;
+    public event Action<TerminalSignalContext>? Signal;
 
     public abstract TerminalReader StdIn { get; }
 
@@ -57,7 +57,7 @@ abstract partial class TerminalDriver
 
     TerminalSize? _size;
 
-    EventHandler<TerminalResizeEventArgs>? _resize;
+    Action<TerminalSize>? _resize;
 
     TerminalSize? _lastResize;
 
@@ -83,7 +83,7 @@ abstract partial class TerminalDriver
 
         void HandleSignal(PosixSignalContext context)
         {
-            var args = new TerminalSignalEventArgs(
+            var args = new TerminalSignalContext(
                 context.Signal switch
                 {
                     PosixSignal.SIGHUP => TerminalSignal.Close,
@@ -93,7 +93,7 @@ abstract partial class TerminalDriver
                     _ => throw new TerminalException($"Received unexpected signal: {context.Signal}"),
                 });
 
-            Signal?.Invoke(null, args);
+            Signal?.Invoke(args);
 
             context.Cancel = args.Cancel;
         }
@@ -118,7 +118,7 @@ abstract partial class TerminalDriver
                 // Do this on the thread pool to avoid breaking driver internals if an event handler misbehaves. This
                 // event is also relatively low priority, so we do not care too much if the thread pool takes a bit of
                 // time to get around to it.
-                _ = ThreadPool.UnsafeQueueUserWorkItem(state => _resize?.Invoke(null, new(size)), null);
+                _ = ThreadPool.UnsafeQueueUserWorkItem(state => _resize?.Invoke(size), null);
             }
         }
     }

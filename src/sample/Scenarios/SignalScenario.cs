@@ -19,11 +19,11 @@ sealed class SignalScenario : Scenario
         {
             Terminal.Out("Command: ");
 
-            static void OnSignal(object? sender, TerminalSignalEventArgs e)
+            static void OnSignal(TerminalSignalContext context)
             {
-                e.Cancel = true;
+                context.Cancel = true;
 
-                Terminal.OutLine("Caught {0} signal.", e.Signal);
+                Terminal.OutLine("Caught {0} signal.", context.Signal);
                 Terminal.Beep();
             }
 

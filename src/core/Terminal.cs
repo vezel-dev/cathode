@@ -6,13 +6,13 @@ namespace System;
 
 public static class Terminal
 {
-    public static event EventHandler<TerminalResizeEventArgs>? Resize
+    public static event Action<TerminalSize>? Resize
     {
         add => _driver.Resize += value;
         remove => _driver.Resize -= value;
     }
 
-    public static event EventHandler<TerminalSignalEventArgs>? Signal
+    public static event Action<TerminalSignalContext>? Signal
     {
         add => _driver.Signal += value;
         remove => _driver.Signal -= value;
