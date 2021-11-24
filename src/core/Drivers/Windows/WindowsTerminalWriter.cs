@@ -34,6 +34,8 @@ sealed class WindowsTerminalWriter : DefaultTerminalWriter
             {
                 uint dummy;
 
+                // Unlike Unix's write system call, if WriteFile returns a successful status, it means everything was
+                // written. So, we do not need to do this in a loop.
                 if (WriteFile(Handle, p, (uint)data.Length, &dummy, null))
                     return;
             }
