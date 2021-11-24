@@ -20,7 +20,6 @@
         <Using Include="System.Globalization" />
         <Using Include="System.Reflection" />
         <Using Include="System.Runtime.InteropServices" />
-        <Using Include="System.Runtime.Serialization" />
         <Using Include="System.Runtime.Versioning" />
         <Using Include="System.Text" />
     </ItemGroup>

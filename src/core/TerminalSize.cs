@@ -1,6 +1,5 @@
 namespace System;
 
-[Serializable]
 public readonly struct TerminalSize : IEquatable<TerminalSize>
 {
     public int Width { get; }
