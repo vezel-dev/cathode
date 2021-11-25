@@ -56,10 +56,16 @@ abstract partial class TerminalDriver
     readonly ManualResetEventSlim _event = new();
 
     [SuppressMessage("Style", "IDE0052")]
+    readonly PosixSignalRegistration _sigHup;
+
+    [SuppressMessage("Style", "IDE0052")]
     readonly PosixSignalRegistration _sigInt;
 
     [SuppressMessage("Style", "IDE0052")]
     readonly PosixSignalRegistration _sigQuit;
+
+    [SuppressMessage("Style", "IDE0052")]
+    readonly PosixSignalRegistration _sigTerm;
 
     TerminalSize? _size;
 
@@ -116,8 +122,10 @@ abstract partial class TerminalDriver
         }
 
         // Keep the registrations alive by storing them in fields.
+        _sigInt = PosixSignalRegistration.Create(PosixSignal.SIGHUP, HandleSignal);
         _sigInt = PosixSignalRegistration.Create(PosixSignal.SIGINT, HandleSignal);
         _sigQuit = PosixSignalRegistration.Create(PosixSignal.SIGQUIT, HandleSignal);
+        _sigInt = PosixSignalRegistration.Create(PosixSignal.SIGTERM, HandleSignal);
     }
 
     protected abstract TerminalSize? GetSize();
