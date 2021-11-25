@@ -122,10 +122,10 @@ abstract partial class TerminalDriver
         }
 
         // Keep the registrations alive by storing them in fields.
-        _sigInt = PosixSignalRegistration.Create(PosixSignal.SIGHUP, HandleSignal);
+        _sigHup = PosixSignalRegistration.Create(PosixSignal.SIGHUP, HandleSignal);
         _sigInt = PosixSignalRegistration.Create(PosixSignal.SIGINT, HandleSignal);
         _sigQuit = PosixSignalRegistration.Create(PosixSignal.SIGQUIT, HandleSignal);
-        _sigInt = PosixSignalRegistration.Create(PosixSignal.SIGTERM, HandleSignal);
+        _sigTerm = PosixSignalRegistration.Create(PosixSignal.SIGTERM, HandleSignal);
     }
 
     protected abstract TerminalSize? GetSize();

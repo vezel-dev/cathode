@@ -10,7 +10,7 @@ This package provides the core terminal API.</PackageDescription>
     </PropertyGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="System.Terminal.Extensions" />
+        <InternalsVisibleTo Include="Microsoft.Extensions.Terminal" />
     </ItemGroup>
 
     <ItemGroup>
