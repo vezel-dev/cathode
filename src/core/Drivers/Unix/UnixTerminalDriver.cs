@@ -35,11 +35,8 @@ abstract class UnixTerminalDriver : TerminalDriver
                 lock (_rawLock)
                     RefreshSettings();
 
-            // Terminal width/height might have changed for SIGCONT, and will definitely have changed for SIGWINCH.
-            //
-            // We currently trust that SIGWINCH will always be delivered when the terminal size changes. If this ever
-            // turns out to be false somewhere/somehow, we may need to use a background thread to also poll for size
-            // changes like in the Windows driver.
+            // Terminal width/height might have changed for SIGCONT, and will definitely have changed for SIGWINCH. On
+            // Unix systems, SIGWINCH lets us respond much more quickly to a change in terminal size.
             RefreshSize();
         }
 

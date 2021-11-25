@@ -15,8 +15,6 @@ sealed class WindowsTerminalDriver : TerminalDriver
 
     public override WindowsTerminalWriter StdError { get; }
 
-    readonly ManualResetEventSlim _event = new();
-
     WindowsTerminalDriver()
     {
         StdIn = new(this, GetStdHandle_SafeHandle(STD_HANDLE.STD_INPUT_HANDLE));
@@ -44,24 +42,6 @@ sealed class WindowsTerminalDriver : TerminalDriver
         // attached, but that is OK.
         _ = StdIn.AddMode(inMode);
         _ = StdOut.AddMode(outMode) || StdError.AddMode(outMode);
-
-        // We need to grab the window size at least once upfront so that adding an event handler to the Resize event
-        // does not immediately cause the event to be fired.
-        RefreshSize();
-
-        // Windows currently has no SIGWINCH equivalent, so we have to poll for size changes.
-        _ = TerminalUtility.StartThread("Terminal Resize Listener", () =>
-        {
-            while (true)
-            {
-                _event.Wait();
-
-                RefreshSize();
-
-                // TODO: Do we need to make this configurable?
-                Thread.Sleep(100);
-            }
-        });
     }
 
     protected override TerminalSize? GetSize()
@@ -74,14 +54,6 @@ sealed class WindowsTerminalDriver : TerminalDriver
         // Try both handles in case only one of them has been redirected.
         return (GetInfo(StdOut.Handle) ?? GetInfo(StdError.Handle)) is CONSOLE_SCREEN_BUFFER_INFO i ?
             new(i.srWindow.Right - i.srWindow.Left + 1, i.srWindow.Bottom - i.srWindow.Top + 1) : null;
-    }
-
-    protected override void ToggleResizeEvent(bool enable)
-    {
-        if (enable)
-            _event.Set();
-        else
-            _event.Reset();
     }
 
     public override void GenerateSignal(TerminalSignal signal)

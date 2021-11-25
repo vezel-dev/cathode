@@ -15,7 +15,7 @@ abstract partial class TerminalDriver
         {
             ArgumentNullException.ThrowIfNull(value);
 
-            lock (_lock)
+            lock (_sequenceLock)
             {
                 Sequence($"{OSC}0;{value}{BEL}");
 
@@ -36,7 +36,7 @@ abstract partial class TerminalDriver
                 _ => throw new ArgumentOutOfRangeException(nameof(value)),
             };
 
-            lock (_lock)
+            lock (_sequenceLock)
             {
                 Sequence($"{CSI}?1{type}");
 
@@ -57,7 +57,7 @@ abstract partial class TerminalDriver
                 _ => throw new ArgumentOutOfRangeException(nameof(value)),
             };
 
-            lock (_lock)
+            lock (_sequenceLock)
             {
                 Sequence($"{ESC}{type}");
 
@@ -74,7 +74,7 @@ abstract partial class TerminalDriver
 
     public void SetMouseEvents(TerminalMouseEvents events)
     {
-        lock (_lock)
+        lock (_sequenceLock)
         {
             Sequence($"{CSI}?1003{(events.HasFlag(TerminalMouseEvents.Movement) ? 'h' : 'l')}");
             Sequence($"{CSI}?1006{(events.HasFlag(TerminalMouseEvents.Buttons) ? 'h' : 'l')}");

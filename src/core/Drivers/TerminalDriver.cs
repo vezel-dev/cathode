@@ -6,22 +6,22 @@ abstract partial class TerminalDriver
     {
         add
         {
-            lock (_lock)
+            lock (_sizeLock)
             {
                 _resize += value;
 
                 if (_resize != null)
-                    ToggleResizeEvent(true);
+                    _event.Set();
             }
         }
         remove
         {
-            lock (_lock)
+            lock (_sizeLock)
             {
                 _resize -= value;
 
                 if (_resize == null)
-                    ToggleResizeEvent(false);
+                    _event.Reset();
             }
         }
     }
@@ -47,7 +47,13 @@ abstract partial class TerminalDriver
         }
     }
 
-    readonly object _lock = new();
+    readonly object _sizeLock = new();
+
+    readonly object _rawLock = new();
+
+    readonly object _sequenceLock = new();
+
+    readonly ManualResetEventSlim _event = new();
 
     [SuppressMessage("Style", "IDE0052")]
     readonly PosixSignalRegistration _sigInt;
@@ -58,8 +64,6 @@ abstract partial class TerminalDriver
     TerminalSize? _size;
 
     Action<TerminalSize>? _resize;
-
-    TerminalSize? _lastResize;
 
     [SuppressMessage("Reliability", "CA2000")]
     [SuppressMessage("ApiDesign", "RS0030")]
@@ -80,6 +84,19 @@ abstract partial class TerminalDriver
         Console.SetIn(new InvalidTextReader());
         Console.SetOut(new InvalidTextWriter());
         Console.SetError(new InvalidTextWriter());
+
+        _ = TerminalUtility.StartThread("Terminal Resize Poller", () =>
+        {
+            while (true)
+            {
+                _event.Wait();
+
+                RefreshSize();
+
+                // TODO: Do we need to make this configurable?
+                Thread.Sleep(100);
+            }
+        });
 
         void HandleSignal(PosixSignalContext context)
         {
@@ -107,24 +124,35 @@ abstract partial class TerminalDriver
 
     protected void RefreshSize()
     {
-        if (GetSize() is TerminalSize size)
+        if (GetSize() is not TerminalSize size)
         {
+            // These environment variables are usually set by shells. Use them as a fallback.
+            if (!int.TryParse(Environment.GetEnvironmentVariable("COLUMNS"), out var columns) ||
+                !int.TryParse(Environment.GetEnvironmentVariable("LINES"), out var lines))
+                return;
+
+            size = new(columns, lines);
+        }
+
+        // Serialize this bit since the Unix driver can call this method from its SIGWINCH/SIGCONT signal handler. We do
+        // not want to raise the Resize event twice for the same size value.
+        lock (_sizeLock)
+        {
+            var old = _size;
+
             _size = size;
 
-            if (size != _lastResize)
-            {
-                _lastResize = size;
-
-                // Do this on the thread pool to avoid breaking driver internals if an event handler misbehaves. This
-                // event is also relatively low priority, so we do not care too much if the thread pool takes a bit of
-                // time to get around to it.
-                _ = ThreadPool.UnsafeQueueUserWorkItem(state => _resize?.Invoke(size), null);
-            }
+            // We do not want to raise the event if the size has not been set before. This just indicates that the user
+            // is either retrieving the Size property for the first time or is installing an event handler without
+            // having accessed the Size property yet.
+            if (old == null || size == old)
+                return;
         }
-    }
 
-    protected virtual void ToggleResizeEvent(bool enable)
-    {
+        // Do this on the thread pool to avoid breaking driver internals if an event handler misbehaves. This event is
+        // also relatively low priority, so we do not care too much if the thread pool takes a bit of time to get around
+        // to it.
+        _ = ThreadPool.UnsafeQueueUserWorkItem(state => _resize?.Invoke(size), null);
     }
 
     public abstract void GenerateSignal(TerminalSignal signal);
@@ -133,13 +161,13 @@ abstract partial class TerminalDriver
 
     public void EnableRawMode()
     {
-        lock (_lock)
+        lock (_rawLock)
             SetRawMode(IsRawMode = true);
     }
 
     public void DisableRawMode()
     {
-        lock (_lock)
+        lock (_rawLock)
             SetRawMode(IsRawMode = false);
     }
 }
