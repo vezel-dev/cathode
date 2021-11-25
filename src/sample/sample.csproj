@@ -14,8 +14,8 @@
     </ItemGroup>
 
     <ItemGroup>
+        <TrimmerRootAssembly Include="Microsoft.Extensions.Terminal" />
         <TrimmerRootAssembly Include="System.Terminal" />
-        <TrimmerRootAssembly Include="System.Terminal.Extensions" />
         <TrimmerRootAssembly Include="System.Terminal.Input" />
     </ItemGroup>
 
