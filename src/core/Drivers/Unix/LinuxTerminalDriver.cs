@@ -17,43 +17,54 @@ sealed class LinuxTerminalDriver : UnixTerminalDriver
 
     LinuxTerminalDriver()
     {
-        if (tcgetattr(STDIN_FILENO, out var settings) == 0)
-        {
-            // These values are usually the default, but we set them just to be safe.
-            settings.c_cc[VTIME] = 0;
-            settings.c_cc[VMIN] = 1;
+        if (tcgetattr(StdIn.Handle, out var settings) == -1 &&
+            tcgetattr(StdOut.Handle, out settings) == -1 &&
+            tcgetattr(StdError.Handle, out settings) == -1)
+            return;
 
-            _original = settings;
+        // These values are usually the default, but we set them just to be safe.
+        settings.c_cc[VTIME] = 0;
+        settings.c_cc[VMIN] = 1;
 
-            // We might get really unlucky and fail to apply the settings right after the call above. We should still
-            // assign _current so we can apply it later.
-            if (!UpdateSettings(TCSANOW, settings))
-                _current = settings;
-        }
+        _original = settings;
+
+        // We might get really unlucky and fail to apply the settings right after the call above. We should still assign
+        // _current so we can apply it later.
+        if (!UpdateSettings(TCSANOW, settings))
+            _current = settings;
     }
 
     bool UpdateSettings(int mode, in termios settings)
     {
-        int ret;
-
-        while ((ret = tcsetattr(STDIN_FILENO, mode, settings)) == -1 && Marshal.GetLastPInvokeError() == EINTR)
+        bool TryUpdate(int handle, in termios settings)
         {
-            // Retry in case we get interrupted by a signal.
+            int ret;
+
+            while ((ret = tcsetattr(handle, mode, settings)) == -1 && Marshal.GetLastPInvokeError() == EINTR)
+            {
+                // Retry in case we get interrupted by a signal.
+            }
+
+            return ret == 0;
         }
 
-        if (ret == 0)
-        {
-            _current = settings;
+        if (!(TryUpdate(StdIn.Handle, settings) ||
+            TryUpdate(StdOut.Handle, settings) ||
+            TryUpdate(StdError.Handle, settings)))
+            return false;
 
-            return true;
-        }
+        _current = settings;
 
-        return false;
+        return true;
     }
 
     protected override TerminalSize? GetSize()
     {
-        return ioctl(STDOUT_FILENO, TIOCGWINSZ, out var w) == 0 ? new(w.ws_col, w.ws_row) : null;
+        return
+            ioctl(StdIn.Handle, TIOCGWINSZ, out var w) == 0 ||
+            ioctl(StdOut.Handle, TIOCGWINSZ, out w) == 0 ||
+            ioctl(StdError.Handle, TIOCGWINSZ, out w) == 0 ?
+            new(w.ws_col, w.ws_row) : null;
     }
 
     protected override void RefreshSettings()
