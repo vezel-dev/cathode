@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <AssemblyName>System.Terminal.Extensions</AssemblyName>
+        <AssemblyName>Microsoft.Extensions.Terminal</AssemblyName>
         <IsPackable>true</IsPackable>
         <PackageDescription>$(PackageDescription)
 
