@@ -1,3 +1,4 @@
+T:Microsoft.Extensions.Hosting.Host;Use the Terminal.Extensions package instead
 T:Microsoft.Extensions.Logging.Console.ConsoleFormatter;Use the Terminal.Extensions package instead
 T:Microsoft.Extensions.Logging.Console.ConsoleFormatterNames;Use the Terminal.Extensions package instead
 T:Microsoft.Extensions.Logging.Console.ConsoleFormatterOptions;Use the Terminal.Extensions package instead
