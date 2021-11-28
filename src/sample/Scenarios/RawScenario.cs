@@ -1,3 +1,5 @@
+using static System.Text.Control.ControlSequences;
+
 namespace Sample.Scenarios;
 
 [SuppressMessage("Performance", "CA1812")]
@@ -9,7 +11,7 @@ sealed class RawScenario : Scenario
         Terminal.OutLine();
 
         Terminal.EnableRawMode();
-        Terminal.SetMouseEvents(TerminalMouseEvents.All);
+        Terminal.Out(SetMouseEvents(MouseEvents.All));
 
         try
         {

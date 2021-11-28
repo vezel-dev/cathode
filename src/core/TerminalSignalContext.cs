@@ -6,8 +6,10 @@ public sealed class TerminalSignalContext
 
     public bool Cancel { get; set; }
 
-    internal TerminalSignalContext(TerminalSignal signal)
+    public TerminalSignalContext(TerminalSignal signal)
     {
+        _ = Enum.IsDefined(signal) ? true : throw new ArgumentOutOfRangeException(nameof(signal));
+
         Signal = signal;
     }
 }

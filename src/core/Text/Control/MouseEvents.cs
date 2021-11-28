@@ -1,7 +1,7 @@
-namespace System;
+namespace System.Text.Control;
 
 [Flags]
-public enum TerminalMouseEvents
+public enum MouseEvents
 {
     None = 0b00,
     Movement = 0b01,

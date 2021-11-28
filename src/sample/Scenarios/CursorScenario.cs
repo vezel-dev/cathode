@@ -1,3 +1,5 @@
+using static System.Text.Control.ControlSequences;
+
 namespace Sample.Scenarios;
 
 [SuppressMessage("Performance", "CA1812")]
@@ -11,6 +13,10 @@ sealed class CursorScenario : Scenario
         Terminal.OutLine("  <style>: Set cursor style to the given style.");
         Terminal.OutLine();
 
+        Terminal.Out(SetCursorVisibility(true));
+
+        var visible = true;
+
         while (true)
         {
             Terminal.Out("Command: ");
@@ -18,14 +24,16 @@ sealed class CursorScenario : Scenario
             switch (Terminal.ReadLine())
             {
                 case "visible":
-                    var visible = Terminal.IsCursorVisible = !Terminal.IsCursorVisible;
+                    visible = !visible;
 
+                    Terminal.Out(SetCursorVisibility(visible));
                     Terminal.OutLine("Cursor is now {0}.", visible ? "visible" : "invisible");
                     break;
                 case null:
                     break;
-                case var style when Enum.TryParse<TerminalCursorStyle>(style, true, out var s):
-                    Terminal.OutLine("Cursor style is now {0}.", Terminal.CursorStyle = s);
+                case var style when Enum.TryParse<CursorStyle>(style, true, out var s):
+                    Terminal.Out(SetCursorStyle(s));
+                    Terminal.OutLine("Cursor style is now {0}.", s);
                     break;
                 case var cmd:
                     Terminal.OutLine("Unknown command '{0}'.", cmd);

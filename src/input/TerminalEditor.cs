@@ -17,10 +17,6 @@ public sealed class TerminalEditor
     {
         lock (_lock)
         {
-            var raw = Terminal.IsRawMode;
-            var events = Terminal.MouseEvents;
-
-            Terminal.SetMouseEvents(TerminalMouseEvents.None);
             Terminal.EnableRawMode();
 
             try
@@ -112,7 +108,6 @@ public sealed class TerminalEditor
             finally
             {
                 Terminal.DisableRawMode();
-                Terminal.SetMouseEvents(events);
             }
         }
     }

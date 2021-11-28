@@ -11,6 +11,7 @@
 
     <ItemGroup>
         <Using Include="System.Input" />
+        <Using Include="System.Text.Control" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,4 +1,5 @@
 using Sample.Scenarios;
+using static System.Text.Control.ControlSequences;
 
 namespace Sample;
 
@@ -20,14 +21,15 @@ static class Program
 
     static async Task<int> Main(string[] args)
     {
-        Terminal.Title = nameof(Sample);
+        Terminal.Out(SetTitle(nameof(Sample)));
 
         if (args.Length == 0 || string.IsNullOrWhiteSpace(args[0]))
         {
-            Terminal.ForegroundColor(255, 0, 0);
-            Terminal.ErrorLine("Please supply a scenario name.");
-            Terminal.ResetAttributes();
-
+            Terminal.ErrorLine(
+                new ControlBuilder()
+                    .SetForegroundColor(255, 0, 0)
+                    .Print("Please supply a scenario name.")
+                    .ResetAttributes());
             Terminal.ErrorLine();
             Terminal.ErrorLine("Available scenarios:");
             Terminal.ErrorLine();
@@ -44,21 +46,27 @@ static class Program
 
         if (match == null)
         {
-            Terminal.ForegroundColor(255, 0, 0);
-            Terminal.ErrorLine("Could not find a scenario matching '{0}'.", args[0]);
-            Terminal.ResetAttributes();
+            Terminal.ErrorLine(
+                new ControlBuilder()
+                    .SetForegroundColor(255, 0, 0)
+                    .Print("Could not find a scenario matching '{0}'.", args[0])
+                    .ResetAttributes());
 
             return 1;
         }
 
-        Terminal.ForegroundColor(0, 255, 0);
-        Terminal.OutLine("Press Enter to run the {0} scenario.", match.Name);
-        Terminal.ResetAttributes();
+        Terminal.ErrorLine(
+            new ControlBuilder()
+                .SetForegroundColor(0, 255, 0)
+                .Print("Press Enter to run the {0} scenario.", match.Name)
+                .ResetAttributes());
 
         _ = Terminal.ReadLine();
 
-        Terminal.ClearScreen();
-        Terminal.MoveCursorTo(0, 0);
+        Terminal.Out(
+            new ControlBuilder()
+                .ClearScreen()
+                .MoveCursorTo(0, 0));
 
         await match.RunAsync().ConfigureAwait(false);
 

@@ -51,8 +51,6 @@ abstract partial class TerminalDriver
 
     readonly object _rawLock = new();
 
-    readonly object _sequenceLock = new();
-
     readonly ManualResetEventSlim _event = new();
 
     [SuppressMessage("Style", "IDE0052")]

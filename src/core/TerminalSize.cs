@@ -6,8 +6,12 @@ public readonly struct TerminalSize : IEquatable<TerminalSize>
 
     public int Height { get; }
 
-    internal TerminalSize(int width, int height)
+    public TerminalSize(int width, int height)
     {
+        // TODO: Can these ever actually be zero?
+        _ = width >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(width));
+        _ = height >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(height));
+
         Width = width;
         Height = height;
     }

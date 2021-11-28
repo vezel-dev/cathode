@@ -1,3 +1,5 @@
+using static System.Text.Control.ControlConstants;
+
 namespace Sample.Scenarios;
 
 [SuppressMessage("Performance", "CA1812")]
@@ -24,7 +26,7 @@ sealed class SignalScenario : Scenario
                 context.Cancel = true;
 
                 Terminal.OutLine("Caught {0} signal.", context.Signal);
-                Terminal.Beep();
+                Terminal.Out(BEL);
             }
 
             switch (Terminal.ReadLine())

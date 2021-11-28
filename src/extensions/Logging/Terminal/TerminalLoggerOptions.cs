@@ -4,24 +4,22 @@ public sealed class TerminalLoggerOptions
 {
     readonly ref struct Decorator
     {
+        readonly ControlBuilder _builder;
+
         readonly bool _set;
 
-        public Decorator((byte R, byte G, byte B)? colors)
+        public Decorator(ControlBuilder builder, byte r, byte g, byte b)
         {
-            if (colors is (byte r, byte g, byte b))
-            {
-                _set = true;
+            _builder = builder;
+            _set = true;
 
-                System.Terminal.ForegroundColor(r, g, b);
-            }
-            else
-                _set = false;
+            _ = builder.SetForegroundColor(r, g, b);
         }
 
         public void Dispose()
         {
             if (_set)
-                System.Terminal.ResetAttributes();
+                _ = _builder.ResetAttributes();
         }
     }
 
@@ -30,8 +28,7 @@ public sealed class TerminalLoggerOptions
         get => _logToStandardErrorThreshold;
         set
         {
-            if (!Enum.IsDefined(typeof(LogLevel), value))
-                throw new ArgumentOutOfRangeException(nameof(value));
+            _ = Enum.IsDefined(value) ? true : throw new ArgumentOutOfRangeException(nameof(value));
 
             _logToStandardErrorThreshold = value;
         }
@@ -55,6 +52,8 @@ public sealed class TerminalLoggerOptions
 
     public TerminalLoggerWriter Writer { get; set; } = DefaultWriter;
 
+    static readonly ThreadLocal<ControlBuilder> _builder = new(() => new());
+
     LogLevel _logToStandardErrorThreshold;
 
     int _logQueueSize = 4096;
@@ -71,59 +70,54 @@ public sealed class TerminalLoggerOptions
         if (entry.CategoryName == null)
             throw new ArgumentException(null, nameof(entry));
 
-        Decorator Decorate((byte R, byte G, byte B)? colors)
+        var (lvl, r, g, b) = entry.LogLevel switch
         {
-            return !options.DisableColors && colors is not null and var c ? new(c) : default;
-        }
-
-        writer.Write("[");
-
-        using (_ = Decorate((127, 127, 127)))
-            writer.Write(entry.Timestamp.ToString("HH:mm:ss.fff", CultureInfo.CurrentCulture));
-
-        writer.Write("][");
-
-        (byte R, byte G, byte B)? colors = entry.LogLevel switch
-        {
-            LogLevel.Trace => (127, 0, 127),
-            LogLevel.Debug => (0, 127, 255),
-            LogLevel.Information => (255, 255, 255),
-            LogLevel.Warning => (255, 255, 0),
-            LogLevel.Error => (255, 63, 0),
-            LogLevel.Critical => (255, 0, 0),
-            _ => null,
+            LogLevel.Trace => ("TRC", 127, 0, 127),
+            LogLevel.Debug => ("DBG", 0, 127, 255),
+            LogLevel.Information => ("INF", 255, 255, 255),
+            LogLevel.Warning => ("WRN", 255, 255, 0),
+            LogLevel.Error => ("ERR", 255, 63, 0),
+            LogLevel.Critical => ("CRT", 255, 0, 0),
+            _ => throw new ArgumentException(null, nameof(entry)),
         };
 
-        using (_ = Decorate(colors))
+        var cb = _builder.Value!;
+
+        cb.Clear();
+
+        Decorator Decorate(byte r, byte g, byte b)
         {
-            writer.Write(entry.LogLevel switch
-            {
-                LogLevel.Trace => "TRC",
-                LogLevel.Debug => "DBG",
-                LogLevel.Information => "INF",
-                LogLevel.Warning => "WRN",
-                LogLevel.Error => "ERR",
-                LogLevel.Critical => "CRT",
-                _ => "UNK",
-            });
+            return !options.DisableColors ? new(cb, r, g, b) : default;
         }
 
-        writer.Write("][");
+        _ = cb.Print("[");
 
-        using (_ = Decorate((233, 233, 233)))
-            writer.Write(entry.CategoryName);
+        using (_ = Decorate(127, 127, 127))
+            _ = cb.Print("{0:HH:mm:ss.fff}", entry.Timestamp);
 
-        writer.Write("][");
+        _ = cb.Print("][");
 
-        using (_ = Decorate((0, 155, 155)))
-            writer.Write(entry.EventId);
+        using (_ = Decorate((byte)r, (byte)g, (byte)b))
+            _ = cb.Print(lvl);
 
-        writer.Write("] ");
+        _ = cb.Print("][");
+
+        using (_ = Decorate(233, 233, 233))
+            _ = cb.Print(entry.CategoryName);
+
+        _ = cb.Print("][");
+
+        using (_ = Decorate(0, 155, 155))
+            _ = cb.Print(entry.EventId);
+
+        _ = cb.Print("] ");
 
         if (entry.Message is string m)
-            writer.WriteLine("{0}", m);
+            _ = cb.PrintLine(m);
 
         if (entry.Exception is Exception e)
-            writer.WriteLine(e);
+            _ = cb.PrintLine(e);
+
+        writer.Write(cb.Span);
     }
 }
