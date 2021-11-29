@@ -34,6 +34,29 @@ To install a package, run `dotnet add package <name>`.
 
 See the [sample program](src/sample) for examples of what the API can do.
 
+## Terminals
+
+This project aims to have excellent support for the following terminal
+emulators:
+
+* [Alacritty](https://github.com/alacritty/alacritty)
+* [ConEmu](https://conemu.github.io)
+* [GNOME Terminal](https://help.gnome.org/users/gnome-terminal/stable)
+* [iTerm2](https://iterm2.com)
+* [kitty](https://sw.kovidgoyal.net/kitty)
+* [Konsole](https://konsole.kde.org)
+* [mintty](https://mintty.github.io)
+* [PuTTY](https://www.putty.org)
+* [rxvt-unicode](http://software.schmorp.de/pkg/rxvt-unicode.html)
+* [Terminal.app](https://support.apple.com/guide/terminal/welcome/mac)
+* [Windows Console](https://docs.microsoft.com/en-us/windows/console)
+* [Windows Terminal](https://aka.ms/terminal)
+* [xterm](https://invisible-island.net/xterm)
+
+(Even if you are using a terminal emulator that is not listed here, chances are
+that it will work just fine; these are just the ones that are tested regularly
+while developing `System.Terminal`.)
+
 ## Resources
 
 These are helpful resources used in the development of `System.Terminal`:
