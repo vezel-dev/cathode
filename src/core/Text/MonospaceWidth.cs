@@ -2,7 +2,7 @@ using Wcwidth;
 
 namespace System.Text;
 
-public static class TerminalWidth
+public static class MonospaceWidth
 {
     const Wcwidth.Unicode Version = Wcwidth.Unicode.Version_14_0_0;
 

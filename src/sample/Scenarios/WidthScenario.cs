@@ -11,7 +11,7 @@ sealed class WidthScenario : Scenario
 
             var str = Terminal.ReadLine() ?? string.Empty;
 
-            Terminal.OutLine("Width: {0}", TerminalWidth.Measure(str.ReplaceLineEndings(string.Empty)));
+            Terminal.OutLine("Width: {0}", MonospaceWidth.Measure(str.ReplaceLineEndings(string.Empty)));
         }
     }
 }
