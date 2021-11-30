@@ -76,14 +76,54 @@ public sealed class ControlBuilder
         return Print(BEL);
     }
 
+    public ControlBuilder Backspace()
+    {
+        return Print(BS);
+    }
+
+    public ControlBuilder HorizontalTab()
+    {
+        return Print(HT);
+    }
+
     public ControlBuilder LineFeed()
     {
         return Print(LF);
     }
 
+    public ControlBuilder VerticalTab()
+    {
+        return Print(VT);
+    }
+
+    public ControlBuilder FormFeed()
+    {
+        return Print(FF);
+    }
+
     public ControlBuilder CarriageReturn()
     {
         return Print(CR);
+    }
+
+    public ControlBuilder FileSeparator()
+    {
+        return Print(FS);
+    }
+
+    public ControlBuilder GroupSeparator()
+    {
+        return Print(GS);
+    }
+
+    public ControlBuilder RecordSeparator()
+    {
+        return Print(RS);
+    }
+
+    public ControlBuilder UnitSeparator()
+    {
+        return Print(US);
     }
 
     public ControlBuilder Space()

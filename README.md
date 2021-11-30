@@ -65,6 +65,7 @@ These are helpful resources used in the development of `System.Terminal`:
 * <https://conemu.github.io/en/AnsiEscapeCodes.html>
 * <https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences>
 * <https://en.wikipedia.org/wiki/ANSI_escape_code>
+* <https://en.wikipedia.org/wiki/C0_and_C1_control_codes>
 * <https://github.com/chromium/hterm/blob/master/doc/ControlSequences.md>
 * <https://github.com/mintty/mintty/wiki/CtrlSeqs>
 * <https://invisible-island.net/xterm/ctlseqs/ctlseqs.html>
