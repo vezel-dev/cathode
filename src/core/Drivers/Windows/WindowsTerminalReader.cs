@@ -79,9 +79,7 @@ sealed class WindowsTerminalReader : DefaultTerminalReader
 
                         // There is a bug where ReadConsoleW will not process Ctrl-Z properly even though ReadFile
                         // will. The good news is that we can fairly easily emulate what the console host should be
-                        // doing by just pretending there is no more data to be read.
-                        //
-                        // TODO: Review this for race conditions with changing raw mode.
+                        // doing by just pretending that there is no more data to be read.
                         if (!_driver.IsRawMode && units[0] == '\x1a')
                         {
                             count = 0;
