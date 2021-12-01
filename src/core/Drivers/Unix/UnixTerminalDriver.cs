@@ -32,8 +32,13 @@ abstract class UnixTerminalDriver : TerminalDriver
             // If we are being restored from the background (SIGCONT), it is possible and likely that terminal settings
             // have been mangled, so restore them.
             if (context.Signal == PosixSignal.SIGCONT)
+            {
                 lock (_rawLock)
                     RefreshSettings();
+
+                // Prevent System.Native from overwriting the terminal settings we just put into effect.
+                context.Cancel = true;
+            }
 
             // Terminal width/height might have changed for SIGCONT, and will definitely have changed for SIGWINCH. On
             // Unix systems, SIGWINCH lets us respond much more quickly to a change in terminal size.
