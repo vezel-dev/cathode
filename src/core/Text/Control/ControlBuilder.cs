@@ -180,6 +180,11 @@ public sealed class ControlBuilder
             .Print(CSI).Print("?1006").Print(events.HasFlag(MouseEvents.Buttons) ? "h" : "l");
     }
 
+    public ControlBuilder SetMousePointerStyle(ReadOnlySpan<char> style)
+    {
+        return Print(OSC).Print("22;").Print(style).Print(ST);
+    }
+
     public ControlBuilder SetFocusEvents(bool enable)
     {
         return Print(CSI).Print("?1004").Print(enable ? "h" : "l");

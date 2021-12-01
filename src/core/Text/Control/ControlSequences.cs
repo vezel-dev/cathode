@@ -52,6 +52,11 @@ public static class ControlSequences
         return Create(cb => cb.SetMouseEvents(events));
     }
 
+    public static string SetMousePointerStyle(ReadOnlySpan<char> style)
+    {
+        return Create((style, cb) => cb.SetMousePointerStyle(style), style);
+    }
+
     public static string SetFocusEvents(bool enable)
     {
         return Create(cb => cb.SetFocusEvents(enable));
