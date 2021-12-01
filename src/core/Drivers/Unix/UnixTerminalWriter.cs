@@ -69,7 +69,7 @@ sealed class UnixTerminalWriter : DefaultTerminalWriter
                     if (_driver.PollHandle(err, Handle, POLLOUT))
                         continue;
 
-                    throw new TerminalException($"Could not write to standard {_name}: {err}");
+                    throw new TerminalException($"Could not write to standard {_name}: {new Win32Exception(err).Message}");
                 }
             }
         }

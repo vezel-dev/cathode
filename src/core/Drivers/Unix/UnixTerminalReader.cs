@@ -64,7 +64,7 @@ sealed class UnixTerminalReader : DefaultTerminalReader
                     if (_driver.PollHandle(err, Handle, POLLIN))
                         continue;
 
-                    throw new TerminalException($"Could not read from standard input: {err}");
+                    throw new TerminalException($"Could not read from standard input: {new Win32Exception(err).Message}");
                 }
             }
         }

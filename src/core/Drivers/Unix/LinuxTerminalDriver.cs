@@ -89,7 +89,7 @@ sealed class LinuxTerminalDriver : UnixTerminalDriver
         }
 
         return UpdateSettings(TCSAFLUSH, settings) ?
-            true : throw new TerminalException($"Could not change raw mode setting: {Marshal.GetLastPInvokeError()}");
+            true : throw new TerminalException($"Could not change raw mode setting: {new Win32Exception().Message}");
     }
 
     public override unsafe bool PollHandle(int error, int handle, short events)
