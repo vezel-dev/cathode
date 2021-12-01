@@ -131,6 +131,11 @@ public sealed class ControlBuilder
         return Print(SP);
     }
 
+    public ControlBuilder SetOutputBatching(bool enable)
+    {
+        return Print(CSI).Print("?2026").Print(enable ? "h" : "l");
+    }
+
     public ControlBuilder SetTitle(string title)
     {
         ArgumentNullException.ThrowIfNull(title);
@@ -203,6 +208,11 @@ public sealed class ControlBuilder
         _ = ((int)style).TryFormat(styleSpan, out var styleLen);
 
         return Print(CSI).Print(styleSpan[..styleLen]).Space().Print("q");
+    }
+
+    public ControlBuilder SetScrollBarVisibility(bool visible)
+    {
+        return Print(CSI).Print("?30").Print(visible ? "h" : "l");
     }
 
     public ControlBuilder SetScrollMargin(int top, int bottom)
@@ -460,5 +470,16 @@ public sealed class ControlBuilder
     public ControlBuilder SoftReset()
     {
         return Print(CSI).Print("!p");
+    }
+
+    public ControlBuilder SaveScreenshot(ScreenshotFormat format)
+    {
+        _ = Enum.IsDefined(format) ? true : throw new ArgumentOutOfRangeException(nameof(format));
+
+        Span<char> formatSpan = stackalloc char[32];
+
+        _ = ((int)format).TryFormat(formatSpan, out var formatLen);
+
+        return Print(CSI).Print(formatSpan[..formatLen]).Print("i");
     }
 }

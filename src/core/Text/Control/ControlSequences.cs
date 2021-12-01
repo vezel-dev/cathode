@@ -22,6 +22,11 @@ public static class ControlSequences
 
     // Keep methods in sync with the ControlStringBuilder class.
 
+    public static string SetOutputBatching(bool enable)
+    {
+        return Create(cb => cb.SetOutputBatching(enable));
+    }
+
     public static string SetTitle(string title)
     {
         return Create(cb => cb.SetTitle(title));
@@ -65,6 +70,11 @@ public static class ControlSequences
     public static string SetCursorStyle(CursorStyle style)
     {
         return Create(cb => cb.SetCursorStyle(style));
+    }
+
+    public static string SetScrollBarVisibility(bool visible)
+    {
+        return Create(cb => cb.SetScrollBarVisibility(visible));
     }
 
     public static string SetScrollMargin(int top, int bottom)
@@ -206,5 +216,10 @@ public static class ControlSequences
     public static string SoftReset()
     {
         return Create(cb => cb.SoftReset());
+    }
+
+    public static string SaveScreenshot(ScreenshotFormat format)
+    {
+        return Create(cb => cb.SaveScreenshot(format));
     }
 }
