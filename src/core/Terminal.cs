@@ -28,6 +28,12 @@ public static class Terminal
 
     public static TerminalSize Size => System.Size;
 
+    public static TimeSpan SizePollingInterval
+    {
+        get => System.SizePollingInterval;
+        set => System.SizePollingInterval = value;
+    }
+
     public static void GenerateSignal(TerminalSignal signal)
     {
         System.GenerateSignal(signal);

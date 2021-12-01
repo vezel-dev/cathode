@@ -30,6 +30,12 @@ public sealed class SystemVirtualTerminal : VirtualTerminal
 
     public override TerminalSize Size => _driver.Size;
 
+    public TimeSpan SizePollingInterval
+    {
+        get => _driver.SizePollingInterval;
+        set => _driver.SizePollingInterval = value;
+    }
+
     readonly TerminalDriver _driver =
         OperatingSystem.IsLinux() ? LinuxTerminalDriver.Instance :
         OperatingSystem.IsMacOS() ? MacOSTerminalDriver.Instance :

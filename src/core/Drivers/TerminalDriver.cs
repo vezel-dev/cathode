@@ -47,6 +47,17 @@ abstract partial class TerminalDriver
         }
     }
 
+    public TimeSpan SizePollingInterval
+    {
+        get => _sizeInterval;
+        set
+        {
+            _ = value >= TimeSpan.Zero ? true : throw new ArgumentOutOfRangeException(nameof(value));
+
+            _sizeInterval = value;
+        }
+    }
+
     readonly object _sizeLock = new();
 
     readonly object _rawLock = new();
@@ -66,6 +77,8 @@ abstract partial class TerminalDriver
     readonly PosixSignalRegistration _sigTerm;
 
     TerminalSize? _size;
+
+    TimeSpan _sizeInterval = TimeSpan.FromMilliseconds(100);
 
     Action<TerminalSize>? _resize;
 
@@ -97,14 +110,13 @@ abstract partial class TerminalDriver
 
                 RefreshSize();
 
-                // TODO: Do we need to make this configurable?
-                Thread.Sleep(100);
+                Thread.Sleep(_sizeInterval);
             }
         });
 
         void HandleSignal(PosixSignalContext context)
         {
-            var args = new TerminalSignalContext(
+            var ctx = new TerminalSignalContext(
                 context.Signal switch
                 {
                     PosixSignal.SIGHUP => TerminalSignal.Close,
@@ -114,9 +126,9 @@ abstract partial class TerminalDriver
                     _ => throw new TerminalException($"Received unexpected signal: {context.Signal}"),
                 });
 
-            Signal?.Invoke(args);
+            Signal?.Invoke(ctx);
 
-            context.Cancel = args.Cancel;
+            context.Cancel = ctx.Cancel;
         }
 
         // Keep the registrations alive by storing them in fields.
