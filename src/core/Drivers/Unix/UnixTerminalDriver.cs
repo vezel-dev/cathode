@@ -5,11 +5,11 @@ namespace System.Drivers.Unix;
 
 abstract class UnixTerminalDriver : TerminalDriver
 {
-    public override UnixTerminalReader StdIn { get; }
+    public override sealed UnixTerminalReader StdIn { get; }
 
-    public override UnixTerminalWriter StdOut { get; }
+    public override sealed UnixTerminalWriter StdOut { get; }
 
-    public override UnixTerminalWriter StdError { get; }
+    public override sealed UnixTerminalWriter StdError { get; }
 
     [SuppressMessage("Style", "IDE0052")]
     readonly PosixSignalRegistration _sigWinch;
@@ -47,7 +47,7 @@ abstract class UnixTerminalDriver : TerminalDriver
         // TODO: SIGCHLD?
     }
 
-    public override void GenerateSignal(TerminalSignal signal)
+    public override sealed void GenerateSignal(TerminalSignal signal)
     {
         _ = kill(
             0,
@@ -63,7 +63,7 @@ abstract class UnixTerminalDriver : TerminalDriver
 
     protected abstract void RefreshSettings();
 
-    protected override void SetRawMode(bool raw)
+    protected override sealed void SetRawMode(bool raw)
     {
         lock (_rawLock)
             if (!SetRawModeCore(raw))

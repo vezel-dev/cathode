@@ -2,7 +2,7 @@ namespace System.IO;
 
 abstract class DefaultTerminalReader : TerminalReader
 {
-    public override TerminalInputStream Stream { get; }
+    public override sealed TerminalInputStream Stream { get; }
 
     protected DefaultTerminalReader()
     {

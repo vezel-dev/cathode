@@ -1,6 +1,6 @@
 namespace System.Input;
 
-public class MemoryTerminalHistory : TerminalHistory
+public sealed class MemoryTerminalHistory : TerminalHistory
 {
     public override int Count => _history.Count;
 
