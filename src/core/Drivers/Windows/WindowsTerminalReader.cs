@@ -1,5 +1,4 @@
 using Windows.Win32.Foundation;
-using Windows.Win32.System.Console;
 using static Windows.Win32.WindowsPInvoke;
 
 namespace System.Drivers.Windows;
@@ -133,15 +132,5 @@ sealed class WindowsTerminalReader : DriverTerminalReader<WindowsTerminalDriver,
             if (!result)
                 WindowsTerminalUtility.ThrowIfUnexpected($"Could not read from {Name}");
         }
-    }
-
-    public bool AddMode(CONSOLE_MODE mode)
-    {
-        return GetConsoleMode(Handle, out var m) && SetConsoleMode(Handle, m | mode);
-    }
-
-    public bool RemoveMode(CONSOLE_MODE mode)
-    {
-        return GetConsoleMode(Handle, out var m) && SetConsoleMode(Handle, m & ~mode);
     }
 }

@@ -55,17 +55,29 @@ sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
         _ = SetConsoleOutputCP((uint)Encoding.UTF8.CodePage);
 
         // Start in cooked mode.
-        _ = TerminalIn.AddMode(
+        _ = AddConsoleMode(
+            TerminalIn.Handle,
             CONSOLE_MODE.ENABLE_PROCESSED_INPUT |
             CONSOLE_MODE.ENABLE_LINE_INPUT |
             CONSOLE_MODE.ENABLE_ECHO_INPUT |
             CONSOLE_MODE.ENABLE_INSERT_MODE |
             CONSOLE_MODE.ENABLE_EXTENDED_FLAGS |
             CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_INPUT);
-        _ = TerminalOut.AddMode(
+        _ = AddConsoleMode(
+            TerminalOut.Handle,
             CONSOLE_MODE.ENABLE_PROCESSED_OUTPUT |
             CONSOLE_MODE.ENABLE_WRAP_AT_EOL_OUTPUT |
             CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+    }
+
+    static bool AddConsoleMode(SafeHandle handle, CONSOLE_MODE mode)
+    {
+        return GetConsoleMode(handle, out var m) && SetConsoleMode(handle, m | mode);
+    }
+
+    static bool RemoveConsoleMode(SafeHandle handle, CONSOLE_MODE mode)
+    {
+        return GetConsoleMode(handle, out var m) && SetConsoleMode(handle, m & ~mode);
     }
 
     protected override TerminalSize? GetSize()
@@ -100,8 +112,8 @@ sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
         var outMode =
             CONSOLE_MODE.DISABLE_NEWLINE_AUTO_RETURN;
 
-        if (!(raw ? TerminalIn.RemoveMode(inMode) && TerminalOut.RemoveMode(outMode) :
-            TerminalIn.AddMode(inMode) && TerminalOut.AddMode(outMode)))
+        if (!(raw ? RemoveConsoleMode(TerminalIn.Handle, inMode) && RemoveConsoleMode(TerminalOut.Handle, outMode) :
+            AddConsoleMode(TerminalIn.Handle, inMode) && AddConsoleMode(TerminalOut.Handle, outMode)))
             throw new TerminalException(
                 $"Could not change raw mode setting: {(WIN32_ERROR)Marshal.GetLastSystemError()}");
 

@@ -38,14 +38,4 @@ sealed class WindowsTerminalWriter : DriverTerminalWriter<WindowsTerminalDriver,
         if (!result)
             WindowsTerminalUtility.ThrowIfUnexpected($"Could not write to {Name}");
     }
-
-    public bool AddMode(CONSOLE_MODE mode)
-    {
-        return GetConsoleMode(Handle, out var m) && SetConsoleMode(Handle, m | mode);
-    }
-
-    public bool RemoveMode(CONSOLE_MODE mode)
-    {
-        return GetConsoleMode(Handle, out var m) && SetConsoleMode(Handle, m & ~mode);
-    }
 }
