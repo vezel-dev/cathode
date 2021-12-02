@@ -1,3 +1,4 @@
+CreateFileW
 FlushConsoleInputBuffer
 GenerateConsoleCtrlEvent
 GetConsoleMode

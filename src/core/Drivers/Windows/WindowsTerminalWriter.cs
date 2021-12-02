@@ -11,16 +11,15 @@ sealed class WindowsTerminalWriter : DefaultTerminalWriter
 
     public override bool IsRedirected { get; }
 
-    readonly object _lock = new();
+    readonly object _lock;
 
-    readonly string _name;
-
-    public WindowsTerminalWriter(SafeHandle handle, string name)
+    public WindowsTerminalWriter(string name, SafeHandle handle, object @lock)
+        : base(name)
     {
         Handle = handle;
+        _lock = @lock;
         IsValid = WindowsTerminalUtility.IsHandleValid(handle, true);
         IsRedirected = WindowsTerminalUtility.IsHandleRedirected(handle);
-        _name = name;
     }
 
     protected override unsafe void WriteCore(ReadOnlySpan<byte> data, out int count)
@@ -44,26 +43,16 @@ sealed class WindowsTerminalWriter : DefaultTerminalWriter
         count = (int)written;
 
         if (!result)
-            WindowsTerminalUtility.ThrowIfUnexpected($"Could not write to standard {_name}");
-    }
-
-    public CONSOLE_MODE? GetMode()
-    {
-        return GetConsoleMode(Handle, out var m) ? m : null;
-    }
-
-    public bool SetMode(CONSOLE_MODE mode)
-    {
-        return SetConsoleMode(Handle, mode);
+            WindowsTerminalUtility.ThrowIfUnexpected($"Could not write to {Name}");
     }
 
     public bool AddMode(CONSOLE_MODE mode)
     {
-        return GetMode() is CONSOLE_MODE m && SetConsoleMode(Handle, m | mode);
+        return GetConsoleMode(Handle, out var m) && SetConsoleMode(Handle, m | mode);
     }
 
     public bool RemoveMode(CONSOLE_MODE mode)
     {
-        return GetMode() is CONSOLE_MODE m && SetConsoleMode(Handle, m & ~mode);
+        return GetConsoleMode(Handle, out var m) && SetConsoleMode(Handle, m & ~mode);
     }
 }

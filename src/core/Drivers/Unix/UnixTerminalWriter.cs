@@ -9,17 +9,16 @@ sealed class UnixTerminalWriter : DefaultTerminalWriter
 
     public override bool IsRedirected => UnixTerminalUtility.IsRedirected(Handle);
 
-    readonly object _lock = new();
+    readonly object _lock;
 
     readonly UnixTerminalDriver _driver;
 
-    readonly string _name;
-
-    public UnixTerminalWriter(UnixTerminalDriver driver, int handle, string name)
+    public UnixTerminalWriter(string name, int handle, object @lock, UnixTerminalDriver driver)
+        : base(name)
     {
         Handle = handle;
+        _lock = @lock;
         _driver = driver;
-        _name = name;
     }
 
     protected override unsafe void WriteCore(ReadOnlySpan<byte> data, out int count)
@@ -69,7 +68,7 @@ sealed class UnixTerminalWriter : DefaultTerminalWriter
                     if (_driver.PollHandle(err, Handle, POLLOUT))
                         continue;
 
-                    throw new TerminalException($"Could not write to standard {_name}: {new Win32Exception(err).Message}");
+                    throw new TerminalException($"Could not write to {Name}: {new Win32Exception(err).Message}");
                 }
             }
         }

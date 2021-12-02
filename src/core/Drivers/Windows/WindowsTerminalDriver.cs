@@ -1,4 +1,6 @@
 using Windows.Win32.Foundation;
+using Windows.Win32.Security;
+using Windows.Win32.Storage.FileSystem;
 using Windows.Win32.System.Console;
 using static Windows.Win32.Constants;
 using static Windows.Win32.WindowsPInvoke;
@@ -9,51 +11,65 @@ sealed class WindowsTerminalDriver : TerminalDriver
 {
     public static WindowsTerminalDriver Instance { get; } = new();
 
-    public override WindowsTerminalReader StdIn { get; }
+    public override WindowsTerminalReader StandardIn { get; }
 
-    public override WindowsTerminalWriter StdOut { get; }
+    public override WindowsTerminalWriter StandardOut { get; }
 
-    public override WindowsTerminalWriter StdError { get; }
+    public override WindowsTerminalWriter StandardError { get; }
+
+    public override WindowsTerminalReader TerminalIn { get; }
+
+    public override WindowsTerminalWriter TerminalOut { get; }
 
     WindowsTerminalDriver()
     {
-        StdIn = new(this, GetStdHandle_SafeHandle(STD_HANDLE.STD_INPUT_HANDLE));
-        StdOut = new(GetStdHandle_SafeHandle(STD_HANDLE.STD_OUTPUT_HANDLE), "output");
-        StdError = new(GetStdHandle_SafeHandle(STD_HANDLE.STD_ERROR_HANDLE), "error");
+        var inLock = new object();
+        var outLock = new object();
+
+        StandardIn = new("standard input", GetStdHandle_SafeHandle(STD_HANDLE.STD_INPUT_HANDLE), inLock, this);
+        StandardOut = new("standard output", GetStdHandle_SafeHandle(STD_HANDLE.STD_OUTPUT_HANDLE), outLock);
+        StandardError = new("standard error", GetStdHandle_SafeHandle(STD_HANDLE.STD_ERROR_HANDLE), new());
+
+        static SafeHandle OpenConsoleHandle(string name)
+        {
+            return CreateFileW(
+                name,
+                FILE_ACCESS_FLAGS.FILE_GENERIC_READ | FILE_ACCESS_FLAGS.FILE_GENERIC_WRITE,
+                FILE_SHARE_MODE.FILE_SHARE_READ | FILE_SHARE_MODE.FILE_SHARE_WRITE,
+                new SECURITY_ATTRIBUTES
+                {
+                    bInheritHandle = true,
+                },
+                FILE_CREATION_DISPOSITION.OPEN_EXISTING,
+                0,
+                null);
+        }
+
+        TerminalIn = new("terminal input", OpenConsoleHandle("CONIN$"), inLock, this);
+        TerminalOut = new("terminal output", OpenConsoleHandle("CONOUT$"), outLock);
 
         // Input needs to be UTF-16, but we make it appear as if it is UTF-8 to users of the library. See the comments
         // in WindowsTerminalReader for the gory details.
         _ = SetConsoleCP((uint)Encoding.Unicode.CodePage);
         _ = SetConsoleOutputCP((uint)Encoding.UTF8.CodePage);
 
-        var inMode =
+        _ = TerminalIn.AddMode(
             CONSOLE_MODE.ENABLE_PROCESSED_INPUT |
             CONSOLE_MODE.ENABLE_LINE_INPUT |
             CONSOLE_MODE.ENABLE_ECHO_INPUT |
             CONSOLE_MODE.ENABLE_INSERT_MODE |
             CONSOLE_MODE.ENABLE_EXTENDED_FLAGS |
-            CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_INPUT;
-        var outMode =
+            CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_INPUT);
+        _ = TerminalOut.AddMode(
             CONSOLE_MODE.ENABLE_PROCESSED_OUTPUT |
             CONSOLE_MODE.ENABLE_WRAP_AT_EOL_OUTPUT |
-            CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-
-        // Set modes on all handles in case one of them has been redirected. These calls can fail if there is no console
-        // attached, but that is OK.
-        _ = StdIn.AddMode(inMode);
-        _ = StdOut.AddMode(outMode) || StdError.AddMode(outMode);
+            CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING);
     }
 
     protected override TerminalSize? GetSize()
     {
-        static CONSOLE_SCREEN_BUFFER_INFO? GetInfo(SafeHandle handle)
-        {
-            return GetConsoleScreenBufferInfo(handle, out var info) ? info : null;
-        }
-
-        // Try both handles in case only one of them has been redirected.
-        return (GetInfo(StdOut.Handle) ?? GetInfo(StdError.Handle)) is CONSOLE_SCREEN_BUFFER_INFO i ?
-            new(i.srWindow.Right - i.srWindow.Left + 1, i.srWindow.Bottom - i.srWindow.Top + 1) : null;
+        return GetConsoleScreenBufferInfo(TerminalOut.Handle, out var info) ?
+            new(info.srWindow.Right - info.srWindow.Left + 1, info.srWindow.Bottom - info.srWindow.Top + 1) : null;
     }
 
     public override void GenerateSignal(TerminalSignal signal)
@@ -72,7 +88,7 @@ sealed class WindowsTerminalDriver : TerminalDriver
 
     protected override void SetRawMode(bool raw)
     {
-        if (!StdIn.IsValid || (!StdOut.IsValid && !StdError.IsValid))
+        if (!TerminalIn.IsValid || TerminalIn.IsRedirected || !TerminalOut.IsValid || TerminalOut.IsRedirected)
             throw new TerminalException("There is no terminal attached.");
 
         var inMode =
@@ -82,12 +98,12 @@ sealed class WindowsTerminalDriver : TerminalDriver
         var outMode =
             CONSOLE_MODE.DISABLE_NEWLINE_AUTO_RETURN;
 
-        if (!(raw ? StdIn.RemoveMode(inMode) && (StdOut.RemoveMode(outMode) || StdError.RemoveMode(outMode)) :
-            StdIn.AddMode(inMode) && (StdOut.AddMode(outMode) || StdError.AddMode(outMode))))
+        if (!(raw ? TerminalIn.RemoveMode(inMode) && TerminalOut.RemoveMode(outMode) :
+            TerminalIn.AddMode(inMode) && TerminalOut.AddMode(outMode)))
             throw new TerminalException(
                 $"Could not change raw mode setting: {(WIN32_ERROR)Marshal.GetLastSystemError()}");
 
-        if (!FlushConsoleInputBuffer(StdIn.Handle))
+        if (!FlushConsoleInputBuffer(StandardIn.Handle))
             throw new TerminalException(
                 $"Could not flush input buffer: {(WIN32_ERROR)Marshal.GetLastSystemError()}");
     }

@@ -1,5 +1,6 @@
 namespace System.Unix.Linux;
 
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310")]
 static class LinuxConstants
 {
     // c_iflag
@@ -49,6 +50,14 @@ static class LinuxConstants
     public const int VTIME = 5;
 
     public const int VMIN = 6;
+
+    // flags
+
+    public const int O_RDWR = 0x2;
+
+    public const int O_NOCTTY = 0x100;
+
+    public const int O_CLOEXEC = 0x80000;
 
     // request
 

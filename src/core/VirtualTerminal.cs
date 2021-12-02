@@ -6,11 +6,15 @@ public abstract class VirtualTerminal
 
     public abstract event Action<TerminalSignalContext>? Signal;
 
-    public abstract TerminalReader StdIn { get; }
+    public abstract TerminalReader StandardIn { get; }
 
-    public abstract TerminalWriter StdOut { get; }
+    public abstract TerminalWriter StandardOut { get; }
 
-    public abstract TerminalWriter StdError { get; }
+    public abstract TerminalWriter StandardError { get; }
+
+    public abstract TerminalReader TerminalIn { get; }
+
+    public abstract TerminalWriter TerminalOut { get; }
 
     public abstract bool IsRawMode { get; }
 
@@ -24,101 +28,101 @@ public abstract class VirtualTerminal
 
     public byte? ReadRaw()
     {
-        return StdIn.ReadRaw();
+        return StandardIn.ReadRaw();
     }
 
     public string? ReadLine()
     {
-        return StdIn.ReadLine();
+        return StandardIn.ReadLine();
     }
 
     public void Out(ReadOnlySpan<byte> value)
     {
-        StdOut.Write(value);
+        StandardOut.Write(value);
     }
 
     public void Out(ReadOnlySpan<char> value)
     {
-        StdOut.Write(value);
+        StandardOut.Write(value);
     }
 
     public void Out(string? value)
     {
-        StdOut.Write(value);
+        StandardOut.Write(value);
     }
 
     public void Out<T>(T value)
     {
-        StdOut.Write(value);
+        StandardOut.Write(value);
     }
 
     public void Out(string format, params object?[] args)
     {
-        StdOut.Write(format, args);
+        StandardOut.Write(format, args);
     }
 
     public void OutLine()
     {
-        StdOut.WriteLine();
+        StandardOut.WriteLine();
     }
 
     public void OutLine(string? value)
     {
-        StdOut.WriteLine(value);
+        StandardOut.WriteLine(value);
     }
 
     public void OutLine<T>(T value)
     {
-        StdOut.WriteLine(value);
+        StandardOut.WriteLine(value);
     }
 
     public void OutLine(string format, params object?[] args)
     {
-        StdOut.WriteLine(format, args);
+        StandardOut.WriteLine(format, args);
     }
 
     public void Error(ReadOnlySpan<byte> value)
     {
-        StdError.Write(value);
+        StandardError.Write(value);
     }
 
     public void Error(ReadOnlySpan<char> value)
     {
-        StdError.Write(value);
+        StandardError.Write(value);
     }
 
     public void Error(string? value)
     {
-        StdError.Write(value);
+        StandardError.Write(value);
     }
 
     public void Error<T>(T value)
     {
-        StdError.Write(value);
+        StandardError.Write(value);
     }
 
     public void Error(string format, params object?[] args)
     {
-        StdError.Write(format, args);
+        StandardError.Write(format, args);
     }
 
     public void ErrorLine()
     {
-        StdError.WriteLine();
+        StandardError.WriteLine();
     }
 
     public void ErrorLine(string? value)
     {
-        StdError.WriteLine(value);
+        StandardError.WriteLine(value);
     }
 
     public void ErrorLine<T>(T value)
     {
-        StdError.WriteLine(value);
+        StandardError.WriteLine(value);
     }
 
     public void ErrorLine(string format, params object?[] args)
     {
-        StdError.WriteLine(format, args);
+        StandardError.WriteLine(format, args);
     }
 }

@@ -12,7 +12,7 @@ sealed class WindowsTerminalReader : DefaultTerminalReader
 
     public override bool IsRedirected { get; }
 
-    readonly object _lock = new();
+    readonly object _lock;
 
     readonly WindowsTerminalDriver _driver;
 
@@ -20,12 +20,14 @@ sealed class WindowsTerminalReader : DefaultTerminalReader
 
     ReadOnlyMemory<byte> _buffered;
 
-    public WindowsTerminalReader(WindowsTerminalDriver driver, SafeHandle handle)
+    public WindowsTerminalReader(string name, SafeHandle handle, object @lock, WindowsTerminalDriver driver)
+        : base(name)
     {
         Handle = handle;
+        _lock = @lock;
+        _driver = driver;
         IsValid = WindowsTerminalUtility.IsHandleValid(handle, false);
         IsRedirected = WindowsTerminalUtility.IsHandleRedirected(handle);
-        _driver = driver;
         _buffer = new byte[Terminal.Encoding.GetMaxByteCount(2)];
     }
 
@@ -59,7 +61,7 @@ sealed class WindowsTerminalReader : DefaultTerminalReader
                     fixed (char* p = units)
                     {
                         bool ret;
-                        uint read = 0;
+                        var read = 0u;
 
                         while ((ret = ReadConsoleW(Handle, p, 1, out read, null)) &&
                             Marshal.GetLastSystemError() == (int)WIN32_ERROR.ERROR_OPERATION_ABORTED)
@@ -68,7 +70,7 @@ sealed class WindowsTerminalReader : DefaultTerminalReader
                         }
 
                         if (!ret)
-                            WindowsTerminalUtility.ThrowIfUnexpected($"Could not read from standard input");
+                            WindowsTerminalUtility.ThrowIfUnexpected($"Could not read from {Name}");
 
                         if (read == 0)
                         {
@@ -105,7 +107,7 @@ sealed class WindowsTerminalReader : DefaultTerminalReader
                             }
 
                             if (!ret)
-                                WindowsTerminalUtility.ThrowIfUnexpected($"Could not read from standard input");
+                                WindowsTerminalUtility.ThrowIfUnexpected($"Could not read from {Name}");
 
                             if (read != 0)
                                 chars++;
@@ -139,27 +141,17 @@ sealed class WindowsTerminalReader : DefaultTerminalReader
             count = (int)read;
 
             if (!result)
-                WindowsTerminalUtility.ThrowIfUnexpected($"Could not read from standard input");
+                WindowsTerminalUtility.ThrowIfUnexpected($"Could not read from {Name}");
         }
-    }
-
-    public CONSOLE_MODE? GetMode()
-    {
-        return GetConsoleMode(Handle, out var m) ? m : null;
-    }
-
-    public bool SetMode(CONSOLE_MODE mode)
-    {
-        return SetConsoleMode(Handle, mode);
     }
 
     public bool AddMode(CONSOLE_MODE mode)
     {
-        return GetMode() is CONSOLE_MODE m && SetConsoleMode(Handle, m | mode);
+        return GetConsoleMode(Handle, out var m) && SetConsoleMode(Handle, m | mode);
     }
 
     public bool RemoveMode(CONSOLE_MODE mode)
     {
-        return GetMode() is CONSOLE_MODE m && SetConsoleMode(Handle, m & ~mode);
+        return GetConsoleMode(Handle, out var m) && SetConsoleMode(Handle, m & ~mode);
     }
 }

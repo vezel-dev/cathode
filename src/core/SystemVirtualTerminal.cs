@@ -20,11 +20,15 @@ public sealed class SystemVirtualTerminal : VirtualTerminal
 
     public static SystemVirtualTerminal Instance { get; } = new();
 
-    public override TerminalReader StdIn => _driver.StdIn;
+    public override TerminalReader StandardIn => _driver.StandardIn;
 
-    public override TerminalWriter StdOut => _driver.StdOut;
+    public override TerminalWriter StandardOut => _driver.StandardOut;
 
-    public override TerminalWriter StdError => _driver.StdError;
+    public override TerminalWriter StandardError => _driver.StandardError;
+
+    public override TerminalReader TerminalIn => _driver.TerminalIn;
+
+    public override TerminalWriter TerminalOut => _driver.TerminalOut;
 
     public override bool IsRawMode => _driver.IsRawMode;
 
@@ -40,7 +44,7 @@ public sealed class SystemVirtualTerminal : VirtualTerminal
         OperatingSystem.IsLinux() ? LinuxTerminalDriver.Instance :
         OperatingSystem.IsMacOS() ? MacOSTerminalDriver.Instance :
         OperatingSystem.IsWindows() ? WindowsTerminalDriver.Instance :
-        throw new TerminalException("This platform is not supported.");
+        throw new PlatformNotSupportedException();
 
     SystemVirtualTerminal()
     {

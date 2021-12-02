@@ -1,5 +1,6 @@
 namespace System.Unix.MacOS;
 
+[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310")]
 static class MacOSConstants
 {
     // c_iflag
@@ -49,6 +50,14 @@ static class MacOSConstants
     public const int VMIN = 16;
 
     public const int VTIME = 17;
+
+    // flags
+
+    public const int O_RDWR = 0x2;
+
+    public const int O_NOCTTY = 0x20000;
+
+    public const int O_CLOEXEC = 0x1000000;
 
     // request
 

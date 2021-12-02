@@ -52,7 +52,8 @@ sealed class TerminalLoggerProcessor : IDisposable
     {
         Options.Writer(
             Options,
-            entry.LogLevel >= Options.LogToStandardErrorThreshold ? System.Terminal.StdError : System.Terminal.StdOut,
+            entry.LogLevel >= Options.LogToStandardErrorThreshold ?
+                System.Terminal.StandardError : System.Terminal.StandardOut,
             entry);
     }
 

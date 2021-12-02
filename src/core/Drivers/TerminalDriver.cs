@@ -28,11 +28,15 @@ abstract partial class TerminalDriver
 
     public event Action<TerminalSignalContext>? Signal;
 
-    public abstract TerminalReader StdIn { get; }
+    public abstract TerminalReader StandardIn { get; }
 
-    public abstract TerminalWriter StdOut { get; }
+    public abstract TerminalWriter StandardOut { get; }
 
-    public abstract TerminalWriter StdError { get; }
+    public abstract TerminalWriter StandardError { get; }
+
+    public abstract TerminalReader TerminalIn { get; }
+
+    public abstract TerminalWriter TerminalOut { get; }
 
     public bool IsRawMode { get; private set; }
 

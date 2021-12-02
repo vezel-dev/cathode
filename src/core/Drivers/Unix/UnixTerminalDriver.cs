@@ -5,11 +5,15 @@ namespace System.Drivers.Unix;
 
 abstract class UnixTerminalDriver : TerminalDriver
 {
-    public override sealed UnixTerminalReader StdIn { get; }
+    public override sealed UnixTerminalReader StandardIn { get; }
 
-    public override sealed UnixTerminalWriter StdOut { get; }
+    public override sealed UnixTerminalWriter StandardOut { get; }
 
-    public override sealed UnixTerminalWriter StdError { get; }
+    public override sealed UnixTerminalWriter StandardError { get; }
+
+    public override sealed UnixTerminalReader TerminalIn { get; }
+
+    public override sealed UnixTerminalWriter TerminalOut { get; }
 
     [SuppressMessage("Style", "IDE0052")]
     readonly PosixSignalRegistration _sigWinch;
@@ -19,11 +23,20 @@ abstract class UnixTerminalDriver : TerminalDriver
 
     readonly object _rawLock = new();
 
+    [SuppressMessage("Usage", "CA2214")]
     protected UnixTerminalDriver()
     {
-        StdIn = new(this, STDIN_FILENO);
-        StdOut = new(this, STDOUT_FILENO, "output");
-        StdError = new(this, STDERR_FILENO, "error");
+        var inLock = new object();
+        var outLock = new object();
+
+        StandardIn = new("standard input", STDIN_FILENO, inLock, this);
+        StandardOut = new("standard output", STDOUT_FILENO, outLock, this);
+        StandardError = new("standard error", STDERR_FILENO, new(), this);
+
+        var tty = OpenTerminalHandle("/dev/tty");
+
+        TerminalIn = new("terminal input", tty, inLock, this);
+        TerminalOut = new("terminal output", tty, outLock, this);
 
         RefreshSize();
 
@@ -76,6 +89,8 @@ abstract class UnixTerminalDriver : TerminalDriver
     }
 
     protected abstract bool SetRawModeCore(bool raw);
+
+    public abstract int OpenTerminalHandle(string name);
 
     public abstract bool PollHandle(int error, int handle, short events);
 }

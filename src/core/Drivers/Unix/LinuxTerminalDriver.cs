@@ -17,12 +17,11 @@ sealed class LinuxTerminalDriver : UnixTerminalDriver
 
     LinuxTerminalDriver()
     {
-        if (tcgetattr(StdIn.Handle, out var settings) == -1 &&
-            tcgetattr(StdOut.Handle, out settings) == -1 &&
-            tcgetattr(StdError.Handle, out settings) == -1)
+        if (tcgetattr(TerminalOut.Handle, out var settings) == -1)
             return;
 
-        // These values are usually the default, but we set them just to be safe.
+        // These values are usually the default, but we set them just to be safe since UnixTerminalReader would not
+        // behave as expected by callers if these values differ.
         settings.c_cc[VTIME] = 0;
         settings.c_cc[VMIN] = 1;
 
@@ -36,35 +35,26 @@ sealed class LinuxTerminalDriver : UnixTerminalDriver
 
     bool UpdateSettings(int mode, in termios settings)
     {
-        bool TryUpdate(int handle, in termios settings)
+        int ret;
+
+        while ((ret = tcsetattr(TerminalOut.Handle, mode, settings)) == -1 && Marshal.GetLastPInvokeError() == EINTR)
         {
-            int ret;
-
-            while ((ret = tcsetattr(handle, mode, settings)) == -1 && Marshal.GetLastPInvokeError() == EINTR)
-            {
-                // Retry in case we get interrupted by a signal.
-            }
-
-            return ret == 0;
+            // Retry in case we get interrupted by a signal.
         }
 
-        if (!(TryUpdate(StdIn.Handle, settings) ||
-            TryUpdate(StdOut.Handle, settings) ||
-            TryUpdate(StdError.Handle, settings)))
-            return false;
+        if (ret == 0)
+        {
+            _current = settings;
 
-        _current = settings;
+            return true;
+        }
 
-        return true;
+        return false;
     }
 
     protected override TerminalSize? GetSize()
     {
-        return
-            ioctl(StdIn.Handle, TIOCGWINSZ, out var w) == 0 ||
-            ioctl(StdOut.Handle, TIOCGWINSZ, out w) == 0 ||
-            ioctl(StdError.Handle, TIOCGWINSZ, out w) == 0 ?
-            new(w.ws_col, w.ws_row) : null;
+        return ioctl(TerminalOut.Handle, TIOCGWINSZ, out var w) == 0 ? new(w.ws_col, w.ws_row) : null;
     }
 
     protected override void RefreshSettings()
@@ -90,6 +80,11 @@ sealed class LinuxTerminalDriver : UnixTerminalDriver
 
         return UpdateSettings(TCSAFLUSH, settings) ?
             true : throw new TerminalException($"Could not change raw mode setting: {new Win32Exception().Message}");
+    }
+
+    public override int OpenTerminalHandle(string name)
+    {
+        return open(name, O_RDWR | O_NOCTTY | O_CLOEXEC);
     }
 
     public override unsafe bool PollHandle(int error, int handle, short events)

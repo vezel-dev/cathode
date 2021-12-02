@@ -18,11 +18,15 @@ public static class Terminal
 
     public static SystemVirtualTerminal System => SystemVirtualTerminal.Instance;
 
-    public static TerminalReader StdIn => System.StdIn;
+    public static TerminalReader StandardIn => System.StandardIn;
 
-    public static TerminalWriter StdOut => System.StdOut;
+    public static TerminalWriter StandardOut => System.StandardOut;
 
-    public static TerminalWriter StdError => System.StdError;
+    public static TerminalWriter StandardError => System.StandardError;
+
+    public static TerminalReader TerminalIn => System.TerminalIn;
+
+    public static TerminalWriter TerminalOut => System.TerminalOut;
 
     public static bool IsRawMode => System.IsRawMode;
 

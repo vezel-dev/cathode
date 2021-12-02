@@ -9,13 +9,15 @@ sealed class UnixTerminalReader : DefaultTerminalReader
 
     public override bool IsRedirected => UnixTerminalUtility.IsRedirected(Handle);
 
-    readonly object _lock = new();
+    readonly object _lock;
 
     readonly UnixTerminalDriver _driver;
 
-    public UnixTerminalReader(UnixTerminalDriver driver, int handle)
+    public UnixTerminalReader(string name, int handle, object @lock, UnixTerminalDriver driver)
+        : base(name)
     {
         Handle = handle;
+        _lock = @lock;
         _driver = driver;
     }
 
@@ -64,7 +66,7 @@ sealed class UnixTerminalReader : DefaultTerminalReader
                     if (_driver.PollHandle(err, Handle, POLLIN))
                         continue;
 
-                    throw new TerminalException($"Could not read from standard input: {new Win32Exception(err).Message}");
+                    throw new TerminalException($"Could not read from {Name}: {new Win32Exception(err).Message}");
                 }
             }
         }
