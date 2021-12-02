@@ -1,4 +1,3 @@
-using Windows.Win32.System.Console;
 using static Windows.Win32.WindowsPInvoke;
 
 namespace System.Drivers.Windows;
