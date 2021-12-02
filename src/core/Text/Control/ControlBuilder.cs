@@ -4,8 +4,6 @@ namespace System.Text.Control;
 
 public sealed class ControlBuilder
 {
-    // TODO: We are missing many escape sequences.
-
     const int StackBufferSize = 32;
 
     public ReadOnlySpan<char> Span => _writer.WrittenSpan;

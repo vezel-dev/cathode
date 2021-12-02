@@ -27,6 +27,76 @@ public static class ControlSequences
 
     // Keep methods in sync with the ControlStringBuilder class.
 
+    public static string Beep()
+    {
+        return Create(cb => cb.Beep());
+    }
+
+    public static string Backspace()
+    {
+        return Create(cb => cb.Backspace());
+    }
+
+    public static string HorizontalTab()
+    {
+        return Create(cb => cb.HorizontalTab());
+    }
+
+    public static string LineFeed()
+    {
+        return Create(cb => cb.LineFeed());
+    }
+
+    public static string VerticalTab()
+    {
+        return Create(cb => cb.VerticalTab());
+    }
+
+    public static string FormFeed()
+    {
+        return Create(cb => cb.FormFeed());
+    }
+
+    public static string CarriageReturn()
+    {
+        return Create(cb => cb.CarriageReturn());
+    }
+
+    public static string Substitute()
+    {
+        return Create(cb => cb.Substitute());
+    }
+
+    public static string Cancel()
+    {
+        return Create(cb => cb.Cancel());
+    }
+
+    public static string FileSeparator()
+    {
+        return Create(cb => cb.FileSeparator());
+    }
+
+    public static string GroupSeparator()
+    {
+        return Create(cb => cb.GroupSeparator());
+    }
+
+    public static string RecordSeparator()
+    {
+        return Create(cb => cb.RecordSeparator());
+    }
+
+    public static string UnitSeparator()
+    {
+        return Create(cb => cb.UnitSeparator());
+    }
+
+    public static string Space()
+    {
+        return Create(cb => cb.Space());
+    }
+
     public static string SetOutputBatching(bool enable)
     {
         return Create(cb => cb.SetOutputBatching(enable));
