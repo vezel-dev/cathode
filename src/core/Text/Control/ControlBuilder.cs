@@ -156,10 +156,8 @@ public sealed class ControlBuilder
         return Print(CSI).Print("?2026").Print(enable ? "h" : "l");
     }
 
-    public ControlBuilder SetTitle(string title)
+    public ControlBuilder SetTitle(ReadOnlySpan<char> title)
     {
-        ArgumentNullException.ThrowIfNull(title);
-
         return Print(OSC).Print("2;").Print(title).Print(ST);
     }
 

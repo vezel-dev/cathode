@@ -32,9 +32,9 @@ public static class ControlSequences
         return Create(cb => cb.SetOutputBatching(enable));
     }
 
-    public static string SetTitle(string title)
+    public static string SetTitle(ReadOnlySpan<char> title)
     {
-        return Create(cb => cb.SetTitle(title));
+        return Create((title, cb) => cb.SetTitle(title), title);
     }
 
     public static string PushTitle()
