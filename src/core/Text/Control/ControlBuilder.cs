@@ -140,7 +140,7 @@ public sealed class ControlBuilder
     {
         ArgumentNullException.ThrowIfNull(title);
 
-        return Print(OSC).Print("0;").Print(title).Print(ST);
+        return Print(OSC).Print("2;").Print(title).Print(ST);
     }
 
     public ControlBuilder SetProgress(ProgressState state, int value)
