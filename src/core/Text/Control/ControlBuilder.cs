@@ -472,11 +472,6 @@ public sealed class ControlBuilder
         return Print(OSC).Print("8;;").Print(ST);
     }
 
-    public ControlBuilder SoftReset()
-    {
-        return Print(CSI).Print("!p");
-    }
-
     public ControlBuilder SaveScreenshot(ScreenshotFormat format)
     {
         _ = Enum.IsDefined(format) ? true : throw new ArgumentOutOfRangeException(nameof(format));
@@ -486,5 +481,15 @@ public sealed class ControlBuilder
         _ = ((int)format).TryFormat(formatSpan, out var formatLen);
 
         return Print(CSI).Print(formatSpan[..formatLen]).Print("i");
+    }
+
+    public ControlBuilder SoftReset()
+    {
+        return Print(CSI).Print("!p");
+    }
+
+    public ControlBuilder FullReset()
+    {
+        return Print(ESC).Print("c");
     }
 }

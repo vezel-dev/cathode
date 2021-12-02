@@ -218,13 +218,18 @@ public static class ControlSequences
         return Create(cb => cb.CloseHyperlink());
     }
 
+    public static string SaveScreenshot(ScreenshotFormat format)
+    {
+        return Create(cb => cb.SaveScreenshot(format));
+    }
+
     public static string SoftReset()
     {
         return Create(cb => cb.SoftReset());
     }
 
-    public static string SaveScreenshot(ScreenshotFormat format)
+    public static string FullReset()
     {
-        return Create(cb => cb.SaveScreenshot(format));
+        return Create(cb => cb.FullReset());
     }
 }
