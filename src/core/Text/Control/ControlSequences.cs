@@ -147,6 +147,11 @@ public static class ControlSequences
         return Create(cb => cb.SetFocusEvents(enable));
     }
 
+    public static string SetBracketedPaste(bool enable)
+    {
+        return Create(cb => cb.SetBracketedPaste(enable));
+    }
+
     public static string SetScreenBuffer(ScreenBuffer buffer)
     {
         return Create(cb => cb.SetScreenBuffer(buffer));

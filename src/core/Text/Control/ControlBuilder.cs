@@ -216,6 +216,11 @@ public sealed class ControlBuilder
         return Print(CSI).Print("?1004").Print(enable ? "h" : "l");
     }
 
+    public ControlBuilder SetBracketedPaste(bool enable)
+    {
+        return Print(CSI).Print("?2004").Print(enable ? "h" : "l");
+    }
+
     public ControlBuilder SetScreenBuffer(ScreenBuffer buffer)
     {
         _ = Enum.IsDefined(buffer) ? true : throw new ArgumentOutOfRangeException(nameof(buffer));
