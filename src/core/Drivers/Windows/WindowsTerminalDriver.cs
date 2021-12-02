@@ -90,7 +90,7 @@ sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
 
     protected override void SetRawMode(bool raw)
     {
-        if (!TerminalIn.IsValid || TerminalIn.IsRedirected || !TerminalOut.IsValid || TerminalOut.IsRedirected)
+        if (TerminalIn.IsRedirected || TerminalOut.IsRedirected)
             throw new TerminalException("There is no terminal attached.");
 
         var inMode =
