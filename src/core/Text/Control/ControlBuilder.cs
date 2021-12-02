@@ -10,18 +10,26 @@ public sealed class ControlBuilder
 
     public ReadOnlySpan<char> Span => _writer.WrittenSpan;
 
-    readonly ArrayBufferWriter<char> _writer;
+    readonly int _capacity;
+
+    ArrayBufferWriter<char> _writer;
 
     public ControlBuilder(int capacity = 1024)
     {
         _ = capacity > 0 ? true : throw new ArgumentOutOfRangeException(nameof(capacity));
 
+        _capacity = capacity;
         _writer = new(capacity);
     }
 
-    public void Clear()
+    public void Clear(int reallocateThreshold = 4096)
     {
-        _writer.Clear();
+        _ = reallocateThreshold >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(reallocateThreshold));
+
+        if (reallocateThreshold != 0 && _writer.Capacity > reallocateThreshold)
+            _writer = new(_capacity);
+        else
+            _writer.Clear();
     }
 
     public override string ToString()

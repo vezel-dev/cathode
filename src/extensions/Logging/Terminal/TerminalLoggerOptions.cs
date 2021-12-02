@@ -83,41 +83,46 @@ public sealed class TerminalLoggerOptions
 
         var cb = _builder.Value!;
 
-        cb.Clear();
-
-        Decorator Decorate(byte r, byte g, byte b)
+        try
         {
-            return !options.DisableColors ? new(cb, r, g, b) : default;
+            Decorator Decorate(byte r, byte g, byte b)
+            {
+                return !options.DisableColors ? new(cb, r, g, b) : default;
+            }
+
+            _ = cb.Print("[");
+
+            using (_ = Decorate(127, 127, 127))
+                _ = cb.Print("{0:HH:mm:ss.fff}", entry.Timestamp);
+
+            _ = cb.Print("][");
+
+            using (_ = Decorate((byte)r, (byte)g, (byte)b))
+                _ = cb.Print(lvl);
+
+            _ = cb.Print("][");
+
+            using (_ = Decorate(233, 233, 233))
+                _ = cb.Print(entry.CategoryName);
+
+            _ = cb.Print("][");
+
+            using (_ = Decorate(0, 155, 155))
+                _ = cb.Print(entry.EventId);
+
+            _ = cb.Print("] ");
+
+            if (entry.Message is string m)
+                _ = cb.PrintLine(m);
+
+            if (entry.Exception is Exception e)
+                _ = cb.PrintLine(e);
+
+            writer.Write(cb.Span);
         }
-
-        _ = cb.Print("[");
-
-        using (_ = Decorate(127, 127, 127))
-            _ = cb.Print("{0:HH:mm:ss.fff}", entry.Timestamp);
-
-        _ = cb.Print("][");
-
-        using (_ = Decorate((byte)r, (byte)g, (byte)b))
-            _ = cb.Print(lvl);
-
-        _ = cb.Print("][");
-
-        using (_ = Decorate(233, 233, 233))
-            _ = cb.Print(entry.CategoryName);
-
-        _ = cb.Print("][");
-
-        using (_ = Decorate(0, 155, 155))
-            _ = cb.Print(entry.EventId);
-
-        _ = cb.Print("] ");
-
-        if (entry.Message is string m)
-            _ = cb.PrintLine(m);
-
-        if (entry.Exception is Exception e)
-            _ = cb.PrintLine(e);
-
-        writer.Write(cb.Span);
+        finally
+        {
+            cb.Clear();
+        }
     }
 }

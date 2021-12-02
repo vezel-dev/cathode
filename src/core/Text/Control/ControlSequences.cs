@@ -8,11 +8,16 @@ public static class ControlSequences
     {
         var cb = _builder.Value!;
 
-        cb.Clear();
+        try
+        {
+            action(span, cb);
 
-        action(span, cb);
-
-        return cb.ToString();
+            return cb.ToString();
+        }
+        finally
+        {
+            cb.Clear();
+        }
     }
 
     static string Create(Action<ControlBuilder> action)
