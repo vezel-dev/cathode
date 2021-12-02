@@ -32,6 +32,16 @@ public static class ControlSequences
         return Create(cb => cb.SetTitle(title));
     }
 
+    public static string PushTitle()
+    {
+        return Create(cb => cb.PushTitle());
+    }
+
+    public static string PopTitle()
+    {
+        return Create(cb => cb.PopTitle());
+    }
+
     public static string SetProgress(ProgressState state, int value)
     {
         return Create(cb => cb.SetProgress(state, value));

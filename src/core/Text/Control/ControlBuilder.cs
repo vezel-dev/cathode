@@ -143,6 +143,16 @@ public sealed class ControlBuilder
         return Print(OSC).Print("2;").Print(title).Print(ST);
     }
 
+    public ControlBuilder PushTitle()
+    {
+        return Print(CSI).Print("22;2t");
+    }
+
+    public ControlBuilder PopTitle()
+    {
+        return Print(CSI).Print("23;2t");
+    }
+
     public ControlBuilder SetProgress(ProgressState state, int value)
     {
         _ = Math.Clamp(value, 0, 100) == value ? true : throw new ArgumentOutOfRangeException(nameof(value));
