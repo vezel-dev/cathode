@@ -16,6 +16,10 @@ public static class ControlConstants
 
     public const string CR = "\r";
 
+    public const string CAN = "\x18";
+
+    public const string SUB = "\x1a";
+
     public const string ESC = "\x1b";
 
     public const string FS = "\x1c";

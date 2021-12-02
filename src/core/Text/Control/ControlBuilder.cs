@@ -116,6 +116,16 @@ public sealed class ControlBuilder
         return Print(CR);
     }
 
+    public ControlBuilder Substitute()
+    {
+        return Print(SUB);
+    }
+
+    public ControlBuilder Cancel()
+    {
+        return Print(CAN);
+    }
+
     public ControlBuilder FileSeparator()
     {
         return Print(FS);
