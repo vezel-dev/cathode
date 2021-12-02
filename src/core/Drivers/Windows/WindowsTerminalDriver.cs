@@ -7,7 +7,7 @@ using static Windows.Win32.WindowsPInvoke;
 
 namespace System.Drivers.Windows;
 
-sealed class WindowsTerminalDriver : TerminalDriver
+sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
 {
     public static WindowsTerminalDriver Instance { get; } = new();
 
@@ -21,14 +21,15 @@ sealed class WindowsTerminalDriver : TerminalDriver
 
     public override WindowsTerminalWriter TerminalOut { get; }
 
+    [SuppressMessage("Reliability", "CA2000")]
     WindowsTerminalDriver()
     {
         var inLock = new object();
         var outLock = new object();
 
-        StandardIn = new("standard input", GetStdHandle_SafeHandle(STD_HANDLE.STD_INPUT_HANDLE), inLock, this);
-        StandardOut = new("standard output", GetStdHandle_SafeHandle(STD_HANDLE.STD_OUTPUT_HANDLE), outLock);
-        StandardError = new("standard error", GetStdHandle_SafeHandle(STD_HANDLE.STD_ERROR_HANDLE), new());
+        StandardIn = new(this, "standard input", GetStdHandle_SafeHandle(STD_HANDLE.STD_INPUT_HANDLE), inLock);
+        StandardOut = new(this, "standard output", GetStdHandle_SafeHandle(STD_HANDLE.STD_OUTPUT_HANDLE), outLock);
+        StandardError = new(this, "standard error", GetStdHandle_SafeHandle(STD_HANDLE.STD_ERROR_HANDLE), new());
 
         static SafeHandle OpenConsoleHandle(string name)
         {
@@ -45,14 +46,15 @@ sealed class WindowsTerminalDriver : TerminalDriver
                 null);
         }
 
-        TerminalIn = new("terminal input", OpenConsoleHandle("CONIN$"), inLock, this);
-        TerminalOut = new("terminal output", OpenConsoleHandle("CONOUT$"), outLock);
+        TerminalIn = new(this, "terminal input", OpenConsoleHandle("CONIN$"), inLock);
+        TerminalOut = new(this, "terminal output", OpenConsoleHandle("CONOUT$"), outLock);
 
         // Input needs to be UTF-16, but we make it appear as if it is UTF-8 to users of the library. See the comments
         // in WindowsTerminalReader for the gory details.
         _ = SetConsoleCP((uint)Encoding.Unicode.CodePage);
         _ = SetConsoleOutputCP((uint)Encoding.UTF8.CodePage);
 
+        // Start in cooked mode.
         _ = TerminalIn.AddMode(
             CONSOLE_MODE.ENABLE_PROCESSED_INPUT |
             CONSOLE_MODE.ENABLE_LINE_INPUT |
@@ -106,5 +108,28 @@ sealed class WindowsTerminalDriver : TerminalDriver
         if (!FlushConsoleInputBuffer(StandardIn.Handle))
             throw new TerminalException(
                 $"Could not flush input buffer: {(WIN32_ERROR)Marshal.GetLastSystemError()}");
+    }
+
+    public override unsafe bool IsHandleValid(SafeHandle handle, bool write)
+    {
+        if (handle.IsInvalid)
+            return false;
+
+        // Apparently, for Windows GUI programs, the standard I/O handles will appear to be valid (i.e. not -1 or 0) but
+        // will not actually be usable. So do a zero-byte write to figure out if the handle is actually valid.
+        if (write)
+        {
+            var dummy = 42u;
+
+            return WriteFile(handle, &dummy, 0, &dummy, null);
+        }
+
+        return true;
+    }
+
+    public override bool IsHandleRedirected(SafeHandle handle)
+    {
+        // Note that this also returns true for invalid handles.
+        return GetFileType(handle) != FILE_TYPE_CHAR || !GetConsoleMode(handle, out _);
     }
 }

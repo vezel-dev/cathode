@@ -3,27 +3,21 @@ using static System.Unix.UnixPInvoke;
 
 namespace System.Drivers.Unix;
 
-sealed class UnixTerminalReader : DefaultTerminalReader
+sealed class UnixTerminalReader : DriverTerminalReader<UnixTerminalDriver, int>
 {
-    public int Handle { get; }
-
-    public override bool IsRedirected => UnixTerminalUtility.IsRedirected(Handle);
-
     readonly object _lock;
 
-    readonly UnixTerminalDriver _driver;
-
-    public UnixTerminalReader(string name, int handle, object @lock, UnixTerminalDriver driver)
-        : base(name)
+    public UnixTerminalReader(UnixTerminalDriver driver, string name, int handle, object @lock)
+        : base(driver, name, handle)
     {
-        Handle = handle;
         _lock = @lock;
-        _driver = driver;
     }
 
     protected override unsafe void ReadCore(Span<byte> data, out int count)
     {
-        if (data.IsEmpty)
+        // If the descriptor is invalid, just present the illusion to the user that it has been redirected to /dev/null
+        // or something along those lines, i.e. return EOF.
+        if (data.IsEmpty || !IsValid)
         {
             count = 0;
 
@@ -63,7 +57,7 @@ sealed class UnixTerminalReader : DefaultTerminalReader
 
                     // The file descriptor has been configured as non-blocking. Instead of busily trying to read over
                     // and over, poll until we can write and then try again.
-                    if (_driver.PollHandle(err, Handle, POLLIN))
+                    if (Driver.PollHandle(err, Handle, POLLIN))
                         continue;
 
                     throw new TerminalException($"Could not read from {Name}: {new Win32Exception(err).Message}");

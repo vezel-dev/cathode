@@ -3,29 +3,23 @@ using static System.Unix.UnixPInvoke;
 
 namespace System.Drivers.Unix;
 
-sealed class UnixTerminalWriter : DefaultTerminalWriter
+sealed class UnixTerminalWriter : DriverTerminalWriter<UnixTerminalDriver, int>
 {
-    public int Handle { get; }
-
-    public override bool IsRedirected => UnixTerminalUtility.IsRedirected(Handle);
-
     readonly object _lock;
 
-    readonly UnixTerminalDriver _driver;
-
-    public UnixTerminalWriter(string name, int handle, object @lock, UnixTerminalDriver driver)
-        : base(name)
+    public UnixTerminalWriter(UnixTerminalDriver driver, string name, int handle, object @lock)
+        : base(driver, name, handle)
     {
-        Handle = handle;
         _lock = @lock;
-        _driver = driver;
     }
 
     protected override unsafe void WriteCore(ReadOnlySpan<byte> data, out int count)
     {
-        if (data.IsEmpty)
+        // If the descriptor is invalid, just present the illusion to the user that it has been redirected to /dev/null
+        // or something along those lines, i.e. pretend we wrote everything.
+        if (data.IsEmpty || !IsValid)
         {
-            count = 0;
+            count = data.Length;
 
             return;
         }
@@ -65,7 +59,7 @@ sealed class UnixTerminalWriter : DefaultTerminalWriter
 
                     // The file descriptor has been configured as non-blocking. Instead of busily trying to write over
                     // and over, poll until we can write and then try again.
-                    if (_driver.PollHandle(err, Handle, POLLOUT))
+                    if (Driver.PollHandle(err, Handle, POLLOUT))
                         continue;
 
                     throw new TerminalException($"Could not write to {Name}: {new Win32Exception(err).Message}");

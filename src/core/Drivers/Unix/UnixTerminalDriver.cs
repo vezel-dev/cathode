@@ -3,7 +3,7 @@ using static System.Unix.UnixPInvoke;
 
 namespace System.Drivers.Unix;
 
-abstract class UnixTerminalDriver : TerminalDriver
+abstract class UnixTerminalDriver : TerminalDriver<int>
 {
     public override sealed UnixTerminalReader StandardIn { get; }
 
@@ -29,14 +29,14 @@ abstract class UnixTerminalDriver : TerminalDriver
         var inLock = new object();
         var outLock = new object();
 
-        StandardIn = new("standard input", STDIN_FILENO, inLock, this);
-        StandardOut = new("standard output", STDOUT_FILENO, outLock, this);
-        StandardError = new("standard error", STDERR_FILENO, new(), this);
+        StandardIn = new(this, "standard input", STDIN_FILENO, inLock);
+        StandardOut = new(this, "standard output", STDOUT_FILENO, outLock);
+        StandardError = new(this, "standard error", STDERR_FILENO, new());
 
         var tty = OpenTerminalHandle("/dev/tty");
 
-        TerminalIn = new("terminal input", tty, inLock, this);
-        TerminalOut = new("terminal output", tty, outLock, this);
+        TerminalIn = new(this, "terminal input", tty, inLock);
+        TerminalOut = new(this, "terminal output", tty, outLock);
 
         RefreshSize();
 
@@ -93,4 +93,16 @@ abstract class UnixTerminalDriver : TerminalDriver
     public abstract int OpenTerminalHandle(string name);
 
     public abstract bool PollHandle(int error, int handle, short events);
+
+    public override bool IsHandleValid(int handle, bool write)
+    {
+        // We might obtain a negative descriptor (-1) if we fail to open /dev/tty, for example.
+        return handle >= 0;
+    }
+
+    public override bool IsHandleRedirected(int handle)
+    {
+        // Note that this also returns true for invalid descriptors.
+        return isatty(handle) == 0;
+    }
 }

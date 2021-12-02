@@ -3,30 +3,23 @@ using static Windows.Win32.WindowsPInvoke;
 
 namespace System.Drivers.Windows;
 
-sealed class WindowsTerminalWriter : DefaultTerminalWriter
+sealed class WindowsTerminalWriter : DriverTerminalWriter<WindowsTerminalDriver, SafeHandle>
 {
-    public SafeHandle Handle { get; }
-
-    public bool IsValid { get; }
-
-    public override bool IsRedirected { get; }
-
     readonly object _lock;
 
-    public WindowsTerminalWriter(string name, SafeHandle handle, object @lock)
-        : base(name)
+    public WindowsTerminalWriter(WindowsTerminalDriver driver, string name, SafeHandle handle, object @lock)
+        : base(driver, name, handle)
     {
-        Handle = handle;
         _lock = @lock;
-        IsValid = WindowsTerminalUtility.IsHandleValid(handle, true);
-        IsRedirected = WindowsTerminalUtility.IsHandleRedirected(handle);
     }
 
     protected override unsafe void WriteCore(ReadOnlySpan<byte> data, out int count)
     {
+        // If the handle is invalid, just present the illusion to the user that it has been redirected to /dev/null or
+        // something along those lines, i.e. pretend we wrote everything.
         if (data.IsEmpty || !IsValid)
         {
-            count = 0;
+            count = data.Length;
 
             return;
         }

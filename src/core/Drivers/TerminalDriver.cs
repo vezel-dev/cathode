@@ -1,6 +1,6 @@
 namespace System.Drivers;
 
-abstract partial class TerminalDriver
+abstract class TerminalDriver
 {
     public event Action<TerminalSize>? Resize
     {
@@ -192,4 +192,11 @@ abstract partial class TerminalDriver
         lock (_rawLock)
             SetRawMode(IsRawMode = false);
     }
+}
+
+abstract class TerminalDriver<THandle> : TerminalDriver
+{
+    public abstract bool IsHandleValid(THandle handle, bool write);
+
+    public abstract bool IsHandleRedirected(THandle handle);
 }

@@ -4,35 +4,25 @@ using static Windows.Win32.WindowsPInvoke;
 
 namespace System.Drivers.Windows;
 
-sealed class WindowsTerminalReader : DefaultTerminalReader
+sealed class WindowsTerminalReader : DriverTerminalReader<WindowsTerminalDriver, SafeHandle>
 {
-    public SafeHandle Handle { get; }
-
-    public bool IsValid { get; }
-
-    public override bool IsRedirected { get; }
-
     readonly object _lock;
-
-    readonly WindowsTerminalDriver _driver;
 
     readonly byte[] _buffer;
 
     ReadOnlyMemory<byte> _buffered;
 
-    public WindowsTerminalReader(string name, SafeHandle handle, object @lock, WindowsTerminalDriver driver)
-        : base(name)
+    public WindowsTerminalReader(WindowsTerminalDriver driver, string name, SafeHandle handle, object @lock)
+        : base(driver, name, handle)
     {
-        Handle = handle;
         _lock = @lock;
-        _driver = driver;
-        IsValid = WindowsTerminalUtility.IsHandleValid(handle, false);
-        IsRedirected = WindowsTerminalUtility.IsHandleRedirected(handle);
         _buffer = new byte[Terminal.Encoding.GetMaxByteCount(2)];
     }
 
     protected override unsafe void ReadCore(Span<byte> data, out int count)
     {
+        // If the handle is invalid, just present the illusion to the user that it has been redirected to /dev/null or
+        // something along those lines, i.e. return EOF.
         if (data.IsEmpty || !IsValid)
         {
             count = 0;
@@ -82,7 +72,7 @@ sealed class WindowsTerminalReader : DefaultTerminalReader
                         // There is a bug where ReadConsoleW will not process Ctrl-Z properly even though ReadFile
                         // will. The good news is that we can fairly easily emulate what the console host should be
                         // doing by just pretending that there is no more data to be read.
-                        if (!_driver.IsRawMode && units[0] == '\x1a')
+                        if (!Driver.IsRawMode && units[0] == '\x1a')
                         {
                             count = 0;
 
