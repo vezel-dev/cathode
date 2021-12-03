@@ -102,7 +102,7 @@ sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
 
     protected override void SetRawMode(bool raw)
     {
-        if (TerminalIn.IsRedirected || TerminalOut.IsRedirected)
+        if (!TerminalIn.IsInteractive || !TerminalOut.IsInteractive)
             throw new TerminalException("There is no terminal attached.");
 
         var inMode =
@@ -139,9 +139,9 @@ sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
         return true;
     }
 
-    public override bool IsHandleRedirected(SafeHandle handle)
+    public override bool IsHandleInteractive(SafeHandle handle)
     {
         // Note that this also returns true for invalid handles.
-        return GetFileType(handle) != FILE_TYPE_CHAR || !GetConsoleMode(handle, out _);
+        return GetFileType(handle) == FILE_TYPE_CHAR && GetConsoleMode(handle, out _);
     }
 }

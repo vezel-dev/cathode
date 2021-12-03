@@ -198,5 +198,5 @@ abstract class TerminalDriver<THandle> : TerminalDriver
 {
     public abstract bool IsHandleValid(THandle handle, bool write);
 
-    public abstract bool IsHandleRedirected(THandle handle);
+    public abstract bool IsHandleInteractive(THandle handle);
 }

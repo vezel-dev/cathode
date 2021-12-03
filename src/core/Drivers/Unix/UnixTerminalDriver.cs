@@ -100,9 +100,9 @@ abstract class UnixTerminalDriver : TerminalDriver<int>
         return handle >= 0;
     }
 
-    public override bool IsHandleRedirected(int handle)
+    public override bool IsHandleInteractive(int handle)
     {
-        // Note that this also returns true for invalid descriptors.
-        return isatty(handle) == 0;
+        // Note that this also returns false for invalid descriptors.
+        return isatty(handle) == 1;
     }
 }

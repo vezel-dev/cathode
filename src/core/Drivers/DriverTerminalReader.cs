@@ -13,7 +13,7 @@ abstract class DriverTerminalReader<TDriver, THandle> : TerminalReader
 
     public override sealed TerminalInputStream Stream { get; }
 
-    public override sealed bool IsRedirected { get; }
+    public override sealed bool IsInteractive { get; }
 
     protected DriverTerminalReader(TDriver driver, string name, THandle handle)
     {
@@ -21,7 +21,7 @@ abstract class DriverTerminalReader<TDriver, THandle> : TerminalReader
         Name = name;
         Handle = handle;
         IsValid = driver.IsHandleValid(handle, false);
-        IsRedirected = driver.IsHandleRedirected(handle);
+        IsInteractive = driver.IsHandleInteractive(handle);
         Stream = new(this);
     }
 }

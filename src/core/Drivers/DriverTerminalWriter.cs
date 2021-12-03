@@ -13,7 +13,7 @@ abstract class DriverTerminalWriter<TDriver, THandle> : TerminalWriter
 
     public override sealed TerminalOutputStream Stream { get; }
 
-    public override sealed bool IsRedirected { get; }
+    public override sealed bool IsInteractive { get; }
 
     protected DriverTerminalWriter(TDriver driver, string name, THandle handle)
     {
@@ -21,7 +21,7 @@ abstract class DriverTerminalWriter<TDriver, THandle> : TerminalWriter
         Name = name;
         Handle = handle;
         IsValid = driver.IsHandleValid(handle, true);
-        IsRedirected = driver.IsHandleRedirected(handle);
+        IsInteractive = driver.IsHandleInteractive(handle);
         Stream = new(this);
     }
 }

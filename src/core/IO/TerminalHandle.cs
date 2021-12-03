@@ -4,5 +4,5 @@ public abstract class TerminalHandle
 {
     public abstract Stream Stream { get; }
 
-    public abstract bool IsRedirected { get; }
+    public abstract bool IsInteractive { get; }
 }

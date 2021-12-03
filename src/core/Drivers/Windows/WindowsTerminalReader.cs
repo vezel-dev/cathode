@@ -38,7 +38,7 @@ sealed class WindowsTerminalReader : DriverTerminalReader<WindowsTerminalDriver,
         // To solve this problem, we read one or two UTF-16 code units to form a complete code point. We then encode
         // that into UTF-8 in a separate buffer. Finally, we copy as many bytes as possible/requested from the UTF-8
         // buffer to the caller-provided buffer.
-        if (!IsRedirected)
+        if (IsInteractive)
         {
             lock (_lock)
             {
