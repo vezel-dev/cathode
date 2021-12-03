@@ -4,152 +4,152 @@ public static class Terminal
 {
     public static event Action<TerminalSize>? Resize
     {
-        add => System.Resize += value;
-        remove => System.Resize -= value;
+        add => _terminal.Resize += value;
+        remove => _terminal.Resize -= value;
     }
 
     public static event Action<TerminalSignalContext>? Signal
     {
-        add => System.Signal += value;
-        remove => System.Signal -= value;
+        add => _terminal.Signal += value;
+        remove => _terminal.Signal -= value;
     }
 
     public static Encoding Encoding { get; } = new UTF8Encoding(false);
 
-    public static SystemVirtualTerminal System => SystemVirtualTerminal.Instance;
+    public static TerminalReader StandardIn => _terminal.StandardIn;
 
-    public static TerminalReader StandardIn => System.StandardIn;
+    public static TerminalWriter StandardOut => _terminal.StandardOut;
 
-    public static TerminalWriter StandardOut => System.StandardOut;
+    public static TerminalWriter StandardError => _terminal.StandardError;
 
-    public static TerminalWriter StandardError => System.StandardError;
+    public static TerminalReader TerminalIn => _terminal.TerminalIn;
 
-    public static TerminalReader TerminalIn => System.TerminalIn;
+    public static TerminalWriter TerminalOut => _terminal.TerminalOut;
 
-    public static TerminalWriter TerminalOut => System.TerminalOut;
+    public static bool IsRawMode => _terminal.IsRawMode;
 
-    public static bool IsRawMode => System.IsRawMode;
-
-    public static TerminalSize Size => System.Size;
+    public static TerminalSize Size => _terminal.Size;
 
     public static TimeSpan SizePollingInterval
     {
-        get => System.SizePollingInterval;
-        set => System.SizePollingInterval = value;
+        get => _terminal.SizePollingInterval;
+        set => _terminal.SizePollingInterval = value;
     }
+
+    static readonly SystemVirtualTerminal _terminal = SystemVirtualTerminal.Instance;
 
     public static void GenerateSignal(TerminalSignal signal)
     {
-        System.GenerateSignal(signal);
+        _terminal.GenerateSignal(signal);
     }
 
     public static void EnableRawMode()
     {
-        System.EnableRawMode();
+        _terminal.EnableRawMode();
     }
 
     public static void DisableRawMode()
     {
-        System.DisableRawMode();
+        _terminal.DisableRawMode();
     }
 
     public static byte? ReadRaw()
     {
-        return System.ReadRaw();
+        return _terminal.ReadRaw();
     }
 
     public static string? ReadLine()
     {
-        return System.ReadLine();
+        return _terminal.ReadLine();
     }
 
     public static void Out(ReadOnlySpan<byte> value)
     {
-        System.Out(value);
+        _terminal.Out(value);
     }
 
     public static void Out(ReadOnlySpan<char> value)
     {
-        System.Out(value);
+        _terminal.Out(value);
     }
 
     public static void Out(string? value)
     {
-        System.Out(value);
+        _terminal.Out(value);
     }
 
     public static void Out<T>(T value)
     {
-        System.Out(value);
+        _terminal.Out(value);
     }
 
     public static void Out(string format, params object?[] args)
     {
-        System.Out(format, args);
+        _terminal.Out(format, args);
     }
 
     public static void OutLine()
     {
-        System.OutLine();
+        _terminal.OutLine();
     }
 
     public static void OutLine(string? value)
     {
-        System.OutLine(value);
+        _terminal.OutLine(value);
     }
 
     public static void OutLine<T>(T value)
     {
-        System.OutLine(value);
+        _terminal.OutLine(value);
     }
 
     public static void OutLine(string format, params object?[] args)
     {
-        System.OutLine(format, args);
+        _terminal.OutLine(format, args);
     }
 
     public static void Error(ReadOnlySpan<byte> value)
     {
-        System.Error(value);
+        _terminal.Error(value);
     }
 
     public static void Error(ReadOnlySpan<char> value)
     {
-        System.Error(value);
+        _terminal.Error(value);
     }
 
     public static void Error(string? value)
     {
-        System.Error(value);
+        _terminal.Error(value);
     }
 
     public static void Error<T>(T value)
     {
-        System.Error(value);
+        _terminal.Error(value);
     }
 
     public static void Error(string format, params object?[] args)
     {
-        System.Error(format, args);
+        _terminal.Error(format, args);
     }
 
     public static void ErrorLine()
     {
-        System.ErrorLine();
+        _terminal.ErrorLine();
     }
 
     public static void ErrorLine(string? value)
     {
-        System.ErrorLine(value);
+        _terminal.ErrorLine(value);
     }
 
     public static void ErrorLine<T>(T value)
     {
-        System.ErrorLine(value);
+        _terminal.ErrorLine(value);
     }
 
     public static void ErrorLine(string format, params object?[] args)
     {
-        System.ErrorLine(format, args);
+        _terminal.ErrorLine(format, args);
     }
 }
