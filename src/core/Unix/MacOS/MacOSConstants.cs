@@ -9,7 +9,11 @@ static class MacOSConstants
 
     public const nuint BRKINT = 0x2;
 
+    public const nuint IGNPAR = 0x4;
+
     public const nuint PARMRK = 0x8;
+
+    public const nuint INPCK = 0x10;
 
     public const nuint ISTRIP = 0x20;
 
@@ -21,29 +25,115 @@ static class MacOSConstants
 
     public const nuint IXON = 0x200;
 
+    public const nuint IXOFF = 0x400;
+
+    public const nuint IXANY = 0x800;
+
+    public const nuint IMAXBEL = 0x2000;
+
+    public const nuint IUTF8 = 0x4000;
+
     // c_oflag
 
     public const nuint OPOST = 0x1;
 
+    public const nuint ONLCR = 0x2;
+
+    public const nuint OCRNL = 0x10;
+
+    public const nuint ONOCR = 0x20;
+
+    public const nuint ONLRET = 0x40;
+
+    public const nuint OFILL = 0x80;
+
+    public const nuint ALTWERASE = 0x200;
+
+    public const nuint OFDEL = 0x20000;
+
+    public const nuint NLDLY = 0x300;
+
+    public const nuint NL0 = 0x0;
+
+    public const nuint TABDLY = 0xc04;
+
+    public const nuint TAB0 = 0x0;
+
+    public const nuint CRDLY = 0x3000;
+
+    public const nuint CR0 = 0x0;
+
+    public const nuint FFDLY = 0x4000;
+
+    public const nuint FF0 = 0x0;
+
+    public const nuint BSDLY = 0x8000;
+
+    public const nuint BS0 = 0x0;
+
+    public const nuint VTDLY = 0x10000;
+
+    public const nuint VT0 = 0x0;
+
     // c_cflag
+
+    public const nuint CSTOPB = 0x400;
+
+    public const nuint CREAD = 0x800;
+
+    public const nuint PARENB = 0x1000;
+
+    public const nuint PARODD = 0x2000;
+
+    public const nuint HUPCL = 0x4000;
+
+    public const nuint CLOCAL = 0x8000;
+
+    public const nuint CRTSCTS = 0x30000;
+
+    public const nuint CDTR_IFLOW = 0x40000;
+
+    public const nuint CDSR_OFLOW = 0x80000;
+
+    public const nuint MDMBUF = 0x100000;
 
     public const nuint CSIZE = 0x300;
 
     public const nuint CS8 = 0x300;
 
-    public const nuint PARENB = 0x1000;
-
     // c_lflag
+
+    public const nuint ECHOKE = 0x1;
+
+    public const nuint ECHOE = 0x2;
+
+    public const nuint ECHOK = 0x4;
 
     public const nuint ECHO = 0x8;
 
     public const nuint ECHONL = 0x10;
+
+    public const nuint ECHOPRT = 0x20;
+
+    public const nuint ECHOCTL = 0x40;
 
     public const nuint ISIG = 0x80;
 
     public const nuint ICANON = 0x100;
 
     public const nuint IEXTEN = 0x400;
+
+    public const nuint EXTPROC = 0x800;
+
+    public const nuint TOSTOP = 0x400000;
+
+    public const nuint FLUSHO = 0x800000;
+
+    public const nuint NOKERNINFO = 0x2000000;
+
+    public const nuint PENDIN = 0x20000000;
+
+    public const nuint NOFLSH = 0x80000000;
 
     // c_cc
 

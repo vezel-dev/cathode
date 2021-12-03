@@ -13,9 +13,9 @@ static class UnixConstants
 
     // events, revents
 
-    public const short POLLIN = 0x0001;
+    public const short POLLIN = 0x1;
 
-    public const short POLLOUT = 0x0004;
+    public const short POLLOUT = 0x4;
 
     // optional_actions
 

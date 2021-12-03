@@ -9,47 +9,14 @@ namespace System.Drivers.Unix;
 
 sealed class LinuxTerminalDriver : UnixTerminalDriver
 {
+    // Keep this class in sync with the MacOSTerminalDriver class.
+
     public static LinuxTerminalDriver Instance { get; } = new();
 
-    readonly termios? _original;
-
-    termios? _current;
+    termios? _original;
 
     LinuxTerminalDriver()
     {
-        if (tcgetattr(TerminalOut.Handle, out var settings) == -1)
-            return;
-
-        // These values are usually the default, but we set them just to be safe since UnixTerminalReader would not
-        // behave as expected by callers if these values differ.
-        settings.c_cc[VTIME] = 0;
-        settings.c_cc[VMIN] = 1;
-
-        _original = settings;
-
-        // We might get really unlucky and fail to apply the settings right after the call above. We should still assign
-        // _current so we can apply it later.
-        if (!UpdateSettings(TCSANOW, settings))
-            _current = settings;
-    }
-
-    bool UpdateSettings(int mode, in termios settings)
-    {
-        int ret;
-
-        while ((ret = tcsetattr(TerminalOut.Handle, mode, settings)) == -1 && Marshal.GetLastPInvokeError() == EINTR)
-        {
-            // Retry in case we get interrupted by a signal.
-        }
-
-        if (ret == 0)
-        {
-            _current = settings;
-
-            return true;
-        }
-
-        return false;
     }
 
     protected override TerminalSize? GetSize()
@@ -57,29 +24,63 @@ sealed class LinuxTerminalDriver : UnixTerminalDriver
         return ioctl(TerminalOut.Handle, TIOCGWINSZ, out var w) == 0 ? new(w.ws_col, w.ws_row) : null;
     }
 
-    protected override void RefreshSettings()
+    protected override void SetRawModeCore(bool raw, bool flush)
     {
-        // This call can fail if the terminal is detached, but that is OK.
-        if (_current is termios c)
-            _ = UpdateSettings(TCSANOW, c);
-    }
+        if (tcgetattr(TerminalOut.Handle, out var termios) == -1)
+            throw new TerminalException("There is no terminal attached.");
 
-    protected override bool SetRawModeCore(bool raw)
-    {
-        if (_original is not termios settings)
-            return false;
+        // Stash away the original settings the first time we are successfully called.
+        if (_original == null)
+            _original = termios;
 
-        if (raw)
+        // These values are usually the default, but we set them just to be safe since UnixTerminalReader would not
+        // behave as expected by callers if these values differ.
+        termios.c_cc[VTIME] = 0;
+        termios.c_cc[VMIN] = 1;
+
+        // Turn off some features that make little or no sense for virtual terminals.
+        termios.c_iflag &= ~(IGNBRK | IGNPAR | PARMRK | INPCK | ISTRIP | IXOFF | IMAXBEL);
+        termios.c_oflag &= ~(OFILL | OFDEL | NLDLY | CRDLY | TABDLY | BSDLY | VTDLY | FFDLY);
+        termios.c_oflag |= NL0 | CR0 | TAB0 | BS0 | VT0 | FF0;
+        termios.c_cflag &= ~(CSTOPB | PARENB | PARODD | HUPCL | CLOCAL | CMSPAR | CRTSCTS);
+        termios.c_lflag &= ~(FLUSHO | EXTPROC);
+
+        // Set up some sensible defaults.
+        termios.c_iflag &= ~(IGNCR | INLCR | IUCLC | IXANY);
+        termios.c_iflag |= IUTF8;
+        termios.c_oflag &= ~(OLCUC | OCRNL | ONOCR | ONLRET);
+        termios.c_cflag &= ~CSIZE;
+        termios.c_cflag |= CS8 | CREAD;
+        termios.c_lflag &= ~(XCASE | ECHONL | NOFLSH | TOSTOP | ECHOPRT | PENDIN);
+
+        var iflag = BRKINT | ICRNL | IXON;
+        var oflag = OPOST | ONLCR;
+        var lflag = ISIG | ICANON | ECHO | ECHOE | ECHOK | ECHOCTL | ECHOKE | IEXTEN;
+
+        // Finally, enable/disable features that depend on cooked/raw mode.
+        if (!raw)
         {
-            settings.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
-            settings.c_oflag &= ~OPOST;
-            settings.c_cflag &= ~(CSIZE | PARENB);
-            settings.c_cflag |= CS8;
-            settings.c_lflag &= ~(ISIG | ICANON | ECHO | ECHONL | IEXTEN);
+            termios.c_iflag |= iflag;
+            termios.c_oflag |= oflag;
+            termios.c_lflag |= lflag;
+        }
+        else
+        {
+            termios.c_iflag &= ~iflag;
+            termios.c_oflag &= ~oflag;
+            termios.c_lflag &= ~lflag;
         }
 
-        return UpdateSettings(TCSAFLUSH, settings) ?
-            true : throw new TerminalException($"Could not change raw mode setting: {new Win32Exception().Message}");
+        int ret;
+
+        while ((ret = tcsetattr(TerminalOut.Handle, flush ? TCSAFLUSH : TCSANOW, termios)) == -1 &&
+            Marshal.GetLastPInvokeError() == EINTR)
+        {
+            // Retry in case we get interrupted by a signal.
+        }
+
+        if (ret != 0)
+            throw new TerminalException($"Could not change raw mode setting: {new Win32Exception().Message}");
     }
 
     public override int OpenTerminalHandle(string name)

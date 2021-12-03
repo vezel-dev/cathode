@@ -38,6 +38,16 @@ abstract class UnixTerminalDriver : TerminalDriver<int>
         TerminalIn = new(this, "terminal input", tty, inLock);
         TerminalOut = new(this, "terminal output", tty, outLock);
 
+        try
+        {
+            // Start in cooked mode.
+            SetRawModeCore(false, false);
+        }
+        catch (TerminalException)
+        {
+            // No terminal attached.
+        }
+
         RefreshSize();
 
         void HandleSignal(PosixSignalContext context)
@@ -46,8 +56,17 @@ abstract class UnixTerminalDriver : TerminalDriver<int>
             // have been mangled, so restore them.
             if (context.Signal == PosixSignal.SIGCONT)
             {
-                lock (_rawLock)
-                    RefreshSettings();
+                try
+                {
+                    lock (_rawLock)
+                        SetRawModeCore(IsRawMode, false);
+                }
+                catch (TerminalException)
+                {
+                    // If we fail to apply the terminal settings again, it means the terminal is gone. By extension,
+                    // that means the program can no longer read from or write to it, so terminal settings are
+                    // irrelevant from that point on anyway.
+                }
 
                 // Prevent System.Native from overwriting the terminal settings we just put into effect.
                 context.Cancel = true;
@@ -79,16 +98,14 @@ abstract class UnixTerminalDriver : TerminalDriver<int>
             });
     }
 
-    protected abstract void RefreshSettings();
+    protected abstract void SetRawModeCore(bool raw, bool flush);
 
     protected override sealed void SetRawMode(bool raw)
     {
+        // We need an additional lock on top of the one in TerminalDriver since we can be called from signal handlers.
         lock (_rawLock)
-            if (!SetRawModeCore(raw))
-                throw new TerminalException("There is no terminal attached.");
+            SetRawModeCore(raw, true);
     }
-
-    protected abstract bool SetRawModeCore(bool raw);
 
     public abstract int OpenTerminalHandle(string name);
 

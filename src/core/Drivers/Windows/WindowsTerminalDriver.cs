@@ -21,6 +21,8 @@ sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
 
     public override WindowsTerminalWriter TerminalOut { get; }
 
+    (CONSOLE_MODE, CONSOLE_MODE)? _original;
+
     [SuppressMessage("Reliability", "CA2000")]
     WindowsTerminalDriver()
     {
@@ -54,30 +56,15 @@ sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
         _ = SetConsoleCP((uint)Encoding.Unicode.CodePage);
         _ = SetConsoleOutputCP((uint)Encoding.UTF8.CodePage);
 
-        // Start in cooked mode.
-        _ = AddConsoleMode(
-            TerminalIn.Handle,
-            CONSOLE_MODE.ENABLE_PROCESSED_INPUT |
-            CONSOLE_MODE.ENABLE_LINE_INPUT |
-            CONSOLE_MODE.ENABLE_ECHO_INPUT |
-            CONSOLE_MODE.ENABLE_INSERT_MODE |
-            CONSOLE_MODE.ENABLE_EXTENDED_FLAGS |
-            CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_INPUT);
-        _ = AddConsoleMode(
-            TerminalOut.Handle,
-            CONSOLE_MODE.ENABLE_PROCESSED_OUTPUT |
-            CONSOLE_MODE.ENABLE_WRAP_AT_EOL_OUTPUT |
-            CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING);
-    }
-
-    static bool AddConsoleMode(SafeHandle handle, CONSOLE_MODE mode)
-    {
-        return GetConsoleMode(handle, out var m) && SetConsoleMode(handle, m | mode);
-    }
-
-    static bool RemoveConsoleMode(SafeHandle handle, CONSOLE_MODE mode)
-    {
-        return GetConsoleMode(handle, out var m) && SetConsoleMode(handle, m & ~mode);
+        try
+        {
+            // Start in cooked mode.
+            SetRawModeCore(false, false);
+        }
+        catch (TerminalException)
+        {
+            // No terminal attached.
+        }
     }
 
     protected override TerminalSize? GetSize()
@@ -100,26 +87,62 @@ sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
             0);
     }
 
-    protected override void SetRawMode(bool raw)
+    void SetRawModeCore(bool raw, bool flush)
     {
-        if (!TerminalIn.IsInteractive || !TerminalOut.IsInteractive)
+        if (!GetConsoleMode(TerminalIn.Handle, out var inMode) ||
+            !GetConsoleMode(TerminalOut.Handle, out var outMode))
             throw new TerminalException("There is no terminal attached.");
 
-        var inMode =
+        // Stash away the original modes the first time we are successfully called.
+        if (_original == null)
+            _original = (inMode, outMode);
+
+        // Set up some sensible defaults.
+        inMode &= ~(
+            CONSOLE_MODE.ENABLE_WINDOW_INPUT |
+            CONSOLE_MODE.ENABLE_MOUSE_INPUT |
+            CONSOLE_MODE.ENABLE_QUICK_EDIT_MODE);
+        inMode |=
+            CONSOLE_MODE.ENABLE_INSERT_MODE |
+            CONSOLE_MODE.ENABLE_EXTENDED_FLAGS |
+            CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_INPUT;
+        outMode &= ~CONSOLE_MODE.ENABLE_LVB_GRID_WORLDWIDE;
+        outMode |=
+            CONSOLE_MODE.ENABLE_PROCESSED_OUTPUT |
+            CONSOLE_MODE.ENABLE_WRAP_AT_EOL_OUTPUT |
+            CONSOLE_MODE.ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+
+        var inExtra =
             CONSOLE_MODE.ENABLE_PROCESSED_INPUT |
             CONSOLE_MODE.ENABLE_LINE_INPUT |
             CONSOLE_MODE.ENABLE_ECHO_INPUT;
-        var outMode =
-            CONSOLE_MODE.DISABLE_NEWLINE_AUTO_RETURN;
+        var outExtra = CONSOLE_MODE.DISABLE_NEWLINE_AUTO_RETURN;
 
-        if (!(raw ? RemoveConsoleMode(TerminalIn.Handle, inMode) && RemoveConsoleMode(TerminalOut.Handle, outMode) :
-            AddConsoleMode(TerminalIn.Handle, inMode) && AddConsoleMode(TerminalOut.Handle, outMode)))
+        // Enable/disable features that depend on cooked/raw mode.
+        if (!raw)
+        {
+            inMode |= inExtra;
+            outMode |= outExtra;
+        }
+        else
+        {
+            inMode &= ~inExtra;
+            outMode &= ~outExtra;
+        }
+
+        if (!SetConsoleMode(TerminalIn.Handle, inMode) ||
+            !SetConsoleMode(TerminalOut.Handle, outMode))
             throw new TerminalException(
                 $"Could not change raw mode setting: {(WIN32_ERROR)Marshal.GetLastSystemError()}");
 
-        if (!FlushConsoleInputBuffer(StandardIn.Handle))
+        if (flush && !FlushConsoleInputBuffer(TerminalIn.Handle))
             throw new TerminalException(
                 $"Could not flush input buffer: {(WIN32_ERROR)Marshal.GetLastSystemError()}");
+    }
+
+    protected override void SetRawMode(bool raw)
+    {
+        SetRawModeCore(raw, true);
     }
 
     public override unsafe bool IsHandleValid(SafeHandle handle, bool write)
