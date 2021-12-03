@@ -9,9 +9,9 @@ abstract class DriverTerminalWriter<TDriver, THandle> : TerminalWriter
 
     public THandle Handle { get; }
 
-    public bool IsValid { get; }
-
     public override sealed TerminalOutputStream Stream { get; }
+
+    public override sealed bool IsValid { get; }
 
     public override sealed bool IsInteractive { get; }
 
@@ -20,8 +20,8 @@ abstract class DriverTerminalWriter<TDriver, THandle> : TerminalWriter
         Driver = driver;
         Name = name;
         Handle = handle;
+        Stream = new(this);
         IsValid = driver.IsHandleValid(handle, true);
         IsInteractive = driver.IsHandleInteractive(handle);
-        Stream = new(this);
     }
 }
