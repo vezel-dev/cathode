@@ -7,8 +7,8 @@ static unsafe class MacOSPInvoke
     public static extern int poll(pollfd* fds, uint nfds, int timeout);
 
     [DllImport("c", SetLastError = true)]
-    public static extern int tcgetattr(int fd, out termios termios_p);
+    public static extern int tcgetattr(int fildes, out termios termios_p);
 
     [DllImport("c", SetLastError = true)]
-    public static extern int tcsetattr(int fd, int optional_actions, in termios termios_p);
+    public static extern int tcsetattr(int fildes, int optional_actions, in termios termios_p);
 }
