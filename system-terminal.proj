@@ -2,7 +2,6 @@
     <ItemGroup>
         <ProjectReference Include="src/core/core.csproj" />
         <ProjectReference Include="src/extensions/extensions.csproj" />
-        <ProjectReference Include="src/input/input.csproj" />
         <ProjectReference Include="src/sample/sample.csproj" />
     </ItemGroup>
 </Project>

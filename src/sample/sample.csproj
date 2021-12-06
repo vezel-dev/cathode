@@ -10,18 +10,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Using Include="System.Input" />
         <Using Include="System.Text.Control" />
     </ItemGroup>
 
     <ItemGroup>
         <TrimmerRootAssembly Include="Microsoft.Extensions.Terminal" />
         <TrimmerRootAssembly Include="System.Terminal" />
-        <TrimmerRootAssembly Include="System.Terminal.Input" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="../extensions/extensions.csproj" />
-        <ProjectReference Include="../input/input.csproj" />
     </ItemGroup>
 </Project>

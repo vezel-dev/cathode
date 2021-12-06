@@ -9,7 +9,6 @@ static class Program
     {
         new AttributeScenario(),
         new CursorScenario(),
-        new EditScenario(),
         new FullScreenScenario(),
         new HostingScenario(),
         new RawScenario(),
