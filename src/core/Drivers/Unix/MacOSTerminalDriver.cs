@@ -87,6 +87,12 @@ sealed class MacOSTerminalDriver : UnixTerminalDriver
             throw new TerminalException($"Could not change raw mode setting: {new Win32Exception().Message}");
     }
 
+    public override void RestoreSettings()
+    {
+        if (_original is termios tios)
+            _ = tcsetattr(TerminalOut.Handle, TCSAFLUSH, tios);
+    }
+
     public override int OpenTerminalHandle(string name)
     {
         return open(name, O_RDWR | O_NOCTTY | O_CLOEXEC);

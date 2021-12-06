@@ -145,6 +145,15 @@ sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
         SetRawModeCore(raw, true);
     }
 
+    public override void RestoreSettings()
+    {
+        if (_original is var (inMode, outMode))
+        {
+            _ = SetConsoleMode(TerminalIn.Handle, inMode);
+            _ = SetConsoleMode(TerminalOut.Handle, outMode);
+        }
+    }
+
     public override unsafe bool IsHandleValid(SafeHandle handle, bool write)
     {
         if (handle.IsInvalid)

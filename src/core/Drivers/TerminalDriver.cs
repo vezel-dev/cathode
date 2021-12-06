@@ -192,6 +192,8 @@ abstract class TerminalDriver
         lock (_rawLock)
             SetRawMode(IsRawMode = false);
     }
+
+    public abstract void RestoreSettings();
 }
 
 abstract class TerminalDriver<THandle> : TerminalDriver
