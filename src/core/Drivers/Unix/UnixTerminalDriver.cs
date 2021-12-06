@@ -1,4 +1,3 @@
-using static System.Unix.UnixConstants;
 using static System.Unix.UnixPInvoke;
 
 namespace System.Drivers.Unix;

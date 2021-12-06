@@ -2,7 +2,6 @@ using Windows.Win32.Foundation;
 using Windows.Win32.Security;
 using Windows.Win32.Storage.FileSystem;
 using Windows.Win32.System.Console;
-using static Windows.Win32.Constants;
 using static Windows.Win32.WindowsPInvoke;
 
 namespace System.Drivers.Windows;

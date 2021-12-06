@@ -1,8 +1,6 @@
 using System.Unix;
 using System.Unix.MacOS;
-using static System.Unix.MacOS.MacOSConstants;
 using static System.Unix.MacOS.MacOSPInvoke;
-using static System.Unix.UnixConstants;
 using static System.Unix.UnixPInvoke;
 
 namespace System.Drivers.Unix;
