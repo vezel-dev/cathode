@@ -30,7 +30,7 @@ abstract class UnixTerminalDriver : TerminalDriver<int>
 
         StandardIn = new(this, "standard input", STDIN_FILENO, inLock);
         StandardOut = new(this, "standard output", STDOUT_FILENO, outLock);
-        StandardError = new(this, "standard error", STDERR_FILENO, new());
+        StandardError = new(this, "standard error", STDERR_FILENO, outLock);
 
         var tty = OpenTerminalHandle("/dev/tty");
 

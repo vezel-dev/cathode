@@ -30,7 +30,7 @@ sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
 
         StandardIn = new(this, "standard input", GetStdHandle_SafeHandle(STD_HANDLE.STD_INPUT_HANDLE), inLock);
         StandardOut = new(this, "standard output", GetStdHandle_SafeHandle(STD_HANDLE.STD_OUTPUT_HANDLE), outLock);
-        StandardError = new(this, "standard error", GetStdHandle_SafeHandle(STD_HANDLE.STD_ERROR_HANDLE), new());
+        StandardError = new(this, "standard error", GetStdHandle_SafeHandle(STD_HANDLE.STD_ERROR_HANDLE), outLock);
 
         static SafeHandle OpenConsoleHandle(string name)
         {
