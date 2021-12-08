@@ -16,6 +16,13 @@ This package provides the core terminal API.</PackageDescription>
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="../analyzers/analyzers.csproj"
+                          PrivateAssets="build;contentfiles"
+                          OutputItemType="Analyzer"
+                          ReferenceOutputAssembly="false" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers"
                           PrivateAssets="build;contentfiles" />
         <PackageReference Include="Microsoft.Windows.CsWin32"

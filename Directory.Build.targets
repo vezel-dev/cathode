@@ -64,5 +64,6 @@
         <Delete Files="@(_CachedFiles)" />
     </Target>
 
-    <Import Project="src/core/buildTransitive/Terminal.targets" />
+    <Import Project="src/core/buildTransitive/Terminal.targets"
+            Condition="'$(DevelopmentDependency)' != 'true'" />
 </Project>
