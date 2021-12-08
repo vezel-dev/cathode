@@ -4,30 +4,22 @@
         <EmbedAllSources>true</EmbedAllSources>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(OutputType)' == 'Library'">
-        <IsTrimmable>true</IsTrimmable>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(IsPackable)' == 'true'">
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    </PropertyGroup>
-
     <ItemGroup>
         <Using Include="System.Buffers" />
-        <Using Include="System.Collections" />
         <Using Include="System.Collections.Concurrent" />
         <Using Include="System.ComponentModel" />
         <Using Include="System.Diagnostics.CodeAnalysis" />
         <Using Include="System.Globalization" />
         <Using Include="System.Reflection" />
         <Using Include="System.Runtime.InteropServices" />
-        <Using Include="System.Runtime.Versioning" />
         <Using Include="System.Text" />
     </ItemGroup>
 
     <Choose>
         <When Condition="'$(IsPackable)' == 'true'">
             <PropertyGroup>
+                <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+                <IsTrimmable Condition="'$(OutputType)' == 'Library'">>true</IsTrimmable>
                 <PackageReadmeFile>README.md</PackageReadmeFile>
             </PropertyGroup>
 
