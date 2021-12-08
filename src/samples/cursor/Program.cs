@@ -7,20 +7,22 @@ Terminal.OutLine();
 Terminal.Out(SetCursorVisibility(true));
 
 var visible = true;
+var run = true;
 
-while (true)
+while (run)
 {
     Terminal.Out("Command: ");
 
     switch (Terminal.ReadLine())
     {
+        case null:
+            run = false;
+            break;
         case "visible":
             visible = !visible;
 
             Terminal.Out(SetCursorVisibility(visible));
             Terminal.OutLine("Cursor is now {0}.", visible ? "visible" : "invisible");
-            break;
-        case null:
             break;
         case var style when Enum.TryParse<CursorStyle>(style, true, out var s):
             Terminal.Out(SetCursorStyle(s));

@@ -8,7 +8,9 @@ Terminal.OutLine("  quit: Send quit signal (SIGQUIT / CTRL_BREAK_EVENT).");
 Terminal.OutLine("  terminate: Send quit signal (SIGTERM / CTRL_SHUTDOWN_EVENT).");
 Terminal.OutLine();
 
-while (true)
+var run = true;
+
+while (run)
 {
     Terminal.Out("Command: ");
 
@@ -22,6 +24,9 @@ while (true)
 
     switch (Terminal.ReadLine())
     {
+        case null:
+            run = false;
+            break;
         case "install":
             Terminal.Signal += OnSignal;
             Terminal.OutLine("Installed signal handler.");
@@ -45,8 +50,6 @@ while (true)
         case "terminate":
             Terminal.OutLine("Generating terminate signal.");
             Terminal.GenerateSignal(TerminalSignal.Terminate);
-            break;
-        case null:
             break;
         case var cmd:
             Terminal.OutLine("Unknown command '{0}'.", cmd);
