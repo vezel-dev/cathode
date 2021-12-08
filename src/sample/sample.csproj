@@ -10,10 +10,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Using Include="System.Text.Control" />
-    </ItemGroup>
-
-    <ItemGroup>
         <TrimmerRootAssembly Include="Microsoft.Extensions.Terminal" />
         <TrimmerRootAssembly Include="System.Terminal" />
     </ItemGroup>

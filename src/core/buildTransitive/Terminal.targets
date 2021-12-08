@@ -1,4 +1,9 @@
 <Project>
+    <ItemGroup Condition="'$(ImplicitUsings)' == 'true' or '$(ImplicitUsings)' == 'enable'">
+        <Using Include="System.Text" />
+        <Using Include="System.Text.Control" />
+    </ItemGroup>
+
     <ItemGroup>
         <AdditionalFiles Include="$(MSBuildThisFileDirectory)BannedSymbols.txt" />
     </ItemGroup>
