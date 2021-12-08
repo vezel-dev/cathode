@@ -1,4 +1,4 @@
-using static System.Text.Control.ControlConstants;
+using static System.Text.Control.ControlSequences;
 
 namespace Sample.Scenarios;
 
@@ -26,7 +26,7 @@ sealed class SignalScenario : Scenario
                 context.Cancel = true;
 
                 Terminal.OutLine("Caught {0} signal.", context.Signal);
-                Terminal.Out(BEL);
+                Terminal.Out(Beep());
             }
 
             switch (Terminal.ReadLine())

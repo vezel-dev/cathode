@@ -106,7 +106,7 @@ abstract class TerminalDriver
         Console.SetOut(new InvalidTextWriter());
         Console.SetError(new InvalidTextWriter());
 
-        _ = TerminalUtility.StartThread("Terminal Resize Poller", () =>
+        var thread = new Thread(() =>
         {
             while (true)
             {
@@ -116,7 +116,13 @@ abstract class TerminalDriver
 
                 Thread.Sleep(_sizeInterval);
             }
-        });
+        })
+        {
+            Name = "Terminal Resize Poller",
+            IsBackground = true,
+        };
+
+        thread.Start();
 
         void HandleSignal(PosixSignalContext context)
         {

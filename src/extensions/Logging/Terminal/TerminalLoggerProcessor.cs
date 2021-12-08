@@ -13,7 +13,7 @@ sealed class TerminalLoggerProcessor : IDisposable
     {
         Options = options;
         _queue = new(options.LogQueueSize);
-        _thread = TerminalUtility.StartThread("Terminal Log Processor", () =>
+        _thread = new Thread(() =>
         {
             try
             {
@@ -32,7 +32,13 @@ sealed class TerminalLoggerProcessor : IDisposable
                 {
                 }
             }
-        });
+        })
+        {
+            Name = "Terminal Log Processor",
+            IsBackground = true,
+        };
+
+        _thread.Start();
     }
 
     public void Enqueue(in TerminalLoggerEntry entry)

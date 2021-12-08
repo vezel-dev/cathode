@@ -10,10 +10,6 @@ This package provides the core terminal API.</PackageDescription>
     </PropertyGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="Microsoft.Extensions.Terminal" />
-    </ItemGroup>
-
-    <ItemGroup>
         <None Include="buildTransitive/**"
               Pack="true"
               PackagePath="%(Identity)" />
