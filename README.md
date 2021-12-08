@@ -32,7 +32,9 @@ This project offers the following packages:
 
 To install a package, run `dotnet add package <name>`.
 
-See the [sample program](src/sample) for examples of what the API can do.
+See the [sample programs](src/samples) for examples of what the API can do. The
+samples can be run with
+[`dotnet example`](https://github.com/patriksvensson/dotnet-example).
 
 ## Terminals
 

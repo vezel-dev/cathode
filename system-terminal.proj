@@ -3,6 +3,7 @@
         <ProjectReference Include="src/analyzers/analyzers.csproj" />
         <ProjectReference Include="src/core/core.csproj" />
         <ProjectReference Include="src/extensions/extensions.csproj" />
-        <ProjectReference Include="src/sample/sample.csproj" />
+        <ProjectReference Include="src/samples/*/*.csproj" />
+        <ProjectReference Include="src/trimming/trimming.csproj" />
     </ItemGroup>
 </Project>

@@ -1,0 +1,12 @@
+<Project>
+    <ItemGroup>
+        <Using Include="System.Text.Control.ControlSequences"
+               Static="true" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="$(MSBuildThisFileDirectory)../extensions/extensions.csproj" />
+    </ItemGroup>
+
+    <Import Project="$([MSBuild]::GetPathOfFileAbove('$(MSBuildThisFile)', '$(MSBuildThisFileDirectory)..'))" />
+</Project>

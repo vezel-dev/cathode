@@ -1,10 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
+    <!--
+    This project exists solely so that we can get full trimming analysis of the
+    library projects when running dotnet publish.
+    -->
+
     <PropertyGroup>
-        <AssemblyName>sample</AssemblyName>
+        <AssemblyName>trimming</AssemblyName>
         <IsPublishable>true</IsPublishable>
         <OutputType>Exe</OutputType>
         <PublishTrimmed>true</PublishTrimmed>
-        <RootNamespace>Sample</RootNamespace>
+        <RootNamespace>Trimming</RootNamespace>
         <TrimmerDefaultAction>link</TrimmerDefaultAction>
         <UseCurrentRuntimeIdentifier>true</UseCurrentRuntimeIdentifier>
     </PropertyGroup>

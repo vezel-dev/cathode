@@ -14,6 +14,12 @@
         "dotnet-dump"
       ]
     },
+    "dotnet-example": {
+      "version": "1.5.0",
+      "commands": [
+        "dotnet-example"
+      ]
+    },
     "dotnet-gcdump": {
       "version": "6.0.257301",
       "commands": [

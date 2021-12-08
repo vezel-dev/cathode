@@ -2,24 +2,6 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": ".NET: Launch",
-      "preLaunchTask": "Build",
-      "type": "coreclr",
-      "request": "launch",
-      "suppressJITOptimizations": true,
-      "justMyCode": false,
-      "symbolOptions": {
-        "searchMicrosoftSymbolServer": true,
-        "searchNuGetOrgSymbolServer": true
-      },
-      "cwd": "${workspaceFolder}/src/sample",
-      "program": "${workspaceFolder}/src/sample/bin/Debug/sample.dll",
-      "args": [
-        "-f",
-        "${workspaceFolder}/pkg/feed"
-      ]
-    },
-    {
       "name": ".NET: Attach",
       "type": "coreclr",
       "request": "attach",

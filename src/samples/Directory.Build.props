@@ -1,0 +1,9 @@
+<Project>
+    <Import Project="$([MSBuild]::GetPathOfFileAbove('$(MSBuildThisFile)', '$(MSBuildThisFileDirectory)..'))" />
+
+    <PropertyGroup>
+        <!-- TODO: https://github.com/dotnet/roslyn-analyzers/issues/5628 -->
+        <NoWarn>$(NoWarn); CA1812</NoWarn>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+</Project>
