@@ -17,7 +17,7 @@ This package provides the core terminal API.</PackageDescription>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers"
-                          PrivateAssets="none" />
+                          PrivateAssets="build;contentfiles" />
         <PackageReference Include="Microsoft.Windows.CsWin32"
                           PrivateAssets="all" />
         <PackageReference Include="Microsoft.Windows.SDK.Win32Docs"
