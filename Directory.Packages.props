@@ -13,7 +13,7 @@
         <PackageVersion Include="Microsoft.Windows.SDK.Win32Docs"
                         Version="0.1.7-alpha" />
         <PackageVersion Include="Microsoft.Windows.SDK.Win32Metadata"
-                        Version="15.0.2-preview" />
+                        Version="15.0.22-preview" />
         <PackageVersion Include="Nerdbank.GitVersioning"
                         Version="3.4.244" />
         <PackageVersion Include="StyleCop.Analyzers"
