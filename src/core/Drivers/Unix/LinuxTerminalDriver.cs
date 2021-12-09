@@ -78,7 +78,8 @@ sealed class LinuxTerminalDriver : UnixTerminalDriver
         }
 
         if (ret != 0)
-            throw new TerminalException($"Could not change raw mode setting: {new Win32Exception().Message}");
+            throw new TerminalException(
+                $"Could not change raw mode setting: {new Win32Exception(Marshal.GetLastPInvokeError()).Message}");
     }
 
     public override void RestoreSettings()
