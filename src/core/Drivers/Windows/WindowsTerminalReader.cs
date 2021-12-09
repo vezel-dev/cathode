@@ -53,7 +53,7 @@ sealed class WindowsTerminalReader : DriverTerminalReader<WindowsTerminalDriver,
                         var read = 0u;
 
                         while ((ret = ReadConsoleW(Handle, p, 1, out read, null)) &&
-                            Marshal.GetLastSystemError() == (int)WIN32_ERROR.ERROR_OPERATION_ABORTED &&
+                            Marshal.GetLastPInvokeError() == (int)WIN32_ERROR.ERROR_OPERATION_ABORTED &&
                             read == 0)
                         {
                             // Retry in case we get interrupted by a signal.
@@ -91,7 +91,7 @@ sealed class WindowsTerminalReader : DriverTerminalReader<WindowsTerminalDriver,
                         if (char.IsHighSurrogate(units[0]))
                         {
                             while ((ret = ReadConsoleW(Handle, p + 1, 1, out read, null)) &&
-                                Marshal.GetLastSystemError() == (int)WIN32_ERROR.ERROR_OPERATION_ABORTED &&
+                                Marshal.GetLastPInvokeError() == (int)WIN32_ERROR.ERROR_OPERATION_ABORTED &&
                                 read == 0)
                             {
                                 // Retry in case we get interrupted by a signal.

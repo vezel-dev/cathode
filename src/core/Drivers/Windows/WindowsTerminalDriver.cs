@@ -132,11 +132,11 @@ sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
         if (!SetConsoleMode(TerminalIn.Handle, inMode) ||
             !SetConsoleMode(TerminalOut.Handle, outMode))
             throw new TerminalException(
-                $"Could not change raw mode setting: {(WIN32_ERROR)Marshal.GetLastSystemError()}");
+                $"Could not change raw mode setting: {(WIN32_ERROR)Marshal.GetLastPInvokeError()}");
 
         if (flush && !FlushConsoleInputBuffer(TerminalIn.Handle))
             throw new TerminalException(
-                $"Could not flush input buffer: {(WIN32_ERROR)Marshal.GetLastSystemError()}");
+                $"Could not flush input buffer: {(WIN32_ERROR)Marshal.GetLastPInvokeError()}");
     }
 
     protected override void SetRawMode(bool raw)
