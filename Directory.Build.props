@@ -13,6 +13,8 @@
         <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
         <DebugType>none</DebugType>
         <EnablePackageValidation>true</EnablePackageValidation>
+        <!-- TODO: Remove in .NET 7. -->
+        <EnablePreviewFeatures>true</EnablePreviewFeatures>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
         <ImplicitUsings>true</ImplicitUsings>
         <IsPackable>false</IsPackable>

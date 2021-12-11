@@ -18,7 +18,7 @@
         <When Condition="'$(IsPackable)' == 'true'">
             <PropertyGroup>
                 <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-                <IsTrimmable Condition="'$(OutputType)' == 'Library'">>true</IsTrimmable>
+                <IsTrimmable Condition="'$(OutputType)' == 'Library' and '$(DevelopmentDependency)' != 'true'">>true</IsTrimmable>
                 <PackageReadmeFile>README.md</PackageReadmeFile>
             </PropertyGroup>
 

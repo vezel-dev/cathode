@@ -1,5 +1,6 @@
 <Project>
     <ItemGroup Condition="'$(ImplicitUsings)' == 'true' or '$(ImplicitUsings)' == 'enable'">
+        <Using Include="System.Hosting" />
         <Using Include="System.Text" />
         <Using Include="System.Text.Control" />
     </ItemGroup>

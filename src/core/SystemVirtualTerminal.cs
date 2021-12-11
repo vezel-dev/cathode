@@ -71,6 +71,7 @@ public sealed class SystemVirtualTerminal : VirtualTerminal
         // This method is named as it is and hidden from IntelliSense because restoring the original terminal settings
         // and then calling any I/O method in our API could have completely unpredictable results. Nevertheless, we
         // expose the method for people who know what they are doing.
+
         _driver.RestoreSettings();
     }
 }
