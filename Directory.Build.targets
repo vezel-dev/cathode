@@ -12,6 +12,7 @@
         <Using Include="System.Globalization" />
         <Using Include="System.Reflection" />
         <Using Include="System.Runtime.InteropServices" />
+        <Using Include="System.Text" />
     </ItemGroup>
 
     <Choose>
@@ -63,7 +64,4 @@
 
         <Delete Files="@(_CachedFiles)" />
     </Target>
-
-    <Import Project="src/core/buildTransitive/Terminal.targets"
-            Condition="'$(DevelopmentDependency)' != 'true'" />
 </Project>

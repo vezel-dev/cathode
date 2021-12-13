@@ -1,6 +1,7 @@
 # System.Terminal [![Build Status](https://github.com/alexrp/system-terminal/actions/workflows/build.yml/badge.svg)](https://github.com/alexrp/system-terminal/actions/workflows/build.yml)
 
 [![Terminal](https://img.shields.io/nuget/v/Terminal.svg?label=Terminal)](https://www.nuget.org/packages/Terminal)
+[![Terminal.Hosting](https://img.shields.io/nuget/v/Terminal.Hosting.svg?label=Terminal.Hosting)](https://www.nuget.org/packages/Terminal.Hosting)
 [![Terminal.Extensions](https://img.shields.io/nuget/v/Terminal.Extensions.svg?label=Terminal.Extensions)](https://www.nuget.org/packages/Terminal.Extensions)
 
 `System.Terminal` is a toolkit for writing terminal-based applications. It is
@@ -27,6 +28,8 @@ This project offers the following packages:
 
 * [Terminal](https://www.nuget.org/packages/Terminal): Provides the core
   terminal API.
+* [Terminal.Hosting](https://www.nuget.org/packages/Terminal.Hosting): Provides
+  the terminal hosting model.
 * [Terminal.Extensions](https://www.nuget.org/packages/Terminal.Extensions):
   Provides terminal hosting and logging for the .NET Generic Host.
 

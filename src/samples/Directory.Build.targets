@@ -4,9 +4,30 @@
                Static="true" />
     </ItemGroup>
 
+    <!--
+    We need this analyzer reference here because the ProjectReference in the
+    core project does not flow properly. It only seems to work in the
+    PackageReference case.
+    -->
+    <ItemGroup>
+        <ProjectReference Include="$(MSBuildThisFileDirectory)../analyzers/analyzers.csproj"
+                          OutputItemType="Analyzer"
+                          ReferenceOutputAssembly="false" />
+    </ItemGroup>
+
     <ItemGroup>
         <ProjectReference Include="$(MSBuildThisFileDirectory)../extensions/extensions.csproj" />
+        <ProjectReference Include="$(MSBuildThisFileDirectory)../hosting/hosting.csproj" />
     </ItemGroup>
+
+    <!--
+    These imports are required here since NuGet only takes of importing them in
+    the PackageReference case.
+    -->
+    <Import Project="../core/buildTransitive/Terminal.targets"
+            Condition="'$(DevelopmentDependency)' != 'true'" />
+    <Import Project="../hosting/buildTransitive/Terminal.Hosting.targets"
+            Condition="'$(DevelopmentDependency)' != 'true'" />
 
     <Import Project="$([MSBuild]::GetPathOfFileAbove('$(MSBuildThisFile)', '$(MSBuildThisFileDirectory)..'))" />
 </Project>

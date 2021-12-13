@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <AssemblyName>System.Terminal.Hosting</AssemblyName>
+        <IsPackable>true</IsPackable>
+        <PackageDescription>$(PackageDescription)
+
+This package provides the terminal hosting model.</PackageDescription>
+        <PackageId>Terminal.Hosting</PackageId>
+        <RootNamespace>System.Hosting</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="buildTransitive/**"
+              Pack="true"
+              PackagePath="%(Identity)" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../core/core.csproj" />
+    </ItemGroup>
+</Project>

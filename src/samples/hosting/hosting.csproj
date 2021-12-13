@@ -1,8 +1,1 @@
-<Project Sdk="Microsoft.NET.Sdk">
-    <!-- FIXME: Why is the analyzer reference not flowing through from the core project? -->
-    <ItemGroup>
-        <ProjectReference Include="../../analyzers/analyzers.csproj"
-                          OutputItemType="Analyzer"
-                          ReferenceOutputAssembly="false" />
-    </ItemGroup>
-</Project>
+<Project Sdk="Microsoft.NET.Sdk" />

@@ -8,7 +8,7 @@
         <NoWarn>$(NoWarn); NU5128</NoWarn>
         <PackageDescription>$(PackageDescription)
 
-This package provides analyzers and source generators.</PackageDescription>
+This package provides diagnostic analyzers and source generators.</PackageDescription>
         <PackageId>Terminal.Analyzers</PackageId>
         <RootNamespace>System.Analyzers</RootNamespace>
         <TargetFramework>netstandard2.0</TargetFramework>

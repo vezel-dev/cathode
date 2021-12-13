@@ -1,9 +1,5 @@
 <Project Sdk="Microsoft.Build.Traversal">
     <ItemGroup>
-        <ProjectReference Include="src/analyzers/analyzers.csproj" />
-        <ProjectReference Include="src/core/core.csproj" />
-        <ProjectReference Include="src/extensions/extensions.csproj" />
-        <ProjectReference Include="src/samples/*/*.csproj" />
-        <ProjectReference Include="src/trimming/trimming.csproj" />
+        <ProjectReference Include="src/**/*.csproj" />
     </ItemGroup>
 </Project>
