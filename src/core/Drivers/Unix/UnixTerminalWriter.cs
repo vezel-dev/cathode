@@ -33,6 +33,9 @@ sealed class UnixTerminalWriter : DriverTerminalWriter<UnixTerminalDriver, int>
                 {
                     long ret;
 
+                    // Note that this call may get us suspended by way of a SIGTTOU signal if we are a background
+                    // process, the handle refers to a terminal, and the TOSTOP bit is set (we disable TOSTOP in the
+                    // drivers but there are ways that it could get set anyway).
                     while ((ret = write(Handle, p + count, (nuint)(data.Length - count))) == -1 &&
                         Marshal.GetLastPInvokeError() == EINTR)
                     {

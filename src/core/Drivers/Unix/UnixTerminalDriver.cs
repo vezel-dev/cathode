@@ -53,6 +53,10 @@ abstract class UnixTerminalDriver : TerminalDriver<int>
         {
             // If we are being restored from the background (SIGCONT), it is possible and likely that terminal settings
             // have been mangled, so restore them.
+            //
+            // This is a best-effort thing. The reality is that, since this signal handler method gets called in a
+            // thread after the process has fully woken up, other code may already be trying to interact with the
+            // terminal again. There is currently nothing we can really do about this race condition.
             if (context.Signal == PosixSignal.SIGCONT)
             {
                 try
@@ -62,9 +66,9 @@ abstract class UnixTerminalDriver : TerminalDriver<int>
                 }
                 catch (TerminalException)
                 {
-                    // If we fail to apply the terminal settings again, it means the terminal is gone. By extension,
-                    // that means the program can no longer read from or write to it, so terminal settings are
-                    // irrelevant from that point on anyway.
+                    // Either there was no terminal attached to begin with, or it has disappeared since we were stopped.
+                    // In either case, the program can no longer read from or write to the terminal, so terminal
+                    // settings are irrelevant.
                 }
 
                 // Prevent System.Native from overwriting the terminal settings we just put into effect.

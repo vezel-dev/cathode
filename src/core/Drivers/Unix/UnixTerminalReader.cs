@@ -31,6 +31,8 @@ sealed class UnixTerminalReader : DriverTerminalReader<UnixTerminalDriver, int>
             {
                 fixed (byte* p = data)
                 {
+                    // Note that this call may get us suspended by way of a SIGTTIN signal if we are a background
+                    // process and the handle refers to a terminal.
                     while ((ret = read(Handle, p, (nuint)data.Length)) == -1 &&
                         Marshal.GetLastPInvokeError() == EINTR)
                     {

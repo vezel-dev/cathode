@@ -75,6 +75,7 @@ sealed class MacOSTerminalDriver : UnixTerminalDriver
 
         int ret;
 
+        // Note that this call may get us suspended by way of a SIGTTOU signal if we are a background process.
         while ((ret = tcsetattr(TerminalOut.Handle, flush ? TCSAFLUSH : TCSANOW, termios)) == -1 &&
             Marshal.GetLastPInvokeError() == EINTR)
         {

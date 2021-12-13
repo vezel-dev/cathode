@@ -100,7 +100,7 @@ abstract class TerminalDriver
         // on Console from calling into internal classes like ConsolePal and StdInReader (which in turn call
         // System.Native functions that, among other things, change terminal settings).
         //
-        // There are still many problematic properties and methods beyond these, but there is  not much we can do about
+        // There are still many problematic properties and methods beyond these, but there is not much we can do about
         // those.
         Console.SetIn(new InvalidTextReader());
         Console.SetOut(new InvalidTextWriter());
