@@ -20,6 +20,9 @@ abstract class UnixTerminalDriver : TerminalDriver<int>
     [SuppressMessage("Style", "IDE0052")]
     readonly PosixSignalRegistration _sigCont;
 
+    [SuppressMessage("Style", "IDE0052")]
+    readonly PosixSignalRegistration _sigChld;
+
     readonly object _rawLock = new();
 
     [SuppressMessage("Usage", "CA2214")]
@@ -70,21 +73,21 @@ abstract class UnixTerminalDriver : TerminalDriver<int>
                     // In either case, the program can no longer read from or write to the terminal, so terminal
                     // settings are irrelevant.
                 }
-
-                // Prevent System.Native from overwriting the terminal settings we just put into effect.
-                context.Cancel = true;
             }
 
-            // Terminal width/height might have changed for SIGCONT, and will definitely have changed for SIGWINCH. On
+            // Terminal width/height will definitely have changed for SIGWINCH, and might have changed for SIGCONT. On
             // Unix systems, SIGWINCH lets us respond much more quickly to a change in terminal size.
-            RefreshSize();
+            if (context.Signal is PosixSignal.SIGWINCH or PosixSignal.SIGCONT)
+                RefreshSize();
+
+            // Prevent System.Native from overwriting our terminal settings.
+            context.Cancel = true;
         }
 
         // Keep the registrations alive by storing them in fields.
         _sigWinch = PosixSignalRegistration.Create(PosixSignal.SIGWINCH, HandleSignal);
         _sigCont = PosixSignalRegistration.Create(PosixSignal.SIGCONT, HandleSignal);
-
-        // TODO: SIGCHLD?
+        _sigChld = PosixSignalRegistration.Create(PosixSignal.SIGCHLD, HandleSignal);
     }
 
     public override sealed void GenerateSignal(TerminalSignal signal)
