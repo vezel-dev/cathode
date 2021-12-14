@@ -200,6 +200,19 @@ public sealed class ControlBuilder
         return Print(ESC).Print(MemoryMarshal.CreateSpan(ref ch, 1));
     }
 
+    public ControlBuilder SetKeyboardLevel(KeyboardLevel level)
+    {
+        var (cursor, function, other) = level switch
+        {
+            KeyboardLevel.Basic => ("1n", "2n", "4n"),
+            KeyboardLevel.Normal => ("1;2m", "2;2m", "4;0m"),
+            KeyboardLevel.Extended => ("1;2m", "2;2m", "4;2m"),
+            _ => throw new ArgumentOutOfRangeException(nameof(level)),
+        };
+
+        return Print(CSI).Print(cursor).Print(CSI).Print(function).Print(CSI).Print(other);
+    }
+
     public ControlBuilder SetMouseEvents(MouseEvents events)
     {
         return Print(CSI).Print("?1003").Print(events.HasFlag(MouseEvents.Movement) ? "h" : "l")
@@ -503,7 +516,7 @@ public sealed class ControlBuilder
         return Print(OSC).Print("8;;").Print(ST);
     }
 
-    public ControlBuilder SaveScreenshot(ScreenshotFormat format)
+    public ControlBuilder SaveScreenshot(ScreenshotFormat format = ScreenshotFormat.Html)
     {
         _ = Enum.IsDefined(format) ? true : throw new ArgumentOutOfRangeException(nameof(format));
 

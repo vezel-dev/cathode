@@ -132,6 +132,11 @@ public static class ControlSequences
         return Create(cb => cb.SetKeypadMode(mode));
     }
 
+    public static string SetKeyboardLevel(KeyboardLevel level)
+    {
+        return Create(cb => cb.SetKeyboardLevel(level));
+    }
+
     public static string SetMouseEvents(MouseEvents events)
     {
         return Create(cb => cb.SetMouseEvents(events));
@@ -308,7 +313,7 @@ public static class ControlSequences
         return Create(cb => cb.CloseHyperlink());
     }
 
-    public static string SaveScreenshot(ScreenshotFormat format)
+    public static string SaveScreenshot(ScreenshotFormat format = ScreenshotFormat.Html)
     {
         return Create(cb => cb.SaveScreenshot(format));
     }
