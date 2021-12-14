@@ -87,25 +87,8 @@ abstract class TerminalDriver
     Action<TerminalSize>? _resize;
 
     [SuppressMessage("Reliability", "CA2000")]
-    [SuppressMessage("ApiDesign", "RS0030")]
     protected TerminalDriver()
     {
-        // Accessing this property has no particularly important effect on Windows, but it does do something important
-        // on Unix: If a terminal is attached, it will force Console to initialize its System.Native portions, which
-        // includes terminal settings. Thus, by doing this here, we ensure that if a user accidentally accesses Console
-        // at some point later, it will not overwrite our terminal settings.
-        _ = Console.In;
-
-        // Try to prevent Console/Terminal intermixing from breaking stuff. This should prevent basic read/write calls
-        // on Console from calling into internal classes like ConsolePal and StdInReader (which in turn call
-        // System.Native functions that, among other things, change terminal settings).
-        //
-        // There are still many problematic properties and methods beyond these, but there is not much we can do about
-        // those.
-        Console.SetIn(new InvalidTextReader());
-        Console.SetOut(new InvalidTextWriter());
-        Console.SetError(new InvalidTextWriter());
-
         var thread = new Thread(() =>
         {
             while (true)
