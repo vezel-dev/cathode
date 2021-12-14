@@ -173,13 +173,21 @@ abstract class TerminalDriver
     public void EnableRawMode()
     {
         lock (_rawLock)
-            SetRawMode(IsRawMode = true);
+        {
+            SetRawMode(true);
+
+            IsRawMode = true;
+        }
     }
 
     public void DisableRawMode()
     {
         lock (_rawLock)
-            SetRawMode(IsRawMode = false);
+        {
+            SetRawMode(false);
+
+            IsRawMode = false;
+        }
     }
 
     public abstract void RestoreSettings();
