@@ -6,7 +6,7 @@ public abstract class TerminalWriter : TerminalHandle
 
     public event ReadOnlySpanAction<byte, TerminalWriter>? OutputWritten;
 
-    public TextWriter Writer => _writer.Value;
+    public TextWriter TextWriter => _writer.Value;
 
     readonly Lazy<TextWriter> _writer;
 

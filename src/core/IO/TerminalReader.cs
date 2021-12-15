@@ -6,7 +6,7 @@ public abstract class TerminalReader : TerminalHandle
 
     public event SpanAction<byte, TerminalReader>? InputRead;
 
-    public TextReader Reader => _reader.Value;
+    public TextReader TextReader => _reader.Value;
 
     readonly Lazy<TextReader> _reader;
 
@@ -47,6 +47,6 @@ public abstract class TerminalReader : TerminalHandle
 
     public string? ReadLine()
     {
-        return Reader.ReadLine();
+        return TextReader.ReadLine();
     }
 }
