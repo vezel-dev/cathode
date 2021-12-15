@@ -10,7 +10,7 @@ public sealed class TerminalProcess
 
     public event Action? Exited;
 
-    public static TerminalProcess CurrentProcess { get; } = new(Process.GetCurrentProcess());
+    public static TerminalProcess CurrentProcess { get; } = new(Process.GetCurrentProcess(), false);
 
     public SafeHandle Handle => _process.SafeHandle;
 
@@ -36,7 +36,7 @@ public sealed class TerminalProcess
 
     readonly Process _process;
 
-    TerminalProcess(Process process)
+    TerminalProcess(Process process, bool reap)
     {
         _process = process;
 
@@ -44,24 +44,33 @@ public sealed class TerminalProcess
 
         process.OutputDataReceived += (_, e) => StandardOutReceived?.Invoke(e.Data);
         process.ErrorDataReceived += (_, e) => StandardErrorReceived?.Invoke(e.Data);
-        process.Exited += (_, _) => Exited?.Invoke();
+
+        process.Exited += (_, _) =>
+        {
+            // Do this before invoking the Exited event since any misbehaving event handlers might otherwise cause us to
+            // not reap the process, leaving terminal configuration in an unknown state.
+            if (reap)
+                SystemVirtualTerminal.Instance.ReapProcess(this);
+
+            Exited?.Invoke();
+        };
     }
 
     public static TerminalProcess[] GetProcesses()
     {
-        return Process.GetProcesses().Select(p => new TerminalProcess(p)).ToArray();
+        return Process.GetProcesses().Select(p => new TerminalProcess(p, false)).ToArray();
     }
 
     public static TerminalProcess[] GetProcessesByName(string name)
     {
         ArgumentNullException.ThrowIfNull(name);
 
-        return Process.GetProcessesByName(name).Select(p => new TerminalProcess(p)).ToArray();
+        return Process.GetProcessesByName(name).Select(p => new TerminalProcess(p, false)).ToArray();
     }
 
     public static TerminalProcess GetProcessById(int id)
     {
-        return new(Process.GetProcessById(id));
+        return new(Process.GetProcessById(id), false);
     }
 
     internal static TerminalProcess Start(TerminalProcessBuilder builder)
@@ -103,18 +112,14 @@ public sealed class TerminalProcess
             StartInfo = info,
         };
 
-        var wrapper = new TerminalProcess(proc);
         var redirected = redirectIn && redirectOut && redirectError;
+        var wrapper = new TerminalProcess(proc, !redirected);
 
-        // Is there a chance the child process will use the terminal?
+        // If the child process might use the terminal, start it under the raw mode lock since we only allow starting
+        // non-redirected processes in cooked mode and we need to verify our current mode.
         if (!redirected)
         {
-            var term = SystemVirtualTerminal.Instance;
-
-            proc.Exited += (_, _) => term.ReapProcess(wrapper);
-
-            // This causes the launch to happen under the raw mode lock.
-            term.StartProcess(() =>
+            SystemVirtualTerminal.Instance.StartProcess(() =>
             {
                 _ = proc.Start();
 
