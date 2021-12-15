@@ -6,7 +6,6 @@ static class WindowsTerminalUtility
 {
     public static void ThrowIfUnexpected(string message)
     {
-        // TODO: https://github.com/microsoft/CsWin32/issues/452
         var err = Marshal.GetLastPInvokeError();
 
         // See comments in UnixTerminalWriter for the error handling rationale.
