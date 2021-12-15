@@ -6,13 +6,17 @@ public abstract class TerminalReader : TerminalHandle
 
     public event SpanAction<byte, TerminalReader>? InputRead;
 
-    readonly Lazy<StreamReader> _reader;
+    public TextReader Reader => _reader.Value;
 
+    readonly Lazy<TextReader> _reader;
+
+    [SuppressMessage("Reliability", "CA2000")]
     protected TerminalReader()
     {
         // Note that the buffer size used affects how many characters the Windows console host will allow the user to
         // type in a single line (in cooked mode).
-        _reader = new(() => new(Stream, Terminal.Encoding, false, ReadBufferSize, true));
+        _reader = new(
+            () => TextReader.Synchronized(new StreamReader(Stream, Terminal.Encoding, false, ReadBufferSize, true)));
     }
 
     protected abstract void ReadCore(Span<byte> data, out int count);
@@ -43,6 +47,6 @@ public abstract class TerminalReader : TerminalHandle
 
     public string? ReadLine()
     {
-        return _reader.Value.ReadLine();
+        return Reader.ReadLine();
     }
 }

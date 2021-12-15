@@ -2,7 +2,23 @@ namespace System.IO;
 
 public abstract class TerminalWriter : TerminalHandle
 {
+    const int WriteBufferSize = 256;
+
     public event ReadOnlySpanAction<byte, TerminalWriter>? OutputWritten;
+
+    public TextWriter Writer => _writer.Value;
+
+    readonly Lazy<TextWriter> _writer;
+
+    protected TerminalWriter()
+    {
+        // Unlike TerminalReader, the buffer size here is arbitrary and only has performance implications.
+        _writer = new(
+            () => TextWriter.Synchronized(new StreamWriter(Stream, Terminal.Encoding, WriteBufferSize, true)
+            {
+                AutoFlush = true,
+            }));
+    }
 
     protected abstract void WriteCore(ReadOnlySpan<byte> data, out int count);
 
