@@ -92,3 +92,7 @@ These are helpful resources used in the development of `System.Terminal`:
 * <https://wezfurlong.org/wezterm/escape-sequences.html>
 * <https://www.ecma-international.org/publications/standards/Ecma-048.htm>
 * <https://xtermjs.org/docs/api/vtfeatures/>
+
+## Statistics
+
+![Repobeats](https://repobeats.axiom.co/api/embed/56d1f4cda2c680fe93627ab2f884a3ce78c7d1d6.svg)
