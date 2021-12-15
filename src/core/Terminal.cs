@@ -2,16 +2,16 @@ namespace System;
 
 public static class Terminal
 {
-    public static event Action<TerminalSize>? Resize
+    public static event Action<TerminalSize>? Resized
     {
-        add => _terminal.Resize += value;
-        remove => _terminal.Resize -= value;
+        add => _terminal.Resized += value;
+        remove => _terminal.Resized -= value;
     }
 
-    public static event Action<TerminalSignalContext>? Signal
+    public static event Action<TerminalSignalContext>? Signaled
     {
-        add => _terminal.Signal += value;
-        remove => _terminal.Signal -= value;
+        add => _terminal.Signaled += value;
+        remove => _terminal.Signaled -= value;
     }
 
     public static Encoding Encoding { get; } = new UTF8Encoding(false);

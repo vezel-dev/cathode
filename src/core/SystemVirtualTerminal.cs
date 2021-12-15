@@ -6,16 +6,16 @@ namespace System;
 
 public sealed class SystemVirtualTerminal : VirtualTerminal
 {
-    public override event Action<TerminalSize>? Resize
+    public override event Action<TerminalSize>? Resized
     {
-        add => _driver.Resize += value;
-        remove => _driver.Resize -= value;
+        add => _driver.Resized += value;
+        remove => _driver.Resized -= value;
     }
 
-    public override event Action<TerminalSignalContext>? Signal
+    public override event Action<TerminalSignalContext>? Signaled
     {
-        add => _driver.Signal += value;
-        remove => _driver.Signal -= value;
+        add => _driver.Signaled += value;
+        remove => _driver.Signaled -= value;
     }
 
     public static SystemVirtualTerminal Instance { get; } = new();

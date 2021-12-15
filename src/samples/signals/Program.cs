@@ -28,11 +28,11 @@ while (run)
             run = false;
             break;
         case "install":
-            Terminal.Signal += OnSignal;
+            Terminal.Signaled += OnSignal;
             Terminal.OutLine("Installed signal handler.");
             break;
         case "uninstall":
-            Terminal.Signal -= OnSignal;
+            Terminal.Signaled -= OnSignal;
             Terminal.OutLine("Uninstalled signal handler.");
             break;
         case "close":

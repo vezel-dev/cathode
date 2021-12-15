@@ -2,9 +2,9 @@ namespace System;
 
 public abstract class VirtualTerminal
 {
-    public abstract event Action<TerminalSize>? Resize;
+    public abstract event Action<TerminalSize>? Resized;
 
-    public abstract event Action<TerminalSignalContext>? Signal;
+    public abstract event Action<TerminalSignalContext>? Signaled;
 
     public abstract TerminalReader StandardIn { get; }
 

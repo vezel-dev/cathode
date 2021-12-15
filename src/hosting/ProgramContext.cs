@@ -4,7 +4,7 @@ public sealed class ProgramContext
 {
     public event Action<Exception>? UnhandledException;
 
-    public event Action? ProcessExit;
+    public event Action? ProcessExiting;
 
     public ReadOnlyMemory<string> Arguments { get; }
 
@@ -40,7 +40,7 @@ public sealed class ProgramContext
     [SuppressMessage("Design", "CA1031")]
     internal void RaiseProcessExit()
     {
-        var ev = ProcessExit;
+        var ev = ProcessExiting;
 
         if (ev != null)
         {

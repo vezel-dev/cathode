@@ -2,7 +2,7 @@ namespace System.Drivers;
 
 abstract class TerminalDriver
 {
-    public event Action<TerminalSize>? Resize
+    public event Action<TerminalSize>? Resized
     {
         add
         {
@@ -26,7 +26,7 @@ abstract class TerminalDriver
         }
     }
 
-    public event Action<TerminalSignalContext>? Signal;
+    public event Action<TerminalSignalContext>? Signaled;
 
     public abstract TerminalReader StandardIn { get; }
 
@@ -121,7 +121,7 @@ abstract class TerminalDriver
                     _ => throw new TerminalException($"Received unexpected signal: {context.Signal}"),
                 });
 
-            Signal?.Invoke(ctx);
+            Signaled?.Invoke(ctx);
 
             context.Cancel = ctx.Cancel;
         }
