@@ -68,6 +68,8 @@ abstract class TerminalDriver
 
     readonly ManualResetEventSlim _event = new();
 
+    readonly HashSet<TerminalProcess> _processes = new();
+
     [SuppressMessage("Style", "IDE0052")]
     readonly PosixSignalRegistration _sigHup;
 
@@ -174,6 +176,10 @@ abstract class TerminalDriver
     {
         lock (_rawLock)
         {
+            if (_processes.Count != 0)
+                throw new InvalidOperationException(
+                    "Cannot enable raw mode with non-redirected child processes running.");
+
             SetRawMode(true);
 
             IsRawMode = true;
@@ -184,9 +190,47 @@ abstract class TerminalDriver
     {
         lock (_rawLock)
         {
+            if (_processes.Count != 0)
+                throw new InvalidOperationException(
+                    "Cannot disable raw mode with non-redirected child processes running.");
+
             SetRawMode(false);
 
             IsRawMode = false;
+        }
+    }
+
+    public void StartProcess(Func<TerminalProcess> starter)
+    {
+        lock (_rawLock)
+        {
+            // The vast majority of programs expect to start in cooked mode. Enforce that we are in cooked mode while
+            // any child processes that could be using the terminal are running.
+            if (IsRawMode)
+                throw new InvalidOperationException("Cannot start non-redirected child processes in raw mode.");
+
+            _ = _processes.Add(starter());
+        }
+    }
+
+    public void ReapProcess(TerminalProcess process)
+    {
+        lock (_rawLock)
+        {
+            _ = _processes.Remove(process);
+
+            if (_processes.Count != 0)
+                return;
+
+            try
+            {
+                // Child processes may have messed up the terminal settings. Restore them just in case.
+                SetRawMode(false);
+            }
+            catch (TerminalException)
+            {
+                // No terminal attached.
+            }
         }
     }
 

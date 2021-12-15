@@ -1,19 +1,41 @@
-Terminal.OutLine("Entering raw mode...");
+Terminal.OutLine("Launching 'bash'...");
+
+var bash =
+    new TerminalProcessBuilder()
+        .WithFileName("bash")
+        .Start();
+
+await bash.WaitForExitAsync().ConfigureAwait(false);
+
+Terminal.OutLine("'bash' exited with code: {0}", bash.ExitCode);
+
+var sb = new StringBuilder();
+
+Terminal.OutLine("Entering raw mode and launching 'echo'...");
 Terminal.EnableRawMode();
 
 try
 {
-    Terminal.OutLine("Launching Bash...");
+    var echo =
+        new TerminalProcessBuilder()
+            .WithFileName("echo")
+            .WithArguments("hello", "world")
+            .WithRedirections(true)
+            .Start();
 
-    using var proc = Process.Start("bash");
+    echo.StandardOutReceived += str =>
+    {
+        lock (sb)
+            _ = sb.Append(str);
+    };
 
-    await proc.WaitForExitAsync().ConfigureAwait(false);
+    echo.StartReadingStandardOut();
 
-    Terminal.OutLine("Bash exited with code {0}.", proc.ExitCode);
-    Terminal.Out("Reading a byte...");
-    Terminal.OutLine("Got: 0x{0:x2}", Terminal.ReadRaw());
+    await echo.WaitForExitAsync().ConfigureAwait(false);
 }
 finally
 {
     Terminal.DisableRawMode();
 }
+
+Terminal.OutLine("Captured output: {0}", sb);

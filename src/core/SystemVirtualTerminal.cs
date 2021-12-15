@@ -65,6 +65,16 @@ public sealed class SystemVirtualTerminal : VirtualTerminal
         _driver.DisableRawMode();
     }
 
+    internal void StartProcess(Func<TerminalProcess> starter)
+    {
+        _driver.StartProcess(starter);
+    }
+
+    internal void ReapProcess(TerminalProcess process)
+    {
+        _driver.ReapProcess(process);
+    }
+
     [EditorBrowsable(EditorBrowsableState.Never)]
     public void DangerousRestoreSettings()
     {

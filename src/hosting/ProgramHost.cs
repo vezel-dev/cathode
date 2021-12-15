@@ -7,7 +7,6 @@ public static class ProgramHost
 
     static int _running;
 
-    [SuppressMessage("ApiDesign", "RS0030")]
     [SuppressMessage("Design", "CA1031")]
     public static async Task RunAsync<TProgram>(ReadOnlyMemory<string> arguments)
         where TProgram : IProgram
