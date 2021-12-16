@@ -73,11 +73,17 @@ sealed class LinuxTerminalDriver : UnixTerminalDriver
 
         int ret;
 
-        // Note that this call may get us suspended by way of a SIGTTOU signal if we are a background process.
-        while ((ret = tcsetattr(TerminalOut.Handle, flush ? TCSAFLUSH : TCSANOW, termios)) == -1 &&
-            Marshal.GetLastPInvokeError() == EINTR)
+        using (var guard = raw ? null : new PosixSignalGuard(PosixSignal.SIGTTOU))
         {
-            // Retry in case we get interrupted by a signal.
+            while ((ret = tcsetattr(TerminalOut.Handle, flush ? TCSAFLUSH : TCSANOW, termios)) == -1 &&
+                Marshal.GetLastPInvokeError() == EINTR)
+            {
+                // Retry in case we get interrupted by a signal. If we are trying to switch to cooked mode and we saw
+                // SIGTTOU, it means we are a background process. We will trust that, by the time we actually read or
+                // write anything, we will be in cooked mode.
+                if (guard?.Signaled == true)
+                    return;
+            }
         }
 
         if (ret != 0)
