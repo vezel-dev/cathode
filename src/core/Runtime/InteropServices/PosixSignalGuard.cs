@@ -2,13 +2,15 @@ namespace System.Runtime.InteropServices;
 
 sealed class PosixSignalGuard : IDisposable
 {
-    public bool Signaled { get; private set; }
+    public bool Signaled => _signaled;
 
     readonly PosixSignalRegistration _registration;
 
+    volatile bool _signaled;
+
     public PosixSignalGuard(PosixSignal signal)
     {
-        _registration = PosixSignalRegistration.Create(signal, _ => Signaled = true);
+        _registration = PosixSignalRegistration.Create(signal, _ => _signaled = true);
     }
 
     ~PosixSignalGuard()
@@ -18,7 +20,7 @@ sealed class PosixSignalGuard : IDisposable
 
     public void Dispose()
     {
-        _registration.Dispose();
+        _registration?.Dispose();
 
         GC.SuppressFinalize(this);
     }
