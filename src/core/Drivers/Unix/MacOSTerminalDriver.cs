@@ -49,7 +49,7 @@ sealed class MacOSTerminalDriver : UnixTerminalDriver
         termios.c_oflag &= ~(OCRNL | ONOCR | ONLRET | ALTWERASE);
         termios.c_cflag &= ~CSIZE;
         termios.c_cflag |= CS8 | CREAD;
-        termios.c_lflag &= ~(ECHONL | NOFLSH | TOSTOP | ECHOPRT | PENDIN);
+        termios.c_lflag &= ~(ECHONL | NOFLSH | ECHOPRT | PENDIN);
 
         // TODO: What's up with ONOEOT? It is not listed in stty -a but does exist in termios.h.
 
@@ -63,14 +63,14 @@ sealed class MacOSTerminalDriver : UnixTerminalDriver
             termios.c_iflag |= iflag;
             termios.c_oflag |= oflag;
             termios.c_lflag |= lflag;
-            termios.c_lflag &= ~NOKERNINFO;
+            termios.c_lflag &= ~(TOSTOP | NOKERNINFO);
         }
         else
         {
             termios.c_iflag &= ~iflag;
             termios.c_oflag &= ~oflag;
             termios.c_lflag &= ~lflag;
-            termios.c_lflag |= NOKERNINFO;
+            termios.c_lflag |= TOSTOP | NOKERNINFO;
         }
 
         int ret;

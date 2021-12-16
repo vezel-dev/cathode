@@ -49,7 +49,7 @@ sealed class LinuxTerminalDriver : UnixTerminalDriver
         termios.c_oflag &= ~(OLCUC | OCRNL | ONOCR | ONLRET);
         termios.c_cflag &= ~CSIZE;
         termios.c_cflag |= CS8 | CREAD;
-        termios.c_lflag &= ~(XCASE | ECHONL | NOFLSH | TOSTOP | ECHOPRT | PENDIN);
+        termios.c_lflag &= ~(XCASE | ECHONL | NOFLSH | ECHOPRT | PENDIN);
 
         var iflag = BRKINT | ICRNL | IXON;
         var oflag = OPOST | ONLCR;
@@ -61,12 +61,14 @@ sealed class LinuxTerminalDriver : UnixTerminalDriver
             termios.c_iflag |= iflag;
             termios.c_oflag |= oflag;
             termios.c_lflag |= lflag;
+            termios.c_lflag &= ~TOSTOP;
         }
         else
         {
             termios.c_iflag &= ~iflag;
             termios.c_oflag &= ~oflag;
             termios.c_lflag &= ~lflag;
+            termios.c_lflag |= TOSTOP;
         }
 
         int ret;
