@@ -19,4 +19,8 @@ T:System.ConsoleModifiers;Use System.Terminal instead
 T:System.ConsoleSpecialKey;Use System.Terminal instead
 T:System.Diagnostics.ConsoleTraceListener;Use System.Diagnostics.TerminalTraceListener instead
 T:System.Diagnostics.Process;Use System.Diagnostics.TerminalProcess instead
+T:System.Diagnostics.ProcessModule;Use System.Diagnostics.TerminalProcessModule instead
+T:System.Diagnostics.ProcessModuleCollection;Use System.Diagnostics.TerminalProcessModule instead
 T:System.Diagnostics.ProcessStartInfo;Use System.Diagnostics.TerminalProcessBuilder instead
+T:System.Diagnostics.ProcessThread;Use System.Diagnostics.TerminalProcessThread instead
+T:System.Diagnostics.ProcessThreadCollection;Use System.Diagnostics.TerminalProcessThread instead

@@ -90,10 +90,10 @@ abstract class UnixTerminalDriver : TerminalDriver<int>
         _sigChld = PosixSignalRegistration.Create(PosixSignal.SIGCHLD, HandleSignal);
     }
 
-    public override sealed void GenerateSignal(TerminalSignal signal)
+    public override sealed void SendSignal(int pid, TerminalSignal signal)
     {
         _ = kill(
-            0,
+            pid,
             signal switch
             {
                 TerminalSignal.Close => SIGHUP,
@@ -117,13 +117,13 @@ abstract class UnixTerminalDriver : TerminalDriver<int>
 
     public abstract bool PollHandle(int error, int handle, short events);
 
-    public override bool IsHandleValid(int handle, bool write)
+    public override sealed bool IsHandleValid(int handle, bool write)
     {
         // We might obtain a negative descriptor (-1) if we fail to open /dev/tty, for example.
         return handle >= 0;
     }
 
-    public override bool IsHandleInteractive(int handle)
+    public override sealed bool IsHandleInteractive(int handle)
     {
         // Note that this also returns false for invalid descriptors.
         return isatty(handle) == 1;

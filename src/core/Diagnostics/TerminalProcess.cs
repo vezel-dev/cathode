@@ -2,7 +2,8 @@ namespace System.Diagnostics;
 
 public sealed class TerminalProcess
 {
-    // TODO: Support more of Process's API surface (threads, modules, memory, etc).
+    // TODO: Review possible exceptions throughout and sanitize.
+    // TODO: Expose information about memory usage.
 
     public event Action<string?>? StandardOutReceived;
 
@@ -18,15 +19,21 @@ public sealed class TerminalProcess
 
     public string Name => _process.ProcessName;
 
+    public int SessionId => _process.SessionId;
+
     public DateTime StartTime => _process.StartTime;
 
-    public bool IsResponding => _process.Responding;
+    public DateTime ExitTime => _process.ExitTime;
 
     public bool HasExited => _process.HasExited;
 
     public int ExitCode => _process.ExitCode;
 
-    public DateTime ExitTime => _process.ExitTime;
+    public TimeSpan UserTime => _process.UserProcessorTime;
+
+    public TimeSpan KernelTime => _process.PrivilegedProcessorTime;
+
+    public TimeSpan TotalTime => _process.TotalProcessorTime;
 
     public StreamWriter StandardIn => _process.StandardInput;
 
@@ -34,7 +41,64 @@ public sealed class TerminalProcess
 
     public StreamReader StandardError => _process.StandardError;
 
+    public TerminalProcessModule? MainModule
+    {
+        get
+        {
+            lock (_lock)
+                return _main ??= _process.MainModule is ProcessModule m ? new(_process.MainModule) : null;
+        }
+    }
+
+    public ImmutableArray<TerminalProcessModule> Modules
+    {
+        get
+        {
+            lock (_lock)
+            {
+                if (!_modules.IsDefault)
+                    return _modules;
+
+                var modules = _process.Modules;
+                var builder = ImmutableArray.CreateBuilder<TerminalProcessModule>(modules.Count);
+
+                foreach (ProcessModule module in modules)
+                    builder.Add(new(module));
+
+                return _modules = builder.MoveToImmutable();
+            }
+        }
+    }
+
+    public ImmutableArray<TerminalProcessThread> Threads
+    {
+        get
+        {
+            lock (_lock)
+            {
+                if (!_threads.IsDefault)
+                    return _threads;
+
+                var threads = _process.Threads;
+                var builder = ImmutableArray.CreateBuilder<TerminalProcessThread>(threads.Count);
+
+                foreach (ProcessThread thread in threads)
+                    builder.Add(new(thread));
+
+                return _threads = builder.MoveToImmutable();
+            }
+        }
+    }
+
+    readonly object _lock = new();
+
     readonly Process _process;
+
+    TerminalProcessModule? _main;
+
+    ImmutableArray<TerminalProcessModule> _modules;
+
+    ImmutableArray<TerminalProcessThread> _threads;
 
     TerminalProcess(Process process, bool reap)
     {
@@ -132,6 +196,18 @@ public sealed class TerminalProcess
         return wrapper;
     }
 
+    public void Refresh()
+    {
+        lock (_lock)
+        {
+            _process.Refresh();
+
+            _main = null;
+            _modules = default;
+            _threads = default;
+        }
+    }
+
     public void StartReadingStandardOut()
     {
         _process.BeginOutputReadLine();
@@ -150,6 +226,11 @@ public sealed class TerminalProcess
     public void StopReadingStandardError()
     {
         _process.CancelErrorRead();
+    }
+
+    public void SendSignal(TerminalSignal signal)
+    {
+        SystemVirtualTerminal.Instance.SignalProcess(this, signal);
     }
 
     public void Kill(bool entireProcessTree = false)

@@ -71,7 +71,7 @@ sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
             new(info.srWindow.Right - info.srWindow.Left + 1, info.srWindow.Bottom - info.srWindow.Top + 1) : null;
     }
 
-    public override void GenerateSignal(TerminalSignal signal)
+    public override void SendSignal(int pid, TerminalSignal signal)
     {
         _ = GenerateConsoleCtrlEvent(
             signal switch
@@ -82,7 +82,7 @@ sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
                 TerminalSignal.Terminate => CTRL_SHUTDOWN_EVENT,
                 _ => throw new ArgumentOutOfRangeException(nameof(signal)),
             },
-            0);
+            (uint)pid);
     }
 
     void SetRawModeCore(bool raw, bool flush)

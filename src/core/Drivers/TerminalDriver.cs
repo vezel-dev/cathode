@@ -168,7 +168,7 @@ abstract class TerminalDriver
         _ = ThreadPool.UnsafeQueueUserWorkItem(state => _resize?.Invoke(size), null);
     }
 
-    public abstract void GenerateSignal(TerminalSignal signal);
+    public abstract void SendSignal(int pid, TerminalSignal signal);
 
     protected abstract void SetRawMode(bool raw);
 

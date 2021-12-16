@@ -52,7 +52,7 @@ public sealed class SystemVirtualTerminal : VirtualTerminal
 
     public override void GenerateSignal(TerminalSignal signal)
     {
-        _driver.GenerateSignal(signal);
+        _driver.SendSignal(0, signal);
     }
 
     public override void EnableRawMode()
@@ -68,6 +68,11 @@ public sealed class SystemVirtualTerminal : VirtualTerminal
     internal void StartProcess(Func<TerminalProcess> starter)
     {
         _driver.StartProcess(starter);
+    }
+
+    internal void SignalProcess(TerminalProcess process, TerminalSignal signal)
+    {
+        _driver.SendSignal(process.Id, signal);
     }
 
     internal void ReapProcess(TerminalProcess process)
