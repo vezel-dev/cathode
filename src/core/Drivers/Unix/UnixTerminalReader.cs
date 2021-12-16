@@ -6,13 +6,21 @@ sealed class UnixTerminalReader : DriverTerminalReader<UnixTerminalDriver, int>
 {
     readonly object _lock;
 
-    public UnixTerminalReader(UnixTerminalDriver driver, string name, int handle, object @lock)
+    readonly UnixCancellationPipe _cancellationPipe;
+
+    public UnixTerminalReader(
+        UnixTerminalDriver driver,
+        string name,
+        int handle,
+        UnixCancellationPipe cancellationPipe,
+        object @lock)
         : base(driver, name, handle)
     {
         _lock = @lock;
+        _cancellationPipe = cancellationPipe;
     }
 
-    protected override unsafe void ReadCore(Span<byte> data, out int count)
+    protected override unsafe void ReadCore(Span<byte> data, out int count, CancellationToken cancellationToken)
     {
         // If the descriptor is invalid, just present the illusion to the user that it has been redirected to /dev/null
         // or something along those lines, i.e. return EOF.
@@ -23,49 +31,54 @@ sealed class UnixTerminalReader : DriverTerminalReader<UnixTerminalDriver, int>
             return;
         }
 
-        long ret;
-
         lock (_lock)
         {
-            while (true)
+            try
             {
-                fixed (byte* p = data)
+                _cancellationPipe.PollWithCancellation(Handle, cancellationToken);
+            }
+            catch (OperationCanceledException)
+            {
+                count = 0;
+
+                throw;
+            }
+
+            fixed (byte* p = data)
+            {
+                nint ret;
+
+                // Note that this call may get us suspended by way of a SIGTTIN signal if we are a background process
+                // and the handle refers to a terminal.
+                while ((ret = read(Handle, p, (nuint)data.Length)) == -1 &&
+                    Marshal.GetLastPInvokeError() == EINTR)
                 {
-                    // Note that this call may get us suspended by way of a SIGTTIN signal if we are a background
-                    // process and the handle refers to a terminal.
-                    while ((ret = read(Handle, p, (nuint)data.Length)) == -1 &&
-                        Marshal.GetLastPInvokeError() == EINTR)
-                    {
-                        // Retry in case we get interrupted by a signal.
-                    }
-
-                    if (ret != -1)
-                        break;
-
-                    var err = Marshal.GetLastPInvokeError();
-
-                    // The descriptor was probably redirected to a program that ended. Just silently ignore this
-                    // situation.
-                    //
-                    // The strange condition where errno is zero happens e.g. on Linux if the process is killed while
-                    // blocking in the read system call.
-                    if (err is 0 or EPIPE)
-                    {
-                        ret = 0;
-
-                        break;
-                    }
-
-                    // The file descriptor has been configured as non-blocking. Instead of busily trying to read over
-                    // and over, poll until we can write and then try again.
-                    if (Driver.PollHandle(err, Handle, POLLIN))
-                        continue;
-
-                    throw new TerminalException($"Could not read from {Name}: {new Win32Exception(err).Message}");
+                    // Retry in case we get interrupted by a signal.
                 }
+
+                if (ret != -1)
+                {
+                    count = (int)ret;
+
+                    return;
+                }
+
+                var err = Marshal.GetLastPInvokeError();
+
+                // The descriptor was probably redirected to a program that ended. Just silently ignore this
+                // situation.
+                //
+                // The strange condition where errno is zero happens e.g. on Linux if the process is killed while
+                // blocking in the read system call.
+                if (err is 0 or EPIPE)
+                {
+                    count = 0;
+
+                    return;
+                }
+
+                throw new TerminalException($"Could not read from {Name}: {new Win32Exception(err).Message}");
             }
         }
-
-        count = (int)ret;
     }
 }

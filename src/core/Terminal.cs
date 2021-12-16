@@ -53,9 +53,9 @@ public static class Terminal
         _terminal.DisableRawMode();
     }
 
-    public static byte? ReadRaw()
+    public static byte? ReadRaw(CancellationToken cancellationToken = default)
     {
-        return _terminal.ReadRaw();
+        return _terminal.ReadRaw(cancellationToken);
     }
 
     public static string? ReadLine()

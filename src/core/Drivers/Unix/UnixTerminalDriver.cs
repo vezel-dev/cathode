@@ -31,13 +31,13 @@ abstract class UnixTerminalDriver : TerminalDriver<int>
         var inLock = new object();
         var outLock = new object();
 
-        StandardIn = new(this, "standard input", STDIN_FILENO, inLock);
+        StandardIn = new(this, "standard input", STDIN_FILENO, new(this), inLock);
         StandardOut = new(this, "standard output", STDOUT_FILENO, outLock);
         StandardError = new(this, "standard error", STDERR_FILENO, outLock);
 
         var tty = OpenTerminalHandle("/dev/tty");
 
-        TerminalIn = new(this, "terminal input", tty, inLock);
+        TerminalIn = new(this, "terminal input", tty, new(this), inLock);
         TerminalOut = new(this, "terminal output", tty, outLock);
 
         try
@@ -115,7 +115,9 @@ abstract class UnixTerminalDriver : TerminalDriver<int>
 
     public abstract int OpenTerminalHandle(string name);
 
-    public abstract bool PollHandle(int error, int handle, short events);
+    public abstract (int ReadHandle, int WriteHandle) CreatePipePair();
+
+    public abstract bool PollHandles(int? error, short events, Span<int> handles);
 
     public override sealed bool IsHandleValid(int handle, bool write)
     {

@@ -5,13 +5,17 @@ GetConsoleMode
 GetConsoleScreenBufferInfo
 GetFileType
 GetStdHandle
+PeekConsoleInputW
+ReadConsoleInputW
 ReadConsoleW
 ReadFile
 SetConsoleCP
 SetConsoleMode
 SetConsoleOutputCP
+WaitForMultipleObjects
 WriteFile
 
+VIRTUAL_KEY
 WIN32_ERROR
 
 CTRL_BREAK_EVENT
@@ -19,3 +23,5 @@ CTRL_C_EVENT
 CTRL_CLOSE_EVENT
 CTRL_SHUTDOWN_EVENT
 FILE_TYPE_CHAR
+KEY_EVENT
+WAIT_OBJECT_0

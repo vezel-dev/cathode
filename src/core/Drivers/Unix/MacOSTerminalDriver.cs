@@ -57,20 +57,20 @@ sealed class MacOSTerminalDriver : UnixTerminalDriver
         var oflag = OPOST | ONLCR;
         var lflag = ISIG | ICANON | ECHO | ECHOE | ECHOK | ECHOCTL | ECHOKE | IEXTEN;
 
-        // Finally, enable/disable features that depend on cooked/raw mode.
-        if (!raw)
-        {
-            termios.c_iflag |= iflag;
-            termios.c_oflag |= oflag;
-            termios.c_lflag |= lflag;
-            termios.c_lflag &= ~(TOSTOP | NOKERNINFO);
-        }
-        else
+        // Finally, enable/disable features that depend on raw/cooked mode.
+        if (raw)
         {
             termios.c_iflag &= ~iflag;
             termios.c_oflag &= ~oflag;
             termios.c_lflag &= ~lflag;
             termios.c_lflag |= TOSTOP | NOKERNINFO;
+        }
+        else
+        {
+            termios.c_iflag |= iflag;
+            termios.c_oflag |= oflag;
+            termios.c_lflag |= lflag;
+            termios.c_lflag &= ~(TOSTOP | NOKERNINFO);
         }
 
         int ret;
@@ -90,7 +90,7 @@ sealed class MacOSTerminalDriver : UnixTerminalDriver
 
         if (ret != 0)
             throw new TerminalException(
-                $"Could not change raw mode setting: {new Win32Exception(Marshal.GetLastPInvokeError()).Message}");
+                $"Could not change raw mode setting: {new Win32Exception().Message}");
     }
 
     public override void RestoreSettings()
@@ -104,18 +104,70 @@ sealed class MacOSTerminalDriver : UnixTerminalDriver
         return open(name, O_RDWR | O_NOCTTY | O_CLOEXEC);
     }
 
-    public override unsafe bool PollHandle(int error, int handle, short events)
+    public override unsafe (int ReadHandle, int WriteHandle) CreatePipePair()
     {
-        if (error != EAGAIN)
+        Span<int> fds = stackalloc int[2];
+
+        // Unfortunately, macOS lacks pipe2 so we have to use this approach which is prone to race conditions on fork.
+        fixed (int* p = fds)
+            if (pipe(p) == -1)
+                return (-1, -1);
+
+        static bool SetCloseOnExec(int handle)
+        {
+            var flags = fcntl(handle, F_GETFD);
+
+            if (flags == -1)
+                return false;
+
+            flags |= O_CLOEXEC;
+
+            return fcntl(handle, F_SETFD, flags) == 0;
+        }
+
+        if (!(SetCloseOnExec(fds[0]) && SetCloseOnExec(fds[1])))
+        {
+            _ = close(fds[0]);
+            _ = close(fds[1]);
+
+            fds.Fill(-1);
+        }
+
+        return (fds[0], fds[1]);
+    }
+
+    public override unsafe bool PollHandles(int? error, short events, Span<int> handles)
+    {
+        if (error is int err && err != EAGAIN)
             return false;
 
-        var fd = new pollfd
-        {
-            fd = handle,
-            events = events,
-        };
+        Span<pollfd> fds = stackalloc pollfd[handles.Length];
 
-        _ = poll(&fd, 1, -1);
+        for (var i = 0; i < handles.Length; i++)
+        {
+            fds[i] = new pollfd
+            {
+                fd = handles[i],
+                events = events,
+                revents = 0, // Shut up CS0649.
+            };
+        }
+
+        fixed (pollfd* p = fds)
+        {
+            int ret;
+
+            while ((ret = poll(p, (uint)fds.Length, -1)) == -1 && Marshal.GetLastPInvokeError() == EINTR)
+            {
+                // Retry in case we get interrupted by a signal.
+            }
+
+            if (ret == -1)
+                return false;
+        }
+
+        for (var i = 0; i < handles.Length; i++)
+            handles[i] = fds[i].revents;
 
         return true;
     }

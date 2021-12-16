@@ -157,6 +157,9 @@ static unsafe class LinuxPInvoke
     public const int EAGAIN = 11;
 
     [DllImport("c", SetLastError = true)]
+    public static extern int pipe2(int* fildes, int oflag);
+
+    [DllImport("c", SetLastError = true)]
     public static extern int poll(pollfd* fds, nuint nfds, int timeout);
 
     [DllImport("c", SetLastError = true)]

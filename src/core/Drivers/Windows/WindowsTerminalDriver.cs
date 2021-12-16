@@ -27,7 +27,7 @@ sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
         var inLock = new object();
         var outLock = new object();
 
-        StandardIn = new(this, "standard input", GetStdHandle_SafeHandle(STD_HANDLE.STD_INPUT_HANDLE), inLock);
+        StandardIn = new(this, "standard input", GetStdHandle_SafeHandle(STD_HANDLE.STD_INPUT_HANDLE), new(), inLock);
         StandardOut = new(this, "standard output", GetStdHandle_SafeHandle(STD_HANDLE.STD_OUTPUT_HANDLE), outLock);
         StandardError = new(this, "standard error", GetStdHandle_SafeHandle(STD_HANDLE.STD_ERROR_HANDLE), outLock);
 
@@ -46,7 +46,7 @@ sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
                 null);
         }
 
-        TerminalIn = new(this, "terminal input", OpenConsoleHandle("CONIN$"), inLock);
+        TerminalIn = new(this, "terminal input", OpenConsoleHandle("CONIN$"), new(), inLock);
         TerminalOut = new(this, "terminal output", OpenConsoleHandle("CONOUT$"), outLock);
 
         // Input needs to be UTF-16, but we make it appear as if it is UTF-8 to users of the library. See the comments
@@ -131,11 +131,11 @@ sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
         if (!SetConsoleMode(TerminalIn.Handle, inMode) ||
             !SetConsoleMode(TerminalOut.Handle, outMode))
             throw new TerminalException(
-                $"Could not change raw mode setting: {new Win32Exception(Marshal.GetLastPInvokeError()).Message}");
+                $"Could not change raw mode setting: {new Win32Exception().Message}");
 
         if (flush && !FlushConsoleInputBuffer(TerminalIn.Handle))
             throw new TerminalException(
-                $"Could not flush input buffer: {new Win32Exception(Marshal.GetLastPInvokeError()).Message}");
+                $"Could not flush input buffer: {new Win32Exception().Message}");
     }
 
     protected override void SetRawMode(bool raw)

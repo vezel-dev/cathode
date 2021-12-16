@@ -26,9 +26,9 @@ public abstract class VirtualTerminal
 
     public abstract void DisableRawMode();
 
-    public byte? ReadRaw()
+    public byte? ReadRaw(CancellationToken cancellationToken = default)
     {
-        return StandardIn.ReadRaw();
+        return StandardIn.ReadRaw(cancellationToken);
     }
 
     public string? ReadLine()

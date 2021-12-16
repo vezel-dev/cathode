@@ -31,7 +31,7 @@ sealed class UnixTerminalWriter : DriverTerminalWriter<UnixTerminalDriver, int>
 
                 while (count < data.Length)
                 {
-                    long ret;
+                    nint ret;
 
                     // Note that this call may get us suspended by way of a SIGTTOU signal if we are a background
                     // process, the handle refers to a terminal, and the TOSTOP bit is set (we disable TOSTOP in the
@@ -59,9 +59,9 @@ sealed class UnixTerminalWriter : DriverTerminalWriter<UnixTerminalDriver, int>
                     if (err == EPIPE)
                         break;
 
-                    // The file descriptor has been configured as non-blocking. Instead of busily trying to write over
-                    // and over, poll until we can write and then try again.
-                    if (Driver.PollHandle(err, Handle, POLLOUT))
+                    // The file descriptor might have been configured as non-blocking. Instead of busily trying to write
+                    // over and over, poll until we can write and then try again.
+                    if (Driver.PollHandles(err, POLLOUT, stackalloc[] { Handle }))
                         continue;
 
                     throw new TerminalException($"Could not write to {Name}: {new Win32Exception(err).Message}");

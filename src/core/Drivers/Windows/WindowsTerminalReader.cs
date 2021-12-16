@@ -1,4 +1,6 @@
 using Windows.Win32.Foundation;
+using Windows.Win32.System.Console;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
 using static Windows.Win32.WindowsPInvoke;
 
 namespace System.Drivers.Windows;
@@ -7,18 +9,26 @@ sealed class WindowsTerminalReader : DriverTerminalReader<WindowsTerminalDriver,
 {
     readonly object _lock;
 
+    readonly WindowsCancellationEvent _cancellationEvent;
+
     readonly byte[] _buffer;
 
     ReadOnlyMemory<byte> _buffered;
 
-    public WindowsTerminalReader(WindowsTerminalDriver driver, string name, SafeHandle handle, object @lock)
+    public WindowsTerminalReader(
+        WindowsTerminalDriver driver,
+        string name,
+        SafeHandle handle,
+        WindowsCancellationEvent cancellationEvent,
+        object @lock)
         : base(driver, name, handle)
     {
         _lock = @lock;
+        _cancellationEvent = cancellationEvent;
         _buffer = new byte[Terminal.Encoding.GetMaxByteCount(2)];
     }
 
-    protected override unsafe void ReadCore(Span<byte> data, out int count)
+    protected override unsafe void ReadCore(Span<byte> data, out int count, CancellationToken cancellationToken)
     {
         // If the handle is invalid, just present the illusion to the user that it has been redirected to /dev/null or
         // something along those lines, i.e. return EOF.
@@ -44,6 +54,42 @@ sealed class WindowsTerminalReader : DriverTerminalReader<WindowsTerminalDriver,
             {
                 if (_buffered.IsEmpty)
                 {
+                    try
+                    {
+                        _cancellationEvent.PollWithCancellation(
+                            Handle,
+                            handle =>
+                            {
+                                Span<INPUT_RECORD> records = stackalloc INPUT_RECORD[1];
+
+                                // Ensure that we actually have a useful key event so that ReadConsole will not block.
+                                //
+                                // TODO: Discarding non-key events is gross. We should find a better way.
+                                while (PeekConsoleInputW(handle, records, out var recordsRead) && recordsRead == 1)
+                                {
+                                    var rec = records[0];
+                                    var evt = rec.Event.KeyEvent;
+
+                                    if (rec.EventType == KEY_EVENT && evt.bKeyDown &&
+                                        (VIRTUAL_KEY)evt.wVirtualKeyCode is not
+                                        (>= VIRTUAL_KEY.VK_SHIFT and <= VIRTUAL_KEY.VK_MENU) or
+                                        VIRTUAL_KEY.VK_CAPITAL or VIRTUAL_KEY.VK_NUMLOCK or VIRTUAL_KEY.VK_SCROLL)
+                                        return true;
+
+                                    _ = ReadConsoleInputW(handle, records, out _);
+                                }
+
+                                return false;
+                            },
+                            cancellationToken);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        count = 0;
+
+                        throw;
+                    }
+
                     Span<char> units = stackalloc char[2];
                     var chars = 0;
 
@@ -125,6 +171,8 @@ sealed class WindowsTerminalReader : DriverTerminalReader<WindowsTerminalDriver,
             bool result;
             uint read;
 
+            // Note that Windows does not support WaitForMultipleObjects on files, so there is no point in trying to
+            // use WindowsCancellationPipe in this case.
             lock (_lock)
                 fixed (byte* p = data)
                     result = ReadFile(Handle, p, (uint)data.Length, &read, null);

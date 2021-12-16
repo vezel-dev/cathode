@@ -19,16 +19,16 @@ public abstract class TerminalReader : TerminalHandle
             () => TextReader.Synchronized(new StreamReader(Stream, Terminal.Encoding, false, ReadBufferSize, true)));
     }
 
-    protected abstract void ReadCore(Span<byte> data, out int count);
+    protected abstract void ReadCore(Span<byte> data, out int count, CancellationToken cancellationToken);
 
-    public void Read(Span<byte> data, out int count)
+    public void Read(Span<byte> data, out int count, CancellationToken cancellationToken = default)
     {
         count = 0;
 
         // ReadCore is required to assign count appropriately for partial reads that fail.
         try
         {
-            ReadCore(data, out count);
+            ReadCore(data, out count, cancellationToken);
         }
         finally
         {
@@ -36,11 +36,11 @@ public abstract class TerminalReader : TerminalHandle
         }
     }
 
-    public byte? ReadRaw()
+    public byte? ReadRaw(CancellationToken cancellationToken = default)
     {
         Span<byte> span = stackalloc byte[1];
 
-        Read(span, out var count);
+        Read(span, out var count, cancellationToken);
 
         return count == span.Length ? span[0] : null;
     }
