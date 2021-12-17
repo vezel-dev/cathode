@@ -19,4 +19,11 @@ public sealed class TerminalOutputStream : TerminalStream
     {
         Writer.Write(buffer);
     }
+
+    public override ValueTask WriteAsync(ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken = default)
+    {
+        return cancellationToken.IsCancellationRequested ?
+            ValueTask.FromCanceled(cancellationToken) :
+            new(Task.Run(() => Writer.Write(buffer.Span, out _, cancellationToken), cancellationToken));
+    }
 }

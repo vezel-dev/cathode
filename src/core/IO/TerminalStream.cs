@@ -1,5 +1,6 @@
 namespace System.IO;
 
+[SuppressMessage("Performance", "CA1844")]
 public abstract class TerminalStream : Stream
 {
     public override sealed bool CanSeek => false;
@@ -29,11 +30,29 @@ public abstract class TerminalStream : Stream
     public override sealed int Read(byte[] buffer, int offset, int count)
     {
         ArgumentNullException.ThrowIfNull(buffer);
-        _ = offset >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(offset));
-        _ = count >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(count));
-        _ = offset + count <= buffer.Length ? true : throw new ArgumentException(null, nameof(buffer));
 
         return Read(buffer.AsSpan(offset, count));
+    }
+
+    public override sealed Task<int> ReadAsync(
+        byte[] buffer,
+        int offset,
+        int count,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(buffer);
+
+        var mem = buffer.AsMemory(offset, count);
+
+        static async Task<int> ReadAsyncCore(
+            TerminalStream stream,
+            Memory<byte> buffer,
+            CancellationToken cancellationToken)
+        {
+            return await stream.ReadAsync(buffer, cancellationToken).ConfigureAwait(false);
+        }
+
+        return ReadAsyncCore(this, mem, cancellationToken);
     }
 
     public override sealed int ReadByte()
@@ -51,6 +70,27 @@ public abstract class TerminalStream : Stream
         _ = offset + count <= buffer.Length ? true : throw new ArgumentException(null, nameof(buffer));
 
         Write(buffer.AsSpan(offset, count));
+    }
+
+    public override sealed Task WriteAsync(
+        byte[] buffer,
+        int offset,
+        int count,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(buffer);
+
+        var mem = buffer.AsMemory(offset, count);
+
+        static async Task WriteAsyncCore(
+            TerminalStream stream,
+            Memory<byte> buffer,
+            CancellationToken cancellationToken)
+        {
+            await stream.WriteAsync(buffer, cancellationToken).ConfigureAwait(false);
+        }
+
+        return WriteAsyncCore(this, mem, cancellationToken);
     }
 
     public override sealed void WriteByte(byte value)
