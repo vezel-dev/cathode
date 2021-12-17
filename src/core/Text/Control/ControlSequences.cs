@@ -2,15 +2,19 @@ namespace System.Text.Control;
 
 public static class ControlSequences
 {
+    delegate void CreateAction<T>(ControlBuilder builder, ReadOnlySpan<T> span);
+
+    delegate void CreateAction<T, in TState>(ControlBuilder builder, ReadOnlySpan<T> span, TState state);
+
     static readonly ThreadLocal<ControlBuilder> _builder = new(() => new());
 
-    static string Create<T>(ReadOnlySpanAction<T, ControlBuilder> action, ReadOnlySpan<T> span)
+    static string Create<T, TState>(CreateAction<T, TState> action, ReadOnlySpan<T> span, TState state)
     {
         var cb = _builder.Value!;
 
         try
         {
-            action(span, cb);
+            action(cb, span, state);
 
             return cb.ToString();
         }
@@ -20,9 +24,14 @@ public static class ControlSequences
         }
     }
 
+    static string Create<T>(CreateAction<T> action, ReadOnlySpan<T> span)
+    {
+        return Create(static (cb, span, act) => act(cb, span), span, action);
+    }
+
     static string Create(Action<ControlBuilder> action)
     {
-        return Create((_, cb) => action(cb), ReadOnlySpan<char>.Empty);
+        return Create(static (cb, _, act) => act(cb), ReadOnlySpan<char>.Empty, action);
     }
 
     // Keep methods in sync with the ControlStringBuilder class.
@@ -104,7 +113,7 @@ public static class ControlSequences
 
     public static string SetTitle(ReadOnlySpan<char> title)
     {
-        return Create((title, cb) => cb.SetTitle(title), title);
+        return Create(static (cb, title) => cb.SetTitle(title), title);
     }
 
     public static string PushTitle()
@@ -144,7 +153,7 @@ public static class ControlSequences
 
     public static string SetMousePointerStyle(ReadOnlySpan<char> style)
     {
-        return Create((style, cb) => cb.SetMousePointerStyle(style), style);
+        return Create(static (cb, style) => cb.SetMousePointerStyle(style), style);
     }
 
     public static string SetFocusEvents(bool enable)
@@ -305,7 +314,7 @@ public static class ControlSequences
 
     public static string OpenHyperlink(Uri uri, ReadOnlySpan<char> id = default)
     {
-        return Create((id, csb) => csb.OpenHyperlink(uri, id), id);
+        return Create(static (cb, id, uri) => cb.OpenHyperlink(uri, id), id, uri);
     }
 
     public static string CloseHyperlink()
