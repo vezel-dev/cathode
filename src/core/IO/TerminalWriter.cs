@@ -20,16 +20,16 @@ public abstract class TerminalWriter : TerminalHandle
             }));
     }
 
-    protected abstract void WriteCore(ReadOnlySpan<byte> data, out int count);
+    protected abstract void WriteCore(ReadOnlySpan<byte> data, out int count, CancellationToken cancellationToken);
 
-    public void Write(ReadOnlySpan<byte> data, out int count)
+    public void Write(ReadOnlySpan<byte> data, out int count, CancellationToken cancellationToken = default)
     {
         count = 0;
 
         // WriteCore is required to assign count appropriately for partial writes that fail.
         try
         {
-            WriteCore(data, out count);
+            WriteCore(data, out count, cancellationToken);
         }
         finally
         {

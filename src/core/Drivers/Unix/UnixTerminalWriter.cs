@@ -12,7 +12,7 @@ sealed class UnixTerminalWriter : DriverTerminalWriter<UnixTerminalDriver, int>
         _lock = @lock;
     }
 
-    protected override unsafe void WriteCore(ReadOnlySpan<byte> data, out int count)
+    protected override unsafe void WriteCore(ReadOnlySpan<byte> data, out int count, CancellationToken cancellationToken)
     {
         // If the descriptor is invalid, just present the illusion to the user that it has been redirected to /dev/null
         // or something along those lines, i.e. pretend we wrote everything.
@@ -22,6 +22,8 @@ sealed class UnixTerminalWriter : DriverTerminalWriter<UnixTerminalDriver, int>
 
             return;
         }
+
+        cancellationToken.ThrowIfCancellationRequested();
 
         lock (_lock)
         {
