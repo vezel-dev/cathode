@@ -3,7 +3,6 @@ namespace System.Diagnostics;
 public sealed class TerminalProcess
 {
     // TODO: Review possible exceptions throughout and sanitize.
-    // TODO: Expose information about memory usage.
 
     public event Action<string?>? StandardOutReceived;
 
