@@ -1,9 +1,9 @@
-namespace System;
+namespace System.IO;
 
 public class TerminalException : IOException
 {
     public TerminalException()
-        : this("An unspecified terminal error occurred.")
+        : this("An unknown terminal error occurred.")
     {
     }
 

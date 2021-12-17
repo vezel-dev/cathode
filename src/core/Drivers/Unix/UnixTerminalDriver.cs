@@ -45,9 +45,8 @@ abstract class UnixTerminalDriver : TerminalDriver<int>
             // Start in cooked mode.
             SetRawModeCore(false, false);
         }
-        catch (TerminalException)
+        catch (Exception e) when (e is TerminalNotAttachedException or TerminalConfigurationException)
         {
-            // No terminal attached.
         }
 
         RefreshSize();
@@ -67,7 +66,7 @@ abstract class UnixTerminalDriver : TerminalDriver<int>
                     lock (_rawLock)
                         SetRawModeCore(IsRawMode, false);
                 }
-                catch (TerminalException)
+                catch (Exception e) when (e is TerminalNotAttachedException or TerminalConfigurationException)
                 {
                     // Either there was no terminal attached to begin with, or it has disappeared since we were stopped.
                     // In either case, the program can no longer read from or write to the terminal, so terminal

@@ -47,7 +47,7 @@ abstract class TerminalDriver
             if (GetSize() is TerminalSize s)
                 _size = s;
 
-            return _size ?? throw new TerminalException("There is no terminal attached.");
+            return _size ?? throw new TerminalNotAttachedException();
         }
     }
 
@@ -118,7 +118,7 @@ abstract class TerminalDriver
                     PosixSignal.SIGINT => TerminalSignal.Interrupt,
                     PosixSignal.SIGQUIT => TerminalSignal.Quit,
                     PosixSignal.SIGTERM => TerminalSignal.Terminate,
-                    _ => throw new TerminalException($"Received unexpected signal: {context.Signal}"),
+                    _ => throw new NotSupportedException($"Received unexpected signal: {context.Signal}"),
                 });
 
             Signaled?.Invoke(ctx);
@@ -227,9 +227,8 @@ abstract class TerminalDriver
                 // Child processes may have messed up the terminal settings. Restore them just in case.
                 SetRawMode(false);
             }
-            catch (TerminalException)
+            catch (Exception e) when (e is TerminalNotAttachedException or TerminalConfigurationException)
             {
-                // No terminal attached.
             }
         }
     }

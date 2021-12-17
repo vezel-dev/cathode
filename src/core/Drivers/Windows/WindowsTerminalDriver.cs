@@ -59,9 +59,8 @@ sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
             // Start in cooked mode.
             SetRawModeCore(false, false);
         }
-        catch (TerminalException)
+        catch (Exception e) when (e is TerminalNotAttachedException or TerminalConfigurationException)
         {
-            // No terminal attached.
         }
     }
 
@@ -89,7 +88,7 @@ sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
     {
         if (!GetConsoleMode(TerminalIn.Handle, out var inMode) ||
             !GetConsoleMode(TerminalOut.Handle, out var outMode))
-            throw new TerminalException("There is no terminal attached.");
+            throw new TerminalNotAttachedException();
 
         // Stash away the original modes the first time we are successfully called.
         if (_original == null)
@@ -130,11 +129,11 @@ sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
 
         if (!SetConsoleMode(TerminalIn.Handle, inMode) ||
             !SetConsoleMode(TerminalOut.Handle, outMode))
-            throw new TerminalException(
+            throw new TerminalConfigurationException(
                 $"Could not change raw mode setting: {new Win32Exception().Message}");
 
         if (flush && !FlushConsoleInputBuffer(TerminalIn.Handle))
-            throw new TerminalException(
+            throw new TerminalConfigurationException(
                 $"Could not flush input buffer: {new Win32Exception().Message}");
     }
 

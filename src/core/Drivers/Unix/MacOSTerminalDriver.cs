@@ -25,7 +25,7 @@ sealed class MacOSTerminalDriver : UnixTerminalDriver
     protected override void SetRawModeCore(bool raw, bool flush)
     {
         if (tcgetattr(TerminalOut.Handle, out var termios) == -1)
-            throw new TerminalException("There is no terminal attached.");
+            throw new TerminalNotAttachedException();
 
         // Stash away the original settings the first time we are successfully called.
         if (_original == null)
@@ -89,7 +89,7 @@ sealed class MacOSTerminalDriver : UnixTerminalDriver
         }
 
         if (ret != 0)
-            throw new TerminalException(
+            throw new TerminalConfigurationException(
                 $"Could not change raw mode setting: {new Win32Exception().Message}");
     }
 
