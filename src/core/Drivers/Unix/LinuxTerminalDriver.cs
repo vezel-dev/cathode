@@ -72,11 +72,12 @@ sealed class LinuxTerminalDriver : UnixTerminalDriver
         }
 
         int ret;
+        var err = 0;
 
         using (var guard = raw ? null : new PosixSignalGuard(PosixSignal.SIGTTOU))
         {
             while ((ret = tcsetattr(TerminalOut.Handle, flush ? TCSAFLUSH : TCSANOW, termios)) == -1 &&
-                Marshal.GetLastPInvokeError() == EINTR)
+                (err = Marshal.GetLastPInvokeError()) == EINTR)
             {
                 // Retry in case we get interrupted by a signal. If we are trying to switch to cooked mode and we saw
                 // SIGTTOU, it means we are a background process. We will trust that, by the time we actually read or
@@ -88,7 +89,7 @@ sealed class LinuxTerminalDriver : UnixTerminalDriver
 
         if (ret != 0)
             throw new TerminalConfigurationException(
-                $"Could not change raw mode setting: {new Win32Exception().Message}");
+                $"Could not change raw mode setting: {new Win32Exception(err).Message}");
     }
 
     public override void RestoreSettings()
