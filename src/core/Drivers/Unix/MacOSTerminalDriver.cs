@@ -110,7 +110,7 @@ sealed class MacOSTerminalDriver : UnixTerminalDriver
         Span<int> fds = stackalloc int[2];
 
         // Unfortunately, macOS lacks pipe2 so we have to use this approach which is prone to race conditions on fork.
-        fixed (int* p = fds)
+        fixed (int* p = &MemoryMarshal.GetReference(fds))
             if (pipe(p) == -1)
                 return (-1, -1);
 
@@ -154,7 +154,7 @@ sealed class MacOSTerminalDriver : UnixTerminalDriver
             };
         }
 
-        fixed (pollfd* p = fds)
+        fixed (pollfd* p = &MemoryMarshal.GetReference(fds))
         {
             int ret;
 

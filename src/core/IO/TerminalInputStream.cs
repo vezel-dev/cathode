@@ -17,22 +17,14 @@ public sealed class TerminalInputStream : TerminalStream
 
     public override int Read(Span<byte> buffer)
     {
-        Reader.Read(buffer, out var count);
-
-        return count;
+        // Unlike for writing, Stream documentation allows us to only do the bare minimum when reading.
+        return Reader.ReadBuffer(buffer);
     }
 
     public override ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
     {
         return cancellationToken.IsCancellationRequested ?
             ValueTask.FromCanceled<int>(cancellationToken) :
-            new(Task.Run(
-                () =>
-                {
-                    Reader.Read(buffer.Span, out var count, cancellationToken);
-
-                    return count;
-                },
-                cancellationToken));
+            new(Task.Run(() => Reader.ReadBuffer(buffer.Span, cancellationToken), cancellationToken));
     }
 }

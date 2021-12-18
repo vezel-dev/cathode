@@ -27,7 +27,7 @@ sealed class UnixCancellationPipe
                 42,
             };
 
-            fixed (byte* p = dummy)
+            fixed (byte* p = &MemoryMarshal.GetReference(dummy))
             {
                 nint ret;
 
@@ -55,7 +55,7 @@ sealed class UnixCancellationPipe
         {
             Span<byte> dummy = stackalloc byte[1];
 
-            fixed (byte* p = dummy)
+            fixed (byte* p = &MemoryMarshal.GetReference(dummy))
             {
                 // We should get no errors other than EINTR from reading from the pipe.
                 while (read(_readHandle, p, (nuint)dummy.Length) == -1 &&

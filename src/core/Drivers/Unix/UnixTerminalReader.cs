@@ -20,64 +20,37 @@ sealed class UnixTerminalReader : DriverTerminalReader<UnixTerminalDriver, int>
         _cancellationPipe = cancellationPipe;
     }
 
-    protected override unsafe void ReadCore(Span<byte> data, out int count, CancellationToken cancellationToken)
+    protected override unsafe int ReadBufferCore(Span<byte> buffer, CancellationToken cancellationToken)
     {
         // If the descriptor is invalid, just present the illusion to the user that it has been redirected to /dev/null
         // or something along those lines, i.e. return EOF.
-        if (data.IsEmpty || !IsValid)
-        {
-            count = 0;
-
-            return;
-        }
+        if (buffer.IsEmpty || !IsValid)
+            return 0;
 
         lock (_lock)
         {
-            try
-            {
-                _cancellationPipe.PollWithCancellation(Handle, cancellationToken);
-            }
-            catch (OperationCanceledException)
-            {
-                count = 0;
+            _cancellationPipe.PollWithCancellation(Handle, cancellationToken);
 
-                throw;
-            }
-
-            fixed (byte* p = data)
+            fixed (byte* p = &MemoryMarshal.GetReference(buffer))
             {
                 nint ret;
 
                 // Note that this call may get us suspended by way of a SIGTTIN signal if we are a background process
                 // and the handle refers to a terminal.
-                while ((ret = read(Handle, p, (nuint)data.Length)) == -1 &&
+                while ((ret = read(Handle, p, (nuint)buffer.Length)) == -1 &&
                     Marshal.GetLastPInvokeError() == EINTR)
                 {
                     // Retry in case we get interrupted by a signal.
                 }
 
                 if (ret != -1)
-                {
-                    count = (int)ret;
-
-                    return;
-                }
+                    return (int)ret;
 
                 var err = Marshal.GetLastPInvokeError();
 
-                // The descriptor was probably redirected to a program that ended. Just silently ignore this
-                // situation.
-                //
-                // The strange condition where errno is zero happens e.g. on Linux if the process is killed while
-                // blocking in the read system call.
-                if (err is 0 or EPIPE)
-                {
-                    count = 0;
-
-                    return;
-                }
-
-                throw new TerminalException($"Could not read from {Name}: {new Win32Exception(err).Message}");
+                // EPIPE means the descriptor was probably redirected to a program that ended.
+                return err == EPIPE ?
+                    0 : throw new TerminalException($"Could not read from {Name}: {new Win32Exception(err).Message}");
             }
         }
     }

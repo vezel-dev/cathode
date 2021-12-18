@@ -188,7 +188,7 @@ public sealed class ControlBuilder
 
         var ch = (char)mode;
 
-        return Print(CSI).Print("?1").Print(MemoryMarshal.CreateSpan(ref ch, 1));
+        return Print(CSI).Print("?1").Print(MemoryMarshal.CreateReadOnlySpan(ref ch, 1));
     }
 
     public ControlBuilder SetKeypadMode(KeypadMode mode)
@@ -197,7 +197,7 @@ public sealed class ControlBuilder
 
         var ch = (char)mode;
 
-        return Print(ESC).Print(MemoryMarshal.CreateSpan(ref ch, 1));
+        return Print(ESC).Print(MemoryMarshal.CreateReadOnlySpan(ref ch, 1));
     }
 
     public ControlBuilder SetKeyboardLevel(KeyboardLevel level)
@@ -240,7 +240,7 @@ public sealed class ControlBuilder
 
         var ch = (char)buffer;
 
-        return Print(CSI).Print("?1049").Print(MemoryMarshal.CreateSpan(ref ch, 1));
+        return Print(CSI).Print("?1049").Print(MemoryMarshal.CreateReadOnlySpan(ref ch, 1));
     }
 
     public ControlBuilder SetCursorVisibility(bool visible)

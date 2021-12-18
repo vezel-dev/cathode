@@ -17,6 +17,7 @@ public sealed class TerminalOutputStream : TerminalStream
 
     public override void Write(ReadOnlySpan<byte> buffer)
     {
+        // Stream documentation requires us to write the entire buffer until complete or an exception occurs.
         Writer.Write(buffer);
     }
 
@@ -24,6 +25,6 @@ public sealed class TerminalOutputStream : TerminalStream
     {
         return cancellationToken.IsCancellationRequested ?
             ValueTask.FromCanceled(cancellationToken) :
-            new(Task.Run(() => Writer.Write(buffer.Span, out _, cancellationToken), cancellationToken));
+            new(Task.Run(() => Writer.Write(buffer.Span, cancellationToken), cancellationToken));
     }
 }

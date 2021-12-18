@@ -20,26 +20,22 @@ public abstract class TerminalWriter : TerminalHandle
             }));
     }
 
-    protected abstract void WriteCore(ReadOnlySpan<byte> data, out int count, CancellationToken cancellationToken);
+    protected abstract int WriteBufferCore(ReadOnlySpan<byte> buffer, CancellationToken cancellationToken);
 
-    public void Write(ReadOnlySpan<byte> data, out int count, CancellationToken cancellationToken = default)
+    public int WriteBuffer(ReadOnlySpan<byte> buffer, CancellationToken cancellationToken = default)
     {
-        count = 0;
+        var count = WriteBufferCore(buffer, cancellationToken);
 
-        // WriteCore is required to assign count appropriately for partial writes that fail.
-        try
-        {
-            WriteCore(data, out count, cancellationToken);
-        }
-        finally
-        {
-            OutputWritten?.Invoke(data[..count], this);
-        }
+        OutputWritten?.Invoke(buffer[..count], this);
+
+        return count;
     }
 
-    public void Write(ReadOnlySpan<byte> data)
+    public void Write(ReadOnlySpan<byte> value, CancellationToken cancellationToken = default)
     {
-        Write(data, out _);
+        for (var count = 0; count < value.Length; count += WriteBuffer(value[count..], cancellationToken))
+        {
+        }
     }
 
     public void Write(ReadOnlySpan<char> value)

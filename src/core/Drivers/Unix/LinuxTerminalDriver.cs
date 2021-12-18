@@ -107,7 +107,7 @@ sealed class LinuxTerminalDriver : UnixTerminalDriver
     {
         Span<int> fds = stackalloc int[2];
 
-        fixed (int* p = fds)
+        fixed (int* p = &MemoryMarshal.GetReference(fds))
             if (pipe2(p, O_CLOEXEC) == -1)
                 fds.Fill(-1);
 
@@ -131,7 +131,7 @@ sealed class LinuxTerminalDriver : UnixTerminalDriver
             };
         }
 
-        fixed (pollfd* p = fds)
+        fixed (pollfd* p = &MemoryMarshal.GetReference(fds))
         {
             int ret;
 

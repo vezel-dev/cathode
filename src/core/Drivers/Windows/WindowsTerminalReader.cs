@@ -28,19 +28,15 @@ sealed class WindowsTerminalReader : DriverTerminalReader<WindowsTerminalDriver,
         _buffer = new byte[Terminal.Encoding.GetMaxByteCount(2)];
     }
 
-    protected override unsafe void ReadCore(Span<byte> data, out int count, CancellationToken cancellationToken)
+    protected override unsafe int ReadBufferCore(Span<byte> buffer, CancellationToken cancellationToken)
     {
         // If the handle is invalid, just present the illusion to the user that it has been redirected to /dev/null or
         // something along those lines, i.e. return EOF.
-        if (data.IsEmpty || !IsValid)
-        {
-            count = 0;
+        if (buffer.IsEmpty || !IsValid)
+            return 0;
 
-            return;
-        }
-
-        // The Windows console host is eventually going to support UTF-8 input via the ReadFile function. Sadly,
-        // this does not work today; non-ASCII characters just turn into NULs. This means that we have to use the
+        // The Windows console host is eventually going to support UTF-8 input via the ReadFile function. Sadly, this
+        // does not work today; non-ASCII characters just turn into NULs. This means that we have to use the
         // ReadConsoleW function for interactive input and ReadFile for redirected input. This complicates the
         // interactive case considerably since ReadConsoleW operates in terms of UTF-16 code units while the API we
         // offer operates in terms of raw bytes.
@@ -54,46 +50,37 @@ sealed class WindowsTerminalReader : DriverTerminalReader<WindowsTerminalDriver,
             {
                 if (_buffered.IsEmpty)
                 {
-                    try
-                    {
-                        _cancellationEvent.PollWithCancellation(
-                            Handle,
-                            handle =>
+                    _cancellationEvent.PollWithCancellation(
+                        Handle,
+                        handle =>
+                        {
+                            Span<INPUT_RECORD> records = stackalloc INPUT_RECORD[1];
+
+                            // Ensure that we actually have a useful key event so that ReadConsole will not block.
+                            //
+                            // TODO: Discarding non-key events is gross. We should find a better way.
+                            while (PeekConsoleInputW(handle, records, out var recordsRead) && recordsRead == 1)
                             {
-                                Span<INPUT_RECORD> records = stackalloc INPUT_RECORD[1];
+                                var rec = records[0];
+                                var evt = rec.Event.KeyEvent;
 
-                                // Ensure that we actually have a useful key event so that ReadConsole will not block.
-                                //
-                                // TODO: Discarding non-key events is gross. We should find a better way.
-                                while (PeekConsoleInputW(handle, records, out var recordsRead) && recordsRead == 1)
-                                {
-                                    var rec = records[0];
-                                    var evt = rec.Event.KeyEvent;
+                                if (rec.EventType == KEY_EVENT && evt.bKeyDown &&
+                                    (VIRTUAL_KEY)evt.wVirtualKeyCode is not
+                                    (>= VIRTUAL_KEY.VK_SHIFT and <= VIRTUAL_KEY.VK_MENU) or
+                                    VIRTUAL_KEY.VK_CAPITAL or VIRTUAL_KEY.VK_NUMLOCK or VIRTUAL_KEY.VK_SCROLL)
+                                    return true;
 
-                                    if (rec.EventType == KEY_EVENT && evt.bKeyDown &&
-                                        (VIRTUAL_KEY)evt.wVirtualKeyCode is not
-                                        (>= VIRTUAL_KEY.VK_SHIFT and <= VIRTUAL_KEY.VK_MENU) or
-                                        VIRTUAL_KEY.VK_CAPITAL or VIRTUAL_KEY.VK_NUMLOCK or VIRTUAL_KEY.VK_SCROLL)
-                                        return true;
+                                _ = ReadConsoleInputW(handle, records, out _);
+                            }
 
-                                    _ = ReadConsoleInputW(handle, records, out _);
-                                }
-
-                                return false;
-                            },
-                            cancellationToken);
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        count = 0;
-
-                        throw;
-                    }
+                            return false;
+                        },
+                        cancellationToken);
 
                     Span<char> units = stackalloc char[2];
                     var chars = 0;
 
-                    fixed (char* p = units)
+                    fixed (char* p = &MemoryMarshal.GetReference(units))
                     {
                         bool ret;
                         var read = 0u;
@@ -109,32 +96,24 @@ sealed class WindowsTerminalReader : DriverTerminalReader<WindowsTerminalDriver,
                             WindowsTerminalUtility.ThrowIfUnexpected($"Could not read from {Name}");
 
                         if (read == 0)
-                        {
-                            count = 0;
+                            return 0;
 
-                            return;
-                        }
-
-                        // There is a bug where ReadConsoleW will not process Ctrl-Z properly even though ReadFile
-                        // will. The good news is that we can fairly easily emulate what the console host should be
-                        // doing by just pretending that there is no more data to be read.
-                        if (!Driver.IsRawMode && units[0] == '\x1a')
-                        {
-                            count = 0;
-
-                            return;
-                        }
+                        // There is a bug where ReadConsoleW will not process Ctrl-Z properly even though ReadFile will.
+                        // The good news is that we can fairly easily emulate what the console host should be doing by
+                        // just pretending that there is no more data to be read.
+                        if (!Driver.IsRawMode && *p == '\x1a')
+                            return 0;
 
                         chars++;
 
                         // If we got a high surrogate, we expect to instantly see a low surrogate following it. In
-                        // really bizarre situations (e.g. broken WriteConsoleInput calls), this might not be the
-                        // case, though; in such a case, we will just let UTF8Encoding encode the lone high
-                        // surrogate into a replacement character (U+FFFD).
+                        // really bizarre situations (e.g. broken WriteConsoleInput calls), this might not be the case
+                        // though; in such a case, we will just let UTF8Encoding encode the lone high surrogate into a
+                        // replacement character (U+FFFD).
                         //
-                        // It is not really clear whether this is the right thing to do. A case could easily be made
-                        // for passing the lone surrogate through unmodified or simply discarding it...
-                        if (char.IsHighSurrogate(units[0]))
+                        // It is not really clear whether this is the right thing to do. A case could easily be made for
+                        // passing the lone surrogate through unmodified or simply discarding it...
+                        if (char.IsHighSurrogate(*p))
                         {
                             while ((ret = ReadConsoleW(Handle, p + 1, 1, out read, null)) &&
                                 Marshal.GetLastPInvokeError() == (int)WIN32_ERROR.ERROR_OPERATION_ABORTED &&
@@ -143,11 +122,12 @@ sealed class WindowsTerminalReader : DriverTerminalReader<WindowsTerminalDriver,
                                 // Retry in case we get interrupted by a signal.
                             }
 
-                            if (!ret)
-                                WindowsTerminalUtility.ThrowIfUnexpected($"Could not read from {Name}");
-
+                            // See comments in UnixTerminalWriter for why we are only throwing on a failed read that
+                            // read nothing.
                             if (read != 0)
                                 chars++;
+                            else if (!ret)
+                                WindowsTerminalUtility.ThrowIfUnexpected($"Could not read from {Name}");
                         }
 
                         // Encode the UTF-16 code unit(s) into UTF-8 and grab a slice of the buffer corresponding to
@@ -158,12 +138,12 @@ sealed class WindowsTerminalReader : DriverTerminalReader<WindowsTerminalDriver,
 
                 // Now that we have some UTF-8 text buffered up, we can copy it over to the buffer provided by the
                 // caller and adjust our UTF-8 buffer accordingly. Be careful not to overrun either buffer.
-                var copied = Math.Min(_buffered.Length, data.Length);
+                var copied = Math.Min(_buffered.Length, buffer.Length);
 
-                _buffered.Span[..copied].CopyTo(data[..copied]);
+                _buffered.Span[..copied].CopyTo(buffer[..copied]);
                 _buffered = _buffered[copied..];
 
-                count = copied;
+                return copied;
             }
         }
         else
@@ -172,15 +152,16 @@ sealed class WindowsTerminalReader : DriverTerminalReader<WindowsTerminalDriver,
             uint read;
 
             // Note that Windows does not support WaitForMultipleObjects on files, so there is no point in trying to
-            // use WindowsCancellationPipe in this case.
+            // use WindowsCancellationEvent in this case.
             lock (_lock)
-                fixed (byte* p = data)
-                    result = ReadFile(Handle, p, (uint)data.Length, &read, null);
+                fixed (byte* p = &MemoryMarshal.GetReference(buffer))
+                    result = ReadFile(Handle, p, (uint)buffer.Length, &read, null);
 
-            count = (int)read;
-
-            if (!result)
+            // See comments in UnixTerminalWriter for why we are only throwing on a failed read that read nothing.
+            if (!result && read == 0)
                 WindowsTerminalUtility.ThrowIfUnexpected($"Could not read from {Name}");
+
+            return (int)read;
         }
     }
 }

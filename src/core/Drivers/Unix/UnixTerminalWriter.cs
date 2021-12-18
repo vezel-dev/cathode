@@ -12,33 +12,29 @@ sealed class UnixTerminalWriter : DriverTerminalWriter<UnixTerminalDriver, int>
         _lock = @lock;
     }
 
-    protected override unsafe void WriteCore(ReadOnlySpan<byte> data, out int count, CancellationToken cancellationToken)
+    protected override unsafe int WriteBufferCore(ReadOnlySpan<byte> buffer, CancellationToken cancellationToken)
     {
         // If the descriptor is invalid, just present the illusion to the user that it has been redirected to /dev/null
         // or something along those lines, i.e. pretend we wrote everything.
-        if (data.IsEmpty || !IsValid)
-        {
-            count = data.Length;
-
-            return;
-        }
+        if (buffer.IsEmpty || !IsValid)
+            return buffer.Length;
 
         cancellationToken.ThrowIfCancellationRequested();
 
+        var count = 0;
+
         lock (_lock)
         {
-            fixed (byte* p = data)
+            fixed (byte* p = &MemoryMarshal.GetReference(buffer))
             {
-                count = 0;
-
-                while (count < data.Length)
+                while (count < buffer.Length)
                 {
                     nint ret;
 
                     // Note that this call may get us suspended by way of a SIGTTOU signal if we are a background
                     // process, the handle refers to a terminal, and the TOSTOP bit is set (we disable TOSTOP in the
                     // drivers but there are ways that it could get set anyway).
-                    while ((ret = write(Handle, p + count, (nuint)(data.Length - count))) == -1 &&
+                    while ((ret = write(Handle, p + count, (nuint)(buffer.Length - count))) == -1 &&
                         Marshal.GetLastPInvokeError() == EINTR)
                     {
                     }
@@ -56,8 +52,7 @@ sealed class UnixTerminalWriter : DriverTerminalWriter<UnixTerminalDriver, int>
 
                     var err = Marshal.GetLastPInvokeError();
 
-                    // The descriptor was probably redirected to a program that ended. Just silently ignore this
-                    // situation.
+                    // EPIPE means the descriptor was probably redirected to a program that ended.
                     if (err == EPIPE)
                         break;
 
@@ -66,9 +61,17 @@ sealed class UnixTerminalWriter : DriverTerminalWriter<UnixTerminalDriver, int>
                     if (Driver.PollHandles(err, POLLOUT, stackalloc[] { Handle }))
                         continue;
 
+                    // At this point there was an actual I/O error. We only want to throw if we did not manage to write
+                    // anything so far. If we did manage to write something, the error should happen again the next time
+                    // we are called, but this time without us managing to write anything.
+                    if (count != 0)
+                        break;
+
                     throw new TerminalException($"Could not write to {Name}: {new Win32Exception(err).Message}");
                 }
             }
         }
+
+        return count;
     }
 }

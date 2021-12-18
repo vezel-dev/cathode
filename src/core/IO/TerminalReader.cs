@@ -19,30 +19,40 @@ public abstract class TerminalReader : TerminalHandle
             () => TextReader.Synchronized(new StreamReader(Stream, Terminal.Encoding, false, ReadBufferSize, true)));
     }
 
-    protected abstract void ReadCore(Span<byte> data, out int count, CancellationToken cancellationToken);
+    protected abstract int ReadBufferCore(Span<byte> buffer, CancellationToken cancellationToken);
 
-    public void Read(Span<byte> data, out int count, CancellationToken cancellationToken = default)
+    public int ReadBuffer(Span<byte> buffer, CancellationToken cancellationToken = default)
     {
-        count = 0;
+        var count = ReadBufferCore(buffer, cancellationToken);
 
-        // ReadCore is required to assign count appropriately for partial reads that fail.
-        try
-        {
-            ReadCore(data, out count, cancellationToken);
-        }
-        finally
-        {
-            InputRead?.Invoke(data[..count], this);
-        }
+        InputRead?.Invoke(buffer[..count], this);
+
+        return count;
     }
 
-    public byte? ReadRaw(CancellationToken cancellationToken = default)
+    public int Read(Span<byte> value, CancellationToken cancellationToken = default)
     {
-        Span<byte> span = stackalloc byte[1];
+        var count = 0;
 
-        Read(span, out var count, cancellationToken);
+        while (count < value.Length)
+        {
+            var ret = ReadBuffer(value[count..], cancellationToken);
 
-        return count == span.Length ? span[0] : null;
+            // EOF?
+            if (ret == 0)
+                break;
+
+            count += ret;
+        }
+
+        return count;
+    }
+
+    public unsafe byte? ReadRaw(CancellationToken cancellationToken = default)
+    {
+        byte value;
+
+        return Read(new Span<byte>(&value, 1), cancellationToken) == 1 ? value : null;
     }
 
     public string? ReadLine()
