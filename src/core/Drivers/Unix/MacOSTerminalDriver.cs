@@ -107,12 +107,11 @@ sealed class MacOSTerminalDriver : UnixTerminalDriver
 
     public override unsafe (int ReadHandle, int WriteHandle) CreatePipePair()
     {
-        Span<int> fds = stackalloc int[2];
+        var fds = stackalloc int[2];
 
         // Unfortunately, macOS lacks pipe2 so we have to use this approach which is prone to race conditions on fork.
-        fixed (int* p = &MemoryMarshal.GetReference(fds))
-            if (pipe(p) == -1)
-                return (-1, -1);
+        if (pipe(fds) == -1)
+            return (-1, -1);
 
         static bool SetCloseOnExec(int handle)
         {
@@ -131,7 +130,7 @@ sealed class MacOSTerminalDriver : UnixTerminalDriver
             _ = close(fds[0]);
             _ = close(fds[1]);
 
-            fds.Fill(-1);
+            return (-1, -1);
         }
 
         return (fds[0], fds[1]);

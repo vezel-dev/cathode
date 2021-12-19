@@ -22,21 +22,14 @@ sealed class UnixCancellationPipe
 
         static void CancellationCallback(object? state)
         {
-            ReadOnlySpan<byte> dummy = stackalloc byte[]
-            {
-                42,
-            };
+            byte dummy = 42;
+            nint ret;
 
-            fixed (byte* p = &MemoryMarshal.GetReference(dummy))
+            // We should get no errors other than EINTR from writing to the pipe.
+            while ((ret = write(((UnixCancellationPipe)state!)._writeHandle, &dummy, 1)) == -1 &&
+                Marshal.GetLastPInvokeError() == EINTR)
             {
-                nint ret;
-
-                // We should get no errors other than EINTR from writing to the pipe.
-                while ((ret = write(((UnixCancellationPipe)state!)._writeHandle, p, (nuint)dummy.Length)) == -1 &&
-                    Marshal.GetLastPInvokeError() == EINTR)
-                {
-                    // Retry in case we get interrupted by a signal.
-                }
+                // Retry in case we get interrupted by a signal.
             }
         }
 
@@ -53,16 +46,13 @@ sealed class UnixCancellationPipe
         // Were we canceled?
         if ((handles[0] & POLLIN) != 0)
         {
-            Span<byte> dummy = stackalloc byte[1];
+            byte dummy;
 
-            fixed (byte* p = &MemoryMarshal.GetReference(dummy))
+            // We should get no errors other than EINTR from reading from the pipe.
+            while (read(_readHandle, &dummy, 1) == -1 &&
+                Marshal.GetLastPInvokeError() == EINTR)
             {
-                // We should get no errors other than EINTR from reading from the pipe.
-                while (read(_readHandle, p, (nuint)dummy.Length) == -1 &&
-                    Marshal.GetLastPInvokeError() == EINTR)
-                {
-                    // Retry in case we get interrupted by a signal.
-                }
+                // Retry in case we get interrupted by a signal.
             }
 
             throw new OperationCanceledException(cancellationToken);

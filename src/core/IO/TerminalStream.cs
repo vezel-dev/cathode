@@ -55,11 +55,11 @@ public abstract class TerminalStream : Stream
         return ReadAsyncCore(this, mem, cancellationToken);
     }
 
-    public override sealed int ReadByte()
+    public override sealed unsafe int ReadByte()
     {
-        Span<byte> buf = stackalloc byte[1];
+        byte value;
 
-        return Read(buf) == buf.Length ? buf[0] : -1;
+        return Read(new Span<byte>(&value, 1)) == 1 ? value : -1;
     }
 
     public override sealed void Write(byte[] buffer, int offset, int count)
@@ -95,12 +95,10 @@ public abstract class TerminalStream : Stream
 
     public override sealed void WriteByte(byte value)
     {
-        ReadOnlySpan<byte> span = stackalloc byte[1]
+        Write(stackalloc byte[]
         {
             value,
-        };
-
-        Write(span);
+        });
     }
 
     public override sealed void Flush()

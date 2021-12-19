@@ -105,13 +105,9 @@ sealed class LinuxTerminalDriver : UnixTerminalDriver
 
     public override unsafe (int ReadHandle, int WriteHandle) CreatePipePair()
     {
-        Span<int> fds = stackalloc int[2];
+        var fds = stackalloc int[2];
 
-        fixed (int* p = &MemoryMarshal.GetReference(fds))
-            if (pipe2(p, O_CLOEXEC) == -1)
-                fds.Fill(-1);
-
-        return (fds[0], fds[1]);
+        return pipe2(fds, O_CLOEXEC) == 0 ? (fds[0], fds[1]) : (-1, -1);
     }
 
     public override unsafe bool PollHandles(int? error, short events, Span<int> handles)

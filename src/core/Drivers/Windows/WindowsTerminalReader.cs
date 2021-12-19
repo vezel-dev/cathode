@@ -61,12 +61,12 @@ sealed class WindowsTerminalReader : DriverTerminalReader<WindowsTerminalDriver,
                             // TODO: Discarding non-key events is gross. We should find a better way.
                             while (PeekConsoleInputW(handle, records, out var recordsRead) && recordsRead == 1)
                             {
-                                var rec = records[0];
+                                var rec = MemoryMarshal.GetReference(records);
                                 var evt = rec.Event.KeyEvent;
 
                                 if (rec.EventType == KEY_EVENT && evt.bKeyDown &&
                                     (VIRTUAL_KEY)evt.wVirtualKeyCode is not
-                                    (>= VIRTUAL_KEY.VK_SHIFT and <= VIRTUAL_KEY.VK_MENU) or
+                                    VIRTUAL_KEY.VK_SHIFT or VIRTUAL_KEY.VK_CONTROL or VIRTUAL_KEY.VK_MENU or
                                     VIRTUAL_KEY.VK_CAPITAL or VIRTUAL_KEY.VK_NUMLOCK or VIRTUAL_KEY.VK_SCROLL)
                                     return true;
 
