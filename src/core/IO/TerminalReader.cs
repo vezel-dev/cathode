@@ -55,8 +55,11 @@ public abstract class TerminalReader : TerminalHandle
         return Read(new Span<byte>(&value, 1), cancellationToken) == 1 ? value : null;
     }
 
-    public string? ReadLine()
+    public string? ReadLine(CancellationToken cancellationToken = default)
     {
+        // TODO: Pass on the cancellation token in .NET 7.
+        cancellationToken.ThrowIfCancellationRequested();
+
         return TextReader.ReadLine();
     }
 }

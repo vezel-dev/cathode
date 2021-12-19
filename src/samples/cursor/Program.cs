@@ -22,14 +22,14 @@ while (run)
             visible = !visible;
 
             Terminal.Out(SetCursorVisibility(visible));
-            Terminal.OutLine("Cursor is now {0}.", visible ? "visible" : "invisible");
+            Terminal.OutLine($"Cursor is now {(visible ? "visible" : "invisible")}.");
             break;
         case var style when Enum.TryParse<CursorStyle>(style, true, out var s):
             Terminal.Out(SetCursorStyle(s));
-            Terminal.OutLine("Cursor style is now {0}.", s);
+            Terminal.OutLine($"Cursor style is now {s}.");
             break;
         case var cmd:
-            Terminal.OutLine("Unknown command '{0}'.", cmd);
+            Terminal.OutLine($"Unknown command '{cmd}'.");
             break;
     }
 }

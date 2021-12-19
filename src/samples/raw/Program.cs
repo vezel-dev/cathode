@@ -8,7 +8,7 @@ try
 {
     for (var i = 0; i < 100; i++)
     {
-        Terminal.Out("0x{0:x2}", Terminal.ReadRaw());
+        Terminal.Out($"0x{Terminal.ReadRaw():x2}");
         Terminal.Out("\r\n");
     }
 }

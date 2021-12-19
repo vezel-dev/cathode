@@ -38,7 +38,7 @@ public abstract class TerminalWriter : TerminalHandle
         }
     }
 
-    public void Write(ReadOnlySpan<char> value)
+    public void Write(ReadOnlySpan<char> value, CancellationToken cancellationToken = default)
     {
         var len = Terminal.Encoding.GetByteCount(value);
         var array = ArrayPool<byte>.Shared.Rent(len);
@@ -49,7 +49,7 @@ public abstract class TerminalWriter : TerminalHandle
 
             _ = Terminal.Encoding.GetBytes(value, span);
 
-            Write(span);
+            Write(span, cancellationToken);
         }
         finally
         {
@@ -57,38 +57,18 @@ public abstract class TerminalWriter : TerminalHandle
         }
     }
 
-    public void Write(string? value)
+    public void Write<T>(T value, CancellationToken cancellationToken = default)
     {
-        Write(value.AsSpan());
+        Write((value?.ToString()).AsSpan(), cancellationToken);
     }
 
-    public void Write<T>(T value)
+    public void WriteLine(CancellationToken cancellationToken = default)
     {
-        Write(value?.ToString());
+        WriteLine(string.Empty, cancellationToken);
     }
 
-    public void Write(string format, params object?[] args)
+    public void WriteLine<T>(T value, CancellationToken cancellationToken = default)
     {
-        Write(string.Format(CultureInfo.CurrentCulture, format, args));
-    }
-
-    public void WriteLine()
-    {
-        WriteLine(null);
-    }
-
-    public void WriteLine(string? value)
-    {
-        Write(value + Environment.NewLine);
-    }
-
-    public void WriteLine<T>(T value)
-    {
-        WriteLine(value?.ToString());
-    }
-
-    public void WriteLine(string format, params object?[] args)
-    {
-        WriteLine(string.Format(CultureInfo.CurrentCulture, format, args));
+        Write(value?.ToString() + Environment.NewLine, cancellationToken);
     }
 }

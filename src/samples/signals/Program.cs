@@ -18,7 +18,7 @@ while (run)
     {
         context.Cancel = true;
 
-        Terminal.OutLine("Caught {0} signal.", context.Signal);
+        Terminal.OutLine($"Caught {context.Signal} signal.");
         Terminal.Out(Beep());
     }
 
@@ -52,7 +52,7 @@ while (run)
             Terminal.GenerateSignal(TerminalSignal.Terminate);
             break;
         case var cmd:
-            Terminal.OutLine("Unknown command '{0}'.", cmd);
+            Terminal.OutLine($"Unknown command '{cmd}'.");
             break;
     }
 }

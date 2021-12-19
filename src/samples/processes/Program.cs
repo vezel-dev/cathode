@@ -7,7 +7,7 @@ var bash =
 
 await bash.WaitForExitAsync().ConfigureAwait(false);
 
-Terminal.OutLine("'bash' exited with code: {0}", bash.ExitCode);
+Terminal.OutLine($"'bash' exited with code: {bash.ExitCode}");
 
 var sb = new StringBuilder();
 
@@ -38,4 +38,4 @@ finally
     Terminal.DisableRawMode();
 }
 
-Terminal.OutLine("Captured output: {0}", sb);
+Terminal.OutLine($"Captured output: {sb}");

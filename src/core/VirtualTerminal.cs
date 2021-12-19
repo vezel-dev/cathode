@@ -31,98 +31,58 @@ public abstract class VirtualTerminal
         return StandardIn.ReadRaw(cancellationToken);
     }
 
-    public string? ReadLine()
+    public string? ReadLine(CancellationToken cancellationToken = default)
     {
-        return StandardIn.ReadLine();
+        return StandardIn.ReadLine(cancellationToken);
     }
 
-    public void Out(ReadOnlySpan<byte> value)
+    public void Out(ReadOnlySpan<byte> value, CancellationToken cancellationToken = default)
     {
-        StandardOut.Write(value);
+        StandardOut.Write(value, cancellationToken);
     }
 
-    public void Out(ReadOnlySpan<char> value)
+    public void Out(ReadOnlySpan<char> value, CancellationToken cancellationToken = default)
     {
-        StandardOut.Write(value);
+        StandardOut.Write(value, cancellationToken);
     }
 
-    public void Out(string? value)
+    public void Out<T>(T value, CancellationToken cancellationToken = default)
     {
-        StandardOut.Write(value);
+        StandardOut.Write(value, cancellationToken);
     }
 
-    public void Out<T>(T value)
+    public void OutLine(CancellationToken cancellationToken = default)
     {
-        StandardOut.Write(value);
+        StandardOut.WriteLine(cancellationToken);
     }
 
-    public void Out(string format, params object?[] args)
+    public void OutLine<T>(T value, CancellationToken cancellationToken = default)
     {
-        StandardOut.Write(format, args);
+        StandardOut.WriteLine(value, cancellationToken);
     }
 
-    public void OutLine()
+    public void Error(ReadOnlySpan<byte> value, CancellationToken cancellationToken = default)
     {
-        StandardOut.WriteLine();
+        StandardError.Write(value, cancellationToken);
     }
 
-    public void OutLine(string? value)
+    public void Error(ReadOnlySpan<char> value, CancellationToken cancellationToken = default)
     {
-        StandardOut.WriteLine(value);
+        StandardError.Write(value, cancellationToken);
     }
 
-    public void OutLine<T>(T value)
+    public void Error<T>(T value, CancellationToken cancellationToken = default)
     {
-        StandardOut.WriteLine(value);
+        StandardError.Write(value, cancellationToken);
     }
 
-    public void OutLine(string format, params object?[] args)
+    public void ErrorLine(CancellationToken cancellationToken = default)
     {
-        StandardOut.WriteLine(format, args);
+        StandardError.WriteLine(cancellationToken);
     }
 
-    public void Error(ReadOnlySpan<byte> value)
+    public void ErrorLine<T>(T value, CancellationToken cancellationToken = default)
     {
-        StandardError.Write(value);
-    }
-
-    public void Error(ReadOnlySpan<char> value)
-    {
-        StandardError.Write(value);
-    }
-
-    public void Error(string? value)
-    {
-        StandardError.Write(value);
-    }
-
-    public void Error<T>(T value)
-    {
-        StandardError.Write(value);
-    }
-
-    public void Error(string format, params object?[] args)
-    {
-        StandardError.Write(format, args);
-    }
-
-    public void ErrorLine()
-    {
-        StandardError.WriteLine();
-    }
-
-    public void ErrorLine(string? value)
-    {
-        StandardError.WriteLine(value);
-    }
-
-    public void ErrorLine<T>(T value)
-    {
-        StandardError.WriteLine(value);
-    }
-
-    public void ErrorLine(string format, params object?[] args)
-    {
-        StandardError.WriteLine(format, args);
+        StandardError.WriteLine(value, cancellationToken);
     }
 }

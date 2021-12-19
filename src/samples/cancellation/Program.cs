@@ -25,7 +25,7 @@ try
             break;
         }
 
-        Terminal.Out("0x{0:x2}", b);
+        Terminal.Out($"0x{b:x2}");
         Terminal.Out("\r\n");
     }
 }

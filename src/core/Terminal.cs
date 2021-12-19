@@ -58,98 +58,58 @@ public static class Terminal
         return _terminal.ReadRaw(cancellationToken);
     }
 
-    public static string? ReadLine()
+    public static string? ReadLine(CancellationToken cancellationToken = default)
     {
-        return _terminal.ReadLine();
+        return _terminal.ReadLine(cancellationToken);
     }
 
-    public static void Out(ReadOnlySpan<byte> value)
+    public static void Out(ReadOnlySpan<byte> value, CancellationToken cancellationToken = default)
     {
-        _terminal.Out(value);
+        _terminal.Out(value, cancellationToken);
     }
 
-    public static void Out(ReadOnlySpan<char> value)
+    public static void Out(ReadOnlySpan<char> value, CancellationToken cancellationToken = default)
     {
-        _terminal.Out(value);
+        _terminal.Out(value, cancellationToken);
     }
 
-    public static void Out(string? value)
+    public static void Out<T>(T value, CancellationToken cancellationToken = default)
     {
-        _terminal.Out(value);
+        _terminal.Out(value, cancellationToken);
     }
 
-    public static void Out<T>(T value)
+    public static void OutLine(CancellationToken cancellationToken = default)
     {
-        _terminal.Out(value);
+        _terminal.OutLine(cancellationToken);
     }
 
-    public static void Out(string format, params object?[] args)
+    public static void OutLine<T>(T value, CancellationToken cancellationToken = default)
     {
-        _terminal.Out(format, args);
+        _terminal.OutLine(value, cancellationToken);
     }
 
-    public static void OutLine()
+    public static void Error(ReadOnlySpan<byte> value, CancellationToken cancellationToken = default)
     {
-        _terminal.OutLine();
+        _terminal.Error(value, cancellationToken);
     }
 
-    public static void OutLine(string? value)
+    public static void Error(ReadOnlySpan<char> value, CancellationToken cancellationToken = default)
     {
-        _terminal.OutLine(value);
+        _terminal.Error(value, cancellationToken);
     }
 
-    public static void OutLine<T>(T value)
+    public static void Error<T>(T value, CancellationToken cancellationToken = default)
     {
-        _terminal.OutLine(value);
+        _terminal.Error(value, cancellationToken);
     }
 
-    public static void OutLine(string format, params object?[] args)
+    public static void ErrorLine(CancellationToken cancellationToken = default)
     {
-        _terminal.OutLine(format, args);
+        _terminal.ErrorLine(cancellationToken);
     }
 
-    public static void Error(ReadOnlySpan<byte> value)
+    public static void ErrorLine<T>(T value, CancellationToken cancellationToken = default)
     {
-        _terminal.Error(value);
-    }
-
-    public static void Error(ReadOnlySpan<char> value)
-    {
-        _terminal.Error(value);
-    }
-
-    public static void Error(string? value)
-    {
-        _terminal.Error(value);
-    }
-
-    public static void Error<T>(T value)
-    {
-        _terminal.Error(value);
-    }
-
-    public static void Error(string format, params object?[] args)
-    {
-        _terminal.Error(format, args);
-    }
-
-    public static void ErrorLine()
-    {
-        _terminal.ErrorLine();
-    }
-
-    public static void ErrorLine(string? value)
-    {
-        _terminal.ErrorLine(value);
-    }
-
-    public static void ErrorLine<T>(T value)
-    {
-        _terminal.ErrorLine(value);
-    }
-
-    public static void ErrorLine(string format, params object?[] args)
-    {
-        _terminal.ErrorLine(format, args);
+        _terminal.ErrorLine(value, cancellationToken);
     }
 }

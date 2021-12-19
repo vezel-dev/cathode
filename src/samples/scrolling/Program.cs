@@ -11,7 +11,7 @@ try
             .SetDecorations(bold: true)
             .PrintLine("The last string entered will be displayed here.")
             .ResetAttributes());
-    Terminal.OutLine(new('-', Terminal.Size.Width));
+    Terminal.OutLine(new string('-', Terminal.Size.Width));
 
     var rng = new Random();
 
