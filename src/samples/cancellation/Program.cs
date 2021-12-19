@@ -1,3 +1,6 @@
+Terminal.Out("Reading cooked input: ");
+Terminal.OutLine(Terminal.ReadLine());
+
 Terminal.OutLine("Entering raw mode and reading input. Canceling after 5 seconds.");
 Terminal.OutLine();
 

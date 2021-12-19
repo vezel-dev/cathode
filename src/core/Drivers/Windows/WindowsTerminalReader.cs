@@ -52,11 +52,11 @@ sealed class WindowsTerminalReader : DriverTerminalReader<WindowsTerminalDriver,
                 {
                     _cancellationEvent.PollWithCancellation(
                         Handle,
-                        handle =>
+                        static (driver, handle) =>
                         {
                             Span<INPUT_RECORD> records = stackalloc INPUT_RECORD[1];
 
-                            // Ensure that we actually have a useful key event so that ReadConsole will not block.
+                            // Ensure that we actually have a useful key event so that ReadConsoleW will not block.
                             //
                             // TODO: Discarding non-key events is gross. We should find a better way.
                             while (PeekConsoleInputW(handle, records, out var recordsRead) && recordsRead == 1)
@@ -64,10 +64,16 @@ sealed class WindowsTerminalReader : DriverTerminalReader<WindowsTerminalDriver,
                                 var rec = MemoryMarshal.GetReference(records);
                                 var evt = rec.Event.KeyEvent;
 
+                                // In cooked mode, we must not drop the key-up event for the Enter key.
+                                if (!driver.IsRawMode && rec.EventType == KEY_EVENT && !evt.bKeyDown &&
+                                    evt.wVirtualKeyCode == (ushort)VIRTUAL_KEY.VK_RETURN)
+                                    return true;
+
+                                // In raw mode, we only care about key-down events for non-modifier keys.
                                 if (rec.EventType == KEY_EVENT && evt.bKeyDown &&
                                     (VIRTUAL_KEY)evt.wVirtualKeyCode is not
-                                    VIRTUAL_KEY.VK_SHIFT or VIRTUAL_KEY.VK_CONTROL or VIRTUAL_KEY.VK_MENU or
-                                    VIRTUAL_KEY.VK_CAPITAL or VIRTUAL_KEY.VK_NUMLOCK or VIRTUAL_KEY.VK_SCROLL)
+                                    (VIRTUAL_KEY.VK_SHIFT or VIRTUAL_KEY.VK_CONTROL or VIRTUAL_KEY.VK_MENU or
+                                    VIRTUAL_KEY.VK_CAPITAL or VIRTUAL_KEY.VK_NUMLOCK or VIRTUAL_KEY.VK_SCROLL))
                                     return true;
 
                                 _ = ReadConsoleInputW(handle, records, out _);

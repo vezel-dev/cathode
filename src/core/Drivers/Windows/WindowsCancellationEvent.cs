@@ -5,11 +5,18 @@ namespace System.Drivers.Windows;
 
 sealed class WindowsCancellationEvent
 {
+    readonly WindowsTerminalDriver _driver;
+
     readonly ManualResetEvent _event = new(false);
+
+    public WindowsCancellationEvent(WindowsTerminalDriver driver)
+    {
+        _driver = driver;
+    }
 
     public unsafe void PollWithCancellation(
         SafeHandle handle,
-        Func<SafeHandle, bool> predicate,
+        Func<WindowsTerminalDriver, SafeHandle, bool> predicate,
         CancellationToken cancellationToken)
     {
         static void CancellationCallback(object? state)
@@ -40,7 +47,7 @@ sealed class WindowsCancellationEvent
                     break;
                 }
 
-                if (ret == WAIT_OBJECT_0 + 1 && predicate(handle))
+                if (ret == WAIT_OBJECT_0 + 1 && predicate(_driver, handle))
                     break;
             }
         }
