@@ -88,7 +88,6 @@ abstract class TerminalDriver
 
     Action<TerminalSize>? _resize;
 
-    [SuppressMessage("Reliability", "CA2000")]
     protected TerminalDriver()
     {
         var thread = new Thread(() =>

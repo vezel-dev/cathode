@@ -10,7 +10,6 @@ public abstract class TerminalReader : TerminalHandle
 
     readonly Lazy<TextReader> _reader;
 
-    [SuppressMessage("Reliability", "CA2000")]
     protected TerminalReader()
     {
         // Note that the buffer size used affects how many characters the Windows console host will allow the user to
