@@ -1,17 +1,17 @@
-Terminal.Out(
+await OutAsync(
     new ControlBuilder()
         .SetScreenBuffer(ScreenBuffer.Alternate)
         .MoveCursorTo(0, 0)
-        .SetScrollMargin(2, Terminal.Size.Height));
+        .SetScrollMargin(2, Size.Height));
 
 try
 {
-    Terminal.Out(
+    await OutAsync(
         new ControlBuilder()
             .SetDecorations(bold: true)
             .PrintLine("The last string entered will be displayed here.")
-            .ResetAttributes());
-    Terminal.OutLine(new string('-', Terminal.Size.Width));
+            .ResetAttributes()
+            .PrintLine(new string('-', Size.Width)));
 
     var rng = new Random();
 
@@ -23,12 +23,12 @@ try
 
     while (true)
     {
-        Terminal.Out("Input: ");
+        await OutAsync("Input: ");
 
-        if (Terminal.ReadLine() is not string str)
+        if (await ReadLineAsync() is not string str)
             break;
 
-        Terminal.Out(
+        await OutAsync(
             new ControlBuilder()
                 .SaveCursorState()
                 .MoveCursorTo(0, 0)
@@ -41,8 +41,8 @@ try
 }
 finally
 {
-    Terminal.Out(
+    await OutAsync(
         new ControlBuilder()
-            .SetScrollMargin(0, Terminal.Size.Height)
+            .SetScrollMargin(0, Size.Height)
             .SetScreenBuffer(ScreenBuffer.Main));
 }

@@ -1,17 +1,17 @@
-Terminal.Out(
+await OutAsync(
     new ControlBuilder()
         .SetScreenBuffer(ScreenBuffer.Alternate)
         .MoveCursorTo(0, 0));
 
 try
 {
-    Terminal.OutLine("This text is rendered in the alternate screen buffer.");
-    Terminal.OutLine();
-    Terminal.OutLine("Press Enter to return to the main screen buffer.");
+    await OutLineAsync("This text is rendered in the alternate screen buffer.");
+    await OutLineAsync();
+    await OutLineAsync("Press Enter to return to the main screen buffer.");
 
-    _ = Terminal.ReadLine();
+    _ = await ReadLineAsync();
 }
 finally
 {
-    Terminal.Out(SetScreenBuffer(ScreenBuffer.Main));
+    await OutAsync(SetScreenBuffer(ScreenBuffer.Main));
 }

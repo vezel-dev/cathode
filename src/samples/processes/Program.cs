@@ -1,18 +1,19 @@
-Terminal.OutLine("Launching 'bash'...");
+await OutLineAsync("Launching 'bash'...");
 
 var bash =
     new TerminalProcessBuilder()
         .WithFileName("bash")
         .Start();
 
-await bash.WaitForExitAsync().ConfigureAwait(false);
+await bash.WaitForExitAsync();
 
-Terminal.OutLine($"'bash' exited with code: {bash.ExitCode}");
+await OutLineAsync($"'bash' exited with code: {bash.ExitCode}");
 
 var sb = new StringBuilder();
 
-Terminal.OutLine("Entering raw mode and launching 'echo'...");
-Terminal.EnableRawMode();
+await OutLineAsync("Entering raw mode and launching 'echo'...");
+
+EnableRawMode();
 
 try
 {
@@ -31,11 +32,11 @@ try
 
     echo.StartReadingStandardOut();
 
-    await echo.WaitForExitAsync().ConfigureAwait(false);
+    await echo.WaitForExitAsync();
 }
 finally
 {
-    Terminal.DisableRawMode();
+    DisableRawMode();
 }
 
-Terminal.OutLine($"Captured output: {sb}");
+await OutLineAsync($"Captured output: {sb}");

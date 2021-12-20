@@ -1,5 +1,7 @@
 <Project>
     <ItemGroup>
+        <Using Include="System.Terminal"
+               Static="true" />
         <Using Include="System.Text.Control.ControlSequences"
                Static="true" />
     </ItemGroup>

@@ -1,19 +1,19 @@
-Terminal.OutLine("Available commands:");
-Terminal.OutLine();
-Terminal.OutLine("  visible: Toggle cursor visibility.");
-Terminal.OutLine("  <style>: Set cursor style to the given style.");
-Terminal.OutLine();
+await OutLineAsync("Available commands:");
+await OutLineAsync();
+await OutLineAsync("  visible: Toggle cursor visibility.");
+await OutLineAsync("  <style>: Set cursor style to the given style.");
+await OutLineAsync();
 
-Terminal.Out(SetCursorVisibility(true));
+await OutAsync(SetCursorVisibility(true));
 
 var visible = true;
 var run = true;
 
 while (run)
 {
-    Terminal.Out("Command: ");
+    await OutAsync("Command: ");
 
-    switch (Terminal.ReadLine())
+    switch (await ReadLineAsync())
     {
         case null:
             run = false;
@@ -21,15 +21,15 @@ while (run)
         case "visible":
             visible = !visible;
 
-            Terminal.Out(SetCursorVisibility(visible));
-            Terminal.OutLine($"Cursor is now {(visible ? "visible" : "invisible")}.");
+            await OutAsync(SetCursorVisibility(visible));
+            await OutLineAsync($"Cursor is now {(visible ? "visible" : "invisible")}.");
             break;
         case var style when Enum.TryParse<CursorStyle>(style, true, out var s):
-            Terminal.Out(SetCursorStyle(s));
-            Terminal.OutLine($"Cursor style is now {s}.");
+            await OutAsync(SetCursorStyle(s));
+            await OutLineAsync($"Cursor style is now {s}.");
             break;
         case var cmd:
-            Terminal.OutLine($"Unknown command '{cmd}'.");
+            await OutLineAsync($"Unknown command '{cmd}'.");
             break;
     }
 }

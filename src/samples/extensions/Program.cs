@@ -1,3 +1,3 @@
 using Microsoft.Extensions.Hosting;
 
-await TerminalHost.CreateDefaultBuilder().RunConsoleAsync().ConfigureAwait(false);
+await TerminalHost.CreateDefaultBuilder().RunConsoleAsync();

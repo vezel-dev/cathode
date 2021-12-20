@@ -1,19 +1,21 @@
-Terminal.OutLine("Entering raw mode.");
-Terminal.OutLine();
+await OutLineAsync("Entering raw mode.");
+await OutLineAsync();
 
-Terminal.EnableRawMode();
-Terminal.Out(SetMouseEvents(MouseEvents.All));
+EnableRawMode();
+
+await OutAsync(SetMouseEvents(MouseEvents.All));
 
 try
 {
     for (var i = 0; i < 100; i++)
     {
-        Terminal.Out($"0x{Terminal.ReadRaw():x2}");
-        Terminal.Out("\r\n");
+        await OutAsync($"0x{await ReadRawAsync():x2}");
+        await OutAsync("\r\n");
     }
 }
 finally
 {
-    Terminal.Out(SetMouseEvents(MouseEvents.None));
-    Terminal.DisableRawMode();
+    await OutAsync(SetMouseEvents(MouseEvents.None));
+
+    DisableRawMode();
 }

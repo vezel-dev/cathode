@@ -1,6 +1,6 @@
-Terminal.OutLine("Listening for resize events.");
-Terminal.OutLine();
+await OutLineAsync("Listening for resize events.");
+await OutLineAsync();
 
-Terminal.Resized += size => Terminal.OutLine($"Width = {size.Width}, Height = {size.Height}");
+Resized += size => OutLine($"Width = {size.Width}, Height = {size.Height}");
 
-await Task.Delay(Timeout.Infinite).ConfigureAwait(false);
+await Task.Delay(Timeout.Infinite);

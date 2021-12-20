@@ -1,10 +1,10 @@
-Terminal.Out("Reading cooked input: ");
-Terminal.OutLine(Terminal.ReadLine());
+await OutAsync("Reading cooked input: ");
+await OutLineAsync(await ReadLineAsync());
 
-Terminal.OutLine("Entering raw mode and reading input. Canceling after 5 seconds.");
-Terminal.OutLine();
+await OutLineAsync("Entering raw mode and reading input. Canceling after 5 seconds.");
+await OutLineAsync();
 
-Terminal.EnableRawMode();
+EnableRawMode();
 
 try
 {
@@ -18,21 +18,21 @@ try
 
         try
         {
-            b = Terminal.ReadRaw(cts.Token);
+            b = await ReadRawAsync(cts.Token);
         }
         catch (OperationCanceledException)
         {
-            Terminal.Out("Canceled.");
-            Terminal.Out("\r\n");
+            await OutAsync("Canceled.");
+            await OutAsync("\r\n");
 
             break;
         }
 
-        Terminal.Out($"0x{b:x2}");
-        Terminal.Out("\r\n");
+        await OutAsync($"0x{b:x2}");
+        await OutAsync("\r\n");
     }
 }
 finally
 {
-    Terminal.DisableRawMode();
+    DisableRawMode();
 }

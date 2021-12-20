@@ -1,4 +1,4 @@
-Terminal.Out(
+await OutAsync(
     new ControlBuilder()
         .SetForegroundColor(255, 0, 0)
         .PrintLine("This text is red.")
