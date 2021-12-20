@@ -109,7 +109,6 @@ dotnet_diagnostic.CA1014.severity = none
 dotnet_diagnostic.CA1017.severity = none
 dotnet_diagnostic.CA1021.severity = none
 dotnet_diagnostic.CA1028.severity = none
-dotnet_diagnostic.CA1032.severity = none
 dotnet_diagnostic.CA1034.severity = none
 dotnet_diagnostic.CA1040.severity = none
 dotnet_diagnostic.CA1045.severity = none
@@ -144,7 +143,7 @@ dotnet_diagnostic.IDE0080.severity = error
 dotnet_diagnostic.IDE0082.severity = error
 dotnet_diagnostic.IDE0100.severity = error
 dotnet_diagnostic.IDE0110.severity = error
-dotnet_diagnostic.IDE0120.severity = error # TODO: This seems broken?
+dotnet_diagnostic.IDE0120.severity = error
 dotnet_diagnostic.IDE0130.severity = error
 
 dotnet_diagnostic.SA0001.severity = none
