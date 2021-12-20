@@ -6,6 +6,8 @@ public abstract class VirtualTerminal
 
     public abstract event Action<TerminalSignalContext>? Signaled;
 
+    public abstract event Action? Resumed;
+
     public abstract TerminalReader StandardIn { get; }
 
     public abstract TerminalWriter StandardOut { get; }

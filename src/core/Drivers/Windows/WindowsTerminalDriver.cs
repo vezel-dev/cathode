@@ -7,6 +7,17 @@ namespace System.Drivers.Windows;
 
 sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
 {
+    public override event Action? Resumed
+    {
+        add
+        {
+            // Windows does not have a SIGSTOP/SIGCONT concept.
+        }
+        remove
+        {
+        }
+    }
+
     public static WindowsTerminalDriver Instance { get; } = new();
 
     public override WindowsTerminalReader StandardIn { get; }

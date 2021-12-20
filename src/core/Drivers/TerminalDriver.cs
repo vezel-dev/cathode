@@ -28,6 +28,8 @@ abstract class TerminalDriver
 
     public event Action<TerminalSignalContext>? Signaled;
 
+    public abstract event Action? Resumed;
+
     public abstract TerminalReader StandardIn { get; }
 
     public abstract TerminalWriter StandardOut { get; }
@@ -161,9 +163,7 @@ abstract class TerminalDriver
                 return;
         }
 
-        // Do this on the thread pool to avoid breaking driver internals if an event handler misbehaves. This event is
-        // also relatively low priority, so we do not care too much if the thread pool takes a bit of time to get around
-        // to it.
+        // Do this on the thread pool to avoid breaking driver internals if an event handler misbehaves.
         _ = ThreadPool.UnsafeQueueUserWorkItem(state => _resize?.Invoke(size), null);
     }
 

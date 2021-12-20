@@ -14,6 +14,12 @@ while (run)
 {
     await OutAsync("Command: ");
 
+    Resumed += () =>
+    {
+        OutLine("Caught SIGCONT signal.");
+        Out(Beep());
+    };
+
     static void OnSignal(TerminalSignalContext context)
     {
         context.Cancel = true;

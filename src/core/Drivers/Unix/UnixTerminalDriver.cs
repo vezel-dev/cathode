@@ -4,6 +4,8 @@ namespace System.Drivers.Unix;
 
 abstract class UnixTerminalDriver : TerminalDriver<int>
 {
+    public override event Action? Resumed;
+
     public override sealed UnixTerminalReader StandardIn { get; }
 
     public override sealed UnixTerminalWriter StandardOut { get; }
@@ -72,6 +74,9 @@ abstract class UnixTerminalDriver : TerminalDriver<int>
                     // In either case, the program can no longer read from or write to the terminal, so terminal
                     // settings are irrelevant.
                 }
+
+                // Do this on the thread pool to avoid breaking driver internals if an event handler misbehaves.
+                _ = ThreadPool.UnsafeQueueUserWorkItem(state => Resumed?.Invoke(), null);
             }
 
             // Terminal width/height will definitely have changed for SIGWINCH, and might have changed for SIGCONT. On

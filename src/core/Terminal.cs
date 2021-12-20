@@ -14,6 +14,12 @@ public static class Terminal
         remove => _terminal.Signaled -= value;
     }
 
+    public static event Action? Resumed
+    {
+        add => _terminal.Resumed += value;
+        remove => _terminal.Resumed -= value;
+    }
+
     public static Encoding Encoding { get; } = new UTF8Encoding(false);
 
     public static TerminalReader StandardIn => _terminal.StandardIn;

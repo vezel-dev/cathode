@@ -18,6 +18,12 @@ public sealed class SystemVirtualTerminal : VirtualTerminal
         remove => _driver.Signaled -= value;
     }
 
+    public override event Action? Resumed
+    {
+        add => _driver.Resumed += value;
+        remove => _driver.Resumed -= value;
+    }
+
     public static SystemVirtualTerminal Instance { get; } = new();
 
     public override TerminalReader StandardIn => _driver.StandardIn;
