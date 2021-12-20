@@ -62,6 +62,11 @@ public abstract class TerminalWriter : TerminalHandle
         }
     }
 
+    public ValueTask WriteAsync(Memory<byte> value, CancellationToken cancellationToken = default)
+    {
+        return WriteAsync((ReadOnlyMemory<byte>)value, cancellationToken);
+    }
+
     public void Write(ReadOnlySpan<char> value, CancellationToken cancellationToken = default)
     {
         var len = Terminal.Encoding.GetByteCount(value);
@@ -98,6 +103,11 @@ public abstract class TerminalWriter : TerminalHandle
         {
             ArrayPool<byte>.Shared.Return(array);
         }
+    }
+
+    public ValueTask WriteAsync(Memory<char> value, CancellationToken cancellationToken = default)
+    {
+        return WriteAsync((ReadOnlyMemory<char>)value, cancellationToken);
     }
 
     public void Write<T>(T value, CancellationToken cancellationToken = default)
