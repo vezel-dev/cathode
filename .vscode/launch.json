@@ -1,6 +1,57 @@
 {
   "version": "0.2.0",
+  "inputs": [
+    {
+      "id": "pickSample",
+      "description": "Select the sample to launch",
+      "type": "pickString",
+      "options": [
+        "attributes",
+        "cancellation",
+        "cursor",
+        "extensions",
+        "hosting",
+        "processes",
+        "raw",
+        "resize",
+        "screens",
+        "scrolling",
+        "signals",
+        "width"
+      ]
+    }
+  ],
   "configurations": [
+    {
+      "name": ".NET: Launch (External)",
+      "type": "coreclr",
+      "request": "launch",
+      "stopAtEntry": true,
+      "suppressJITOptimizations": true,
+      "justMyCode": false,
+      "symbolOptions": {
+        "searchMicrosoftSymbolServer": true,
+        "searchNuGetOrgSymbolServer": true
+      },
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}/src/samples/${input:pickSample}",
+      "program": "${workspaceFolder}/src/samples/${input:pickSample}/bin/Debug/${input:pickSample}.dll"
+    },
+    {
+      "name": ".NET: Launch (Integrated)",
+      "type": "coreclr",
+      "request": "launch",
+      "stopAtEntry": true,
+      "suppressJITOptimizations": true,
+      "justMyCode": false,
+      "symbolOptions": {
+        "searchMicrosoftSymbolServer": true,
+        "searchNuGetOrgSymbolServer": true
+      },
+      "console": "externalTerminal",
+      "cwd": "${workspaceFolder}/src/samples/${input:pickSample}",
+      "program": "${workspaceFolder}/src/samples/${input:pickSample}/bin/Debug/${input:pickSample}.dll"
+    },
     {
       "name": ".NET: Attach",
       "type": "coreclr",
