@@ -42,17 +42,7 @@ public abstract class TerminalStream : Stream
     {
         ArgumentNullException.ThrowIfNull(buffer);
 
-        var mem = buffer.AsMemory(offset, count);
-
-        static async Task<int> ReadAsyncCore(
-            TerminalStream stream,
-            Memory<byte> buffer,
-            CancellationToken cancellationToken)
-        {
-            return await stream.ReadAsync(buffer, cancellationToken).ConfigureAwait(false);
-        }
-
-        return ReadAsyncCore(this, mem, cancellationToken);
+        return ReadAsync(buffer.AsMemory(offset, count), cancellationToken).AsTask();
     }
 
     public override sealed unsafe int ReadByte()

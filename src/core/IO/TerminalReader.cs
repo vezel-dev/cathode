@@ -21,11 +21,22 @@ public abstract class TerminalReader : TerminalHandle
 
     protected abstract int ReadBufferCore(Span<byte> buffer, CancellationToken cancellationToken);
 
+    protected abstract ValueTask<int> ReadBufferCoreAsync(Memory<byte> buffer, CancellationToken cancellationToken);
+
     public int ReadBuffer(Span<byte> buffer, CancellationToken cancellationToken = default)
     {
         var count = ReadBufferCore(buffer, cancellationToken);
 
         InputRead?.Invoke(buffer[..count], this);
+
+        return count;
+    }
+
+    public async ValueTask<int> ReadBufferAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
+    {
+        var count = await ReadBufferCoreAsync(buffer, cancellationToken).ConfigureAwait(false);
+
+        InputRead?.Invoke(buffer.Span[..count], this);
 
         return count;
     }
@@ -48,11 +59,45 @@ public abstract class TerminalReader : TerminalHandle
         return count;
     }
 
+    public async ValueTask<int> ReadAsync(Memory<byte> value, CancellationToken cancellationToken = default)
+    {
+        var count = 0;
+
+        while (count < value.Length)
+        {
+            var ret = await ReadBufferAsync(value[count..], cancellationToken).ConfigureAwait(false);
+
+            // EOF?
+            if (ret == 0)
+                break;
+
+            count += ret;
+        }
+
+        return count;
+    }
+
     public unsafe byte? ReadRaw(CancellationToken cancellationToken = default)
     {
         byte value;
 
         return Read(new Span<byte>(&value, 1), cancellationToken) == 1 ? value : null;
+    }
+
+    public async ValueTask<byte?> ReadRawAsync(CancellationToken cancellationToken = default)
+    {
+        // TODO: Can we optimize this?
+        var array = ArrayPool<byte>.Shared.Rent(1);
+
+        try
+        {
+            return await ReadAsync(array.AsMemory(0, 1), cancellationToken).ConfigureAwait(false) == 1 ?
+                MemoryMarshal.GetArrayDataReference(array) : null;
+        }
+        finally
+        {
+            ArrayPool<byte>.Shared.Return(array);
+        }
     }
 
     public string? ReadLine(CancellationToken cancellationToken = default)
@@ -61,5 +106,13 @@ public abstract class TerminalReader : TerminalHandle
         cancellationToken.ThrowIfCancellationRequested();
 
         return TextReader.ReadLine();
+    }
+
+    public ValueTask<string?> ReadLineAsync(CancellationToken cancellationToken = default)
+    {
+        // TODO: Pass on the cancellation token in .NET 7.
+        return cancellationToken.IsCancellationRequested ?
+            ValueTask.FromCanceled<string?>(cancellationToken) :
+            new(TextReader.ReadLineAsync());
     }
 }

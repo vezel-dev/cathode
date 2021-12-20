@@ -24,4 +24,14 @@ abstract class DriverTerminalWriter<TDriver, THandle> : TerminalWriter
         IsValid = driver.IsHandleValid(handle, true);
         IsInteractive = driver.IsHandleInteractive(handle);
     }
+
+    protected override sealed ValueTask<int> WriteBufferCoreAsync(
+        ReadOnlyMemory<byte> buffer,
+        CancellationToken cancellationToken)
+    {
+        // We currently have no async support in the drivers.
+        return cancellationToken.IsCancellationRequested ?
+            ValueTask.FromCanceled<int>(cancellationToken) :
+            new(Task.Run(() => WriteBufferCore(buffer.Span, cancellationToken), cancellationToken));
+    }
 }

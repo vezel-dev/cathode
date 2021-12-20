@@ -58,9 +58,19 @@ public static class Terminal
         return _terminal.ReadRaw(cancellationToken);
     }
 
+    public static ValueTask<byte?> ReadRawAsync(CancellationToken cancellationToken = default)
+    {
+        return _terminal.ReadRawAsync(cancellationToken);
+    }
+
     public static string? ReadLine(CancellationToken cancellationToken = default)
     {
         return _terminal.ReadLine(cancellationToken);
+    }
+
+    public static ValueTask<string?> ReadLineAsync(CancellationToken cancellationToken = default)
+    {
+        return _terminal.ReadLineAsync(cancellationToken);
     }
 
     public static void Out(ReadOnlySpan<byte> value, CancellationToken cancellationToken = default)
@@ -68,9 +78,19 @@ public static class Terminal
         _terminal.Out(value, cancellationToken);
     }
 
+    public static ValueTask OutAsync(ReadOnlyMemory<byte> value, CancellationToken cancellationToken = default)
+    {
+        return _terminal.OutAsync(value, cancellationToken);
+    }
+
     public static void Out(ReadOnlySpan<char> value, CancellationToken cancellationToken = default)
     {
         _terminal.Out(value, cancellationToken);
+    }
+
+    public static ValueTask OutAsync(ReadOnlyMemory<char> value, CancellationToken cancellationToken = default)
+    {
+        return _terminal.OutAsync(value, cancellationToken);
     }
 
     public static void Out<T>(T value, CancellationToken cancellationToken = default)
@@ -78,9 +98,19 @@ public static class Terminal
         _terminal.Out(value, cancellationToken);
     }
 
+    public static ValueTask OutAsync<T>(T value, CancellationToken cancellationToken = default)
+    {
+        return _terminal.OutAsync(value, cancellationToken);
+    }
+
     public static void OutLine(CancellationToken cancellationToken = default)
     {
         _terminal.OutLine(cancellationToken);
+    }
+
+    public static ValueTask OutLineAsync(CancellationToken cancellationToken = default)
+    {
+        return _terminal.OutLineAsync(cancellationToken);
     }
 
     public static void OutLine<T>(T value, CancellationToken cancellationToken = default)
@@ -88,9 +118,19 @@ public static class Terminal
         _terminal.OutLine(value, cancellationToken);
     }
 
+    public static ValueTask OutLineAsync<T>(T value, CancellationToken cancellationToken = default)
+    {
+        return _terminal.OutLineAsync(value, cancellationToken);
+    }
+
     public static void Error(ReadOnlySpan<byte> value, CancellationToken cancellationToken = default)
     {
         _terminal.Error(value, cancellationToken);
+    }
+
+    public static ValueTask ErrorAsync(ReadOnlyMemory<byte> value, CancellationToken cancellationToken = default)
+    {
+        return _terminal.ErrorAsync(value, cancellationToken);
     }
 
     public static void Error(ReadOnlySpan<char> value, CancellationToken cancellationToken = default)
@@ -98,9 +138,19 @@ public static class Terminal
         _terminal.Error(value, cancellationToken);
     }
 
+    public static ValueTask ErrorAsync(ReadOnlyMemory<char> value, CancellationToken cancellationToken = default)
+    {
+        return _terminal.ErrorAsync(value, cancellationToken);
+    }
+
     public static void Error<T>(T value, CancellationToken cancellationToken = default)
     {
         _terminal.Error(value, cancellationToken);
+    }
+
+    public static ValueTask ErrorAsync<T>(T value, CancellationToken cancellationToken = default)
+    {
+        return _terminal.ErrorAsync(value, cancellationToken);
     }
 
     public static void ErrorLine(CancellationToken cancellationToken = default)
@@ -108,8 +158,18 @@ public static class Terminal
         _terminal.ErrorLine(cancellationToken);
     }
 
+    public static ValueTask ErrorLineAsync(CancellationToken cancellationToken = default)
+    {
+        return _terminal.ErrorLineAsync(cancellationToken);
+    }
+
     public static void ErrorLine<T>(T value, CancellationToken cancellationToken = default)
     {
         _terminal.ErrorLine(value, cancellationToken);
+    }
+
+    public static ValueTask ErrorLineAsync<T>(T value, CancellationToken cancellationToken = default)
+    {
+        return _terminal.ErrorLineAsync(value, cancellationToken);
     }
 }

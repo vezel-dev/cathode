@@ -23,8 +23,6 @@ public sealed class TerminalInputStream : TerminalStream
 
     public override ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
     {
-        return cancellationToken.IsCancellationRequested ?
-            ValueTask.FromCanceled<int>(cancellationToken) :
-            new(Task.Run(() => Reader.ReadBuffer(buffer.Span, cancellationToken), cancellationToken));
+        return Reader.ReadBufferAsync(buffer, cancellationToken);
     }
 }

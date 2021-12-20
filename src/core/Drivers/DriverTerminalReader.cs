@@ -24,4 +24,14 @@ abstract class DriverTerminalReader<TDriver, THandle> : TerminalReader
         IsValid = driver.IsHandleValid(handle, false);
         IsInteractive = driver.IsHandleInteractive(handle);
     }
+
+    protected override sealed ValueTask<int> ReadBufferCoreAsync(
+        Memory<byte> buffer,
+        CancellationToken cancellationToken)
+    {
+        // We currently have no async support in the drivers.
+        return cancellationToken.IsCancellationRequested ?
+            ValueTask.FromCanceled<int>(cancellationToken) :
+            new(Task.Run(() => ReadBufferCore(buffer.Span, cancellationToken), cancellationToken));
+    }
 }
