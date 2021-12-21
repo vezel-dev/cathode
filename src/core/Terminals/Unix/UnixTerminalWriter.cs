@@ -1,13 +1,13 @@
 using static System.Unix.UnixPInvoke;
 
-namespace System.Drivers.Unix;
+namespace System.Terminals.Unix;
 
-sealed class UnixTerminalWriter : DriverTerminalWriter<UnixTerminalDriver, int>
+sealed class UnixTerminalWriter : NativeTerminalWriter<UnixVirtualTerminal, int>
 {
     readonly object _lock;
 
-    public UnixTerminalWriter(UnixTerminalDriver driver, string name, int handle, object @lock)
-        : base(driver, name, handle)
+    public UnixTerminalWriter(UnixVirtualTerminal terminal, string name, int handle, object @lock)
+        : base(terminal, name, handle)
     {
         _lock = @lock;
     }
@@ -32,8 +32,8 @@ sealed class UnixTerminalWriter : DriverTerminalWriter<UnixTerminalDriver, int>
                     nint ret;
 
                     // Note that this call may get us suspended by way of a SIGTTOU signal if we are a background
-                    // process, the handle refers to a terminal, and the TOSTOP bit is set (we disable TOSTOP in the
-                    // drivers but there are ways that it could get set anyway).
+                    // process, the handle refers to a terminal, and the TOSTOP bit is set (we disable TOSTOP but there
+                    // are ways that it could get set anyway).
                     while ((ret = write(Handle, p + count, (nuint)(buffer.Length - count))) == -1 &&
                         Marshal.GetLastPInvokeError() == EINTR)
                     {
@@ -58,7 +58,7 @@ sealed class UnixTerminalWriter : DriverTerminalWriter<UnixTerminalDriver, int>
 
                     // The file descriptor might have been configured as non-blocking. Instead of busily trying to write
                     // over and over, poll until we can write and then try again.
-                    if (Driver.PollHandles(err, POLLOUT, stackalloc[] { Handle }))
+                    if (Terminal.PollHandles(err, POLLOUT, stackalloc[] { Handle }))
                         continue;
 
                     // At this point there was an actual I/O error. We only want to throw if we did not manage to write

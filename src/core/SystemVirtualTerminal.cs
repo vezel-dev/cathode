@@ -1,98 +1,238 @@
-using System.Drivers;
-using System.Drivers.Unix;
-using System.Drivers.Windows;
-
 namespace System;
 
-public sealed class SystemVirtualTerminal : VirtualTerminal
+public abstract class SystemVirtualTerminal : VirtualTerminal
 {
     public override event Action<TerminalSize>? Resized
     {
-        add => _driver.Resized += value;
-        remove => _driver.Resized -= value;
+        add
+        {
+            lock (_sizeLock)
+            {
+                _resize += value;
+
+                if (_resize != null)
+                    _event.Set();
+            }
+        }
+        remove
+        {
+            lock (_sizeLock)
+            {
+                _resize -= value;
+
+                if (_resize == null)
+                    _event.Reset();
+            }
+        }
     }
 
-    public override event Action<TerminalSignalContext>? Signaled
+    public override event Action<TerminalSignalContext>? Signaled;
+
+    public override bool IsRawMode => _rawMode;
+
+    [SuppressMessage("Design", "CA1065")]
+    public override TerminalSize Size
     {
-        add => _driver.Signaled += value;
-        remove => _driver.Signaled -= value;
+        get
+        {
+            if (QuerySize() is TerminalSize s)
+                _size = s;
+
+            return _size ?? throw new TerminalNotAttachedException();
+        }
     }
-
-    public override event Action? Resumed
-    {
-        add => _driver.Resumed += value;
-        remove => _driver.Resumed -= value;
-    }
-
-    public static SystemVirtualTerminal Instance { get; } = new();
-
-    public override TerminalReader StandardIn => _driver.StandardIn;
-
-    public override TerminalWriter StandardOut => _driver.StandardOut;
-
-    public override TerminalWriter StandardError => _driver.StandardError;
-
-    public override TerminalReader TerminalIn => _driver.TerminalIn;
-
-    public override TerminalWriter TerminalOut => _driver.TerminalOut;
-
-    public override bool IsRawMode => _driver.IsRawMode;
-
-    public override TerminalSize Size => _driver.Size;
 
     public TimeSpan SizePollingInterval
     {
-        get => _driver.SizePollingInterval;
-        set => _driver.SizePollingInterval = value;
+        get => _sizeInterval;
+        set
+        {
+            _ = value >= TimeSpan.Zero ? true : throw new ArgumentOutOfRangeException(nameof(value));
+
+            _sizeInterval = value;
+        }
     }
 
-    readonly TerminalDriver _driver =
-        OperatingSystem.IsLinux() ? LinuxTerminalDriver.Instance :
-        OperatingSystem.IsMacOS() ? MacOSTerminalDriver.Instance :
-        OperatingSystem.IsWindows() ? WindowsTerminalDriver.Instance :
-        throw new PlatformNotSupportedException();
+    readonly object _sizeLock = new();
 
-    SystemVirtualTerminal()
+    readonly object _rawLock = new();
+
+    readonly ManualResetEventSlim _event = new();
+
+    readonly HashSet<TerminalProcess> _processes = new();
+
+    [SuppressMessage("Style", "IDE0052")]
+    readonly PosixSignalRegistration _sigHup;
+
+    [SuppressMessage("Style", "IDE0052")]
+    readonly PosixSignalRegistration _sigInt;
+
+    [SuppressMessage("Style", "IDE0052")]
+    readonly PosixSignalRegistration _sigQuit;
+
+    [SuppressMessage("Style", "IDE0052")]
+    readonly PosixSignalRegistration _sigTerm;
+
+    bool _rawMode;
+
+    TerminalSize? _size;
+
+    TimeSpan _sizeInterval = TimeSpan.FromMilliseconds(100);
+
+    Action<TerminalSize>? _resize;
+
+    private protected SystemVirtualTerminal()
     {
+        var thread = new Thread(() =>
+        {
+            while (true)
+            {
+                _event.Wait();
+
+                RefreshSize();
+
+                Thread.Sleep(_sizeInterval);
+            }
+        })
+        {
+            Name = "Terminal Resize Poller",
+            IsBackground = true,
+        };
+
+        thread.Start();
+
+        void HandleSignal(PosixSignalContext context)
+        {
+            var ctx = new TerminalSignalContext(
+                context.Signal switch
+                {
+                    PosixSignal.SIGHUP => TerminalSignal.Close,
+                    PosixSignal.SIGINT => TerminalSignal.Interrupt,
+                    PosixSignal.SIGQUIT => TerminalSignal.Quit,
+                    PosixSignal.SIGTERM => TerminalSignal.Terminate,
+                    _ => throw new NotSupportedException($"Received unexpected signal: {context.Signal}"),
+                });
+
+            Signaled?.Invoke(ctx);
+
+            context.Cancel = ctx.Cancel;
+        }
+
+        // Keep the registrations alive by storing them in fields.
+        _sigHup = PosixSignalRegistration.Create(PosixSignal.SIGHUP, HandleSignal);
+        _sigInt = PosixSignalRegistration.Create(PosixSignal.SIGINT, HandleSignal);
+        _sigQuit = PosixSignalRegistration.Create(PosixSignal.SIGQUIT, HandleSignal);
+        _sigTerm = PosixSignalRegistration.Create(PosixSignal.SIGTERM, HandleSignal);
     }
+
+    protected abstract TerminalSize? QuerySize();
+
+    protected void RefreshSize()
+    {
+        if (QuerySize() is not TerminalSize size)
+        {
+            // These environment variables are usually set by shells. Use them as a fallback.
+            if (!int.TryParse(Environment.GetEnvironmentVariable("COLUMNS"), out var columns) ||
+                !int.TryParse(Environment.GetEnvironmentVariable("LINES"), out var lines))
+                return;
+
+            size = new(columns, lines);
+        }
+
+        // Serialize this bit since the Unix implementation can call this method from its SIGWINCH/SIGCONT signal
+        // handler. We do not want to raise the Resize event twice for the same size value.
+        lock (_sizeLock)
+        {
+            var old = _size;
+
+            _size = size;
+
+            // We do not want to raise the event if the size has not been set before. This just indicates that the user
+            // is either retrieving the Size property for the first time or is installing an event handler without
+            // having accessed the Size property yet.
+            if (old == null || size == old)
+                return;
+        }
+
+        // Do this on the thread pool to avoid breaking internals if an event handler misbehaves.
+        _ = ThreadPool.UnsafeQueueUserWorkItem(state => _resize?.Invoke(size), null);
+    }
+
+    protected abstract void SendSignal(int pid, TerminalSignal signal);
 
     public override void GenerateSignal(TerminalSignal signal)
     {
-        _driver.SendSignal(0, signal);
-    }
-
-    public override void EnableRawMode()
-    {
-        _driver.EnableRawMode();
-    }
-
-    public override void DisableRawMode()
-    {
-        _driver.DisableRawMode();
-    }
-
-    internal void StartProcess(Func<TerminalProcess> starter)
-    {
-        _driver.StartProcess(starter);
+        SendSignal(0, signal);
     }
 
     internal void SignalProcess(TerminalProcess process, TerminalSignal signal)
     {
-        _driver.SendSignal(process.Id, signal);
+        SendSignal(process.Id, signal);
+    }
+
+    protected abstract void SetRawMode(bool raw);
+
+    public override void EnableRawMode()
+    {
+        lock (_rawLock)
+        {
+            if (_processes.Count != 0)
+                throw new InvalidOperationException(
+                    "Cannot enable raw mode with non-redirected child processes running.");
+
+            SetRawMode(true);
+
+            _rawMode = true;
+        }
+    }
+
+    public override void DisableRawMode()
+    {
+        lock (_rawLock)
+        {
+            if (_processes.Count != 0)
+                throw new InvalidOperationException(
+                    "Cannot disable raw mode with non-redirected child processes running.");
+
+            SetRawMode(false);
+
+            _rawMode = false;
+        }
+    }
+
+    internal void StartProcess(Func<TerminalProcess> starter)
+    {
+        lock (_rawLock)
+        {
+            // The vast majority of programs expect to start in cooked mode. Enforce that we are in cooked mode while
+            // any child processes that could be using the terminal are running.
+            if (_rawMode)
+                throw new InvalidOperationException("Cannot start non-redirected child processes in raw mode.");
+
+            _ = _processes.Add(starter());
+        }
     }
 
     internal void ReapProcess(TerminalProcess process)
     {
-        _driver.ReapProcess(process);
+        lock (_rawLock)
+        {
+            _ = _processes.Remove(process);
+
+            if (_processes.Count != 0)
+                return;
+
+            try
+            {
+                // Child processes may have messed up the terminal settings. Restore them just in case.
+                SetRawMode(false);
+            }
+            catch (Exception e) when (e is TerminalNotAttachedException or TerminalConfigurationException)
+            {
+            }
+        }
     }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public void DangerousRestoreSettings()
-    {
-        // This method is named as it is and hidden from IntelliSense because restoring the original terminal settings
-        // and then calling any I/O method in our API could have completely unpredictable results. Nevertheless, we
-        // expose the method for people who know what they are doing.
-
-        _driver.RestoreSettings();
-    }
+    public abstract void DangerousRestoreSettings();
 }

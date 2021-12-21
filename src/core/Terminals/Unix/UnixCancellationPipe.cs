@@ -1,19 +1,19 @@
 using static System.Unix.UnixPInvoke;
 
-namespace System.Drivers.Unix;
+namespace System.Terminals.Unix;
 
 sealed class UnixCancellationPipe
 {
-    readonly UnixTerminalDriver _driver;
+    readonly UnixVirtualTerminal _terminal;
 
     readonly int _readHandle;
 
     readonly int _writeHandle;
 
-    public UnixCancellationPipe(UnixTerminalDriver driver)
+    public UnixCancellationPipe(UnixVirtualTerminal terminal)
     {
-        _driver = driver;
-        (_readHandle, _writeHandle) = driver.CreatePipePair();
+        _terminal = terminal;
+        (_readHandle, _writeHandle) = terminal.CreatePipePair();
     }
 
     public unsafe void PollWithCancellation(int handle, CancellationToken cancellationToken)
@@ -40,7 +40,7 @@ sealed class UnixCancellationPipe
         };
 
         using (var registration = cancellationToken.UnsafeRegister(CancellationCallback, this))
-            if (!_driver.PollHandles(null, POLLIN, handles))
+            if (!_terminal.PollHandles(null, POLLIN, handles))
                 return;
 
         // Were we canceled?

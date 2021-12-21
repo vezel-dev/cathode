@@ -1,20 +1,20 @@
 using static System.Unix.UnixPInvoke;
 
-namespace System.Drivers.Unix;
+namespace System.Terminals.Unix;
 
-sealed class UnixTerminalReader : DriverTerminalReader<UnixTerminalDriver, int>
+sealed class UnixTerminalReader : NativeTerminalReader<UnixVirtualTerminal, int>
 {
     readonly object _lock;
 
     readonly UnixCancellationPipe _cancellationPipe;
 
     public UnixTerminalReader(
-        UnixTerminalDriver driver,
+        UnixVirtualTerminal terminal,
         string name,
         int handle,
         UnixCancellationPipe cancellationPipe,
         object @lock)
-        : base(driver, name, handle)
+        : base(terminal, name, handle)
     {
         _lock = @lock;
         _cancellationPipe = cancellationPipe;

@@ -3,9 +3,9 @@ using Windows.Win32.System.Console;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using static Windows.Win32.WindowsPInvoke;
 
-namespace System.Drivers.Windows;
+namespace System.Terminals.Windows;
 
-sealed class WindowsTerminalReader : DriverTerminalReader<WindowsTerminalDriver, SafeHandle>
+sealed class WindowsTerminalReader : NativeTerminalReader<WindowsVirtualTerminal, SafeHandle>
 {
     readonly object _lock;
 
@@ -16,16 +16,16 @@ sealed class WindowsTerminalReader : DriverTerminalReader<WindowsTerminalDriver,
     ReadOnlyMemory<byte> _buffered;
 
     public WindowsTerminalReader(
-        WindowsTerminalDriver driver,
+        WindowsVirtualTerminal terminal,
         string name,
         SafeHandle handle,
         WindowsCancellationEvent cancellationEvent,
         object @lock)
-        : base(driver, name, handle)
+        : base(terminal, name, handle)
     {
         _lock = @lock;
         _cancellationEvent = cancellationEvent;
-        _buffer = new byte[Terminal.Encoding.GetMaxByteCount(2)];
+        _buffer = new byte[System.Terminal.Encoding.GetMaxByteCount(2)];
     }
 
     protected override unsafe int ReadBufferCore(Span<byte> buffer, CancellationToken cancellationToken)
@@ -52,7 +52,7 @@ sealed class WindowsTerminalReader : DriverTerminalReader<WindowsTerminalDriver,
                 {
                     _cancellationEvent.PollWithCancellation(
                         Handle,
-                        static (driver, handle) =>
+                        static (terminal, handle) =>
                         {
                             Span<INPUT_RECORD> records = stackalloc INPUT_RECORD[1];
 
@@ -65,7 +65,7 @@ sealed class WindowsTerminalReader : DriverTerminalReader<WindowsTerminalDriver,
                                 var evt = rec.Event.KeyEvent;
 
                                 // In cooked mode, we must not drop the key-up event for the Enter key.
-                                if (!driver.IsRawMode && rec.EventType == KEY_EVENT && !evt.bKeyDown &&
+                                if (!terminal.IsRawMode && rec.EventType == KEY_EVENT && !evt.bKeyDown &&
                                     evt.wVirtualKeyCode == (ushort)VIRTUAL_KEY.VK_RETURN)
                                     return true;
 
@@ -107,7 +107,7 @@ sealed class WindowsTerminalReader : DriverTerminalReader<WindowsTerminalDriver,
                         // There is a bug where ReadConsoleW will not process Ctrl-Z properly even though ReadFile will.
                         // The good news is that we can fairly easily emulate what the console host should be doing by
                         // just pretending that there is no more data to be read.
-                        if (!Driver.IsRawMode && *p == '\x1a')
+                        if (!Terminal.IsRawMode && *p == '\x1a')
                             return 0;
 
                         chars++;
@@ -138,7 +138,7 @@ sealed class WindowsTerminalReader : DriverTerminalReader<WindowsTerminalDriver,
 
                         // Encode the UTF-16 code unit(s) into UTF-8 and grab a slice of the buffer corresponding to
                         // just the portion used.
-                        _buffered = _buffer.AsMemory(0, Terminal.Encoding.GetBytes(units[..chars], _buffer));
+                        _buffered = _buffer.AsMemory(0, System.Terminal.Encoding.GetBytes(units[..chars], _buffer));
                     }
                 }
 

@@ -1,13 +1,13 @@
 using static Windows.Win32.WindowsPInvoke;
 
-namespace System.Drivers.Windows;
+namespace System.Terminals.Windows;
 
-sealed class WindowsTerminalWriter : DriverTerminalWriter<WindowsTerminalDriver, SafeHandle>
+sealed class WindowsTerminalWriter : NativeTerminalWriter<WindowsVirtualTerminal, SafeHandle>
 {
     readonly object _lock;
 
-    public WindowsTerminalWriter(WindowsTerminalDriver driver, string name, SafeHandle handle, object @lock)
-        : base(driver, name, handle)
+    public WindowsTerminalWriter(WindowsVirtualTerminal terminal, string name, SafeHandle handle, object @lock)
+        : base(terminal, name, handle)
     {
         _lock = @lock;
     }

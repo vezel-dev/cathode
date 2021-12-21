@@ -1,9 +1,9 @@
-namespace System.Drivers;
+namespace System.Terminals;
 
-abstract class DriverTerminalWriter<TDriver, THandle> : TerminalWriter
-    where TDriver : TerminalDriver<THandle>
+abstract class NativeTerminalWriter<TTerminal, THandle> : TerminalWriter
+    where TTerminal : NativeVirtualTerminal<THandle>
 {
-    public TDriver Driver { get; }
+    public TTerminal Terminal { get; }
 
     public string Name { get; }
 
@@ -15,21 +15,21 @@ abstract class DriverTerminalWriter<TDriver, THandle> : TerminalWriter
 
     public override sealed bool IsInteractive { get; }
 
-    protected DriverTerminalWriter(TDriver driver, string name, THandle handle)
+    protected NativeTerminalWriter(TTerminal terminal, string name, THandle handle)
     {
-        Driver = driver;
+        Terminal = terminal;
         Name = name;
         Handle = handle;
         Stream = new(this);
-        IsValid = driver.IsHandleValid(handle, true);
-        IsInteractive = driver.IsHandleInteractive(handle);
+        IsValid = terminal.IsHandleValid(handle, true);
+        IsInteractive = terminal.IsHandleInteractive(handle);
     }
 
     protected override sealed ValueTask<int> WriteBufferCoreAsync(
         ReadOnlyMemory<byte> buffer,
         CancellationToken cancellationToken)
     {
-        // We currently have no async support in the drivers.
+        // We currently have no async support.
         return cancellationToken.IsCancellationRequested ?
             ValueTask.FromCanceled<int>(cancellationToken) :
             new(Task.Run(() => WriteBufferCore(buffer.Span, cancellationToken), cancellationToken));

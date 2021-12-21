@@ -1,8 +1,8 @@
 using static System.Unix.UnixPInvoke;
 
-namespace System.Drivers.Unix;
+namespace System.Terminals.Unix;
 
-abstract class UnixTerminalDriver : TerminalDriver<int>
+abstract class UnixVirtualTerminal : NativeVirtualTerminal<int>
 {
     public override event Action? Resumed;
 
@@ -28,7 +28,7 @@ abstract class UnixTerminalDriver : TerminalDriver<int>
     readonly object _rawLock = new();
 
     [SuppressMessage("Usage", "CA2214")]
-    protected UnixTerminalDriver()
+    protected UnixVirtualTerminal()
     {
         var inLock = new object();
         var outLock = new object();
@@ -75,7 +75,7 @@ abstract class UnixTerminalDriver : TerminalDriver<int>
                     // settings are irrelevant.
                 }
 
-                // Do this on the thread pool to avoid breaking driver internals if an event handler misbehaves.
+                // Do this on the thread pool to avoid breaking internals if an event handler misbehaves.
                 _ = ThreadPool.UnsafeQueueUserWorkItem(state => Resumed?.Invoke(), null);
             }
 
@@ -94,7 +94,7 @@ abstract class UnixTerminalDriver : TerminalDriver<int>
         _sigChld = PosixSignalRegistration.Create(PosixSignal.SIGCHLD, HandleSignal);
     }
 
-    public override sealed void SendSignal(int pid, TerminalSignal signal)
+    protected override sealed void SendSignal(int pid, TerminalSignal signal)
     {
         _ = kill(
             pid,
@@ -112,7 +112,7 @@ abstract class UnixTerminalDriver : TerminalDriver<int>
 
     protected override sealed void SetRawMode(bool raw)
     {
-        // We need an additional lock on top of the one in TerminalDriver since we can be called from signal handlers.
+        // We can be called from signal handlers so we need an additional lock here.
         lock (_rawLock)
             SetRawModeCore(raw, true);
     }

@@ -3,9 +3,9 @@ using Windows.Win32.Storage.FileSystem;
 using Windows.Win32.System.Console;
 using static Windows.Win32.WindowsPInvoke;
 
-namespace System.Drivers.Windows;
+namespace System.Terminals.Windows;
 
-sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
+sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
 {
     public override event Action? Resumed
     {
@@ -18,7 +18,7 @@ sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
         }
     }
 
-    public static WindowsTerminalDriver Instance { get; } = new();
+    public static WindowsVirtualTerminal Instance { get; } = new();
 
     public override WindowsTerminalReader StandardIn { get; }
 
@@ -33,7 +33,7 @@ sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
     (CONSOLE_MODE, CONSOLE_MODE)? _original;
 
     [SuppressMessage("Reliability", "CA2000")]
-    WindowsTerminalDriver()
+    WindowsVirtualTerminal()
     {
         var inLock = new object();
         var outLock = new object();
@@ -75,13 +75,13 @@ sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
         }
     }
 
-    protected override TerminalSize? GetSize()
+    protected override TerminalSize? QuerySize()
     {
         return GetConsoleScreenBufferInfo(TerminalOut.Handle, out var info) ?
             new(info.srWindow.Right - info.srWindow.Left + 1, info.srWindow.Bottom - info.srWindow.Top + 1) : null;
     }
 
-    public override void SendSignal(int pid, TerminalSignal signal)
+    protected override void SendSignal(int pid, TerminalSignal signal)
     {
         _ = GenerateConsoleCtrlEvent(
             signal switch
@@ -153,7 +153,7 @@ sealed class WindowsTerminalDriver : TerminalDriver<SafeHandle>
         SetRawModeCore(raw, true);
     }
 
-    public override void RestoreSettings()
+    public override void DangerousRestoreSettings()
     {
         if (_original is var (inMode, outMode))
         {

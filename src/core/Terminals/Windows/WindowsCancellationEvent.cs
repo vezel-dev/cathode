@@ -1,22 +1,22 @@
 using Windows.Win32.Foundation;
 using static Windows.Win32.WindowsPInvoke;
 
-namespace System.Drivers.Windows;
+namespace System.Terminals.Windows;
 
 sealed class WindowsCancellationEvent
 {
-    readonly WindowsTerminalDriver _driver;
+    readonly WindowsVirtualTerminal _terminal;
 
     readonly ManualResetEvent _event = new(false);
 
-    public WindowsCancellationEvent(WindowsTerminalDriver driver)
+    public WindowsCancellationEvent(WindowsVirtualTerminal terminal)
     {
-        _driver = driver;
+        _terminal = terminal;
     }
 
     public unsafe void PollWithCancellation(
         SafeHandle handle,
-        Func<WindowsTerminalDriver, SafeHandle, bool> predicate,
+        Func<WindowsVirtualTerminal, SafeHandle, bool> predicate,
         CancellationToken cancellationToken)
     {
         static void CancellationCallback(object? state)
@@ -47,7 +47,7 @@ sealed class WindowsCancellationEvent
                     break;
                 }
 
-                if (ret == WAIT_OBJECT_0 + 1 && predicate(_driver, handle))
+                if (ret == WAIT_OBJECT_0 + 1 && predicate(_terminal, handle))
                     break;
             }
         }

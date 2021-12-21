@@ -1,6 +1,6 @@
 using Windows.Win32.Foundation;
 
-namespace System.Drivers.Windows;
+namespace System.Terminals.Windows;
 
 static class WindowsTerminalUtility
 {

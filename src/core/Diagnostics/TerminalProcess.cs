@@ -113,7 +113,7 @@ public sealed class TerminalProcess
             // Do this before invoking the Exited event since any misbehaving event handlers might otherwise cause us to
             // not reap the process, leaving terminal configuration in an unknown state.
             if (reap)
-                SystemVirtualTerminal.Instance.ReapProcess(this);
+                Terminal.System.ReapProcess(this);
 
             Exited?.Invoke();
         };
@@ -182,7 +182,7 @@ public sealed class TerminalProcess
         // non-redirected processes in cooked mode and we need to verify our current mode.
         if (!redirected)
         {
-            SystemVirtualTerminal.Instance.StartProcess(() =>
+            Terminal.System.StartProcess(() =>
             {
                 _ = proc.Start();
 
@@ -229,7 +229,7 @@ public sealed class TerminalProcess
 
     public void SendSignal(TerminalSignal signal)
     {
-        SystemVirtualTerminal.Instance.SignalProcess(this, signal);
+        Terminal.System.SignalProcess(this, signal);
     }
 
     public void Kill(bool entireProcessTree = false)

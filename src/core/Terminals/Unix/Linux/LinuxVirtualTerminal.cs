@@ -3,21 +3,21 @@ using System.Unix.Linux;
 using static System.Unix.Linux.LinuxPInvoke;
 using static System.Unix.UnixPInvoke;
 
-namespace System.Drivers.Unix;
+namespace System.Terminals.Unix.Linux;
 
-sealed class LinuxTerminalDriver : UnixTerminalDriver
+sealed class LinuxVirtualTerminal : UnixVirtualTerminal
 {
-    // Keep this class in sync with the MacOSTerminalDriver class.
+    // Keep this class in sync with the MacOSVirtualTerminal class.
 
-    public static LinuxTerminalDriver Instance { get; } = new();
+    public static LinuxVirtualTerminal Instance { get; } = new();
 
     termios? _original;
 
-    LinuxTerminalDriver()
+    LinuxVirtualTerminal()
     {
     }
 
-    protected override TerminalSize? GetSize()
+    protected override TerminalSize? QuerySize()
     {
         return ioctl(TerminalOut.Handle, TIOCGWINSZ, out var w) == 0 ? new(w.ws_col, w.ws_row) : null;
     }
@@ -92,12 +92,6 @@ sealed class LinuxTerminalDriver : UnixTerminalDriver
                 $"Could not change raw mode setting: {new Win32Exception(err).Message}");
     }
 
-    public override void RestoreSettings()
-    {
-        if (_original is termios tios)
-            _ = tcsetattr(TerminalOut.Handle, TCSAFLUSH, tios);
-    }
-
     public override int OpenTerminalHandle(string name)
     {
         return open(name, O_RDWR | O_NOCTTY | O_CLOEXEC);
@@ -144,5 +138,11 @@ sealed class LinuxTerminalDriver : UnixTerminalDriver
             handles[i] = fds[i].revents;
 
         return true;
+    }
+
+    public override void DangerousRestoreSettings()
+    {
+        if (_original is termios tios)
+            _ = tcsetattr(TerminalOut.Handle, TCSAFLUSH, tios);
     }
 }

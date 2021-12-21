@@ -23,7 +23,7 @@ public static class ProgramHost
 
             // From this point on, invoking any terminal-related API will basically have undefined behavior. The only
             // way for that to happen is if a user has hooked into some of the framework events that we have banned.
-            SystemVirtualTerminal.Instance.DangerousRestoreSettings();
+            Terminal.DangerousRestoreSettings();
 
             Environment.ExitCode = context.ExitCode;
         };

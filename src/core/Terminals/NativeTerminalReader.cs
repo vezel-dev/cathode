@@ -1,9 +1,9 @@
-namespace System.Drivers;
+namespace System.Terminals;
 
-abstract class DriverTerminalReader<TDriver, THandle> : TerminalReader
-    where TDriver : TerminalDriver<THandle>
+abstract class NativeTerminalReader<TTerminal, THandle> : TerminalReader
+    where TTerminal : NativeVirtualTerminal<THandle>
 {
-    public TDriver Driver { get; }
+    public TTerminal Terminal { get; }
 
     public string Name { get; }
 
@@ -15,21 +15,21 @@ abstract class DriverTerminalReader<TDriver, THandle> : TerminalReader
 
     public override sealed bool IsInteractive { get; }
 
-    protected DriverTerminalReader(TDriver driver, string name, THandle handle)
+    protected NativeTerminalReader(TTerminal terminal, string name, THandle handle)
     {
-        Driver = driver;
+        Terminal = terminal;
         Name = name;
         Handle = handle;
         Stream = new(this);
-        IsValid = driver.IsHandleValid(handle, false);
-        IsInteractive = driver.IsHandleInteractive(handle);
+        IsValid = terminal.IsHandleValid(handle, false);
+        IsInteractive = terminal.IsHandleInteractive(handle);
     }
 
     protected override sealed ValueTask<int> ReadBufferCoreAsync(
         Memory<byte> buffer,
         CancellationToken cancellationToken)
     {
-        // We currently have no async support in the drivers.
+        // We currently have no async support.
         return cancellationToken.IsCancellationRequested ?
             ValueTask.FromCanceled<int>(cancellationToken) :
             new(Task.Run(() => ReadBufferCore(buffer.Span, cancellationToken), cancellationToken));
