@@ -2,7 +2,7 @@ namespace System;
 
 public sealed class TerminalControl
 {
-    readonly AsyncReaderWriterLock _lock = new();
+    readonly AsyncReaderWriterLockSlim _lock = new();
 
     readonly AsyncLocal<object> _current = new();
 

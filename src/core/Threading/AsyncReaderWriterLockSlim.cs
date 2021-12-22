@@ -1,6 +1,6 @@
 namespace System.Threading;
 
-sealed class AsyncReaderWriterLock
+sealed class AsyncReaderWriterLockSlim
 {
     // This is a simple, async-compatible, writer-biased reader/writer lock. The assumption is that write sections will
     // be considerably less frequent than read sections and also very short-lived, so new readers will be forced to spin
