@@ -2,6 +2,13 @@ namespace System.Threading;
 
 sealed class AsyncReaderWriterLock
 {
+    // This is a simple, async-compatible, writer-biased reader/writer lock. The assumption is that write sections will
+    // be considerably less frequent than read sections and also very short-lived, so new readers will be forced to spin
+    // and yield when the write lock is held.
+    //
+    // Due to the nature of async/await, this class has no notion of threads. So, read lock recursion is supported while
+    // the write lock is not held, but attempting to enter the read lock while holding the write lock will deadlock.
+
     readonly SemaphoreSlim _semaphore = new(1, 1);
 
     int _state;
@@ -94,6 +101,7 @@ sealed class AsyncReaderWriterLock
         }
         catch (SemaphoreFullException)
         {
+            // This means that there were unbalanced EnterWriteLock/ExitWriteLock calls.
             throw new SynchronizationLockException();
         }
 
