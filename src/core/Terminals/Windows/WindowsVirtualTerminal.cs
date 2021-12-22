@@ -105,6 +105,9 @@ sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
         if (_original == null)
             _original = (inMode, outMode);
 
+        var origIn = inMode;
+        var origOut = outMode;
+
         // Set up some sensible defaults.
         inMode &= ~(
             CONSOLE_MODE.ENABLE_WINDOW_INPUT |
@@ -144,8 +147,13 @@ sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
                 $"Could not change raw mode setting: {new Win32Exception().Message}");
 
         if (flush && !FlushConsoleInputBuffer(TerminalIn.Handle))
+        {
+            _ = SetConsoleMode(TerminalIn.Handle, origIn);
+            _ = SetConsoleMode(TerminalOut.Handle, origOut);
+
             throw new TerminalConfigurationException(
                 $"Could not flush input buffer: {new Win32Exception().Message}");
+        }
     }
 
     protected override void SetRawMode(bool raw)
