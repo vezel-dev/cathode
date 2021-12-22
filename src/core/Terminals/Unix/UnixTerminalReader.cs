@@ -22,6 +22,8 @@ sealed class UnixTerminalReader : NativeTerminalReader<UnixVirtualTerminal, int>
 
     protected override unsafe int ReadBufferCore(Span<byte> buffer, CancellationToken cancellationToken)
     {
+        using var guard = Terminal.Control.Guard();
+
         // If the descriptor is invalid, just present the illusion to the user that it has been redirected to /dev/null
         // or something along those lines, i.e. return EOF.
         if (buffer.IsEmpty || !IsValid)

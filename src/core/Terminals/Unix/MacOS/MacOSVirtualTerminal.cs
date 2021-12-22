@@ -168,6 +168,8 @@ sealed class MacOSVirtualTerminal : UnixVirtualTerminal
 
     public override void DangerousRestoreSettings()
     {
+        using var guard = Control.Guard();
+
         if (_original is termios tios)
             _ = tcsetattr(TerminalOut.Handle, TCSAFLUSH, tios);
     }

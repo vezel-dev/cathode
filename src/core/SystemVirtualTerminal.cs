@@ -11,7 +11,7 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
                 _resize += value;
 
                 if (_resize != null)
-                    _event.Set();
+                    _resizeEvent.Set();
             }
         }
         remove
@@ -21,12 +21,14 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
                 _resize -= value;
 
                 if (_resize == null)
-                    _event.Reset();
+                    _resizeEvent.Reset();
             }
         }
     }
 
     public override event Action<TerminalSignalContext>? Signaled;
+
+    public TerminalControl Control { get; } = new();
 
     public override bool IsRawMode => _rawMode;
 
@@ -47,6 +49,8 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
         get => _sizeInterval;
         set
         {
+            using var guard = Control.Guard();
+
             _ = value >= TimeSpan.Zero ? true : throw new ArgumentOutOfRangeException(nameof(value));
 
             _sizeInterval = value;
@@ -57,7 +61,7 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
 
     readonly object _rawLock = new();
 
-    readonly ManualResetEventSlim _event = new();
+    readonly ManualResetEventSlim _resizeEvent = new();
 
     readonly HashSet<TerminalProcess> _processes = new();
 
@@ -87,7 +91,7 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
         {
             while (true)
             {
-                _event.Wait();
+                _resizeEvent.Wait();
 
                 RefreshSize();
 
@@ -162,6 +166,8 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
 
     public override void GenerateSignal(TerminalSignal signal)
     {
+        using var guard = Control.Guard();
+
         SendSignal(0, signal);
     }
 
@@ -174,6 +180,8 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
 
     public override void EnableRawMode()
     {
+        using var guard = Control.Guard();
+
         lock (_rawLock)
         {
             if (_processes.Count != 0)
@@ -188,6 +196,8 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
 
     public override void DisableRawMode()
     {
+        using var guard = Control.Guard();
+
         lock (_rawLock)
         {
             if (_processes.Count != 0)
@@ -208,6 +218,9 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
             // any child processes that could be using the terminal are running.
             if (_rawMode)
                 throw new InvalidOperationException("Cannot start non-redirected child processes in raw mode.");
+
+            // Guard here since this locks us into cooked mode until all non-redirected processes are gone.
+            using var guard = Control.Guard();
 
             _ = _processes.Add(starter());
         }

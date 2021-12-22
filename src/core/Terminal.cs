@@ -26,6 +26,14 @@ public static class Terminal
 
     public static Encoding Encoding { get; } = new UTF8Encoding(false);
 
+    public static SystemVirtualTerminal System { get; } =
+        OperatingSystem.IsLinux() ? LinuxVirtualTerminal.Instance :
+        OperatingSystem.IsMacOS() ? MacOSVirtualTerminal.Instance :
+        OperatingSystem.IsWindows() ? WindowsVirtualTerminal.Instance :
+        throw new PlatformNotSupportedException();
+
+    public static TerminalControl Control => System.Control;
+
     public static TerminalReader StandardIn => System.StandardIn;
 
     public static TerminalWriter StandardOut => System.StandardOut;
@@ -45,12 +53,6 @@ public static class Terminal
         get => System.SizePollingInterval;
         set => System.SizePollingInterval = value;
     }
-
-    public static SystemVirtualTerminal System { get; } =
-        OperatingSystem.IsLinux() ? LinuxVirtualTerminal.Instance :
-        OperatingSystem.IsMacOS() ? MacOSVirtualTerminal.Instance :
-        OperatingSystem.IsWindows() ? WindowsVirtualTerminal.Instance :
-        throw new PlatformNotSupportedException();
 
     public static void GenerateSignal(TerminalSignal signal)
     {

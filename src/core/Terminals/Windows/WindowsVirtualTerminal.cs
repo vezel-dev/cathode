@@ -163,6 +163,8 @@ sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
 
     public override void DangerousRestoreSettings()
     {
+        using var guard = Control.Guard();
+
         if (_original is var (inMode, outMode))
         {
             _ = SetConsoleMode(TerminalIn.Handle, inMode);

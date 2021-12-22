@@ -2,6 +2,8 @@ namespace System.IO;
 
 public abstract class TerminalReader : TerminalHandle
 {
+    // Note that the buffer size used affects how many characters the Windows console host will allow the user to type
+    // in a single line (in cooked mode).
     const int ReadBufferSize = 4096;
 
     public event SpanAction<byte, TerminalReader>? InputRead;
@@ -12,8 +14,6 @@ public abstract class TerminalReader : TerminalHandle
 
     protected TerminalReader()
     {
-        // Note that the buffer size used affects how many characters the Windows console host will allow the user to
-        // type in a single line (in cooked mode).
         _reader = new(
             () => TextReader.Synchronized(new StreamReader(Stream, Terminal.Encoding, false, ReadBufferSize, true)));
     }

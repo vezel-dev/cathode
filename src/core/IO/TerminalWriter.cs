@@ -2,6 +2,7 @@ namespace System.IO;
 
 public abstract class TerminalWriter : TerminalHandle
 {
+    // Unlike TerminalReader, the buffer size here is arbitrary and only has performance implications.
     const int WriteBufferSize = 256;
 
     public event ReadOnlySpanAction<byte, TerminalWriter>? OutputWritten;
@@ -12,7 +13,6 @@ public abstract class TerminalWriter : TerminalHandle
 
     protected TerminalWriter()
     {
-        // Unlike TerminalReader, the buffer size here is arbitrary and only has performance implications.
         _writer = new(
             () => TextWriter.Synchronized(new StreamWriter(Stream, Terminal.Encoding, WriteBufferSize, true)
             {
@@ -69,14 +69,15 @@ public abstract class TerminalWriter : TerminalHandle
 
     public void Write(ReadOnlySpan<char> value, CancellationToken cancellationToken = default)
     {
-        var len = Terminal.Encoding.GetByteCount(value);
+        var encoding = Terminal.Encoding;
+        var len = encoding.GetByteCount(value);
         var array = ArrayPool<byte>.Shared.Rent(len);
 
         try
         {
             var span = array.AsSpan(0, len);
 
-            _ = Terminal.Encoding.GetBytes(value, span);
+            _ = encoding.GetBytes(value, span);
 
             Write(span, cancellationToken);
         }
@@ -88,14 +89,15 @@ public abstract class TerminalWriter : TerminalHandle
 
     public async ValueTask WriteAsync(ReadOnlyMemory<char> value, CancellationToken cancellationToken = default)
     {
-        var len = Terminal.Encoding.GetByteCount(value.Span);
+        var encoding = Terminal.Encoding;
+        var len = encoding.GetByteCount(value.Span);
         var array = ArrayPool<byte>.Shared.Rent(len);
 
         try
         {
             var mem = array.AsMemory(0, len);
 
-            _ = Terminal.Encoding.GetBytes(value.Span, mem.Span);
+            _ = encoding.GetBytes(value.Span, mem.Span);
 
             await WriteAsync(mem, cancellationToken).ConfigureAwait(false);
         }
