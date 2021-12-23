@@ -171,6 +171,11 @@ public static class ControlSequences
         return Create(cb => cb.SetScreenBuffer(buffer));
     }
 
+    public static string SetInvertedColors(bool enable)
+    {
+        return Create(cb => cb.SetInvertedColors(enable));
+    }
+
     public static string SetCursorVisibility(bool visible)
     {
         return Create(cb => cb.SetCursorVisibility(visible));

@@ -243,6 +243,11 @@ public sealed class ControlBuilder
         return Print(CSI).Print("?1049").Print(MemoryMarshal.CreateReadOnlySpan(ref ch, 1));
     }
 
+    public ControlBuilder SetInvertedColors(bool enable)
+    {
+        return Print(CSI).Print("?5").Print(enable ? "h" : "l");
+    }
+
     public ControlBuilder SetCursorVisibility(bool visible)
     {
         return Print(CSI).Print("?25").Print(visible ? "h" : "l");
