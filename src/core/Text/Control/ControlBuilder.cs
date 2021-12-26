@@ -4,6 +4,115 @@ namespace System.Text.Control;
 
 public sealed class ControlBuilder
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [InterpolatedStringHandler]
+    public readonly ref struct PrintInterpolatedStringHandler
+    {
+        const int StackBufferSize = 256;
+
+        readonly ControlBuilder _builder;
+
+        readonly IFormatProvider? _provider;
+
+        readonly ICustomFormatter? _formatter;
+
+        public PrintInterpolatedStringHandler(
+            int literalLength,
+            int formattedCount,
+            ControlBuilder builder,
+            IFormatProvider? provider = null)
+        {
+            _builder = builder;
+            _provider = provider;
+            _formatter = provider is not CultureInfo ?
+                (ICustomFormatter?)provider?.GetFormat(typeof(ICustomFormatter)) : null;
+        }
+
+        void AppendSpan(ReadOnlySpan<char> span)
+        {
+            _ = _builder.Print(span);
+        }
+
+        public void AppendLiteral(string value)
+        {
+            AppendSpan(value);
+        }
+
+        [SuppressMessage("Style", "IDE0038")]
+        public void AppendFormatted<T>(T value, string? format = null)
+        {
+            if (_formatter != null)
+            {
+                AppendSpan(_formatter.Format(format, value, _provider));
+
+                return;
+            }
+
+            // Do not use pattern matching here as it results in boxing.
+            if (value is IFormattable)
+            {
+                if (value is ISpanFormattable)
+                {
+                    char[]? rented = null;
+                    Span<char> span = stackalloc char[StackBufferSize];
+
+                    try
+                    {
+                        int written;
+
+                        // Try to format the value on the stack; fall back to the heap.
+                        while (!((ISpanFormattable)value).TryFormat(span, out written, format, _provider))
+                        {
+                            if (rented != null)
+                                ArrayPool<char>.Shared.Return(rented);
+
+                            var len = span.Length * 2;
+
+                            rented = ArrayPool<char>.Shared.Rent(len);
+                            span = rented.AsSpan(0, len);
+                        }
+
+                        AppendSpan(span[..written]);
+                    }
+                    finally
+                    {
+                        if (rented != null)
+                            ArrayPool<char>.Shared.Return(rented);
+                    }
+                }
+                else
+                    AppendSpan(((IFormattable)value).ToString(format, _provider));
+            }
+            else
+                AppendSpan(value?.ToString());
+        }
+
+        public void AppendFormatted(object? value, string? format = null)
+        {
+            // This overload is used when a target-typed expression cannot use the generic overload.
+            AppendFormatted<object?>(value, format);
+        }
+
+        public void AppendFormatted(string? value)
+        {
+            // This overload exists to disambiguate string since it can implicitly convert to both object and
+            // ReadOnlySpan<char>.
+            AppendFormatted<string?>(value);
+        }
+
+        public unsafe void AppendFormatted(void* value, string? format = null)
+        {
+            // This overload makes pointer values work in interpolation holes; they cannot be passed as generic type
+            // arguments currently.
+            AppendFormatted((nuint)value, format);
+        }
+
+        public void AppendFormatted(ReadOnlySpan<char> value)
+        {
+            AppendSpan(value);
+        }
+    }
+
     const int StackBufferSize = 32;
 
     public ReadOnlySpan<char> Span => _writer.WrittenSpan;
@@ -47,14 +156,38 @@ public sealed class ControlBuilder
         return Print((value?.ToString()).AsSpan());
     }
 
+    public ControlBuilder Print([InterpolatedStringHandlerArgument("")] ref PrintInterpolatedStringHandler handler)
+    {
+        return this;
+    }
+
+    public ControlBuilder Print(
+        IFormatProvider? provider,
+        [InterpolatedStringHandlerArgument("", "provider")] ref PrintInterpolatedStringHandler handler)
+    {
+        return this;
+    }
+
     public ControlBuilder PrintLine()
     {
-        return PrintLine(string.Empty);
+        return Print(Environment.NewLine);
     }
 
     public ControlBuilder PrintLine<T>(T value)
     {
-        return Print(value?.ToString() + Environment.NewLine);
+        return Print(value).PrintLine();
+    }
+
+    public ControlBuilder PrintLine([InterpolatedStringHandlerArgument("")] ref PrintInterpolatedStringHandler handler)
+    {
+        return PrintLine();
+    }
+
+    public ControlBuilder PrintLine(
+        IFormatProvider? provider,
+        [InterpolatedStringHandlerArgument("", "provider")] ref PrintInterpolatedStringHandler handler)
+    {
+        return PrintLine();
     }
 
     // Keep methods in sync with the ControlSequences class.
