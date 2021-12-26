@@ -93,7 +93,7 @@ public sealed class TerminalLoggerOptions
             _ = cb.Print("[");
 
             using (_ = Decorate(127, 127, 127))
-                _ = cb.Print("{0:HH:mm:ss.fff}", entry.Timestamp);
+                _ = cb.Print(entry.Timestamp.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture));
 
             _ = cb.Print("][");
 

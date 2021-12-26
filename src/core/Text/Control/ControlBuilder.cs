@@ -42,111 +42,96 @@ public sealed class ControlBuilder
         return this;
     }
 
-    public ControlBuilder Print(string? value)
-    {
-        return Print(value.AsSpan());
-    }
-
     public ControlBuilder Print<T>(T value)
     {
-        return Print(value?.ToString());
-    }
-
-    public ControlBuilder Print(string format, params object?[] args)
-    {
-        return Print(string.Format(CultureInfo.CurrentCulture, format, args));
+        return Print((value?.ToString()).AsSpan());
     }
 
     public ControlBuilder PrintLine()
     {
-        return PrintLine(null);
-    }
-
-    public ControlBuilder PrintLine(string? value)
-    {
-        return Print(value + Environment.NewLine);
+        return PrintLine(string.Empty);
     }
 
     public ControlBuilder PrintLine<T>(T value)
     {
-        return PrintLine(value?.ToString());
-    }
-
-    public ControlBuilder PrintLine(string format, params object?[] args)
-    {
-        return PrintLine(string.Format(CultureInfo.CurrentCulture, format, args));
+        return Print(value?.ToString() + Environment.NewLine);
     }
 
     // Keep methods in sync with the ControlSequences class.
 
+    public ControlBuilder Null()
+    {
+        return Print(stackalloc[] { NUL });
+    }
+
     public ControlBuilder Beep()
     {
-        return Print(BEL);
+        return Print(stackalloc[] { BEL });
     }
 
     public ControlBuilder Backspace()
     {
-        return Print(BS);
+        return Print(stackalloc[] { BS });
     }
 
     public ControlBuilder HorizontalTab()
     {
-        return Print(HT);
+        return Print(stackalloc[] { HT });
     }
 
     public ControlBuilder LineFeed()
     {
-        return Print(LF);
+        return Print(stackalloc[] { LF });
     }
 
     public ControlBuilder VerticalTab()
     {
-        return Print(VT);
+        return Print(stackalloc[] { VT });
     }
 
     public ControlBuilder FormFeed()
     {
-        return Print(FF);
+        return Print(stackalloc[] { FF });
     }
 
     public ControlBuilder CarriageReturn()
     {
-        return Print(CR);
+        return Print(stackalloc[] { CR });
     }
 
     public ControlBuilder Substitute()
     {
-        return Print(SUB);
+        return Print(stackalloc[] { SUB });
     }
 
     public ControlBuilder Cancel()
     {
-        return Print(CAN);
+        return Print(stackalloc[] { CAN });
     }
 
     public ControlBuilder FileSeparator()
     {
-        return Print(FS);
+        return Print(stackalloc[] { FS });
     }
 
     public ControlBuilder GroupSeparator()
     {
-        return Print(GS);
+        return Print(stackalloc[] { GS });
     }
 
     public ControlBuilder RecordSeparator()
     {
-        return Print(RS);
+        return Print(stackalloc[] { RS });
     }
 
     public ControlBuilder UnitSeparator()
     {
-        return Print(US);
+        return Print(stackalloc[] { US });
     }
 
     public ControlBuilder Space()
     {
-        return Print(SP);
+        return Print(stackalloc[] { SP });
     }
 
     public ControlBuilder SetOutputBatching(bool enable)
