@@ -22,5 +22,6 @@ These are helpful resources used in the development of the project:
 * <https://terminalguide.namepad.de>
 * <https://vt100.net/docs>
 * <https://wezfurlong.org/wezterm/escape-sequences.html>
-* <https://www.ecma-international.org/publications/standards/Ecma-048.htm>
+* <https://www.ecma-international.org/publications-and-standards/standards/ecma-35>
+* <https://www.ecma-international.org/publications-and-standards/standards/ecma-48>
 * <https://xtermjs.org/docs/api/vtfeatures>
