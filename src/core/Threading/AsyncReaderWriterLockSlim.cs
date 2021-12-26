@@ -35,6 +35,7 @@ sealed class AsyncReaderWriterLockSlim
             wait.SpinOnce();
     }
 
+    [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder))]
     public async ValueTask EnterReadLockAsync(CancellationToken cancellationToken = default)
     {
         // Try synchronously once and then fall back to the thread pool.
@@ -75,6 +76,7 @@ sealed class AsyncReaderWriterLockSlim
             wait.SpinOnce();
     }
 
+    [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder))]
     public async ValueTask EnterWriteLockAsync(CancellationToken cancellationToken = default)
     {
         await _semaphore.WaitAsync(cancellationToken).ConfigureAwait(false);

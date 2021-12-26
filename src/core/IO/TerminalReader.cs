@@ -31,6 +31,7 @@ public abstract class TerminalReader : TerminalHandle
         return count;
     }
 
+    [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder<>))]
     public async ValueTask<int> ReadBufferAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
     {
         var count = await ReadBufferCoreAsync(buffer, cancellationToken).ConfigureAwait(false);
@@ -58,6 +59,7 @@ public abstract class TerminalReader : TerminalHandle
         return count;
     }
 
+    [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder<>))]
     public async ValueTask<int> ReadAsync(Memory<byte> value, CancellationToken cancellationToken = default)
     {
         var count = 0;
@@ -83,6 +85,7 @@ public abstract class TerminalReader : TerminalHandle
         return Read(new Span<byte>(&value, 1), cancellationToken) == 1 ? value : null;
     }
 
+    [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder<>))]
     public async ValueTask<byte?> ReadRawAsync(CancellationToken cancellationToken = default)
     {
         // TODO: Can we optimize this?

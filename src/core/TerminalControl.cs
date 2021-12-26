@@ -52,6 +52,7 @@ public sealed class TerminalControl
         return new(this, static c => c._lock.ExitReadLock());
     }
 
+    [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder<>))]
     internal async ValueTask<StackDisposable<TerminalControl>> GuardAsync()
     {
         await _lock.EnterReadLockAsync().ConfigureAwait(false);

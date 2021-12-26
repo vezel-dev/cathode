@@ -35,6 +35,7 @@ public abstract class TerminalWriter : TerminalHandle
         return count;
     }
 
+    [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder<>))]
     public async ValueTask<int> WriteBufferAsync(
         ReadOnlyMemory<byte> buffer,
         CancellationToken cancellationToken = default)
@@ -53,6 +54,7 @@ public abstract class TerminalWriter : TerminalHandle
         }
     }
 
+    [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder))]
     public async ValueTask WriteAsync(ReadOnlyMemory<byte> value, CancellationToken cancellationToken = default)
     {
         for (var count = 0;
@@ -87,6 +89,7 @@ public abstract class TerminalWriter : TerminalHandle
         }
     }
 
+    [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder))]
     public async ValueTask WriteAsync(ReadOnlyMemory<char> value, CancellationToken cancellationToken = default)
     {
         var encoding = Terminal.Encoding;
