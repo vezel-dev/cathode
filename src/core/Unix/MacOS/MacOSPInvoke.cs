@@ -40,6 +40,8 @@ static unsafe class MacOSPInvoke
 
     public const nuint ONLCR = 0x2;
 
+    public const nuint ONOEOT = 0x8;
+
     public const nuint OCRNL = 0x10;
 
     public const nuint ONOCR = 0x20;

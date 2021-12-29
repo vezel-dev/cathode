@@ -46,12 +46,10 @@ sealed class MacOSVirtualTerminal : UnixVirtualTerminal
         // Set up some sensible defaults.
         termios.c_iflag &= ~(IGNCR | INLCR | IXANY);
         termios.c_iflag |= IUTF8;
-        termios.c_oflag &= ~(OCRNL | ONOCR | ONLRET | ALTWERASE);
+        termios.c_oflag &= ~(ONOEOT | OCRNL | ONOCR | ONLRET | ALTWERASE);
         termios.c_cflag &= ~CSIZE;
         termios.c_cflag |= CS8 | CREAD;
         termios.c_lflag &= ~(ECHONL | NOFLSH | ECHOPRT | PENDIN);
-
-        // TODO: What's up with ONOEOT? It is not listed in stty -a but does exist in termios.h.
 
         var iflag = BRKINT | ICRNL | IXON;
         var oflag = OPOST | ONLCR;
