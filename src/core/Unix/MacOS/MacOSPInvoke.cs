@@ -50,8 +50,6 @@ static unsafe class MacOSPInvoke
 
     public const nuint OFILL = 0x80;
 
-    public const nuint ALTWERASE = 0x200;
-
     public const nuint OFDEL = 0x20000;
 
     public const nuint NLDLY = 0x300;
@@ -123,6 +121,8 @@ static unsafe class MacOSPInvoke
     public const nuint ISIG = 0x80;
 
     public const nuint ICANON = 0x100;
+
+    public const nuint ALTWERASE = 0x200;
 
     public const nuint IEXTEN = 0x400;
 
