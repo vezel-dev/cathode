@@ -38,7 +38,7 @@ sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
         var inLock = new object();
         var outLock = new object();
 
-        StandardIn = new(this, "standard input", GetStdHandle_SafeHandle(STD_HANDLE.STD_INPUT_HANDLE), new(this), inLock);
+        StandardIn = new(this, "standard input", GetStdHandle_SafeHandle(STD_HANDLE.STD_INPUT_HANDLE), inLock);
         StandardOut = new(this, "standard output", GetStdHandle_SafeHandle(STD_HANDLE.STD_OUTPUT_HANDLE), outLock);
         StandardError = new(this, "standard error", GetStdHandle_SafeHandle(STD_HANDLE.STD_ERROR_HANDLE), outLock);
 
@@ -57,7 +57,7 @@ sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
                 null);
         }
 
-        TerminalIn = new(this, "terminal input", OpenConsoleHandle("CONIN$"), new(this), inLock);
+        TerminalIn = new(this, "terminal input", OpenConsoleHandle("CONIN$"), inLock);
         TerminalOut = new(this, "terminal output", OpenConsoleHandle("CONOUT$"), outLock);
 
         // Input needs to be UTF-16, but we make it appear as if it is UTF-8 to users of the library. See the comments

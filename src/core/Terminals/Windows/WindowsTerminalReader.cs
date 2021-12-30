@@ -1,6 +1,4 @@
 using Windows.Win32.Foundation;
-using Windows.Win32.System.Console;
-using Windows.Win32.UI.Input.KeyboardAndMouse;
 using static Windows.Win32.WindowsPInvoke;
 
 namespace System.Terminals.Windows;
@@ -8,8 +6,6 @@ namespace System.Terminals.Windows;
 sealed class WindowsTerminalReader : NativeTerminalReader<WindowsVirtualTerminal, SafeHandle>
 {
     readonly object _lock;
-
-    readonly WindowsCancellationEvent _cancellationEvent;
 
     readonly byte[] _buffer;
 
@@ -19,12 +15,10 @@ sealed class WindowsTerminalReader : NativeTerminalReader<WindowsVirtualTerminal
         WindowsVirtualTerminal terminal,
         string name,
         SafeHandle handle,
-        WindowsCancellationEvent cancellationEvent,
         object @lock)
         : base(terminal, name, handle)
     {
         _lock = @lock;
-        _cancellationEvent = cancellationEvent;
         _buffer = new byte[System.Terminal.Encoding.GetMaxByteCount(2)];
     }
 
@@ -52,39 +46,6 @@ sealed class WindowsTerminalReader : NativeTerminalReader<WindowsVirtualTerminal
             {
                 if (_buffered.IsEmpty)
                 {
-                    _cancellationEvent.PollWithCancellation(
-                        Handle,
-                        static (terminal, handle) =>
-                        {
-                            Span<INPUT_RECORD> records = stackalloc INPUT_RECORD[1];
-
-                            // Ensure that we actually have a useful key event so that ReadConsoleW will not block.
-                            //
-                            // TODO: Discarding non-key events is gross. We should find a better way.
-                            while (PeekConsoleInputW(handle, records, out var recordsRead) && recordsRead == 1)
-                            {
-                                var rec = MemoryMarshal.GetReference(records);
-                                var evt = rec.Event.KeyEvent;
-
-                                // In cooked mode, we must not drop the key-up event for the Enter key.
-                                if (!terminal.IsRawMode && rec.EventType == KEY_EVENT && !evt.bKeyDown &&
-                                    evt.wVirtualKeyCode == (ushort)VIRTUAL_KEY.VK_RETURN)
-                                    return true;
-
-                                // In raw mode, we only care about key-down events for non-modifier keys.
-                                if (rec.EventType == KEY_EVENT && evt.bKeyDown &&
-                                    (VIRTUAL_KEY)evt.wVirtualKeyCode is not
-                                    (VIRTUAL_KEY.VK_SHIFT or VIRTUAL_KEY.VK_CONTROL or VIRTUAL_KEY.VK_MENU or
-                                    VIRTUAL_KEY.VK_CAPITAL or VIRTUAL_KEY.VK_NUMLOCK or VIRTUAL_KEY.VK_SCROLL))
-                                    return true;
-
-                                _ = ReadConsoleInputW(handle, records, out _);
-                            }
-
-                            return false;
-                        },
-                        cancellationToken);
-
                     Span<char> units = stackalloc char[2];
                     var chars = 0;
 
