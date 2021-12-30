@@ -93,7 +93,7 @@ public abstract class TerminalReader : TerminalHandle
 
         try
         {
-            return await ReadAsync(array.AsMemory(0, 1), cancellationToken).ConfigureAwait(false) == 1 ?
+            return await ReadAsync(array.AsMemory(..1), cancellationToken).ConfigureAwait(false) == 1 ?
                 MemoryMarshal.GetArrayDataReference(array) : null;
         }
         finally

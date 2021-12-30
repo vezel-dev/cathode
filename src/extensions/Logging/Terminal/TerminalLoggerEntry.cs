@@ -1,33 +1,15 @@
 namespace Microsoft.Extensions.Logging.Terminal;
 
 [SuppressMessage("Design", "CA1815")]
-public readonly struct TerminalLoggerEntry
+readonly struct TerminalLoggerEntry
 {
-    public DateTime Timestamp { get; }
+    public ReadOnlyMemory<char> Message { get; }
 
-    public LogLevel LogLevel { get; }
+    public TerminalWriter Writer { get; }
 
-    public string CategoryName { get; }
-
-    public EventId EventId { get; }
-
-    public string? Message { get; }
-
-    public Exception? Exception { get; }
-
-    internal TerminalLoggerEntry(
-        DateTime timestamp,
-        LogLevel logLevel,
-        string categoryName,
-        EventId eventId,
-        string? message,
-        Exception? exception)
+    internal TerminalLoggerEntry(ReadOnlyMemory<char> message, TerminalWriter writer)
     {
-        Timestamp = timestamp;
-        LogLevel = logLevel;
-        CategoryName = categoryName;
-        EventId = eventId;
         Message = message;
-        Exception = exception;
+        Writer = writer;
     }
 }

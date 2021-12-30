@@ -7,9 +7,9 @@ public sealed class TerminalLoggerProvider : ILoggerProvider, ISupportExternalSc
 {
     readonly ConcurrentDictionary<string, TerminalLogger> _loggers = new();
 
-    readonly TerminalLoggerProcessor _processor;
+    readonly IOptionsMonitor<TerminalLoggerOptions> _options;
 
-    readonly IDisposable _reload;
+    readonly TerminalLoggerProcessor _processor;
 
     IExternalScopeProvider _scopeProvider = NullExternalScopeProvider.Instance;
 
@@ -17,13 +17,12 @@ public sealed class TerminalLoggerProvider : ILoggerProvider, ISupportExternalSc
     {
         ArgumentNullException.ThrowIfNull(options);
 
-        _processor = new(options.CurrentValue);
-        _reload = options.OnChange(opts => _processor.Options = opts);
+        _options = options;
+        _processor = new(options.CurrentValue.LogQueueSize);
     }
 
     public void Dispose()
     {
-        _reload.Dispose();
         _processor.Dispose();
     }
 
@@ -31,7 +30,7 @@ public sealed class TerminalLoggerProvider : ILoggerProvider, ISupportExternalSc
     {
         ArgumentNullException.ThrowIfNull(categoryName);
 
-        return _loggers.GetOrAdd(categoryName, name => new(_scopeProvider, name, _processor));
+        return _loggers.GetOrAdd(categoryName, name => new(name, _options, _processor, _scopeProvider));
     }
 
     public void SetScopeProvider(IExternalScopeProvider scopeProvider)

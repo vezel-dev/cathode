@@ -2,17 +2,14 @@ namespace Microsoft.Extensions.Logging.Terminal;
 
 sealed class TerminalLoggerProcessor : IDisposable
 {
-    public TerminalLoggerOptions Options { get; set; }
-
     readonly BlockingCollection<TerminalLoggerEntry> _queue;
 
     readonly Thread _thread;
 
     [SuppressMessage("Design", "CA1031")]
-    public TerminalLoggerProcessor(TerminalLoggerOptions options)
+    public TerminalLoggerProcessor(int queueSize)
     {
-        Options = options;
-        _queue = new(options.LogQueueSize);
+        _queue = new(queueSize);
         _thread = new Thread(() =>
         {
             try
@@ -41,28 +38,6 @@ sealed class TerminalLoggerProcessor : IDisposable
         _thread.Start();
     }
 
-    public void Enqueue(in TerminalLoggerEntry entry)
-    {
-        try
-        {
-            _queue.Add(entry);
-        }
-        catch (Exception ex) when (ex is InvalidOperationException or ObjectDisposedException)
-        {
-            // The processor thread is gone, so just write it directly.
-            Write(entry);
-        }
-    }
-
-    void Write(in TerminalLoggerEntry entry)
-    {
-        Options.Writer(
-            Options,
-            entry.LogLevel >= Options.LogToStandardErrorThreshold ?
-                System.Terminal.StandardError : System.Terminal.StandardOut,
-            entry);
-    }
-
     public void Dispose()
     {
         try
@@ -77,5 +52,27 @@ sealed class TerminalLoggerProcessor : IDisposable
         _queue.Dispose();
 
         _ = _thread.Join(1500);
+    }
+
+    public void Enqueue(TerminalLoggerEntry entry)
+    {
+        try
+        {
+            _queue.Add(entry);
+        }
+        catch (Exception ex) when (ex is InvalidOperationException or ObjectDisposedException)
+        {
+            // The processor thread is gone, so just write it directly.
+            Write(entry);
+        }
+    }
+
+    static void Write(TerminalLoggerEntry entry)
+    {
+        entry.Writer.Write(entry.Message.Span);
+
+        _ = MemoryMarshal.TryGetArray(entry.Message, out var seg);
+
+        ArrayPool<char>.Shared.Return(seg.Array!);
     }
 }

@@ -101,7 +101,7 @@ sealed class WindowsTerminalReader : NativeTerminalReader<WindowsVirtualTerminal
 
                         // Encode the UTF-16 code unit(s) into UTF-8 and grab a slice of the buffer corresponding to
                         // just the portion used.
-                        _buffered = _buffer.AsMemory(0, System.Terminal.Encoding.GetBytes(units[..chars], _buffer));
+                        _buffered = _buffer.AsMemory(..System.Terminal.Encoding.GetBytes(units[..chars], _buffer));
                     }
                 }
 

@@ -69,7 +69,7 @@ public sealed class ControlBuilder
                             var len = span.Length * 2;
 
                             rented = ArrayPool<char>.Shared.Rent(len);
-                            span = rented.AsSpan(0, len);
+                            span = rented.AsSpan(..len);
                         }
 
                         AppendSpan(span[..written]);

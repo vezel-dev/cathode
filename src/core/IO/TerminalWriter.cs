@@ -77,7 +77,7 @@ public abstract class TerminalWriter : TerminalHandle
 
         try
         {
-            var span = array.AsSpan(0, len);
+            var span = array.AsSpan(..len);
 
             _ = encoding.GetBytes(value, span);
 
@@ -98,7 +98,7 @@ public abstract class TerminalWriter : TerminalHandle
 
         try
         {
-            var mem = array.AsMemory(0, len);
+            var mem = array.AsMemory(..len);
 
             _ = encoding.GetBytes(value.Span, mem.Span);
 

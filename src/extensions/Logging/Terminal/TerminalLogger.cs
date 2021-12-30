@@ -1,18 +1,29 @@
+using Microsoft.Extensions.Options;
+
 namespace Microsoft.Extensions.Logging.Terminal;
 
 sealed class TerminalLogger : ILogger
 {
     public IExternalScopeProvider ScopeProvider { get; set; }
 
+    static readonly ThreadLocal<ControlBuilder> _builder = new(() => new());
+
     readonly string _name;
+
+    readonly IOptionsMonitor<TerminalLoggerOptions> _options;
 
     readonly TerminalLoggerProcessor _processor;
 
-    public TerminalLogger(IExternalScopeProvider scopeProvider, string name, TerminalLoggerProcessor processor)
+    public TerminalLogger(
+        string name,
+        IOptionsMonitor<TerminalLoggerOptions> options,
+        TerminalLoggerProcessor processor,
+        IExternalScopeProvider scopeProvider)
     {
-        ScopeProvider = scopeProvider;
         _name = name;
+        _options = options;
         _processor = processor;
+        ScopeProvider = scopeProvider;
     }
 
     public IDisposable BeginScope<TState>(TState state)
@@ -30,17 +41,41 @@ sealed class TerminalLogger : ILogger
         EventId eventId,
         TState state,
         Exception? exception,
-        Func<TState, Exception?, string?> formatter)
+        Func<TState, Exception?, string> formatter)
     {
         ArgumentNullException.ThrowIfNull(formatter);
 
         if (!IsEnabled(logLevel))
             return;
 
-        var now = _processor.Options.UseUtcTimestamp ? DateTime.UtcNow : DateTime.Now;
         var msg = formatter(state, exception);
 
-        if (!string.IsNullOrEmpty(msg) || exception != null)
-            _processor.Enqueue(new(now, logLevel, _name, eventId, msg, exception));
+        if (string.IsNullOrWhiteSpace(msg) && exception == null)
+            return;
+
+        var opts = _options.CurrentValue;
+        var now = opts.UseUtcTimestamp ? DateTime.UtcNow : DateTime.Now;
+        var cb = _builder.Value!;
+
+        try
+        {
+            opts.Writer(opts, cb, new(now, logLevel, _name, eventId, msg, exception));
+
+            _ = cb.PrintLine();
+
+            var span = cb.Span;
+            var array = ArrayPool<char>.Shared.Rent(span.Length);
+
+            span.CopyTo(array);
+
+            _processor.Enqueue(new(
+                array.AsMemory(..span.Length),
+                logLevel >= opts.LogToStandardErrorThreshold ?
+                    System.Terminal.StandardError : System.Terminal.StandardOut));
+        }
+        finally
+        {
+            cb.Clear();
+        }
     }
 }

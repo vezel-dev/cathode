@@ -31,7 +31,7 @@ public abstract class TerminalStream : Stream
     {
         ArgumentNullException.ThrowIfNull(buffer);
 
-        return Read(buffer.AsSpan(offset, count));
+        return Read(buffer.AsSpan(offset..count));
     }
 
     public override sealed Task<int> ReadAsync(
@@ -42,7 +42,7 @@ public abstract class TerminalStream : Stream
     {
         ArgumentNullException.ThrowIfNull(buffer);
 
-        return ReadAsync(buffer.AsMemory(offset, count), cancellationToken).AsTask();
+        return ReadAsync(buffer.AsMemory(offset..count), cancellationToken).AsTask();
     }
 
     public override sealed unsafe int ReadByte()
@@ -59,7 +59,7 @@ public abstract class TerminalStream : Stream
         _ = count >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(count));
         _ = offset + count <= buffer.Length ? true : throw new ArgumentException(null, nameof(buffer));
 
-        Write(buffer.AsSpan(offset, count));
+        Write(buffer.AsSpan(offset..count));
     }
 
     public override sealed Task WriteAsync(
@@ -70,7 +70,7 @@ public abstract class TerminalStream : Stream
     {
         ArgumentNullException.ThrowIfNull(buffer);
 
-        var mem = buffer.AsMemory(offset, count);
+        var mem = buffer.AsMemory(offset..count);
 
         static async Task WriteAsyncCore(
             TerminalStream stream,
