@@ -120,6 +120,15 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
             Signaled?.Invoke(ctx);
 
             context.Cancel = ctx.Cancel;
+
+            // The following is a workaround: see https://github.com/alexrp/system-terminal/issues/64
+            // When the debugger is attached and we are on Windows with an active ReadConsole
+            // the threads will be stuck and CTRL+C won't exit the process.
+            if (Debugger.IsAttached && OperatingSystem.IsWindows() && !ctx.Cancel && context.Signal == PosixSignal.SIGINT)
+            {
+                // Emit the same exit code as CTRL+C (0x_C000_013A)
+                Environment.Exit(-1073741510);
+            }
         }
 
         // Keep the registrations alive by storing them in fields.
