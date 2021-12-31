@@ -23,57 +23,39 @@ sealed class UnixTerminalWriter : NativeTerminalWriter<UnixVirtualTerminal, int>
 
         cancellationToken.ThrowIfCancellationRequested();
 
-        var count = 0;
-
         lock (_lock)
         {
             fixed (byte* p = &MemoryMarshal.GetReference(buffer))
             {
-                while (count < buffer.Length)
+                while (true)
                 {
                     nint ret;
 
                     // Note that this call may get us suspended by way of a SIGTTOU signal if we are a background
                     // process, the handle refers to a terminal, and the TOSTOP bit is set (we disable TOSTOP but there
                     // are ways that it could get set anyway).
-                    while ((ret = write(Handle, p + count, (nuint)(buffer.Length - count))) == -1 &&
+                    while ((ret = write(Handle, p, (nuint)buffer.Length)) == -1 &&
                         Marshal.GetLastPInvokeError() == EINTR)
                     {
                     }
 
-                    // The descriptor has been closed by someone else. Just silently ignore this situation.
-                    if (ret == 0)
-                        break;
-
                     if (ret != -1)
-                    {
-                        count += (int)ret;
-
-                        continue;
-                    }
+                        return (int)ret;
 
                     var err = Marshal.GetLastPInvokeError();
 
                     // EPIPE means the descriptor was probably redirected to a program that ended.
                     if (err == EPIPE)
-                        break;
+                        return 0;
 
                     // The file descriptor might have been configured as non-blocking. Instead of busily trying to write
                     // over and over, poll until we can write and then try again.
                     if (Terminal.PollHandles(err, POLLOUT, stackalloc[] { Handle }))
                         continue;
 
-                    // At this point there was an actual I/O error. We only want to throw if we did not manage to write
-                    // anything so far. If we did manage to write something, the error should happen again the next time
-                    // we are called, but this time without us managing to write anything.
-                    if (count != 0)
-                        break;
-
                     throw new TerminalException($"Could not write to {Name}: {new Win32Exception(err).Message}");
                 }
             }
         }
-
-        return count;
     }
 }
