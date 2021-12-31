@@ -25,13 +25,13 @@ abstract class NativeTerminalReader<TTerminal, THandle> : TerminalReader
         IsInteractive = terminal.IsHandleInteractive(handle);
     }
 
-    protected override sealed ValueTask<int> ReadBufferCoreAsync(
+    protected override sealed ValueTask<int> ReadPartialCoreAsync(
         Memory<byte> buffer,
         CancellationToken cancellationToken)
     {
         // We currently have no async support.
         return cancellationToken.IsCancellationRequested ?
             ValueTask.FromCanceled<int>(cancellationToken) :
-            new(Task.Run(() => ReadBufferCore(buffer.Span, cancellationToken), cancellationToken));
+            new(Task.Run(() => ReadPartialCore(buffer.Span, cancellationToken), cancellationToken));
     }
 }

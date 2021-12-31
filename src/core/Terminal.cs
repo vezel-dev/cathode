@@ -69,14 +69,14 @@ public static class Terminal
         System.DisableRawMode();
     }
 
-    public static byte? ReadRaw(CancellationToken cancellationToken = default)
+    public static int Read(Span<byte> value, CancellationToken cancellationToken = default)
     {
-        return System.ReadRaw(cancellationToken);
+        return System.Read(value, cancellationToken);
     }
 
-    public static ValueTask<byte?> ReadRawAsync(CancellationToken cancellationToken = default)
+    public static ValueTask<int> ReadAsync(Memory<byte> value, CancellationToken cancellationToken = default)
     {
-        return System.ReadRawAsync(cancellationToken);
+        return System.ReadAsync(value, cancellationToken);
     }
 
     public static string? ReadLine(CancellationToken cancellationToken = default)

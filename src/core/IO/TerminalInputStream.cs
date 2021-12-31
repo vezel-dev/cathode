@@ -18,11 +18,11 @@ public sealed class TerminalInputStream : TerminalStream
     public override int Read(Span<byte> buffer)
     {
         // Unlike for writing, Stream documentation allows us to only do the bare minimum when reading.
-        return Reader.ReadBuffer(buffer);
+        return Reader.ReadPartial(buffer);
     }
 
     public override ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
     {
-        return Reader.ReadBufferAsync(buffer, cancellationToken);
+        return Reader.ReadPartialAsync(buffer, cancellationToken);
     }
 }

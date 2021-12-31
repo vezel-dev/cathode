@@ -20,15 +20,15 @@ public abstract class TerminalWriter : TerminalHandle
             }));
     }
 
-    protected abstract int WriteBufferCore(ReadOnlySpan<byte> buffer, CancellationToken cancellationToken);
+    protected abstract int WritePartialCore(ReadOnlySpan<byte> buffer, CancellationToken cancellationToken);
 
-    protected abstract ValueTask<int> WriteBufferCoreAsync(
+    protected abstract ValueTask<int> WritePartialCoreAsync(
         ReadOnlyMemory<byte> buffer,
         CancellationToken cancellationToken);
 
-    public int WriteBuffer(ReadOnlySpan<byte> buffer, CancellationToken cancellationToken = default)
+    public int WritePartial(ReadOnlySpan<byte> buffer, CancellationToken cancellationToken = default)
     {
-        var count = WriteBufferCore(buffer, cancellationToken);
+        var count = WritePartialCore(buffer, cancellationToken);
 
         OutputWritten?.Invoke(buffer[..count], this);
 
@@ -36,11 +36,11 @@ public abstract class TerminalWriter : TerminalHandle
     }
 
     [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder<>))]
-    public async ValueTask<int> WriteBufferAsync(
+    public async ValueTask<int> WritePartialAsync(
         ReadOnlyMemory<byte> buffer,
         CancellationToken cancellationToken = default)
     {
-        var count = await WriteBufferCoreAsync(buffer, cancellationToken).ConfigureAwait(false);
+        var count = await WritePartialCoreAsync(buffer, cancellationToken).ConfigureAwait(false);
 
         OutputWritten?.Invoke(buffer.Span[..count], this);
 
@@ -49,7 +49,7 @@ public abstract class TerminalWriter : TerminalHandle
 
     public void Write(ReadOnlySpan<byte> value, CancellationToken cancellationToken = default)
     {
-        for (var count = 0; count < value.Length; count += WriteBuffer(value[count..], cancellationToken))
+        for (var count = 0; count < value.Length; count += WritePartial(value[count..], cancellationToken))
         {
         }
     }
@@ -59,7 +59,7 @@ public abstract class TerminalWriter : TerminalHandle
     {
         for (var count = 0;
             count < value.Length;
-            count += await WriteBufferAsync(value[count..], cancellationToken).ConfigureAwait(false))
+            count += await WritePartialAsync(value[count..], cancellationToken).ConfigureAwait(false))
         {
         }
     }

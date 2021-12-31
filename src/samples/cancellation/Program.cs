@@ -4,21 +4,22 @@ await OutLineAsync(await ReadLineAsync());
 await OutLineAsync("Entering raw mode and reading input. Canceling after 5 seconds.");
 await OutLineAsync();
 
+using var cts = new CancellationTokenSource();
+
+cts.CancelAfter(TimeSpan.FromSeconds(5));
+
+var array = new byte[1];
+
 EnableRawMode();
 
 try
 {
-    using var cts = new CancellationTokenSource();
-
-    cts.CancelAfter(TimeSpan.FromSeconds(5));
-
     while (true)
     {
-        byte? b;
-
         try
         {
-            b = await ReadRawAsync(cts.Token);
+            if (await ReadAsync(array, cts.Token) == 0)
+                break;
         }
         catch (OperationCanceledException)
         {
@@ -28,7 +29,7 @@ try
             break;
         }
 
-        await OutAsync($"0x{b:x2}");
+        await OutAsync($"0x{array[0]:x2}");
         await OutAsync("\r\n");
     }
 }

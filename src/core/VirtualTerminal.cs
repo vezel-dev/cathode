@@ -28,14 +28,14 @@ public abstract class VirtualTerminal
 
     public abstract void DisableRawMode();
 
-    public byte? ReadRaw(CancellationToken cancellationToken = default)
+    public int Read(Span<byte> value, CancellationToken cancellationToken = default)
     {
-        return StandardIn.ReadRaw(cancellationToken);
+        return StandardIn.ReadPartial(value, cancellationToken);
     }
 
-    public ValueTask<byte?> ReadRawAsync(CancellationToken cancellationToken = default)
+    public ValueTask<int> ReadAsync(Memory<byte> value, CancellationToken cancellationToken = default)
     {
-        return StandardIn.ReadRawAsync(cancellationToken);
+        return StandardIn.ReadPartialAsync(value, cancellationToken);
     }
 
     public string? ReadLine(CancellationToken cancellationToken = default)

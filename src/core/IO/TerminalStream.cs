@@ -85,10 +85,7 @@ public abstract class TerminalStream : Stream
 
     public override sealed void WriteByte(byte value)
     {
-        Write(stackalloc byte[]
-        {
-            value,
-        });
+        Write(stackalloc[] { value });
     }
 
     public override sealed void Flush()

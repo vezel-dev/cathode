@@ -12,7 +12,7 @@ sealed class UnixTerminalWriter : NativeTerminalWriter<UnixVirtualTerminal, int>
         _lock = @lock;
     }
 
-    protected override unsafe int WriteBufferCore(ReadOnlySpan<byte> buffer, CancellationToken cancellationToken)
+    protected override unsafe int WritePartialCore(ReadOnlySpan<byte> buffer, CancellationToken cancellationToken)
     {
         using var guard = Terminal.Control.Guard();
 

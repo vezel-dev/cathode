@@ -18,13 +18,13 @@ public abstract class TerminalReader : TerminalHandle
             () => TextReader.Synchronized(new StreamReader(Stream, Terminal.Encoding, false, ReadBufferSize, true)));
     }
 
-    protected abstract int ReadBufferCore(Span<byte> buffer, CancellationToken cancellationToken);
+    protected abstract int ReadPartialCore(Span<byte> buffer, CancellationToken cancellationToken);
 
-    protected abstract ValueTask<int> ReadBufferCoreAsync(Memory<byte> buffer, CancellationToken cancellationToken);
+    protected abstract ValueTask<int> ReadPartialCoreAsync(Memory<byte> buffer, CancellationToken cancellationToken);
 
-    public int ReadBuffer(Span<byte> buffer, CancellationToken cancellationToken = default)
+    public int ReadPartial(Span<byte> buffer, CancellationToken cancellationToken = default)
     {
-        var count = ReadBufferCore(buffer, cancellationToken);
+        var count = ReadPartialCore(buffer, cancellationToken);
 
         InputRead?.Invoke(buffer[..count], this);
 
@@ -32,9 +32,9 @@ public abstract class TerminalReader : TerminalHandle
     }
 
     [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder<>))]
-    public async ValueTask<int> ReadBufferAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
+    public async ValueTask<int> ReadPartialAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
     {
-        var count = await ReadBufferCoreAsync(buffer, cancellationToken).ConfigureAwait(false);
+        var count = await ReadPartialCoreAsync(buffer, cancellationToken).ConfigureAwait(false);
 
         InputRead?.Invoke(buffer.Span[..count], this);
 
@@ -47,7 +47,7 @@ public abstract class TerminalReader : TerminalHandle
 
         while (count < value.Length)
         {
-            var ret = ReadBuffer(value[count..], cancellationToken);
+            var ret = ReadPartial(value[count..], cancellationToken);
 
             // EOF?
             if (ret == 0)
@@ -66,7 +66,7 @@ public abstract class TerminalReader : TerminalHandle
 
         while (count < value.Length)
         {
-            var ret = await ReadBufferAsync(value[count..], cancellationToken).ConfigureAwait(false);
+            var ret = await ReadPartialAsync(value[count..], cancellationToken).ConfigureAwait(false);
 
             // EOF?
             if (ret == 0)
@@ -76,30 +76,6 @@ public abstract class TerminalReader : TerminalHandle
         }
 
         return count;
-    }
-
-    public unsafe byte? ReadRaw(CancellationToken cancellationToken = default)
-    {
-        byte value;
-
-        return Read(new Span<byte>(&value, 1), cancellationToken) == 1 ? value : null;
-    }
-
-    [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder<>))]
-    public async ValueTask<byte?> ReadRawAsync(CancellationToken cancellationToken = default)
-    {
-        // TODO: Can we optimize this?
-        var array = ArrayPool<byte>.Shared.Rent(1);
-
-        try
-        {
-            return await ReadAsync(array.AsMemory(..1), cancellationToken).ConfigureAwait(false) == 1 ?
-                MemoryMarshal.GetArrayDataReference(array) : null;
-        }
-        finally
-        {
-            ArrayPool<byte>.Shared.Return(array);
-        }
     }
 
     public string? ReadLine(CancellationToken cancellationToken = default)

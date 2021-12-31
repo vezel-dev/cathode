@@ -33,11 +33,7 @@ sealed class UnixCancellationPipe
             }
         }
 
-        Span<int> handles = stackalloc int[]
-        {
-            _readHandle,
-            handle,
-        };
+        Span<int> handles = stackalloc int[] { _readHandle, handle };
 
         using (var registration = cancellationToken.UnsafeRegister(CancellationCallback, this))
             if (!_terminal.PollHandles(null, POLLIN, handles))
