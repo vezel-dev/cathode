@@ -2,6 +2,40 @@ namespace System;
 
 public sealed class TerminalControl
 {
+    public sealed class AcquireDisposable : IDisposable
+    {
+        readonly TerminalControl _control;
+
+        internal AcquireDisposable(TerminalControl control)
+        {
+            _control = control;
+        }
+
+        public void Dispose()
+        {
+            _control._lock.EnterWriteLock();
+
+            _control._controller = null;
+
+            _control._lock.ExitWriteLock();
+        }
+    }
+
+    internal readonly struct GuardDisposable : IDisposable
+    {
+        readonly TerminalControl _control;
+
+        public GuardDisposable(TerminalControl control)
+        {
+            _control = control;
+        }
+
+        public void Dispose()
+        {
+            _control._lock.ExitReadLock();
+        }
+    }
+
     readonly AsyncReaderWriterLockSlim _lock = new();
 
     readonly AsyncLocal<object> _current = new();
@@ -12,7 +46,7 @@ public sealed class TerminalControl
     {
     }
 
-    public IDisposable Acquire(CancellationToken cancellationToken = default)
+    public AcquireDisposable Acquire(CancellationToken cancellationToken = default)
     {
         _lock.EnterWriteLock(cancellationToken);
 
@@ -28,17 +62,10 @@ public sealed class TerminalControl
             _lock.ExitWriteLock();
         }
 
-        return new HeapDisposable<TerminalControl>(this, static c =>
-        {
-            c._lock.EnterWriteLock();
-
-            c._controller = null;
-
-            c._lock.ExitWriteLock();
-        });
+        return new(this);
     }
 
-    internal StackDisposable<TerminalControl> Guard()
+    internal GuardDisposable Guard()
     {
         _lock.EnterReadLock();
 
@@ -49,11 +76,11 @@ public sealed class TerminalControl
             throw new InvalidOperationException("Caller does not have terminal control.");
         }
 
-        return new(this, static c => c._lock.ExitReadLock());
+        return new(this);
     }
 
     [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder<>))]
-    internal async ValueTask<StackDisposable<TerminalControl>> GuardAsync()
+    internal async ValueTask<GuardDisposable> GuardAsync()
     {
         await _lock.EnterReadLockAsync().ConfigureAwait(false);
 
@@ -64,6 +91,6 @@ public sealed class TerminalControl
             throw new InvalidOperationException("Caller does not have terminal control.");
         }
 
-        return new(this, static c => c._lock.ExitReadLock());
+        return new(this);
     }
 }
