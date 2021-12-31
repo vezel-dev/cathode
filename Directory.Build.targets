@@ -23,11 +23,11 @@
             <PropertyGroup>
                 <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
                 <IsTrimmable Condition="'$(OutputType)' == 'Library' and '$(DevelopmentDependency)' != 'true'">>true</IsTrimmable>
-                <PackageReadmeFile>README.md</PackageReadmeFile>
+                <PackageReadmeFile>PACKAGE.md</PackageReadmeFile>
             </PropertyGroup>
 
             <ItemGroup>
-                <None Include="$(MSBuildThisFileDirectory)README.md"
+                <None Include="$(MSBuildThisFileDirectory)PACKAGE.md"
                       Pack="true"
                       PackagePath=""
                       Visible="false" />

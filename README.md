@@ -10,9 +10,9 @@ effectively a complete replacement for System.Console.
 With the Windows console host now supporting virtual terminal sequences, it
 makes little sense for console interaction to still be centered around the old
 Windows console host and the many limitations it had. System.Terminal provides
-an API centered around an emulated [VT100 terminal](https://vt100.net) (with
-various modern and widely supported extensions) and works on all desktop
-platforms that .NET 6+ supports.
+an API centered around a [VT100 terminal](https://vt100.net) with some
+extensions from later models and modern terminal emulators. It works on all
+desktop platforms that .NET 6+ supports.
 
 Please note that, since System.Terminal replaces a very fundamental component of
 the framework, the use of certain framework APIs becomes problematic. As an
