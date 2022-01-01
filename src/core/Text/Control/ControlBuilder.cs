@@ -630,7 +630,6 @@ public sealed class ControlBuilder
         if (!id.IsEmpty)
             _ = Print("id=").Print(id);
 
-        // TODO: Avoid string allocation for the URI value.
         return Print(";").Print(uri).Print(ST);
     }
 
