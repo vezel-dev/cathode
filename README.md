@@ -2,7 +2,7 @@
 
 <div align="center">
     <img src="system-terminal.svg"
-         width="256" />
+         width="128" />
 </div>
 
 <p align="center">
