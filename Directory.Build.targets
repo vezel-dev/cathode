@@ -23,11 +23,12 @@
             <PropertyGroup>
                 <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
                 <IsTrimmable Condition="'$(OutputType)' == 'Library' and '$(DevelopmentDependency)' != 'true'">>true</IsTrimmable>
+                <PackageIcon>system-terminal.png</PackageIcon>
                 <PackageReadmeFile>PACKAGE.md</PackageReadmeFile>
             </PropertyGroup>
 
             <ItemGroup>
-                <None Include="$(MSBuildThisFileDirectory)PACKAGE.md"
+                <None Include="$(MSBuildThisFileDirectory)PACKAGE.md; $(MSBuildThisFileDirectory)system-terminal.png"
                       Pack="true"
                       PackagePath=""
                       Visible="false" />

@@ -1,8 +1,25 @@
-# System.Terminal [![Build Status](https://github.com/alexrp/system-terminal/actions/workflows/build.yml/badge.svg)](https://github.com/alexrp/system-terminal/actions/workflows/build.yml)
+# System.Terminal
+
+<div align="center">
+    <img src="system-terminal.svg"
+         width="256" />
+</div>
+
+<p align="center">
+    <strong>
+        A terminal-centric replacement for System.Console.
+    </strong>
+</p>
+
+<div align="center">
 
 [![Terminal](https://img.shields.io/nuget/v/Terminal.svg?label=Terminal)](https://www.nuget.org/packages/Terminal)
 [![Terminal.Hosting](https://img.shields.io/nuget/v/Terminal.Hosting.svg?label=Terminal.Hosting)](https://www.nuget.org/packages/Terminal.Hosting)
 [![Terminal.Extensions](https://img.shields.io/nuget/v/Terminal.Extensions.svg?label=Terminal.Extensions)](https://www.nuget.org/packages/Terminal.Extensions)
+
+</div>
+
+---
 
 System.Terminal is a toolkit for writing terminal-based applications. It is
 effectively a complete replacement for System.Console.
