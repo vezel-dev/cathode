@@ -30,7 +30,7 @@ Windows console host and the many limitations it had. System.Terminal provides
 an API centered around a VT100 terminal with some extensions from later models
 and modern terminal emulators. It works on all desktop platforms that .NET 6+
 supports.</PackageDescription>
-        <PackageLicenseExpression>ISC</PackageLicenseExpression>
+        <PackageLicenseExpression>0BSD</PackageLicenseExpression>
         <PackageOutputPath>$(MSBuildThisFileDirectory)pkg/feed/</PackageOutputPath>
         <PackageProjectUrl>https://github.com/alexrp/system-terminal</PackageProjectUrl>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
