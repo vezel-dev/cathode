@@ -25,7 +25,7 @@ public sealed class TerminalLoggerOptions
         }
     }
 
-    public bool UseColors { get; set; }
+    public bool UseColors { get; set; } = true;
 
     public bool SingleLine { get; set; }
 
