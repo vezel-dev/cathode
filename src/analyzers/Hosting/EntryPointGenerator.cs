@@ -32,6 +32,15 @@ public sealed class EntryPointGenerator : ISourceGenerator
         }
     }
 
+    const string Program = @"[global::System.Runtime.CompilerServices.CompilerGenerated]
+static class GeneratedProgram
+{{
+    static async global::System.Threading.Tasks.Task Main(string[] args)
+    {{
+        await global::System.Hosting.ProgramHost.RunAsync<{0}>(args);
+    }}
+}}";
+
     public void Initialize(GeneratorInitializationContext context)
     {
         context.RegisterForSyntaxNotifications(() => new ProgramClassSyntaxReceiver());
@@ -59,14 +68,6 @@ public sealed class EntryPointGenerator : ISourceGenerator
                     Diagnostic.Create(DiagnosticDescriptors.AvoidSpecifyingEntryPoint, loc, entry));
 
         if (entry == null)
-            context.AddSource("Program.g.cs", $@"
-[global::System.Runtime.CompilerServices.CompilerGenerated]
-static class GeneratedProgram
-{{
-    static async global::System.Threading.Tasks.Task Main(string[] args)
-    {{
-        await global::System.Hosting.ProgramHost.RunAsync<{syms[0].Name}>(args);
-    }}
-}}");
+            context.AddSource("Program.g.cs", string.Format(CultureInfo.InvariantCulture, Program, syms[0].Name));
     }
 }
