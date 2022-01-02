@@ -9,7 +9,5 @@ sealed class Program : IProgram
         await OutLineAsync("Switching to raw mode...");
 
         EnableRawMode();
-
-        context.ExitCode = 42;
     }
 }

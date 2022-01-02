@@ -1,11 +1,25 @@
 await OutLineAsync("Launching 'bash'...");
 
+using var cts = new CancellationTokenSource();
+
+cts.CancelAfter(TimeSpan.FromSeconds(10));
+
 var bash =
     new TerminalProcessBuilder()
         .WithFileName("bash")
         .Start();
 
-await bash.WaitForExitAsync();
+try
+{
+    await bash.WaitForExitAsync(cts.Token);
+}
+catch (OperationCanceledException)
+{
+    bash.Kill();
+
+    await OutLineAsync();
+    await OutLineAsync("Killed 'bash' due to timeout.");
+}
 
 await OutLineAsync($"'bash' exited with code: {bash.ExitCode}");
 

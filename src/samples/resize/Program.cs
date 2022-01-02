@@ -3,4 +3,4 @@ await OutLineAsync();
 
 Resized += size => OutLine($"Width = {size.Width}, Height = {size.Height}");
 
-await Task.Delay(Timeout.Infinite);
+await Task.Delay(TimeSpan.FromSeconds(30));
