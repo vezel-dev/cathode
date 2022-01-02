@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <AssemblyName>System.Terminal.Testing</AssemblyName>
+        <IsPackable>true</IsPackable>
+        <PackageDescription>$(PackageDescription)
+
+This packages provides testing utilities for terminal applications.</PackageDescription>
+        <PackageId>Terminal.Testing</PackageId>
+        <RootNamespace>System</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../core/core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="System.IO.Pipelines" />
+    </ItemGroup>
+</Project>

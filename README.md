@@ -16,6 +16,7 @@
 [![Terminal](https://img.shields.io/nuget/v/Terminal.svg?label=Terminal)](https://www.nuget.org/packages/Terminal)
 [![Terminal.Hosting](https://img.shields.io/nuget/v/Terminal.Hosting.svg?label=Terminal.Hosting)](https://www.nuget.org/packages/Terminal.Hosting)
 [![Terminal.Extensions](https://img.shields.io/nuget/v/Terminal.Extensions.svg?label=Terminal.Extensions)](https://www.nuget.org/packages/Terminal.Extensions)
+[![Terminal.Testing](https://img.shields.io/nuget/v/Terminal.Testing.svg?label=Terminal.Testing)](https://www.nuget.org/packages/Terminal.Testing)
 
 </div>
 
@@ -49,6 +50,8 @@ This project offers the following packages:
   the terminal hosting model.
 * [Terminal.Extensions](https://www.nuget.org/packages/Terminal.Extensions):
   Provides terminal hosting and logging for the .NET Generic Host.
+* [Terminal.Testing](https://www.nuget.org/packages/Terminal.Testing): Provides
+  testing utilities for terminal applications.
 
 To install a package, run `dotnet add package <name>`.
 

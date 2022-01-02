@@ -17,9 +17,11 @@
     <ItemGroup>
         <TrimmerRootAssembly Include="Microsoft.Extensions.Terminal" />
         <TrimmerRootAssembly Include="System.Terminal" />
+        <TrimmerRootAssembly Include="System.Terminal.Testing" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="../extensions/extensions.csproj" />
+        <ProjectReference Include="../testing/testing.csproj" />
     </ItemGroup>
 </Project>
