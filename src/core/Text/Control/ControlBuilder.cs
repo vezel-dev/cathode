@@ -572,15 +572,33 @@ public sealed class ControlBuilder
             .Print(gSpan[..gLen]).Print(";").Print(bSpan[..bLen]).Print("m");
     }
 
+    public ControlBuilder SetUnderlineColor(byte r, byte g, byte b)
+    {
+        Span<char> rSpan = stackalloc char[StackBufferSize];
+        Span<char> gSpan = stackalloc char[StackBufferSize];
+        Span<char> bSpan = stackalloc char[StackBufferSize];
+
+        _ = r.TryFormat(rSpan, out var rLen);
+        _ = g.TryFormat(gSpan, out var gLen);
+        _ = b.TryFormat(bSpan, out var bLen);
+
+        return Print(CSI).Print("58;2;").Print(rSpan[..rLen]).Print(";")
+            .Print(gSpan[..gLen]).Print(";").Print(bSpan[..bLen]).Print("m");
+    }
+
     public ControlBuilder SetDecorations(
         bool bold = false,
         bool faint = false,
         bool italic = false,
         bool underline = false,
+        bool curlyUnderline = false,
+        bool dottedUnderline = false,
+        bool dashedUnderline = false,
         bool blink = false,
+        bool rapidBlink = false,
         bool invert = false,
         bool invisible = false,
-        bool strike = false,
+        bool strikethrough = false,
         bool doubleUnderline = false,
         bool overline = false)
     {
@@ -601,15 +619,18 @@ public sealed class ControlBuilder
             _ = Print(code);
         }
 
-        // TODO: Support more exotic decorations?
         HandleMode(bold, "1");
         HandleMode(faint, "2");
         HandleMode(italic, "3");
         HandleMode(underline, "4");
+        HandleMode(curlyUnderline, "4:3");
+        HandleMode(dottedUnderline, "4:4");
+        HandleMode(dashedUnderline, "4:5");
         HandleMode(blink, "5");
+        HandleMode(rapidBlink, "6");
         HandleMode(invert, "7");
         HandleMode(invisible, "8");
-        HandleMode(strike, "9");
+        HandleMode(strikethrough, "9");
         HandleMode(doubleUnderline, "21");
         HandleMode(overline, "53");
 
