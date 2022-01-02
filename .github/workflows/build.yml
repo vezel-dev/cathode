@@ -37,3 +37,13 @@ jobs:
               run: |
                   dotnet tool restore
                   dotnet publish -c ${{ matrix.cfg }}
+            - name: Run samples
+              run: |
+                  dotnet example --all \
+                      --skip cancellation \
+                      --skip control \
+                      --skip cursor \
+                      --skip raw \
+                      --skip scrolling \
+                      --skip signals \
+                      --skip width
