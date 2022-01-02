@@ -19,7 +19,7 @@
         <PackageVersion Include="Nerdbank.GitVersioning"
                         Version="3.4.244" />
         <PackageVersion Include="StyleCop.Analyzers"
-                        Version="1.2.0-beta.354" />
+                        Version="1.2.0-beta.376" />
         <PackageVersion Include="Wcwidth"
                         Version="0.6.0" />
     </ItemGroup>
