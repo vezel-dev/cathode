@@ -11,15 +11,6 @@
     </strong>
 </p>
 
-<div align="center">
-
-[![Terminal](https://img.shields.io/nuget/v/Terminal.svg?label=Terminal)](https://www.nuget.org/packages/Terminal)
-[![Terminal.Hosting](https://img.shields.io/nuget/v/Terminal.Hosting.svg?label=Terminal.Hosting)](https://www.nuget.org/packages/Terminal.Hosting)
-[![Terminal.Extensions](https://img.shields.io/nuget/v/Terminal.Extensions.svg?label=Terminal.Extensions)](https://www.nuget.org/packages/Terminal.Extensions)
-[![Terminal.Testing](https://img.shields.io/nuget/v/Terminal.Testing.svg?label=Terminal.Testing)](https://www.nuget.org/packages/Terminal.Testing)
-
-</div>
-
 ---
 
 System.Terminal is a toolkit for writing terminal-based applications. It is
@@ -36,22 +27,31 @@ Please note that, since System.Terminal replaces a very fundamental component of
 the framework, the use of certain framework APIs becomes problematic. As an
 example, intermixing System.Terminal and System.Console usage *will* break.
 Referencing System.Terminal (or a package that uses it) will pull in a Roslyn
-analyzer that will diagnose
-[problematic APIs](src/core/buildTransitive/BannedSymbols.txt) and suggest
-working replacements.
+analyzer which will diagnose problematic APIs and suggest working replacements.
 
 ## Usage
 
 This project offers the following packages:
 
-* [Terminal](https://www.nuget.org/packages/Terminal): Provides the core
-  terminal API.
-* [Terminal.Hosting](https://www.nuget.org/packages/Terminal.Hosting): Provides
-  the terminal hosting model.
-* [Terminal.Extensions](https://www.nuget.org/packages/Terminal.Extensions):
-  Provides terminal hosting and logging for the .NET Generic Host.
-* [Terminal.Testing](https://www.nuget.org/packages/Terminal.Testing): Provides
-  testing utilities for terminal applications.
+| Package | Description |
+| - | - |
+| [![Terminal][core-img]][core-pkg] | Provides the core terminal API. |
+| [![Terminal.Analyzers][analyzers-img]][analyzers-pkg] | Provides diagnostic analyzers and source generators. |
+| [![Terminal.Hosting][hosting-img]][hosting-pkg] | Provides the terminal hosting model. |
+| [![Terminal.Extensions][extensions-img]][extensions-pkg] | Provides terminal hosting and logging for the .NET Generic Host. |
+| [![Terminal.Testing][testing-img]][testing-pkg] | Provides testing utilities for terminal applications. |
+
+[core-pkg]: https://www.nuget.org/packages/Terminal
+[analyzers-pkg]: https://www.nuget.org/packages/Terminal.Analyzers
+[hosting-pkg]: https://www.nuget.org/packages/Terminal.Hosting
+[extensions-pkg]: https://www.nuget.org/packages/Terminal.Extensions
+[testing-pkg]: https://www.nuget.org/packages/Terminal.Testing
+
+[core-img]: https://img.shields.io/nuget/v/Terminal.svg?label=Terminal
+[analyzers-img]: https://img.shields.io/nuget/v/Terminal.Analyzers.svg?label=Terminal.Analyzers
+[hosting-img]: https://img.shields.io/nuget/v/Terminal.Hosting.svg?label=Terminal.Hosting
+[extensions-img]: https://img.shields.io/nuget/v/Terminal.Extensions.svg?label=Terminal.Extensions
+[testing-img]: https://img.shields.io/nuget/v/Terminal.Testing.svg?label=Terminal.Testing
 
 To install a package, run `dotnet add package <name>`.
 
@@ -84,7 +84,7 @@ emulators:
 
 (Even if you are using a terminal emulator that is not listed here, chances are
 that it will work just fine; these are just the ones that are tested regularly
-while developing `System.Terminal`.)
+while developing System.Terminal.)
 
 ## Statistics
 
