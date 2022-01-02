@@ -8,6 +8,13 @@ sealed class Program : IProgram
         await OutLineAsync($"Arguments: {string.Join(' ', context.Arguments.ToArray())}");
         await OutLineAsync("Switching to raw mode...");
 
-        EnableRawMode();
+        try
+        {
+            EnableRawMode();
+        }
+        catch (TerminalNotAttachedException)
+        {
+            // Expected in CI.
+        }
     }
 }

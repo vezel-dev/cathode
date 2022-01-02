@@ -27,7 +27,14 @@ var sb = new StringBuilder();
 
 await OutLineAsync("Entering raw mode and launching 'echo'...");
 
-EnableRawMode();
+try
+{
+    EnableRawMode();
+}
+catch (TerminalNotAttachedException)
+{
+    // Expected in CI.
+}
 
 try
 {
@@ -50,7 +57,14 @@ try
 }
 finally
 {
-    DisableRawMode();
+    try
+    {
+        DisableRawMode();
+    }
+    catch (TerminalNotAttachedException)
+    {
+        // Expected in CI.
+    }
 }
 
 await OutLineAsync($"Captured output: {sb}");
