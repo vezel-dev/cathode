@@ -3,6 +3,8 @@ namespace System.IO;
 [SuppressMessage("Performance", "CA1844")]
 public abstract class TerminalStream : Stream
 {
+    // This class and classes inheriting from it should not override Close, Dispose, or DisposeAsync.
+
     public override sealed bool CanSeek => false;
 
     public override sealed long Length => throw new NotSupportedException();
@@ -54,10 +56,7 @@ public abstract class TerminalStream : Stream
 
     public override sealed void Write(byte[] buffer, int offset, int count)
     {
-        ArgumentNullException.ThrowIfNull(buffer);
-        _ = offset >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(offset));
-        _ = count >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(count));
-        _ = offset + count <= buffer.Length ? true : throw new ArgumentException(null, nameof(buffer));
+        ValidateBufferArguments(buffer, offset, count);
 
         Write(buffer.AsSpan(offset..count));
     }

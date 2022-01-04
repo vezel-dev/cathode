@@ -14,7 +14,7 @@ public abstract class TerminalWriter : TerminalHandle
     protected TerminalWriter()
     {
         _writer = new(
-            () => TextWriter.Synchronized(new StreamWriter(Stream, Terminal.Encoding, WriteBufferSize, true)
+            () => new SynchronizedTextWriter(new StreamWriter(Stream, Terminal.Encoding, WriteBufferSize, true)
             {
                 AutoFlush = true,
             }));

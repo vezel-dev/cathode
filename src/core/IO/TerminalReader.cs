@@ -15,7 +15,7 @@ public abstract class TerminalReader : TerminalHandle
     protected TerminalReader()
     {
         _reader = new(
-            () => TextReader.Synchronized(new StreamReader(Stream, Terminal.Encoding, false, ReadBufferSize, true)));
+            () => new SynchronizedTextReader(new StreamReader(Stream, Terminal.Encoding, false, ReadBufferSize, true)));
     }
 
     protected abstract int ReadPartialCore(Span<byte> buffer, CancellationToken cancellationToken);
