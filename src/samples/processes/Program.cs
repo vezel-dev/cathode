@@ -7,6 +7,7 @@ var bash =
         .WithFileName("bash")
         .WithRedirections(false)
         .WithCancellationToken(cts.Token)
+        .WithThrowOnError(false)
         .Run();
 
 try
