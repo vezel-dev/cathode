@@ -119,7 +119,7 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
 
     readonly ManualResetEventSlim _resizeEvent = new();
 
-    readonly HashSet<TerminalProcess> _processes = new();
+    readonly HashSet<ChildProcess> _processes = new();
 
     Action<TerminalSize>? _resized;
 
@@ -202,7 +202,7 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
         SendSignal(0, signal);
     }
 
-    internal void SignalProcess(TerminalProcess process, TerminalSignal signal)
+    internal void SignalProcess(ChildProcess process, TerminalSignal signal)
     {
         SendSignal(process.Id, signal);
     }
@@ -241,7 +241,7 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
         }
     }
 
-    internal void StartProcess(Func<TerminalProcess> starter)
+    internal void StartProcess(Func<ChildProcess> starter)
     {
         lock (_rawLock)
         {
@@ -257,7 +257,7 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
         }
     }
 
-    internal void ReapProcess(TerminalProcess process)
+    internal void ReapProcess(ChildProcess process)
     {
         lock (_rawLock)
         {

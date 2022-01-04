@@ -10,10 +10,12 @@ This packages provides testing utilities for terminal applications.</PackageDesc
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="../core/core.csproj" />
+        <Using Include="System.IO.Pipelines" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.IO.Pipelines" />
+        <ProjectReference Include="../core/core.csproj" />
     </ItemGroup>
+
+    <Import Project="../core/buildTransitive/Terminal.targets" />
 </Project>

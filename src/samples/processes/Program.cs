@@ -1,29 +1,23 @@
 await OutLineAsync("Launching 'bash'...");
 
-using var cts = new CancellationTokenSource();
-
-cts.CancelAfter(TimeSpan.FromSeconds(10));
+using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
 
 var bash =
-    new TerminalProcessBuilder()
+    new ChildProcessBuilder()
         .WithFileName("bash")
-        .Start();
+        .WithRedirections(false)
+        .WithCancellationToken(cts.Token)
+        .Run();
 
 try
 {
-    await bash.WaitForExitAsync(cts.Token);
+    await OutLineAsync($"'bash' exited with code: {await bash.Completion}");
 }
 catch (OperationCanceledException)
 {
-    bash.Kill();
-
     await OutLineAsync();
     await OutLineAsync("Killed 'bash' due to timeout.");
 }
-
-await OutLineAsync($"'bash' exited with code: {bash.ExitCode}");
-
-var sb = new StringBuilder();
 
 await OutLineAsync("Entering raw mode and launching 'echo'...");
 
@@ -36,24 +30,11 @@ catch (TerminalNotAttachedException)
     // Expected in CI.
 }
 
+var echo = ChildProcess.Run("echo", "hello", "world");
+
 try
 {
-    var echo =
-        new TerminalProcessBuilder()
-            .WithFileName("echo")
-            .WithArguments("hello", "world")
-            .WithRedirections(true)
-            .Start();
-
-    echo.StandardOutReceived += str =>
-    {
-        lock (sb)
-            _ = sb.Append(str);
-    };
-
-    echo.StartReadingStandardOut();
-
-    await echo.WaitForExitAsync();
+    await OutLineAsync($"'echo' exited with code: {await echo.Completion}");
 }
 finally
 {
@@ -67,4 +48,4 @@ finally
     }
 }
 
-await OutLineAsync($"Captured output: {sb}");
+await OutLineAsync($"Captured output: {(await echo.StandardOut.TextReader.ReadToEndAsync()).Trim()}");

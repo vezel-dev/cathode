@@ -26,10 +26,8 @@
     These imports are required here since NuGet only takes of importing them in
     the PackageReference case.
     -->
-    <Import Project="../core/buildTransitive/Terminal.targets"
-            Condition="'$(DevelopmentDependency)' != 'true'" />
-    <Import Project="../hosting/buildTransitive/Terminal.Hosting.targets"
-            Condition="'$(DevelopmentDependency)' != 'true'" />
+    <Import Project="../core/buildTransitive/Terminal.targets" />
+    <Import Project="../hosting/buildTransitive/Terminal.Hosting.targets" />
 
     <Import Project="$([MSBuild]::GetPathOfFileAbove('$(MSBuildThisFile)', '$(MSBuildThisFileDirectory)..'))" />
 </Project>

@@ -3,4 +3,4 @@ T:Microsoft.Extensions.Logging.Console.ConsoleLoggerProvider;Use the Terminal.Ex
 T:Microsoft.Extensions.Logging.ConsoleLoggerExtensions;Use the Terminal.Extensions package instead
 T:System.Console;Use System.Terminal instead
 T:System.Diagnostics.ConsoleTraceListener;Use System.Diagnostics.TerminalTraceListener instead
-T:System.Diagnostics.Process;Use System.Diagnostics.TerminalProcess instead
+T:System.Diagnostics.Process;Use System.Processes.ChildProcess instead

@@ -10,6 +10,10 @@ This package provides the core terminal API.</PackageDescription>
     </PropertyGroup>
 
     <ItemGroup>
+        <Using Include="System.IO.Pipelines" />
+    </ItemGroup>
+
+    <ItemGroup>
         <None Include="buildTransitive/**"
               Pack="true"
               PackagePath="%(Identity)" />
@@ -31,6 +35,9 @@ This package provides the core terminal API.</PackageDescription>
                           PrivateAssets="all" />
         <PackageReference Include="Microsoft.Windows.SDK.Win32Metadata"
                           PrivateAssets="all" />
+        <PackageReference Include="System.IO.Pipelines" />
         <PackageReference Include="Wcwidth" />
     </ItemGroup>
+
+    <Import Project="../core/buildTransitive/Terminal.targets" />
 </Project>

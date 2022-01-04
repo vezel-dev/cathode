@@ -1,6 +1,7 @@
 namespace System.Hosting;
 
 [EditorBrowsable(EditorBrowsableState.Never)]
+[SuppressMessage("ApiDesign", "RS0030")]
 public static class ProgramHost
 {
     // This class is only meant to be used by generated code.

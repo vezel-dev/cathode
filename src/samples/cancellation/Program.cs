@@ -4,9 +4,7 @@ await OutLineAsync(await ReadLineAsync());
 await OutLineAsync("Entering raw mode and reading input. Canceling after 5 seconds.");
 await OutLineAsync();
 
-using var cts = new CancellationTokenSource();
-
-cts.CancelAfter(TimeSpan.FromSeconds(5));
+using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
 
 var array = new byte[1];
 

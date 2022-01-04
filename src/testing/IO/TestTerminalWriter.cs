@@ -1,5 +1,3 @@
-using System.IO.Pipelines;
-
 namespace System.IO;
 
 public class TestTerminalWriter : TerminalWriter

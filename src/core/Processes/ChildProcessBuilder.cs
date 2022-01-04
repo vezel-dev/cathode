@@ -1,6 +1,6 @@
-namespace System.Diagnostics;
+namespace System.Processes;
 
-public sealed class TerminalProcessBuilder
+public sealed class ChildProcessBuilder
 {
     public string FileName { get; private set; } = string.Empty;
 
@@ -11,17 +11,19 @@ public sealed class TerminalProcessBuilder
 
     public string WorkingDirectory { get; private set; } = string.Empty;
 
-    public bool UseShell { get; private set; }
-
-    public bool NoWindow { get; private set; }
+    public bool CreateWindow { get; private set; } = true;
 
     public ProcessWindowStyle WindowStyle { get; private set; }
 
-    public bool RedirectStandardIn { get; private set; }
+    public bool RedirectStandardIn { get; private set; } = true;
 
-    public bool RedirectStandardOut { get; private set; }
+    public bool RedirectStandardOut { get; private set; } = true;
 
-    public bool RedirectStandardError { get; private set; }
+    public bool RedirectStandardError { get; private set; } = true;
+
+    public int StandardOutBufferSize { get; private set; }
+
+    public int StandardErrorBufferSize { get; private set; }
 
     // The sad reality is that some programs use insane encodings even in today's world, so we do still need to expose
     // these properties for those pathological cases.
@@ -32,7 +34,11 @@ public sealed class TerminalProcessBuilder
 
     public Encoding StandardErrorEncoding { get; private set; } = Terminal.Encoding;
 
-    TerminalProcessBuilder Clone()
+    public CancellationToken CancellationToken { get; private set; }
+
+    public bool ThrowOnError { get; private set; } = true;
+
+    ChildProcessBuilder Clone()
     {
         return new()
         {
@@ -40,19 +46,22 @@ public sealed class TerminalProcessBuilder
             Arguments = Arguments,
             Variables = Variables,
             WorkingDirectory = WorkingDirectory,
-            UseShell = UseShell,
-            NoWindow = NoWindow,
+            CreateWindow = CreateWindow,
             WindowStyle = WindowStyle,
             RedirectStandardIn = RedirectStandardIn,
             RedirectStandardOut = RedirectStandardOut,
             RedirectStandardError = RedirectStandardError,
+            StandardOutBufferSize = StandardOutBufferSize,
+            StandardErrorBufferSize = StandardErrorBufferSize,
             StandardInEncoding = StandardInEncoding,
             StandardOutEncoding = StandardOutEncoding,
             StandardErrorEncoding = StandardErrorEncoding,
+            CancellationToken = CancellationToken,
+            ThrowOnError = ThrowOnError,
         };
     }
 
-    public TerminalProcessBuilder WithFileName(string fileName)
+    public ChildProcessBuilder WithFileName(string fileName)
     {
         ArgumentNullException.ThrowIfNull(fileName);
 
@@ -63,10 +72,12 @@ public sealed class TerminalProcessBuilder
         return builder;
     }
 
-    public TerminalProcessBuilder WithArguments(ImmutableArray<string> arguments)
+    public ChildProcessBuilder WithArguments(ImmutableArray<string> arguments)
     {
-        ArgumentNullException.ThrowIfNull(arguments);
-        _ = arguments.All(a => a != null) ? true : throw new ArgumentException(null, nameof(arguments));
+        if (arguments.IsDefault)
+            arguments = ImmutableArray<string>.Empty;
+        else
+            _ = arguments.All(a => a != null) ? true : throw new ArgumentException(null, nameof(arguments));
 
         var builder = Clone();
 
@@ -75,12 +86,12 @@ public sealed class TerminalProcessBuilder
         return builder;
     }
 
-    public TerminalProcessBuilder WithArguments(params string[] arguments)
+    public ChildProcessBuilder WithArguments(params string[] arguments)
     {
         return WithArguments(arguments.ToImmutableArray());
     }
 
-    public TerminalProcessBuilder AddArgument(string argument)
+    public ChildProcessBuilder AddArgument(string argument)
     {
         ArgumentNullException.ThrowIfNull(argument);
 
@@ -91,7 +102,7 @@ public sealed class TerminalProcessBuilder
         return builder;
     }
 
-    public TerminalProcessBuilder AddArguments(params string[] arguments)
+    public ChildProcessBuilder AddArguments(params string[] arguments)
     {
         ArgumentNullException.ThrowIfNull(arguments);
         _ = arguments.All(a => a != null) ? true : throw new ArgumentException(null, nameof(arguments));
@@ -103,9 +114,11 @@ public sealed class TerminalProcessBuilder
         return builder;
     }
 
-    public TerminalProcessBuilder WithVariables(ImmutableDictionary<string, string> environment)
+    public ChildProcessBuilder WithVariables(ImmutableDictionary<string, string> environment)
     {
         ArgumentNullException.ThrowIfNull(environment);
+        _ = environment.All(kvp => kvp.Key != null && kvp.Value != null) ?
+            true : throw new ArgumentException(null, nameof(environment));
 
         var builder = Clone();
 
@@ -114,12 +127,12 @@ public sealed class TerminalProcessBuilder
         return builder;
     }
 
-    public TerminalProcessBuilder WithVariables(params (string, string)[] environment)
+    public ChildProcessBuilder WithVariables(params (string, string)[] environment)
     {
         return WithVariables(environment.ToImmutableDictionary(t => t.Item1, t => t.Item2));
     }
 
-    public TerminalProcessBuilder AddVariable(string name, string value)
+    public ChildProcessBuilder AddVariable(string name, string value)
     {
         ArgumentNullException.ThrowIfNull(name);
         ArgumentNullException.ThrowIfNull(value);
@@ -131,7 +144,7 @@ public sealed class TerminalProcessBuilder
         return builder;
     }
 
-    public TerminalProcessBuilder SetVariable(string name, string value)
+    public ChildProcessBuilder SetVariable(string name, string value)
     {
         ArgumentNullException.ThrowIfNull(name);
         ArgumentNullException.ThrowIfNull(value);
@@ -143,7 +156,7 @@ public sealed class TerminalProcessBuilder
         return builder;
     }
 
-    public TerminalProcessBuilder RemoveVariable(string name)
+    public ChildProcessBuilder RemoveVariable(string name)
     {
         ArgumentNullException.ThrowIfNull(name);
 
@@ -154,12 +167,12 @@ public sealed class TerminalProcessBuilder
         return builder;
     }
 
-    public TerminalProcessBuilder ClearVariables()
+    public ChildProcessBuilder ClearVariables()
     {
         return WithVariables();
     }
 
-    public TerminalProcessBuilder WithWorkingDirectory(string workingDirectory)
+    public ChildProcessBuilder WithWorkingDirectory(string workingDirectory)
     {
         ArgumentNullException.ThrowIfNull(workingDirectory);
 
@@ -170,25 +183,16 @@ public sealed class TerminalProcessBuilder
         return builder;
     }
 
-    public TerminalProcessBuilder WithUseShell(bool useShell)
+    public ChildProcessBuilder WithCreateWindow(bool createWindow)
     {
         var builder = Clone();
 
-        builder.UseShell = useShell;
+        builder.CreateWindow = createWindow;
 
         return builder;
     }
 
-    public TerminalProcessBuilder WithNoWindow(bool noWindow)
-    {
-        var builder = Clone();
-
-        builder.NoWindow = noWindow;
-
-        return builder;
-    }
-
-    public TerminalProcessBuilder WithWindowStyle(ProcessWindowStyle windowStyle)
+    public ChildProcessBuilder WithWindowStyle(ProcessWindowStyle windowStyle)
     {
         _ = Enum.IsDefined(windowStyle) ? true : throw new ArgumentOutOfRangeException(nameof(windowStyle));
 
@@ -199,7 +203,7 @@ public sealed class TerminalProcessBuilder
         return builder;
     }
 
-    public TerminalProcessBuilder WithRedirections(bool standardIn, bool standardOut, bool standardError)
+    public ChildProcessBuilder WithRedirections(bool standardIn, bool standardOut, bool standardError)
     {
         var builder = Clone();
 
@@ -210,29 +214,65 @@ public sealed class TerminalProcessBuilder
         return builder;
     }
 
-    public TerminalProcessBuilder WithRedirections(bool allStreams)
+    public ChildProcessBuilder WithRedirections(bool allStreams)
     {
         return WithRedirections(allStreams, allStreams, allStreams);
     }
 
-    public TerminalProcessBuilder WithEncodings(Encoding standardIn, Encoding standardOut, Encoding standardError)
+    public ChildProcessBuilder WithBufferSizes(int standardOut, int standardError)
     {
+        _ = standardOut >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(standardOut));
+        _ = standardError >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(standardError));
+
         var builder = Clone();
 
-        builder.StandardInEncoding = standardIn;
-        builder.StandardOutEncoding = standardOut;
-        builder.StandardErrorEncoding = standardError;
+        builder.StandardOutBufferSize = standardOut;
+        builder.StandardErrorBufferSize = standardError;
 
         return builder;
     }
 
-    public TerminalProcessBuilder WithEncodings(Encoding allStreams)
+    public ChildProcessBuilder WithBufferSizes(int allStreams)
+    {
+        return WithBufferSizes(allStreams, allStreams);
+    }
+
+    public ChildProcessBuilder WithEncodings(Encoding? standardIn, Encoding? standardOut, Encoding? standardError)
+    {
+        var builder = Clone();
+
+        builder.StandardInEncoding = standardIn ?? Terminal.Encoding;
+        builder.StandardOutEncoding = standardOut ?? Terminal.Encoding;
+        builder.StandardErrorEncoding = standardError ?? Terminal.Encoding;
+
+        return builder;
+    }
+
+    public ChildProcessBuilder WithEncodings(Encoding? allStreams)
     {
         return WithEncodings(allStreams, allStreams, allStreams);
     }
 
-    public TerminalProcess Start()
+    public ChildProcessBuilder WithCancellationToken(CancellationToken cancellationToken)
     {
-        return TerminalProcess.Start(this);
+        var builder = Clone();
+
+        builder.CancellationToken = cancellationToken;
+
+        return builder;
+    }
+
+    public ChildProcessBuilder WithThrowOnError(bool throwOnError)
+    {
+        var builder = Clone();
+
+        builder.ThrowOnError = throwOnError;
+
+        return builder;
+    }
+
+    public ChildProcess Run()
+    {
+        return new(this);
     }
 }
