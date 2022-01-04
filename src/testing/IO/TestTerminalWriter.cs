@@ -21,6 +21,7 @@ public class TestTerminalWriter : TerminalWriter
         Stream = new TerminalOutputStream(this);
     }
 
+    [SuppressMessage("Usage", "VSTHRD002")]
     protected override sealed int WritePartialCore(ReadOnlySpan<byte> buffer, CancellationToken cancellationToken)
     {
         var len = buffer.Length;

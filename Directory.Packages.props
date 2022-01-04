@@ -10,6 +10,8 @@
                         Version="6.0.0" />
         <PackageVersion Include="Microsoft.SourceLink.GitHub"
                         Version="1.1.1" />
+        <PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers"
+                        Version="17.0.64" />
         <PackageVersion Include="Microsoft.Windows.CsWin32"
                         Version="0.1.619-beta" />
         <PackageVersion Include="Microsoft.Windows.SDK.Win32Docs"
