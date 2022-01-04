@@ -6,50 +6,33 @@ sealed class UnixCancellationPipe
 {
     readonly UnixVirtualTerminal _terminal;
 
-    readonly int _readHandle;
+    readonly AnonymousPipeServerStream _server;
 
-    readonly int _writeHandle;
+    readonly AnonymousPipeClientStream _client;
 
     public UnixCancellationPipe(UnixVirtualTerminal terminal)
     {
         _terminal = terminal;
-        (_readHandle, _writeHandle) = terminal.CreatePipePair();
+        _server = new(PipeDirection.Out);
+        _client = new(PipeDirection.In, _server.ClientSafePipeHandle);
     }
 
     public unsafe void PollWithCancellation(int handle, CancellationToken cancellationToken)
     {
         // Note that the runtime sets up a SIGPIPE handler for us.
 
-        static void CancellationCallback(object? state)
-        {
-            byte dummy = 42;
-            nint ret;
+        Span<int> handles = stackalloc int[] { (int)_client.SafePipeHandle.DangerousGetHandle(), handle };
 
-            // We should get no errors other than EINTR from writing to the pipe.
-            while ((ret = write(((UnixCancellationPipe)state!)._writeHandle, &dummy, 1)) == -1 &&
-                Marshal.GetLastPInvokeError() == EINTR)
-            {
-                // Retry in case we get interrupted by a signal.
-            }
-        }
-
-        Span<int> handles = stackalloc int[] { _readHandle, handle };
-
-        using (var registration = cancellationToken.UnsafeRegister(CancellationCallback, this))
+        using (var registration = cancellationToken.UnsafeRegister(
+            state => ((UnixCancellationPipe)state!)._server.WriteByte(42), this))
             if (!_terminal.PollHandles(null, POLLIN, handles))
                 return;
 
         // Were we canceled?
         if ((handles[0] & POLLIN) != 0)
         {
-            byte dummy;
-
-            // We should get no errors other than EINTR from reading from the pipe.
-            while (read(_readHandle, &dummy, 1) == -1 &&
-                Marshal.GetLastPInvokeError() == EINTR)
-            {
-                // Retry in case we get interrupted by a signal.
-            }
+            // Read the dummy byte that was written to indicate cancellation.
+            _ = _client.ReadByte();
 
             throw new OperationCanceledException(cancellationToken);
         }

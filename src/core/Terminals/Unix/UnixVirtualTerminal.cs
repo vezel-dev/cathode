@@ -119,8 +119,6 @@ abstract class UnixVirtualTerminal : NativeVirtualTerminal<int>
 
     public abstract int OpenTerminalHandle(string name);
 
-    public abstract (int ReadHandle, int WriteHandle) CreatePipePair();
-
     public abstract bool PollHandles(int? error, short events, Span<int> handles);
 
     public override sealed bool IsHandleValid(int handle, bool write)

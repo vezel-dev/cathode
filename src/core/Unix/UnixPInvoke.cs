@@ -18,12 +18,6 @@ static unsafe class UnixPInvoke
 
     public const short POLLOUT = 0x4;
 
-    // cmd
-
-    public const int F_GETFD = 1;
-
-    public const int F_SETFD = 1;
-
     // optional_actions
 
     public const int TCSANOW = 0;
@@ -54,25 +48,13 @@ static unsafe class UnixPInvoke
     public static extern int open(string path, int oflag);
 
     [DllImport("c", SetLastError = true)]
-    public static extern int pipe(int* fildes);
-
-    [DllImport("c", SetLastError = true)]
     public static extern nint read(int fildes, void* buf, nuint nbyte);
 
     [DllImport("c", SetLastError = true)]
     public static extern nint write(int fildes, void* buf, nuint nbyte);
 
     [DllImport("c", SetLastError = true)]
-    public static extern int fcntl(int fildes, int cmd);
-
-    [DllImport("c", SetLastError = true)]
-    public static extern int fcntl(int fildes, int cmd, int arg);
-
-    [DllImport("c", SetLastError = true)]
     public static extern int ioctl(int fildes, nuint request, out winsize argp);
-
-    [DllImport("c", SetLastError = true)]
-    public static extern int close(int fildes);
 
     [DllImport("c", SetLastError = true)]
     public static extern int kill(int pid, int sig);

@@ -97,13 +97,6 @@ sealed class LinuxVirtualTerminal : UnixVirtualTerminal
         return open(name, O_RDWR | O_NOCTTY | O_CLOEXEC);
     }
 
-    public override unsafe (int ReadHandle, int WriteHandle) CreatePipePair()
-    {
-        var fds = stackalloc int[2];
-
-        return pipe2(fds, O_CLOEXEC) == 0 ? (fds[0], fds[1]) : (-1, -1);
-    }
-
     public override unsafe bool PollHandles(int? error, short events, Span<int> handles)
     {
         if (error is int err && err != EAGAIN)

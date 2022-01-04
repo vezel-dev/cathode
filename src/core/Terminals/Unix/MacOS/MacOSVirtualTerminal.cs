@@ -97,37 +97,6 @@ sealed class MacOSVirtualTerminal : UnixVirtualTerminal
         return open(name, O_RDWR | O_NOCTTY | O_CLOEXEC);
     }
 
-    public override unsafe (int ReadHandle, int WriteHandle) CreatePipePair()
-    {
-        var fds = stackalloc int[2];
-
-        // Unfortunately, macOS lacks pipe2 so we have to use this approach which is prone to race conditions on fork.
-        if (pipe(fds) == -1)
-            return (-1, -1);
-
-        static bool SetCloseOnExec(int handle)
-        {
-            var flags = fcntl(handle, F_GETFD);
-
-            if (flags == -1)
-                return false;
-
-            flags |= O_CLOEXEC;
-
-            return fcntl(handle, F_SETFD, flags) == 0;
-        }
-
-        if (!(SetCloseOnExec(fds[0]) && SetCloseOnExec(fds[1])))
-        {
-            _ = close(fds[0]);
-            _ = close(fds[1]);
-
-            return (-1, -1);
-        }
-
-        return (fds[0], fds[1]);
-    }
-
     public override unsafe bool PollHandles(int? error, short events, Span<int> handles)
     {
         if (error is int err && err != EAGAIN)
