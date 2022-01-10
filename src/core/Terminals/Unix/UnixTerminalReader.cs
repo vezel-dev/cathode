@@ -29,6 +29,8 @@ sealed class UnixTerminalReader : NativeTerminalReader<UnixVirtualTerminal, int>
         if (buffer.IsEmpty || !IsValid)
             return 0;
 
+        cancellationToken.ThrowIfCancellationRequested();
+
         lock (_lock)
         {
             _cancellationPipe.PollWithCancellation(Handle, cancellationToken);

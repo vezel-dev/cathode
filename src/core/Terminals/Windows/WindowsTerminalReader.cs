@@ -31,6 +31,8 @@ sealed class WindowsTerminalReader : NativeTerminalReader<WindowsVirtualTerminal
         if (buffer.IsEmpty || !IsValid)
             return 0;
 
+        cancellationToken.ThrowIfCancellationRequested();
+
         if (!IsInteractive)
         {
             bool result;
