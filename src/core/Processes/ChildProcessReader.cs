@@ -18,9 +18,9 @@ public sealed class ChildProcessReader
     internal ChildProcessReader(StreamReader reader, int bufferSize)
     {
         _pipe = new(new(pauseWriterThreshold: bufferSize, useSynchronizationContext: false));
-        Stream = _pipe.Reader.AsStream();
+        Stream = new SynchronizedStream(_pipe.Reader.AsStream());
         Encoding = reader.CurrentEncoding;
-        TextReader = new StreamReader(Stream, Encoding, false);
+        TextReader = new SynchronizedTextReader(new StreamReader(Stream, Encoding, false, ReadBufferSize));
 
         var readStream = reader.BaseStream;
         var writeStream = _pipe.Writer.AsStream();
@@ -41,6 +41,9 @@ public sealed class ChildProcessReader
             {
                 ArrayPool<byte>.Shared.Return(array);
 
+                // Users of the Stream and TextReader properties might block forever if we do not signal completion on
+                // the write end of the pipe. We do not signal completion on the read end of the pipe since we want
+                // users to be able to read all buffered data after the process exits.
                 await _pipe.Writer.CompleteAsync().ConfigureAwait(false);
             }
         });

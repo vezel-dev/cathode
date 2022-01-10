@@ -19,14 +19,18 @@ public abstract class TerminalStream : Stream
     {
     }
 
+    public override sealed long Seek(long offset, SeekOrigin origin)
+    {
+        throw new NotSupportedException();
+    }
+
     public override sealed void SetLength(long value)
     {
         throw new NotSupportedException();
     }
 
-    public override sealed long Seek(long offset, SeekOrigin origin)
+    public override sealed void Flush()
     {
-        throw new NotSupportedException();
     }
 
     public override sealed int Read(byte[] buffer, int offset, int count)
@@ -69,25 +73,11 @@ public abstract class TerminalStream : Stream
     {
         ArgumentNullException.ThrowIfNull(buffer);
 
-        var mem = buffer.AsMemory(offset..count);
-
-        static async Task WriteAsyncCore(
-            TerminalStream stream,
-            Memory<byte> buffer,
-            CancellationToken cancellationToken)
-        {
-            await stream.WriteAsync(buffer, cancellationToken).ConfigureAwait(false);
-        }
-
-        return WriteAsyncCore(this, mem, cancellationToken);
+        return WriteAsync(buffer.AsMemory(offset..count), cancellationToken).AsTask();
     }
 
     public override sealed void WriteByte(byte value)
     {
         Write(stackalloc[] { value });
-    }
-
-    public override sealed void Flush()
-    {
     }
 }
