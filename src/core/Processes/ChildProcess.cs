@@ -25,7 +25,9 @@ public sealed class ChildProcess
 
     readonly ChildProcessReader? _error;
 
-    readonly TaskCompletionSource<int> _exit = new(TaskCreationOptions.RunContinuationsAsynchronously);
+    readonly TaskCompletionSource<int> _completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+    readonly TaskCompletionSource _exited = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
     [SuppressMessage("Design", "CA1031")]
     internal ChildProcess(ChildProcessBuilder builder)
@@ -78,11 +80,13 @@ public sealed class ChildProcess
             var code = _process.ExitCode;
 
             _ = throwOnError && code != 0 ?
-                _exit.TrySetException(new ChildProcessException($"Process exited with code {code}.", code)) :
-                _exit.TrySetResult(code);
+                _completion.TrySetException(new ChildProcessException($"Process exited with code {code}.", code)) :
+                _completion.TrySetResult(code);
 
             if (terminal)
                 Terminal.System.ReapProcess(this);
+
+            _exited.SetResult();
         };
 
         // If the child process might use the terminal, start it under the raw mode lock since we only allow starting
@@ -115,23 +119,7 @@ public sealed class ChildProcess
         // We register the cancellation callback here, after it has started, so that we do not potentially kill the
         // process prior to or during startup.
         ctr = builder.CancellationToken.UnsafeRegister(
-            static (state, token) =>
-            {
-                var proc = (ChildProcess)state!;
-
-                if (!proc._exit.TrySetCanceled(token))
-                    return;
-
-                try
-                {
-                    proc.Kill();
-                }
-                catch (Exception)
-                {
-                    // Even if killing the process tree somehow fails, there is nothing we can do about it here.
-                }
-            },
-            this);
+            static (state, token) => ((ChildProcess)state!)._completion.TrySetCanceled(token), this);
 
         Completion = Task.Run(async () =>
         {
@@ -139,7 +127,25 @@ public sealed class ChildProcess
 
             try
             {
-                code = await _exit.Task.ConfigureAwait(false);
+                code = await _completion.Task.ConfigureAwait(false);
+            }
+            catch (OperationCanceledException)
+            {
+                try
+                {
+                    _process.Kill();
+                }
+                catch (Exception)
+                {
+                    // Even if killing the process tree somehow fails, there is nothing we can do about it here.
+                }
+
+                // Normally, _completion is completed from the Exited event handler. In the case of cancellation, we
+                // complete it from the cancellation callback. This means that we have to wait for the Exited event
+                // handler to run so that it becomes safe to dispose the process.
+                await _exited.Task.ConfigureAwait(false);
+
+                throw;
             }
             finally
             {
@@ -168,9 +174,6 @@ public sealed class ChildProcess
 
     public void Kill(bool entireProcessTree = true)
     {
-        // FIXME: https://github.com/dotnet/runtime/issues/63328
-        entireProcessTree = false;
-
         try
         {
             // TODO: Review exceptions that can be thrown here.
