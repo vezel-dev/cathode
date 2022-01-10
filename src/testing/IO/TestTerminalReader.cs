@@ -6,6 +6,8 @@ public class TestTerminalReader : TerminalReader
 
     public override sealed Stream Stream { get; }
 
+    public override sealed TextReader TextReader { get; }
+
     public override sealed bool IsValid => _isValid;
 
     public override sealed bool IsInteractive => _isInteractive;
@@ -19,6 +21,7 @@ public class TestTerminalReader : TerminalReader
     public TestTerminalReader()
     {
         Stream = new TerminalInputStream(this);
+        TextReader = new StreamReader(Stream, Terminal.Encoding, false);
     }
 
     [SuppressMessage("Usage", "VSTHRD002")]

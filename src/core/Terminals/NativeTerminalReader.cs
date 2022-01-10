@@ -3,13 +3,19 @@ namespace System.Terminals;
 abstract class NativeTerminalReader<TTerminal, THandle> : TerminalReader
     where TTerminal : NativeVirtualTerminal<THandle>
 {
+    // Note that the buffer size used affects how many characters the Windows console host will allow the user to type
+    // in a single line (in cooked mode).
+    const int ReadBufferSize = 4096;
+
     public TTerminal Terminal { get; }
 
     public string Name { get; }
 
     public THandle Handle { get; }
 
-    public override sealed TerminalInputStream Stream { get; }
+    public override sealed Stream Stream { get; }
+
+    public override sealed TextReader TextReader { get; }
 
     public override sealed bool IsValid { get; }
 
@@ -20,7 +26,9 @@ abstract class NativeTerminalReader<TTerminal, THandle> : TerminalReader
         Terminal = terminal;
         Name = name;
         Handle = handle;
-        Stream = new(this);
+        Stream = new SynchronizedStream(new TerminalInputStream(this));
+        TextReader =
+            new SynchronizedTextReader(new StreamReader(Stream, System.Terminal.Encoding, false, ReadBufferSize, true));
         IsValid = terminal.IsHandleValid(handle, false);
         IsInteractive = terminal.IsHandleInteractive(handle);
     }

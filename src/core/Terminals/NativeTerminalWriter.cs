@@ -3,13 +3,18 @@ namespace System.Terminals;
 abstract class NativeTerminalWriter<TTerminal, THandle> : TerminalWriter
     where TTerminal : NativeVirtualTerminal<THandle>
 {
+    // Unlike NativeTerminalReader, the buffer size here is arbitrary and only has performance implications.
+    const int WriteBufferSize = 256;
+
     public TTerminal Terminal { get; }
 
     public string Name { get; }
 
     public THandle Handle { get; }
 
-    public override sealed TerminalOutputStream Stream { get; }
+    public override sealed Stream Stream { get; }
+
+    public override sealed TextWriter TextWriter { get; }
 
     public override sealed bool IsValid { get; }
 
@@ -20,7 +25,12 @@ abstract class NativeTerminalWriter<TTerminal, THandle> : TerminalWriter
         Terminal = terminal;
         Name = name;
         Handle = handle;
-        Stream = new(this);
+        Stream = new SynchronizedStream(new TerminalOutputStream(this));
+        TextWriter =
+            new SynchronizedTextWriter(new StreamWriter(Stream, System.Terminal.Encoding, WriteBufferSize, true)
+            {
+                AutoFlush = true,
+            });
         IsValid = terminal.IsHandleValid(handle, true);
         IsInteractive = terminal.IsHandleInteractive(handle);
     }

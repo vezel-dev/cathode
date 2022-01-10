@@ -4,11 +4,13 @@ public class TestTerminalWriter : TerminalWriter
 {
     // TODO: Add synchronization.
 
-    public override Stream Stream { get; }
+    public override sealed Stream Stream { get; }
 
-    public override bool IsValid => _isValid;
+    public override sealed TextWriter TextWriter { get; }
 
-    public override bool IsInteractive => _isInteractive;
+    public override sealed bool IsValid => _isValid;
+
+    public override sealed bool IsInteractive => _isInteractive;
 
     readonly Pipe _pipe = new(new(pauseWriterThreshold: 0, useSynchronizationContext: false));
 
@@ -19,6 +21,7 @@ public class TestTerminalWriter : TerminalWriter
     public TestTerminalWriter()
     {
         Stream = new TerminalOutputStream(this);
+        TextWriter = new StreamWriter(Stream, Terminal.Encoding);
     }
 
     [SuppressMessage("Usage", "VSTHRD002")]
