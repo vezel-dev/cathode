@@ -1,7 +1,9 @@
 CreateFileW
 FlushConsoleInputBuffer
 GenerateConsoleCtrlEvent
+GetConsoleCP
 GetConsoleMode
+GetConsoleOutputCP
 GetConsoleScreenBufferInfo
 GetFileType
 GetStdHandle

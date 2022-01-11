@@ -89,7 +89,7 @@ sealed class MacOSVirtualTerminal : UnixVirtualTerminal
 
         if (ret != 0)
             throw new TerminalConfigurationException(
-                $"Could not change raw mode setting: {new Win32Exception(err).Message}");
+                $"Could not change terminal mode: {new Win32Exception(err).Message}");
     }
 
     public override int OpenTerminalHandle(string name)

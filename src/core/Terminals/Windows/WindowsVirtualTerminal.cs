@@ -7,6 +7,25 @@ namespace System.Terminals.Windows;
 
 sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
 {
+    sealed class ConsoleState
+    {
+        public CONSOLE_MODE InMode { get; }
+
+        public CONSOLE_MODE OutMode { get; }
+
+        public uint InCodePage { get; }
+
+        public uint OutCodePage { get; }
+
+        public ConsoleState(CONSOLE_MODE inMode, CONSOLE_MODE outMode, uint inCodePage, uint outCodePage)
+        {
+            InMode = inMode;
+            OutMode = outMode;
+            InCodePage = inCodePage;
+            OutCodePage = outCodePage;
+        }
+    }
+
     public override event Action? Resumed
     {
         add
@@ -30,7 +49,7 @@ sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
 
     public override WindowsTerminalWriter TerminalOut { get; }
 
-    (CONSOLE_MODE, CONSOLE_MODE)? _original;
+    ConsoleState? _original;
 
     [SuppressMessage("Reliability", "CA2000")]
     WindowsVirtualTerminal()
@@ -59,11 +78,6 @@ sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
 
         TerminalIn = new(this, "terminal input", OpenConsoleHandle("CONIN$"), inLock);
         TerminalOut = new(this, "terminal output", OpenConsoleHandle("CONOUT$"), outLock);
-
-        // Input needs to be UTF-16, but we make it appear as if it is UTF-8 to users of the library. See the comments
-        // in WindowsTerminalReader for the gory details.
-        _ = SetConsoleCP((uint)Encoding.Unicode.CodePage);
-        _ = SetConsoleOutputCP((uint)Encoding.UTF8.CodePage);
 
         try
         {
@@ -96,13 +110,18 @@ sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
 
     void SetRawModeCore(bool raw, bool flush)
     {
+        uint inCP;
+        uint outCP;
+
         if (!GetConsoleMode(TerminalIn.Handle, out var inMode) ||
-            !GetConsoleMode(TerminalOut.Handle, out var outMode))
+            !GetConsoleMode(TerminalOut.Handle, out var outMode) ||
+            (inCP = GetConsoleCP()) == 0 ||
+            (outCP = GetConsoleOutputCP()) == 0)
             throw new TerminalNotAttachedException();
 
         // Stash away the original modes the first time we are successfully called.
         if (_original == null)
-            _original = (inMode, outMode);
+            _original = new(inMode, outMode, inCP, outCP);
 
         var origIn = inMode;
         var origOut = outMode;
@@ -140,18 +159,35 @@ sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
             outMode &= ~outExtra;
         }
 
-        if (!SetConsoleMode(TerminalIn.Handle, inMode) ||
-            !SetConsoleMode(TerminalOut.Handle, outMode))
-            throw new TerminalConfigurationException(
-                $"Could not change raw mode setting: {new Win32Exception().Message}");
-
-        if (flush && !FlushConsoleInputBuffer(TerminalIn.Handle))
+        try
         {
+            // Input needs to be UTF-16, but we make it appear as if it is UTF-8 to users of the library. See the
+            // comments in WindowsTerminalReader for the gory details.
+            if (!SetConsoleCP((uint)Encoding.Unicode.CodePage) ||
+                !SetConsoleOutputCP((uint)Encoding.UTF8.CodePage))
+                throw new TerminalConfigurationException(
+                    $"Could not change console code page: {new Win32Exception().Message}");
+
+            if (!SetConsoleMode(TerminalIn.Handle, inMode) ||
+                !SetConsoleMode(TerminalOut.Handle, outMode))
+                throw new TerminalConfigurationException(
+                    $"Could not change console mode: {new Win32Exception().Message}");
+
+            if (flush && !FlushConsoleInputBuffer(TerminalIn.Handle))
+                throw new TerminalConfigurationException(
+                    $"Could not flush input buffer: {new Win32Exception().Message}");
+        }
+        catch (TerminalConfigurationException)
+        {
+            // If we failed to configure the console, try to undo partial configuration (if any).
+
             _ = SetConsoleMode(TerminalIn.Handle, origIn);
             _ = SetConsoleMode(TerminalOut.Handle, origOut);
 
-            throw new TerminalConfigurationException(
-                $"Could not flush input buffer: {new Win32Exception().Message}");
+            _ = SetConsoleCP(inCP);
+            _ = SetConsoleOutputCP(outCP);
+
+            throw;
         }
     }
 
@@ -164,10 +200,13 @@ sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
     {
         using var guard = Control.Guard();
 
-        if (_original is var (inMode, outMode))
+        if (_original != null)
         {
-            _ = SetConsoleMode(TerminalIn.Handle, inMode);
-            _ = SetConsoleMode(TerminalOut.Handle, outMode);
+            _ = SetConsoleMode(TerminalIn.Handle, _original.InMode);
+            _ = SetConsoleMode(TerminalOut.Handle, _original.OutMode);
+
+            _ = SetConsoleCP(_original.InCodePage);
+            _ = SetConsoleOutputCP(_original.OutCodePage);
         }
     }
 
