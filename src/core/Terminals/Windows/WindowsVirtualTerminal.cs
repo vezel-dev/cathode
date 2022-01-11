@@ -161,10 +161,10 @@ sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
 
         try
         {
-            // Input needs to be UTF-16, but we make it appear as if it is UTF-8 to users of the library. See the
-            // comments in WindowsTerminalReader for the gory details.
-            if (!SetConsoleCP((uint)Encoding.Unicode.CodePage) ||
-                !SetConsoleOutputCP((uint)Encoding.UTF8.CodePage))
+            var utf8 = (uint)Encoding.UTF8.CodePage;
+
+            if (!SetConsoleCP(utf8) ||
+                !SetConsoleOutputCP(utf8))
                 throw new TerminalConfigurationException(
                     $"Could not change console code page: {new Win32Exception().Message}");
 
