@@ -22,7 +22,7 @@ sealed class MacOSVirtualTerminal : UnixVirtualTerminal
         return ioctl(TerminalOut.Handle, TIOCGWINSZ, out var w) == 0 ? new(w.ws_col, w.ws_row) : null;
     }
 
-    protected override void SetRawModeCore(bool raw, bool flush)
+    protected override void SetModeCore(bool raw, bool flush)
     {
         if (tcgetattr(TerminalOut.Handle, out var termios) == -1)
             throw new TerminalNotAttachedException();

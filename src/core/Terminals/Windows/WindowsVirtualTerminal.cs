@@ -82,7 +82,7 @@ sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
         try
         {
             // Start in cooked mode.
-            SetRawModeCore(false, false);
+            SetModeCore(false, false);
         }
         catch (Exception e) when (e is TerminalNotAttachedException or TerminalConfigurationException)
         {
@@ -108,7 +108,7 @@ sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
             (uint)pid);
     }
 
-    void SetRawModeCore(bool raw, bool flush)
+    void SetModeCore(bool raw, bool flush)
     {
         uint inCP;
         uint outCP;
@@ -191,9 +191,9 @@ sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
         }
     }
 
-    protected override void SetRawMode(bool raw)
+    protected override void SetMode(bool raw)
     {
-        SetRawModeCore(raw, true);
+        SetModeCore(raw, true);
     }
 
     public override void DangerousRestoreSettings()

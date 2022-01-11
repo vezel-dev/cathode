@@ -207,7 +207,7 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
         SendSignal(process.Id, signal);
     }
 
-    protected abstract void SetRawMode(bool raw);
+    protected abstract void SetMode(bool raw);
 
     public override void EnableRawMode()
     {
@@ -219,7 +219,7 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
                 throw new InvalidOperationException(
                     "Cannot enable raw mode with non-redirected child processes running.");
 
-            SetRawMode(true);
+            SetMode(true);
 
             _rawMode = true;
         }
@@ -235,7 +235,7 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
                 throw new InvalidOperationException(
                     "Cannot disable raw mode with non-redirected child processes running.");
 
-            SetRawMode(false);
+            SetMode(false);
 
             _rawMode = false;
         }
@@ -269,7 +269,7 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
             try
             {
                 // Child processes may have messed up the terminal settings. Restore them just in case.
-                SetRawMode(false);
+                SetMode(false);
             }
             catch (Exception e) when (e is TerminalNotAttachedException or TerminalConfigurationException)
             {

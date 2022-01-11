@@ -45,7 +45,7 @@ abstract class UnixVirtualTerminal : NativeVirtualTerminal<int>
         try
         {
             // Start in cooked mode.
-            SetRawModeCore(false, false);
+            SetModeCore(false, false);
         }
         catch (Exception e) when (e is TerminalNotAttachedException or TerminalConfigurationException)
         {
@@ -66,7 +66,7 @@ abstract class UnixVirtualTerminal : NativeVirtualTerminal<int>
                 try
                 {
                     lock (_rawLock)
-                        SetRawModeCore(IsRawMode, false);
+                        SetModeCore(IsRawMode, false);
                 }
                 catch (Exception e) when (e is TerminalNotAttachedException or TerminalConfigurationException)
                 {
@@ -108,13 +108,13 @@ abstract class UnixVirtualTerminal : NativeVirtualTerminal<int>
             });
     }
 
-    protected abstract void SetRawModeCore(bool raw, bool flush);
+    protected abstract void SetModeCore(bool raw, bool flush);
 
-    protected override sealed void SetRawMode(bool raw)
+    protected override sealed void SetMode(bool raw)
     {
         // We can be called from signal handlers so we need an additional lock here.
         lock (_rawLock)
-            SetRawModeCore(raw, true);
+            SetModeCore(raw, true);
     }
 
     public abstract int OpenTerminalHandle(string name);
