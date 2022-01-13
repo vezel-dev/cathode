@@ -95,8 +95,10 @@ sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
             new(info.srWindow.Right - info.srWindow.Left + 1, info.srWindow.Bottom - info.srWindow.Top + 1) : null;
     }
 
-    protected override void SendSignal(int pid, TerminalSignal signal)
+    public override void GenerateSignal(TerminalSignal signal)
     {
+        using var guard = Control.Guard();
+
         _ = GenerateConsoleCtrlEvent(
             signal switch
             {
@@ -105,7 +107,7 @@ sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
                 TerminalSignal.Close or TerminalSignal.Terminate => throw new PlatformNotSupportedException(),
                 _ => throw new ArgumentOutOfRangeException(nameof(signal)),
             },
-            (uint)pid);
+            0);
     }
 
     void SetModeCore(bool raw, bool flush)

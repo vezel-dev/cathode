@@ -193,20 +193,6 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
         _ = ThreadPool.UnsafeQueueUserWorkItem(state => _resized?.Invoke(size), null);
     }
 
-    protected abstract void SendSignal(int pid, TerminalSignal signal);
-
-    public override void GenerateSignal(TerminalSignal signal)
-    {
-        using var guard = Control.Guard();
-
-        SendSignal(0, signal);
-    }
-
-    internal void SignalProcess(ChildProcess process, TerminalSignal signal)
-    {
-        SendSignal(process.Id, signal);
-    }
-
     protected abstract void SetMode(bool raw);
 
     public override void EnableRawMode()

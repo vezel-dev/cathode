@@ -94,10 +94,12 @@ abstract class UnixVirtualTerminal : NativeVirtualTerminal<int>
         _sigChld = PosixSignalRegistration.Create(PosixSignal.SIGCHLD, HandleSignal);
     }
 
-    protected override sealed void SendSignal(int pid, TerminalSignal signal)
+    public override sealed void GenerateSignal(TerminalSignal signal)
     {
+        using var guard = Control.Guard();
+
         _ = kill(
-            pid,
+            0,
             signal switch
             {
                 TerminalSignal.Close => SIGHUP,

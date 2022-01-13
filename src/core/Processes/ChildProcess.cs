@@ -167,11 +167,6 @@ public sealed class ChildProcess
             .Run();
     }
 
-    public void SendSignal(TerminalSignal signal)
-    {
-        Terminal.System.SignalProcess(this, signal);
-    }
-
     public void Kill(bool entireProcessTree = true)
     {
         try
