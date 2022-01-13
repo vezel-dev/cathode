@@ -100,9 +100,9 @@ sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
         _ = GenerateConsoleCtrlEvent(
             signal switch
             {
-                TerminalSignal.Close => CTRL_CLOSE_EVENT,
                 TerminalSignal.Interrupt => CTRL_C_EVENT,
-                TerminalSignal.Quit or TerminalSignal.Terminate => throw new PlatformNotSupportedException(),
+                TerminalSignal.Quit => CTRL_BREAK_EVENT,
+                TerminalSignal.Close or TerminalSignal.Terminate => throw new PlatformNotSupportedException(),
                 _ => throw new ArgumentOutOfRangeException(nameof(signal)),
             },
             (uint)pid);
