@@ -8,7 +8,7 @@ try
 {
     await OutAsync(
         new ControlBuilder()
-            .SetDecorations(bold: true)
+            .SetDecorations(intense: true)
             .PrintLine("The last string entered will be displayed here.")
             .ResetAttributes()
             .PrintLine(new string('-', Size.Width)));

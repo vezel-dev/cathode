@@ -587,7 +587,7 @@ public sealed class ControlBuilder
     }
 
     public ControlBuilder SetDecorations(
-        bool bold = false,
+        bool intense = false,
         bool faint = false,
         bool italic = false,
         bool underline = false,
@@ -619,7 +619,7 @@ public sealed class ControlBuilder
             _ = Print(code);
         }
 
-        HandleMode(bold, "1");
+        HandleMode(intense, "1");
         HandleMode(faint, "2");
         HandleMode(italic, "3");
         HandleMode(underline, "4");

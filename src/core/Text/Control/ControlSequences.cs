@@ -287,7 +287,7 @@ public static class ControlSequences
     }
 
     public static string SetDecorations(
-        bool bold = false,
+        bool intense = false,
         bool faint = false,
         bool italic = false,
         bool underline = false,
@@ -300,7 +300,7 @@ public static class ControlSequences
     {
         return Create(
             cb => cb.SetDecorations(
-                bold,
+                intense,
                 faint,
                 italic,
                 underline,
