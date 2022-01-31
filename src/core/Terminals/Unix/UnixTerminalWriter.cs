@@ -4,12 +4,12 @@ namespace System.Terminals.Unix;
 
 sealed class UnixTerminalWriter : NativeTerminalWriter<UnixVirtualTerminal, int>
 {
-    readonly object _lock;
+    readonly SemaphoreSlim _semaphore;
 
-    public UnixTerminalWriter(UnixVirtualTerminal terminal, string name, int handle, object @lock)
+    public UnixTerminalWriter(UnixVirtualTerminal terminal, string name, int handle, SemaphoreSlim semaphore)
         : base(terminal, name, handle)
     {
-        _lock = @lock;
+        _semaphore = semaphore;
     }
 
     protected override unsafe int WritePartialCore(ReadOnlySpan<byte> buffer, CancellationToken cancellationToken)
@@ -21,9 +21,7 @@ sealed class UnixTerminalWriter : NativeTerminalWriter<UnixVirtualTerminal, int>
         if (buffer.IsEmpty || !IsValid)
             return buffer.Length;
 
-        cancellationToken.ThrowIfCancellationRequested();
-
-        lock (_lock)
+        using (_semaphore.Enter(cancellationToken))
         {
             fixed (byte* p = &MemoryMarshal.GetReference(buffer))
             {

@@ -30,8 +30,8 @@ abstract class UnixVirtualTerminal : NativeVirtualTerminal<int>
     [SuppressMessage("Usage", "CA2214")]
     protected UnixVirtualTerminal()
     {
-        var inLock = new object();
-        var outLock = new object();
+        var inLock = new SemaphoreSlim(1, 1);
+        var outLock = new SemaphoreSlim(1, 1);
 
         StandardIn = new(this, "standard input", STDIN_FILENO, new(this), inLock);
         StandardOut = new(this, "standard output", STDOUT_FILENO, outLock);

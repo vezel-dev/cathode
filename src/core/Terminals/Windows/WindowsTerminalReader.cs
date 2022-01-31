@@ -5,7 +5,7 @@ namespace System.Terminals.Windows;
 
 sealed class WindowsTerminalReader : NativeTerminalReader<WindowsVirtualTerminal, SafeHandle>
 {
-    readonly object _lock;
+    readonly SemaphoreSlim _semaphore;
 
     readonly byte[] _buffer;
 
@@ -15,10 +15,10 @@ sealed class WindowsTerminalReader : NativeTerminalReader<WindowsVirtualTerminal
         WindowsVirtualTerminal terminal,
         string name,
         SafeHandle handle,
-        object @lock)
+        SemaphoreSlim semaphore)
         : base(terminal, name, handle)
     {
-        _lock = @lock;
+        _semaphore = semaphore;
         _buffer = new byte[System.Terminal.Encoding.GetMaxByteCount(2)];
     }
 
@@ -31,14 +31,12 @@ sealed class WindowsTerminalReader : NativeTerminalReader<WindowsVirtualTerminal
         if (buffer.IsEmpty || !IsValid)
             return 0;
 
-        cancellationToken.ThrowIfCancellationRequested();
-
         if (!IsInteractive)
         {
             bool result;
             uint read;
 
-            lock (_lock)
+            using (_semaphore.Enter(cancellationToken))
                 fixed (byte* p = &MemoryMarshal.GetReference(buffer))
                     result = ReadFile(Handle, p, (uint)buffer.Length, &read, null);
 
@@ -58,7 +56,7 @@ sealed class WindowsTerminalReader : NativeTerminalReader<WindowsVirtualTerminal
         // that into UTF-8 in a separate buffer. Finally, we copy as many bytes as possible/requested from the UTF-8
         // buffer to the caller-provided buffer.
 
-        lock (_lock)
+        using (_semaphore.Enter(cancellationToken))
         {
             if (_buffered.IsEmpty)
             {

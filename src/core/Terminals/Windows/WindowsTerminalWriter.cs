@@ -4,12 +4,16 @@ namespace System.Terminals.Windows;
 
 sealed class WindowsTerminalWriter : NativeTerminalWriter<WindowsVirtualTerminal, SafeHandle>
 {
-    readonly object _lock;
+    readonly SemaphoreSlim _semaphore;
 
-    public WindowsTerminalWriter(WindowsVirtualTerminal terminal, string name, SafeHandle handle, object @lock)
+    public WindowsTerminalWriter(
+        WindowsVirtualTerminal terminal,
+        string name,
+        SafeHandle handle,
+        SemaphoreSlim semaphore)
         : base(terminal, name, handle)
     {
-        _lock = @lock;
+        _semaphore = semaphore;
     }
 
     protected override unsafe int WritePartialCore(ReadOnlySpan<byte> buffer, CancellationToken cancellationToken)
@@ -21,12 +25,10 @@ sealed class WindowsTerminalWriter : NativeTerminalWriter<WindowsVirtualTerminal
         if (buffer.IsEmpty || !IsValid)
             return buffer.Length;
 
-        cancellationToken.ThrowIfCancellationRequested();
-
         bool result;
         uint written;
 
-        lock (_lock)
+        using (_semaphore.Enter(cancellationToken))
             fixed (byte* p = &MemoryMarshal.GetReference(buffer))
                 result = WriteFile(Handle, p, (uint)buffer.Length, &written, null);
 

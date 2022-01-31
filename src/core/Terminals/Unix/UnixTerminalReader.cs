@@ -4,7 +4,7 @@ namespace System.Terminals.Unix;
 
 sealed class UnixTerminalReader : NativeTerminalReader<UnixVirtualTerminal, int>
 {
-    readonly object _lock;
+    readonly SemaphoreSlim _semaphore;
 
     readonly UnixCancellationPipe _cancellationPipe;
 
@@ -13,10 +13,10 @@ sealed class UnixTerminalReader : NativeTerminalReader<UnixVirtualTerminal, int>
         string name,
         int handle,
         UnixCancellationPipe cancellationPipe,
-        object @lock)
+        SemaphoreSlim semaphore)
         : base(terminal, name, handle)
     {
-        _lock = @lock;
+        _semaphore = semaphore;
         _cancellationPipe = cancellationPipe;
     }
 
@@ -29,9 +29,7 @@ sealed class UnixTerminalReader : NativeTerminalReader<UnixVirtualTerminal, int>
         if (buffer.IsEmpty || !IsValid)
             return 0;
 
-        cancellationToken.ThrowIfCancellationRequested();
-
-        lock (_lock)
+        using (_semaphore.Enter(cancellationToken))
         {
             _cancellationPipe.PollWithCancellation(Handle, cancellationToken);
 

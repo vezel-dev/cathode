@@ -54,8 +54,8 @@ sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
     [SuppressMessage("Reliability", "CA2000")]
     WindowsVirtualTerminal()
     {
-        var inLock = new object();
-        var outLock = new object();
+        var inLock = new SemaphoreSlim(1, 1);
+        var outLock = new SemaphoreSlim(1, 1);
 
         StandardIn = new(this, "standard input", GetStdHandle_SafeHandle(STD_HANDLE.STD_INPUT_HANDLE), inLock);
         StandardOut = new(this, "standard output", GetStdHandle_SafeHandle(STD_HANDLE.STD_OUTPUT_HANDLE), outLock);
