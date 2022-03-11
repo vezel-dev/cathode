@@ -18,8 +18,6 @@ This project offers the following packages:
   the terminal hosting model.
 * [Terminal.Extensions](https://www.nuget.org/packages/Terminal.Extensions):
   Provides terminal hosting and logging for the .NET Generic Host.
-* [Terminal.Testing](https://www.nuget.org/packages/Terminal.Testing): Provides
-  testing utilities for terminal applications.
 
 See the
 [sample programs](https://github.com/alexrp/system-terminal/tree/master/src/samples)

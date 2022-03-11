@@ -49,25 +49,21 @@ This project offers the following packages:
 | [![Terminal.Analyzers][analyzers-img]][analyzers-pkg] | Provides diagnostic analyzers and source generators. | ![Downloads][analyzers-dls] |
 | [![Terminal.Hosting][hosting-img]][hosting-pkg] | Provides the terminal hosting model. | ![Downloads][hosting-dls] |
 | [![Terminal.Extensions][extensions-img]][extensions-pkg] | Provides terminal hosting and logging for the .NET Generic Host. | ![Downloads][extensions-dls] |
-| [![Terminal.Testing][testing-img]][testing-pkg] | Provides testing utilities for terminal applications. | ![Downloads][testing-dls] |
 
 [core-pkg]: https://www.nuget.org/packages/Terminal
 [analyzers-pkg]: https://www.nuget.org/packages/Terminal.Analyzers
 [hosting-pkg]: https://www.nuget.org/packages/Terminal.Hosting
 [extensions-pkg]: https://www.nuget.org/packages/Terminal.Extensions
-[testing-pkg]: https://www.nuget.org/packages/Terminal.Testing
 
 [core-img]: https://img.shields.io/nuget/v/Terminal?label=Terminal
 [analyzers-img]: https://img.shields.io/nuget/v/Terminal.Analyzers?label=Terminal.Analyzers
 [hosting-img]: https://img.shields.io/nuget/v/Terminal.Hosting?label=Terminal.Hosting
 [extensions-img]: https://img.shields.io/nuget/v/Terminal.Extensions?label=Terminal.Extensions
-[testing-img]: https://img.shields.io/nuget/v/Terminal.Testing?label=Terminal.Testing
 
 [core-dls]: https://img.shields.io/nuget/dt/Terminal?label=
 [analyzers-dls]: https://img.shields.io/nuget/dt/Terminal.Analyzers?label=
 [hosting-dls]: https://img.shields.io/nuget/dt/Terminal.Hosting?label=
 [extensions-dls]: https://img.shields.io/nuget/dt/Terminal.Extensions?label=
-[testing-dls]: https://img.shields.io/nuget/dt/Terminal.Testing?label=
 
 To install a package, run `dotnet add package <name>`.
 

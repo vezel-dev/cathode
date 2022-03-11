@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <AssemblyName>System.Terminal.Testing</AssemblyName>
-        <IsPackable>true</IsPackable>
         <PackageDescription>$(PackageDescription)
 
 This packages provides testing utilities for terminal applications.</PackageDescription>
