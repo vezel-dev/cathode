@@ -11,19 +11,18 @@ env:
     DOTNET_CLI_TELEMETRY_OPTOUT: true
     DOTNET_GENERATE_ASPNET_CERTIFICATE: false
     DOTNET_NOLOGO: true
-    NUKE_TELEMETRY_OPTOUT: true
 jobs:
     release:
         if: github.repository == 'alexrp/system-terminal'
         runs-on: ubuntu-latest
         steps:
             - name: Clone repository
-              uses: actions/checkout@v2.4.0
+              uses: actions/checkout@v3.0.0
               with:
                   fetch-depth: 0
                   submodules: recursive
             - name: Set up .NET
-              uses: actions/setup-dotnet@v1.8.2
+              uses: actions/setup-dotnet@v2.0.0
             - name: Build project
               run: |
                   dotnet tool restore
