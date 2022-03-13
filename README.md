@@ -100,4 +100,4 @@ while developing Cathode.)
 
 ## Statistics
 
-![Repobeats](https://repobeats.axiom.co/api/embed/56d1f4cda2c680fe93627ab2f884a3ce78c7d1d6.svg)
+![Repobeats](https://repobeats.axiom.co/api/embed/5384ff8be63554eca628b72efa99d27242b3bd25.svg)
