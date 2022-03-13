@@ -1,4 +1,4 @@
-namespace System;
+namespace Cathode;
 
 public readonly struct TerminalSize : IEquatable<TerminalSize>
 {

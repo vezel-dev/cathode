@@ -1,4 +1,4 @@
-namespace Microsoft.Extensions.Logging.Terminal;
+namespace Cathode.Extensions.Logging;
 
 [SuppressMessage("Design", "CA1815")]
 readonly struct TerminalLoggerEntry

@@ -1,4 +1,4 @@
-namespace System.Terminals;
+namespace Cathode.Terminals;
 
 abstract class NativeVirtualTerminal<THandle> : SystemVirtualTerminal
 {

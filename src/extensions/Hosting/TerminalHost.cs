@@ -1,9 +1,10 @@
+using Cathode.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.EventLog;
-using Microsoft.Extensions.Logging.Terminal;
 
-namespace Microsoft.Extensions.Hosting;
+namespace Cathode.Extensions.Hosting;
 
 public static class TerminalHost
 {

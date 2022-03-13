@@ -1,8 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Configuration;
 
-namespace Microsoft.Extensions.Logging.Terminal;
+namespace Cathode.Extensions.Logging;
 
 public static class TerminalLoggingBuilderExtensions
 {

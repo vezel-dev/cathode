@@ -1,7 +1,7 @@
 <Project>
     <PropertyGroup>
-        <Product>System.Terminal</Product>
-        <Description>System.Terminal is a terminal-centric replacement for System.Console.</Description>
+        <Product>Cathode</Product>
+        <Description>Cathode is a terminal-centric replacement for System.Console.</Description>
         <Authors>The $(Product) Maintainers</Authors>
         <Copyright>Copyright © $(Authors)</Copyright>
     </PropertyGroup>
@@ -26,15 +26,15 @@
 
 With the Windows console host now supporting virtual terminal sequences, it
 makes little sense for console interaction to still be centered around the old
-Windows console host and the many limitations it had. System.Terminal provides
-an API centered around a VT100 terminal with some extensions from later models
-and modern terminal emulators. It works on all desktop platforms that .NET 6+
+Windows console host and the many limitations it had. Cathode provides an API
+centered around a VT100 terminal with some extensions from later models and
+modern terminal emulators. It works on all desktop platforms that .NET 6+
 supports.</PackageDescription>
         <PackageLicenseExpression>0BSD</PackageLicenseExpression>
         <PackageOutputPath>$(MSBuildThisFileDirectory)pkg/feed/</PackageOutputPath>
-        <PackageProjectUrl>https://github.com/alexrp/system-terminal</PackageProjectUrl>
+        <PackageProjectUrl>https://github.com/alexrp/cathode</PackageProjectUrl>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <RepositoryUrl>https://github.com/alexrp/system-terminal.git</RepositoryUrl>
+        <RepositoryUrl>https://github.com/alexrp/cathode.git</RepositoryUrl>
         <TargetFramework>net6.0</TargetFramework>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>

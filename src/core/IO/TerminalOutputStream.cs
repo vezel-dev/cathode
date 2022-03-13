@@ -1,4 +1,4 @@
-namespace System.IO;
+namespace Cathode.IO;
 
 public sealed class TerminalOutputStream : TerminalStream
 {

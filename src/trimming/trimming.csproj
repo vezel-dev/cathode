@@ -9,19 +9,22 @@
         <IsPublishable>true</IsPublishable>
         <OutputType>Exe</OutputType>
         <PublishTrimmed>true</PublishTrimmed>
-        <RootNamespace>Trimming</RootNamespace>
+        <RootNamespace>Cathode.Trimming</RootNamespace>
         <TrimmerDefaultAction>link</TrimmerDefaultAction>
         <UseCurrentRuntimeIdentifier>true</UseCurrentRuntimeIdentifier>
     </PropertyGroup>
 
     <ItemGroup>
-        <TrimmerRootAssembly Include="Microsoft.Extensions.Terminal" />
-        <TrimmerRootAssembly Include="System.Terminal" />
-        <TrimmerRootAssembly Include="System.Terminal.Testing" />
+        <TrimmerRootAssembly Include="Cathode" />
+        <TrimmerRootAssembly Include="Cathode.Extensions" />
+        <TrimmerRootAssembly Include="Cathode.Hosting" />
+        <TrimmerRootAssembly Include="Cathode.Testing" />
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="../core/core.csproj" />
         <ProjectReference Include="../extensions/extensions.csproj" />
+        <ProjectReference Include="../hosting/hosting.csproj" />
         <ProjectReference Include="../testing/testing.csproj" />
     </ItemGroup>
 </Project>

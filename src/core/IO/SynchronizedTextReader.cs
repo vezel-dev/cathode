@@ -1,4 +1,6 @@
-namespace System.IO;
+using Cathode.Threading;
+
+namespace Cathode.IO;
 
 sealed class SynchronizedTextReader : TextReader
 {

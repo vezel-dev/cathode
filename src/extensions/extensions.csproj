@@ -1,13 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <AssemblyName>Microsoft.Extensions.Terminal</AssemblyName>
+        <AssemblyName>Cathode.Extensions</AssemblyName>
         <IsPackable>true</IsPackable>
         <PackageDescription>$(PackageDescription)
 
 This package provides terminal hosting and logging for the .NET Generic Host.</PackageDescription>
-        <PackageId>Terminal.Extensions</PackageId>
-        <RootNamespace>Microsoft.Extensions</RootNamespace>
+        <PackageId>Cathode.Extensions</PackageId>
+        <RootNamespace>Cathode.Extensions</RootNamespace>
     </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="buildTransitive/**"
+              Pack="true"
+              PackagePath="%(Identity)" />
+    </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="../core/core.csproj" />
@@ -18,5 +24,5 @@ This package provides terminal hosting and logging for the .NET Generic Host.</P
         <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" />
     </ItemGroup>
 
-    <Import Project="../core/buildTransitive/Terminal.targets" />
+    <Import Project="../core/buildTransitive/Cathode.targets" />
 </Project>

@@ -1,6 +1,7 @@
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Microsoft.Extensions.Logging.Terminal;
+namespace Cathode.Extensions.Logging;
 
 sealed class TerminalLogger : ILogger
 {
@@ -70,8 +71,7 @@ sealed class TerminalLogger : ILogger
 
             _processor.Enqueue(new(
                 array.AsMemory(..span.Length),
-                logLevel >= opts.LogToStandardErrorThreshold ?
-                    System.Terminal.StandardError : System.Terminal.StandardOut));
+                logLevel >= opts.LogToStandardErrorThreshold ? Terminal.StandardError : Terminal.StandardOut));
         }
         finally
         {

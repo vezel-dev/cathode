@@ -1,4 +1,4 @@
-namespace System.Terminals;
+namespace Cathode.Terminals;
 
 abstract class NativeTerminalWriter<TTerminal, THandle> : TerminalWriter
     where TTerminal : NativeVirtualTerminal<THandle>
@@ -27,7 +27,7 @@ abstract class NativeTerminalWriter<TTerminal, THandle> : TerminalWriter
         Handle = handle;
         Stream = new SynchronizedStream(new TerminalOutputStream(this));
         TextWriter =
-            new SynchronizedTextWriter(new StreamWriter(Stream, System.Terminal.Encoding, WriteBufferSize, true)
+            new SynchronizedTextWriter(new StreamWriter(Stream, Cathode.Terminal.Encoding, WriteBufferSize, true)
             {
                 AutoFlush = true,
             });

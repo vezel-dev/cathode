@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <AssemblyName>System.Terminal.Testing</AssemblyName>
+        <AssemblyName>Cathode.Testing</AssemblyName>
         <PackageDescription>$(PackageDescription)
 
 This packages provides testing utilities for terminal applications.</PackageDescription>
-        <PackageId>Terminal.Testing</PackageId>
-        <RootNamespace>System</RootNamespace>
+        <PackageId>Cathode.Testing</PackageId>
+        <RootNamespace>Cathode</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -16,5 +16,5 @@ This packages provides testing utilities for terminal applications.</PackageDesc
         <ProjectReference Include="../core/core.csproj" />
     </ItemGroup>
 
-    <Import Project="../core/buildTransitive/Terminal.targets" />
+    <Import Project="../core/buildTransitive/Cathode.targets" />
 </Project>

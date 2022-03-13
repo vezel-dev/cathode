@@ -1,4 +1,4 @@
-namespace System.Diagnostics;
+namespace Cathode.Diagnostics;
 
 public class TerminalTraceListener : TextWriterTraceListener
 {

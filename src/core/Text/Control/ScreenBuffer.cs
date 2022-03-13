@@ -1,4 +1,4 @@
-namespace System.Text.Control;
+namespace Cathode.Text.Control;
 
 [SuppressMessage("Design", "CA1008")]
 public enum ScreenBuffer

@@ -1,4 +1,6 @@
-namespace Microsoft.Extensions.Logging.Terminal;
+using Microsoft.Extensions.Logging;
+
+namespace Cathode.Extensions.Logging;
 
 public sealed class TerminalLoggerOptions
 {

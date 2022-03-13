@@ -1,7 +1,8 @@
+using Cathode.Threading;
 using Windows.Win32.Foundation;
 using static Windows.Win32.WindowsPInvoke;
 
-namespace System.Terminals.Windows;
+namespace Cathode.Terminals.Windows;
 
 sealed class WindowsTerminalReader : NativeTerminalReader<WindowsVirtualTerminal, SafeHandle>
 {
@@ -19,7 +20,7 @@ sealed class WindowsTerminalReader : NativeTerminalReader<WindowsVirtualTerminal
         : base(terminal, name, handle)
     {
         _semaphore = semaphore;
-        _buffer = new byte[System.Terminal.Encoding.GetMaxByteCount(2)];
+        _buffer = new byte[Cathode.Terminal.Encoding.GetMaxByteCount(2)];
     }
 
     protected override unsafe int ReadPartialCore(Span<byte> buffer, CancellationToken cancellationToken)
@@ -113,7 +114,7 @@ sealed class WindowsTerminalReader : NativeTerminalReader<WindowsVirtualTerminal
 
                     // Encode the UTF-16 code unit(s) into UTF-8 and grab a slice of the buffer corresponding to just
                     // the portion used.
-                    _buffered = _buffer.AsMemory(..System.Terminal.Encoding.GetBytes(units[..chars], _buffer));
+                    _buffered = _buffer.AsMemory(..Cathode.Terminal.Encoding.GetBytes(units[..chars], _buffer));
                 }
             }
 

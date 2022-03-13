@@ -1,6 +1,6 @@
-E:System.AppDomain.ProcessExit;Use System.Hosting.ProgramContext.ProcessExit instead
-E:System.AppDomain.UnhandledException;Use System.Hosting.ProgramContext.UnhandledException instead
-M:System.Environment.Exit(System.Int32);Use System.Hosting.ProgramContext.ExitCode instead
+E:System.AppDomain.ProcessExit;Use Cathode.Hosting.ProgramContext.ProcessExit instead
+E:System.AppDomain.UnhandledException;Use Cathode.Hosting.ProgramContext.UnhandledException instead
+M:System.Environment.Exit(System.Int32);Use Cathode.Hosting.ProgramContext.ExitCode instead
 M:System.Environment.FailFast(System.String);May leave the terminal in an unusable state
 M:System.Environment.FailFast(System.String,System.Exception);May leave the terminal in an unusable state
-P:System.Environment.ExitCode;Use System.Hosting.ProgramContext.ExitCode instead
+P:System.Environment.ExitCode;Use Cathode.Hosting.ProgramContext.ExitCode instead

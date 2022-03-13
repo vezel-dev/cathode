@@ -1,6 +1,7 @@
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Microsoft.Extensions.Logging.Terminal;
+namespace Cathode.Extensions.Logging;
 
 [ProviderAlias(nameof(Terminal))]
 public sealed class TerminalLoggerProvider : ILoggerProvider, ISupportExternalScope

@@ -1,4 +1,4 @@
-namespace System.Hosting;
+namespace Cathode.Hosting;
 
 public sealed class ProgramContext
 {

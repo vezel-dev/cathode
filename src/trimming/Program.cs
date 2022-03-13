@@ -1,4 +1,4 @@
-namespace Trimming;
+namespace Cathode.Trimming;
 
 static class Program
 {

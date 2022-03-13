@@ -1,6 +1,6 @@
 using Wcwidth;
 
-namespace System.Text;
+namespace Cathode.Text;
 
 public static class MonospaceWidth
 {

@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <AssemblyName>System.Terminal</AssemblyName>
+        <AssemblyName>Cathode</AssemblyName>
         <IsPackable>true</IsPackable>
         <PackageDescription>$(PackageDescription)
 
 This package provides the core terminal API.</PackageDescription>
-        <PackageId>Terminal</PackageId>
-        <RootNamespace>System</RootNamespace>
+        <PackageId>Cathode</PackageId>
+        <RootNamespace>Cathode</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -39,5 +39,5 @@ This package provides the core terminal API.</PackageDescription>
         <PackageReference Include="Wcwidth" />
     </ItemGroup>
 
-    <Import Project="../core/buildTransitive/Terminal.targets" />
+    <Import Project="buildTransitive/Cathode.targets" />
 </Project>

@@ -1,6 +1,6 @@
-using static System.Unix.UnixPInvoke;
+using static Cathode.Unix.UnixPInvoke;
 
-namespace System.Terminals.Unix;
+namespace Cathode.Terminals.Unix;
 
 sealed class UnixCancellationPipe
 {

@@ -1,6 +1,7 @@
+using Cathode.Threading;
 using static Windows.Win32.WindowsPInvoke;
 
-namespace System.Terminals.Windows;
+namespace Cathode.Terminals.Windows;
 
 sealed class WindowsTerminalWriter : NativeTerminalWriter<WindowsVirtualTerminal, SafeHandle>
 {

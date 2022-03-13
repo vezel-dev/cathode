@@ -1,4 +1,4 @@
-namespace System.Processes;
+namespace Cathode.Processes;
 
 public sealed class ChildProcessReader
 {

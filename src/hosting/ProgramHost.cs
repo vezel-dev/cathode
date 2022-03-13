@@ -1,4 +1,4 @@
-namespace System.Hosting;
+namespace Cathode.Hosting;
 
 [EditorBrowsable(EditorBrowsableState.Never)]
 [SuppressMessage("ApiDesign", "RS0030")]

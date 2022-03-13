@@ -13,7 +13,7 @@ env:
     DOTNET_NOLOGO: true
 jobs:
     release:
-        if: github.repository == 'alexrp/system-terminal'
+        if: github.repository == 'alexrp/cathode'
         runs-on: ubuntu-latest
         steps:
             - name: Clone repository

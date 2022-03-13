@@ -1,6 +1,7 @@
-using static System.Unix.UnixPInvoke;
+using Cathode.Threading;
+using static Cathode.Unix.UnixPInvoke;
 
-namespace System.Terminals.Unix;
+namespace Cathode.Terminals.Unix;
 
 sealed class UnixTerminalWriter : NativeTerminalWriter<UnixVirtualTerminal, int>
 {

@@ -1,4 +1,4 @@
-namespace System.Runtime.InteropServices;
+namespace Cathode.Terminals.Unix;
 
 sealed class PosixSignalGuard : IDisposable
 {

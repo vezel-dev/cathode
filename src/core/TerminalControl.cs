@@ -1,4 +1,6 @@
-namespace System;
+using Cathode.Threading;
+
+namespace Cathode;
 
 public sealed class TerminalControl
 {

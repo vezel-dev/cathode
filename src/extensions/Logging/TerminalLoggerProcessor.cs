@@ -1,4 +1,4 @@
-namespace Microsoft.Extensions.Logging.Terminal;
+namespace Cathode.Extensions.Logging;
 
 sealed class TerminalLoggerProcessor : IDisposable
 {

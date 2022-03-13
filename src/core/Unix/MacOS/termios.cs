@@ -1,4 +1,4 @@
-namespace System.Unix.MacOS;
+namespace Cathode.Unix.MacOS;
 
 [SuppressMessage("Style", "IDE1006")]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300")]

@@ -1,6 +1,6 @@
 using Microsoft.CodeAnalysis;
 
-namespace System.Analyzers;
+namespace Cathode.Analyzers;
 
 static class DiagnosticDescriptors
 {
@@ -47,7 +47,7 @@ static class DiagnosticDescriptors
             p.SetValue(
                 null,
                 new DiagnosticDescriptor(
-                    $"TERM{id}", attr.Title, attr.Message, "System.Terminal", attr.Severity, true));
+                    $"CATH{id}", attr.Title, attr.Message, "Cathode", attr.Severity, true));
 
             id++;
         }

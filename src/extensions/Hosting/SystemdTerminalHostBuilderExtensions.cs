@@ -1,8 +1,9 @@
+using Cathode.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.Systemd;
-using Microsoft.Extensions.Logging.Terminal;
 
-namespace Microsoft.Extensions.Hosting;
+namespace Cathode.Extensions.Hosting;
 
 public static class SystemdTerminalHostBuilderExtensions
 {

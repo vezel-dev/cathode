@@ -1,4 +1,4 @@
-namespace System.Text.Control;
+namespace Cathode.Text.Control;
 
 public enum ProgressState
 {

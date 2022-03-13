@@ -1,7 +1,7 @@
-# System.Terminal
+# Cathode
 
 <div align="center">
-    <img src="system-terminal.svg"
+    <img src="cathode.svg"
          width="128" />
 </div>
 
@@ -13,31 +13,31 @@
 
 <div align="center">
 
-[![License](https://img.shields.io/github/license/alexrp/system-terminal?color=brown)](LICENSE.md)
-[![Commits](https://img.shields.io/github/commit-activity/m/alexrp/system-terminal/master?label=commits&color=slateblue)](https://github.com/alexrp/system-terminal/commits/master)
-[![Build](https://img.shields.io/github/workflow/status/alexrp/system-terminal/Build/master)](https://github.com/alexrp/system-terminal/actions/workflows/build.yml)
+[![License](https://img.shields.io/github/license/alexrp/cathode?color=brown)](LICENSE.md)
+[![Commits](https://img.shields.io/github/commit-activity/m/alexrp/cathode/master?label=commits&color=slateblue)](https://github.com/alexrp/cathode/commits/master)
+[![Build](https://img.shields.io/github/workflow/status/alexrp/cathode/Build/master)](https://github.com/alexrp/cathode/actions/workflows/build.yml)
 [![Sponsors](https://img.shields.io/github/sponsors/alexrp?color=mediumorchid)](https://github.com/sponsors/alexrp)
-[![Discussions](https://img.shields.io/github/discussions/alexrp/system-terminal?color=teal)](https://github.com/alexrp/system-terminal/discussions)
+[![Discussions](https://img.shields.io/github/discussions/alexrp/cathode?color=teal)](https://github.com/alexrp/cathode/discussions)
 
 </div>
 
 ---
 
-System.Terminal is a toolkit for writing terminal-based applications. It is
-effectively a complete replacement for System.Console.
+Cathode is a toolkit for writing terminal-based applications. It is effectivel
+a complete replacement for System.Console.
 
 With the Windows console host now supporting virtual terminal sequences, it
 makes little sense for console interaction to still be centered around the old
-Windows console host and the many limitations it had. System.Terminal provides
-an API centered around a [VT100 terminal](https://vt100.net) with some
-extensions from later models and modern terminal emulators. It works on all
-desktop platforms that .NET 6+ supports.
+Windows console host and the many limitations it had. Cathode provides an API
+centered around a [VT100 terminal](https://vt100.net) with some extensions from
+later models and modern terminal emulators. It works on all desktop platforms
+that .NET 6+ supports.
 
-Please note that, since System.Terminal replaces a very fundamental component of
-the framework, the use of certain framework APIs becomes problematic. As an
-example, intermixing System.Terminal and System.Console usage *will* break.
-Referencing System.Terminal (or a package that uses it) will pull in a Roslyn
-analyzer which will diagnose problematic APIs and suggest working replacements.
+Please note that, since Cathode replaces a very fundamental component of the
+framework, the use of certain framework APIs becomes problematic. As an example,
+intermixing Cathode and System.Console usage *will* break. Referencing Cathode
+(or a package that uses it) will pull in a Roslyn analyzer which will diagnose
+problematic APIs and suggest working replacements.
 
 ## Usage
 
@@ -45,25 +45,25 @@ This project offers the following packages:
 
 | Package | Description | Downloads |
 | -: | - | :- |
-| [![Terminal][core-img]][core-pkg] | Provides the core terminal API. | ![Downloads][core-dls] |
-| [![Terminal.Analyzers][analyzers-img]][analyzers-pkg] | Provides diagnostic analyzers and source generators. | ![Downloads][analyzers-dls] |
-| [![Terminal.Hosting][hosting-img]][hosting-pkg] | Provides the terminal hosting model. | ![Downloads][hosting-dls] |
-| [![Terminal.Extensions][extensions-img]][extensions-pkg] | Provides terminal hosting and logging for the .NET Generic Host. | ![Downloads][extensions-dls] |
+| [![Cathode][core-img]][core-pkg] | Provides the core terminal API. | ![Downloads][core-dls] |
+| [![Cathode.Analyzers][analyzers-img]][analyzers-pkg] | Provides diagnostic analyzers and source generators. | ![Downloads][analyzers-dls] |
+| [![Cathode.Hosting][hosting-img]][hosting-pkg] | Provides the terminal hosting model. | ![Downloads][hosting-dls] |
+| [![Cathode.Extensions][extensions-img]][extensions-pkg] | Provides terminal hosting and logging for the .NET Generic Host. | ![Downloads][extensions-dls] |
 
-[core-pkg]: https://www.nuget.org/packages/Terminal
-[analyzers-pkg]: https://www.nuget.org/packages/Terminal.Analyzers
-[hosting-pkg]: https://www.nuget.org/packages/Terminal.Hosting
-[extensions-pkg]: https://www.nuget.org/packages/Terminal.Extensions
+[core-pkg]: https://www.nuget.org/packages/Cathode
+[analyzers-pkg]: https://www.nuget.org/packages/Cathode.Analyzers
+[hosting-pkg]: https://www.nuget.org/packages/Cathode.Hosting
+[extensions-pkg]: https://www.nuget.org/packages/Cathode.Extensions
 
-[core-img]: https://img.shields.io/nuget/v/Terminal?label=Terminal
-[analyzers-img]: https://img.shields.io/nuget/v/Terminal.Analyzers?label=Terminal.Analyzers
-[hosting-img]: https://img.shields.io/nuget/v/Terminal.Hosting?label=Terminal.Hosting
-[extensions-img]: https://img.shields.io/nuget/v/Terminal.Extensions?label=Terminal.Extensions
+[core-img]: https://img.shields.io/nuget/v/Cathode?label=Cathode
+[analyzers-img]: https://img.shields.io/nuget/v/Cathode.Analyzers?label=Cathode.Analyzers
+[hosting-img]: https://img.shields.io/nuget/v/Cathode.Hosting?label=Cathode.Hosting
+[extensions-img]: https://img.shields.io/nuget/v/Cathode.Extensions?label=Cathode.Extensions
 
-[core-dls]: https://img.shields.io/nuget/dt/Terminal?label=
-[analyzers-dls]: https://img.shields.io/nuget/dt/Terminal.Analyzers?label=
-[hosting-dls]: https://img.shields.io/nuget/dt/Terminal.Hosting?label=
-[extensions-dls]: https://img.shields.io/nuget/dt/Terminal.Extensions?label=
+[core-dls]: https://img.shields.io/nuget/dt/Cathode?label=
+[analyzers-dls]: https://img.shields.io/nuget/dt/Cathode.Analyzers?label=
+[hosting-dls]: https://img.shields.io/nuget/dt/Cathode.Hosting?label=
+[extensions-dls]: https://img.shields.io/nuget/dt/Cathode.Extensions?label=
 
 To install a package, run `dotnet add package <name>`.
 
@@ -96,7 +96,7 @@ emulators:
 
 (Even if you are using a terminal emulator that is not listed here, chances are
 that it will work just fine; these are just the ones that are tested regularly
-while developing System.Terminal.)
+while developing Cathode.)
 
 ## Statistics
 

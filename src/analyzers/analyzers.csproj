@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <AssemblyName>System.Terminal.Analyzers</AssemblyName>
+        <AssemblyName>Cathode.Analyzers</AssemblyName>
         <BuildOutputTargetFolder>analyzers/dotnet/cs</BuildOutputTargetFolder>
         <DevelopmentDependency>true</DevelopmentDependency>
         <IsPackable>true</IsPackable>
@@ -9,8 +9,8 @@
         <PackageDescription>$(PackageDescription)
 
 This package provides diagnostic analyzers and source generators.</PackageDescription>
-        <PackageId>Terminal.Analyzers</PackageId>
-        <RootNamespace>System.Analyzers</RootNamespace>
+        <PackageId>Cathode.Analyzers</PackageId>
+        <RootNamespace>Cathode.Analyzers</RootNamespace>
         <TargetFramework>netstandard2.0</TargetFramework>
     </PropertyGroup>
 

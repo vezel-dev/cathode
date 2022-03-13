@@ -1,9 +1,9 @@
-using System.Unix;
-using System.Unix.Linux;
-using static System.Unix.Linux.LinuxPInvoke;
-using static System.Unix.UnixPInvoke;
+using Cathode.Unix;
+using Cathode.Unix.Linux;
+using static Cathode.Unix.Linux.LinuxPInvoke;
+using static Cathode.Unix.UnixPInvoke;
 
-namespace System.Terminals.Unix.Linux;
+namespace Cathode.Terminals.Unix.Linux;
 
 sealed class LinuxVirtualTerminal : UnixVirtualTerminal
 {

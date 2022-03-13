@@ -1,4 +1,4 @@
-namespace System.Terminals;
+namespace Cathode.Terminals;
 
 abstract class NativeTerminalReader<TTerminal, THandle> : TerminalReader
     where TTerminal : NativeVirtualTerminal<THandle>
@@ -28,7 +28,8 @@ abstract class NativeTerminalReader<TTerminal, THandle> : TerminalReader
         Handle = handle;
         Stream = new SynchronizedStream(new TerminalInputStream(this));
         TextReader =
-            new SynchronizedTextReader(new StreamReader(Stream, System.Terminal.Encoding, false, ReadBufferSize, true));
+            new SynchronizedTextReader(
+                new StreamReader(Stream, Cathode.Terminal.Encoding, false, ReadBufferSize, true));
         IsValid = terminal.IsHandleValid(handle, false);
         IsInteractive = terminal.IsHandleInteractive(handle);
     }

@@ -1,4 +1,4 @@
-namespace System.IO;
+namespace Cathode.IO;
 
 [SuppressMessage("Performance", "CA1844")]
 public abstract class TerminalStream : Stream

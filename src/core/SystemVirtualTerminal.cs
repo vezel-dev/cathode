@@ -1,4 +1,4 @@
-namespace System;
+namespace Cathode;
 
 public abstract class SystemVirtualTerminal : VirtualTerminal
 {

@@ -1,6 +1,6 @@
-T:Microsoft.Extensions.Hosting.Host;Use the Terminal.Extensions package instead
-T:Microsoft.Extensions.Logging.Console.ConsoleLoggerProvider;Use the Terminal.Extensions package instead
-T:Microsoft.Extensions.Logging.ConsoleLoggerExtensions;Use the Terminal.Extensions package instead
-T:System.Console;Use System.Terminal instead
-T:System.Diagnostics.ConsoleTraceListener;Use System.Diagnostics.TerminalTraceListener instead
-T:System.Diagnostics.Process;Use System.Processes.ChildProcess instead
+T:Microsoft.Extensions.Hosting.Host;Use the Cathode.Extensions package instead
+T:Microsoft.Extensions.Logging.Console.ConsoleLoggerProvider;Use the Cathode.Extensions package instead
+T:Microsoft.Extensions.Logging.ConsoleLoggerExtensions;Use the Cathode.Extensions package instead
+T:System.Console;Use Cathode.Terminal instead
+T:System.Diagnostics.ConsoleTraceListener;Use Cathode.Diagnostics.TerminalTraceListener instead
+T:System.Diagnostics.Process;Use Cathode.Processes.ChildProcess instead

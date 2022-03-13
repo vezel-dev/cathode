@@ -1,6 +1,6 @@
-using static System.Text.Control.ControlConstants;
+using static Cathode.Text.Control.ControlConstants;
 
-namespace System.Text.Control;
+namespace Cathode.Text.Control;
 
 public sealed class ControlBuilder
 {

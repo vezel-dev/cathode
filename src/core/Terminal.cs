@@ -1,8 +1,8 @@
-using System.Terminals.Unix.Linux;
-using System.Terminals.Unix.MacOS;
-using System.Terminals.Windows;
+using Cathode.Terminals.Unix.Linux;
+using Cathode.Terminals.Unix.MacOS;
+using Cathode.Terminals.Windows;
 
-namespace System;
+namespace Cathode;
 
 public static class Terminal
 {

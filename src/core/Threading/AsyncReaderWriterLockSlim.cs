@@ -1,4 +1,4 @@
-namespace System.Threading;
+namespace Cathode.Threading;
 
 sealed class AsyncReaderWriterLockSlim
 {

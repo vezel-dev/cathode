@@ -1,9 +1,9 @@
-using System.Unix;
-using System.Unix.MacOS;
-using static System.Unix.MacOS.MacOSPInvoke;
-using static System.Unix.UnixPInvoke;
+using Cathode.Unix;
+using Cathode.Unix.MacOS;
+using static Cathode.Unix.MacOS.MacOSPInvoke;
+using static Cathode.Unix.UnixPInvoke;
 
-namespace System.Terminals.Unix.MacOS;
+namespace Cathode.Terminals.Unix.MacOS;
 
 sealed class MacOSVirtualTerminal : UnixVirtualTerminal
 {

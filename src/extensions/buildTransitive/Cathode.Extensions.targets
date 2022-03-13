@@ -1,0 +1,6 @@
+<Project>
+    <ItemGroup Condition="'$(UsingMicrosoftNETSdkWeb)' == 'true' and ('$(ImplicitUsings)' == 'true' or '$(ImplicitUsings)' == 'enable')">
+        <Using Include="Cathode.Extensions.Hosting" />
+        <Using Include="Cathode.Extensions.Logging" />
+    </ItemGroup>
+</Project>

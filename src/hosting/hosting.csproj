@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <AssemblyName>System.Terminal.Hosting</AssemblyName>
+        <AssemblyName>Cathode.Hosting</AssemblyName>
         <IsPackable>true</IsPackable>
         <PackageDescription>$(PackageDescription)
 
 This package provides the terminal hosting model.</PackageDescription>
-        <PackageId>Terminal.Hosting</PackageId>
-        <RootNamespace>System.Hosting</RootNamespace>
+        <PackageId>Cathode.Hosting</PackageId>
+        <RootNamespace>Cathode.Hosting</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -19,5 +19,5 @@ This package provides the terminal hosting model.</PackageDescription>
         <ProjectReference Include="../core/core.csproj" />
     </ItemGroup>
 
-    <Import Project="../hosting/buildTransitive/Terminal.Hosting.targets" />
+    <Import Project="../hosting/buildTransitive/Cathode.Hosting.targets" />
 </Project>
