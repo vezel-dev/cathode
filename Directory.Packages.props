@@ -1,7 +1,7 @@
 <Project>
     <ItemGroup>
         <PackageVersion Include="Microsoft.CodeAnalysis.BannedApiAnalyzers"
-                        Version="3.3.4-beta1.22068.2" />
+                        Version="3.3.3" />
         <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces"
                         Version="4.0.1" />
         <PackageVersion Include="Microsoft.Extensions.Hosting"
