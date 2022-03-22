@@ -4,7 +4,7 @@ namespace Cathode.Text;
 
 public static class MonospaceWidth
 {
-    const Wcwidth.Unicode Version = Wcwidth.Unicode.Version_14_0_0;
+    const Unicode Version = Unicode.Version_14_0_0;
 
     public static int? Measure(Rune value)
     {
