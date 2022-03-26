@@ -53,7 +53,7 @@
             BeforeTargets="GenerateNuspec"
             Condition="'$(IsPackable)' == 'true'">
         <PropertyGroup>
-            <PackageReleaseNotes>https://github.com/alexrp/cathode/releases/tag/v$(Version)</PackageReleaseNotes>
+            <PackageReleaseNotes>https://github.com/vezel-dev/cathode/releases/tag/v$(Version)</PackageReleaseNotes>
         </PropertyGroup>
     </Target>
 

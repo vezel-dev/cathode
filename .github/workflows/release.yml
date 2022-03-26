@@ -13,7 +13,7 @@ env:
     DOTNET_NOLOGO: true
 jobs:
     release:
-        if: github.repository == 'alexrp/cathode'
+        if: github.repository == 'vezel-dev/cathode'
         runs-on: ubuntu-latest
         steps:
             - name: Clone repository

@@ -22,8 +22,8 @@ This project offers the following packages:
   Provides terminal hosting and logging for the .NET Generic Host.
 
 See the
-[sample programs](https://github.com/alexrp/cathode/tree/master/src/samples)
+[sample programs](https://github.com/vezel-dev/cathode/tree/master/src/samples)
 for examples of what the API can do.
 
 For more information, please visit the
-[project page](https://github.com/alexrp/cathode).
+[project page](https://github.com/vezel-dev/cathode).

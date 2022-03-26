@@ -1,10 +1,10 @@
 # Support
 
 The project has a [GitHub Discussions](https://docs.github.com/en/discussions) forum:
-[![GitHub Discussions](https://img.shields.io/github/discussions/alexrp/cathode)](https://github.com/alexrp/cathode/discussions)
+[![GitHub Discussions](https://img.shields.io/github/discussions/vezel-dev/cathode)](https://github.com/vezel-dev/cathode/discussions)
 
 Please do *not* use the
-[issue tracker](https://github.com/alexrp/cathode/issues) for support requests.
+[issue tracker](https://github.com/vezel-dev/cathode/issues) for support requests.
 
 When seeking help, please note the following:
 

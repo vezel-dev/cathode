@@ -13,11 +13,10 @@
 
 <div align="center">
 
-[![License](https://img.shields.io/github/license/alexrp/cathode?color=brown)](LICENSE.md)
-[![Commits](https://img.shields.io/github/commit-activity/m/alexrp/cathode/master?label=commits&color=slateblue)](https://github.com/alexrp/cathode/commits/master)
-[![Build](https://img.shields.io/github/workflow/status/alexrp/cathode/Build/master)](https://github.com/alexrp/cathode/actions/workflows/build.yml)
-[![Sponsors](https://img.shields.io/github/sponsors/alexrp?color=mediumorchid)](https://github.com/sponsors/alexrp)
-[![Discussions](https://img.shields.io/github/discussions/alexrp/cathode?color=teal)](https://github.com/alexrp/cathode/discussions)
+[![License](https://img.shields.io/github/license/vezel-dev/cathode?color=brown)](LICENSE.md)
+[![Commits](https://img.shields.io/github/commit-activity/m/vezel-dev/cathode/master?label=commits&color=slateblue)](https://github.com/vezel-dev/cathode/commits/master)
+[![Build](https://img.shields.io/github/workflow/status/vezel-dev/cathode/Build/master)](https://github.com/vezel-dev/cathode/actions/workflows/build.yml)
+[![Discussions](https://img.shields.io/github/discussions/vezel-dev/cathode?color=teal)](https://github.com/vezel-dev/cathode/discussions)
 
 </div>
 

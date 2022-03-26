@@ -32,9 +32,9 @@ modern terminal emulators. It works on all desktop platforms that .NET 6+
 supports.</PackageDescription>
         <PackageLicenseExpression>0BSD</PackageLicenseExpression>
         <PackageOutputPath>$(MSBuildThisFileDirectory)pkg/feed/</PackageOutputPath>
-        <PackageProjectUrl>https://github.com/alexrp/cathode</PackageProjectUrl>
+        <PackageProjectUrl>https://github.com/vezel-dev/cathode</PackageProjectUrl>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <RepositoryUrl>https://github.com/alexrp/cathode.git</RepositoryUrl>
+        <RepositoryUrl>https://github.com/vezel-dev/cathode.git</RepositoryUrl>
         <TargetFramework>net6.0</TargetFramework>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
