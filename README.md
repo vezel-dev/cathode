@@ -96,7 +96,3 @@ emulators:
 (Even if you are using a terminal emulator that is not listed here, chances are
 that it will work just fine; these are just the ones that are tested regularly
 while developing Cathode.)
-
-## Statistics
-
-![Repobeats](https://repobeats.axiom.co/api/embed/5384ff8be63554eca628b72efa99d27242b3bd25.svg)
