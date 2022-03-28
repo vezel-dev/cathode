@@ -25,6 +25,9 @@
   "configurations": [
     {
       "name": ".NET: Launch (External)",
+      "presentation": {
+        "group": "cathode"
+      },
       "type": "coreclr",
       "request": "launch",
       "stopAtEntry": true,
@@ -40,6 +43,9 @@
     },
     {
       "name": ".NET: Launch (Integrated)",
+      "presentation": {
+        "group": "cathode"
+      },
       "type": "coreclr",
       "request": "launch",
       "stopAtEntry": true,
@@ -55,6 +61,9 @@
     },
     {
       "name": ".NET: Attach",
+      "presentation": {
+        "group": "cathode"
+      },
       "type": "coreclr",
       "request": "attach",
       "suppressJITOptimizations": true,
