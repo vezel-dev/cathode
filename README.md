@@ -22,7 +22,7 @@
 
 ---
 
-Cathode is a toolkit for writing terminal-based applications. It is effectivel
+Cathode is a toolkit for writing terminal-based applications. It is effectively
 a complete replacement for System.Console.
 
 With the Windows console host now supporting virtual terminal sequences, it
