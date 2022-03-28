@@ -2,7 +2,8 @@
     <PropertyGroup>
         <Product>Cathode</Product>
         <Description>Cathode is a terminal-centric replacement for System.Console.</Description>
-        <Authors>The $(Product) Maintainers</Authors>
+        <Company>Vezel</Company>
+        <Authors>$(Company) Maintainers</Authors>
         <Copyright>Copyright © $(Authors)</Copyright>
     </PropertyGroup>
 
