@@ -1,5 +1,3 @@
-is_global = true
-
 csharp_indent_block_contents = true
 csharp_indent_braces = false
 csharp_indent_case_contents = true
