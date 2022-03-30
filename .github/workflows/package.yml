@@ -2,7 +2,6 @@
 name: Package
 on:
     push:
-    workflow_dispatch:
 defaults:
     run:
         shell: bash
