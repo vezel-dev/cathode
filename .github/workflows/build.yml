@@ -46,3 +46,17 @@ jobs:
                       --skip scrolling \
                       --skip signals \
                       --skip width
+            - name: Upload GitHub packages
+              if: github.event_name == 'push' && github.repository == 'vezel-dev/cathode' && github.ref == 'refs/heads/master' && matrix.os == 'ubuntu-latest' && matrix.cfg == 'Debug'
+              run: |
+                  dotnet tool run gpr push pkg/feed/*.nupkg -k ${{ secrets.GITHUB_TOKEN }}
+            - name: Prune GitHub packages
+              if: github.event_name == 'push' && github.repository == 'vezel-dev/cathode' && github.ref == 'refs/heads/master' && matrix.os == 'ubuntu-latest' && matrix.cfg == 'Debug'
+              uses: SmartsquareGmbH/delete-old-packages@v0.4.0
+              with:
+                  names: |
+                      Cathode
+                      Cathode.Analyzers
+                      Cathode.Extensions
+                      Cathode.Hosting
+                  keep: 5

@@ -50,6 +50,12 @@
         "dotnet-trace"
       ]
     },
+    "gpr": {
+      "version": "0.1.281",
+      "commands": [
+        "gpr"
+      ]
+    },
     "nbgv": {
       "version": "3.5.86-alpha",
       "commands": [
