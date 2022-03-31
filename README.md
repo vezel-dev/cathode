@@ -22,21 +22,21 @@
 
 ---
 
-Cathode is a toolkit for writing terminal-based applications. It is effectively
-a complete replacement for System.Console.
+**Cathode** is a toolkit for writing terminal-based applications. It is
+effectively a complete replacement for System.Console.
 
 With the Windows console host now supporting virtual terminal sequences, it
 makes little sense for console interaction to still be centered around the old
-Windows console host and the many limitations it had. Cathode provides an API
-centered around a [VT100 terminal](https://vt100.net) with some extensions from
-later models and modern terminal emulators. It works on all desktop platforms
-that .NET 6+ supports.
+Windows console host and the many limitations it had. **Cathode** provides an
+API centered around a [VT100 terminal](https://vt100.net) with some extensions
+from later models and modern terminal emulators. It works on all desktop
+platforms that .NET 6+ supports.
 
-Please note that, since Cathode replaces a very fundamental component of the
+Please note that, since **Cathode** replaces a very fundamental component of the
 framework, the use of certain framework APIs becomes problematic. As an example,
-intermixing Cathode and System.Console usage *will* break. Referencing Cathode
-(or a package that uses it) will pull in a Roslyn analyzer which will diagnose
-problematic APIs and suggest working replacements.
+intermixing **Cathode** and System.Console usage *will* break. Referencing
+**Cathode** (or a package that uses it) will pull in a Roslyn analyzer which
+diagnoses problematic APIs and suggests working replacements.
 
 ## Usage
 
@@ -93,6 +93,6 @@ emulators:
 * [Windows Terminal](https://aka.ms/terminal)
 * [xterm](https://invisible-island.net/xterm)
 
-(Even if you are using a terminal emulator that is not listed here, chances are
+Even if you are using a terminal emulator that is not listed here, chances are
 that it will work just fine; these are just the ones that are tested regularly
-while developing Cathode.)
+while developing **Cathode**.
