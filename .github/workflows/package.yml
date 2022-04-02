@@ -36,4 +36,4 @@ jobs:
                       Cathode.Analyzers
                       Cathode.Extensions
                       Cathode.Hosting
-                  keep: 5
+                  keep: 25
