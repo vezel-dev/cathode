@@ -1,9 +1,9 @@
 <Project>
     <PropertyGroup>
         <Product>Cathode</Product>
-        <Description>Cathode is a terminal-centric replacement for System.Console.</Description>
+        <Description>Cathode is a terminal-centric replacement for the .NET console APIs.</Description>
         <Company>Vezel</Company>
-        <Authors>$(Company) Maintainers</Authors>
+        <Authors>$(Company) Contributors</Authors>
         <Copyright>Copyright © $(Authors)</Copyright>
     </PropertyGroup>
 

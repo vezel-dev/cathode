@@ -4,7 +4,8 @@ The project has a [GitHub Discussions](https://docs.github.com/en/discussions) f
 [![GitHub Discussions](https://img.shields.io/github/discussions/vezel-dev/cathode)](https://github.com/vezel-dev/cathode/discussions)
 
 Please do *not* use the
-[issue tracker](https://github.com/vezel-dev/cathode/issues) for support requests.
+[issue tracker](https://github.com/vezel-dev/cathode/issues) for support
+requests.
 
 When seeking help, please note the following:
 

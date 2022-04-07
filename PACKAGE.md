@@ -1,7 +1,7 @@
 # Cathode
 
 **Cathode** is a toolkit for writing terminal-based applications. It is
-effectively a complete replacement for System.Console.
+effectively a complete replacement for the .NET console APIs.
 
 With the Windows console host now supporting virtual terminal sequences, it
 makes little sense for console interaction to still be centered around the old

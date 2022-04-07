@@ -7,7 +7,7 @@
 
 <p align="center">
     <strong>
-        A terminal-centric replacement for System.Console.
+        A terminal-centric replacement for the .NET console APIs.
     </strong>
 </p>
 
@@ -23,7 +23,7 @@
 ---
 
 **Cathode** is a toolkit for writing terminal-based applications. It is
-effectively a complete replacement for System.Console.
+effectively a complete replacement for the .NET console APIs.
 
 With the Windows console host now supporting virtual terminal sequences, it
 makes little sense for console interaction to still be centered around the old
@@ -34,8 +34,8 @@ platforms that .NET 6+ supports.
 
 Please note that, since **Cathode** replaces a very fundamental component of the
 framework, the use of certain framework APIs becomes problematic. As an example,
-intermixing **Cathode** and System.Console usage *will* break. Referencing
-**Cathode** (or a package that uses it) will pull in a Roslyn analyzer which
+intermixing **Cathode** and `System.Console` usage *will* break. Referencing
+**Cathode** (or a package that uses it) will pull in a Roslyn analyzer that
 diagnoses problematic APIs and suggests working replacements.
 
 ## Usage
