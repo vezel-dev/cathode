@@ -29,7 +29,7 @@ jobs:
                   dotnet build
             - name: Upload GitHub packages
               run: |
-                  dotnet tool run gpr push pkg/feed/*.nupkg -k ${{ secrets.GITHUB_TOKEN }}
+                  dotnet gpr push pkg/feed/*.nupkg -k ${{ secrets.GITHUB_TOKEN }}
             - name: Prune GitHub packages
               uses: SmartsquareGmbH/delete-old-packages@v0.4.0
               with:
