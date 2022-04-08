@@ -1,5 +1,5 @@
-using Cathode.Extensions.Hosting;
 using Microsoft.Extensions.Hosting;
+using Vezel.Cathode.Extensions.Hosting;
 
 using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
 

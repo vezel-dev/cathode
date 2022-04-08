@@ -1,9 +1,4 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Configuration;
-
-namespace Cathode.Extensions.Logging;
+namespace Vezel.Cathode.Extensions.Logging;
 
 public static class TerminalLoggingBuilderExtensions
 {

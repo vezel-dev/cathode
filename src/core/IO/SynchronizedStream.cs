@@ -1,6 +1,6 @@
-using Cathode.Threading;
+using Vezel.Cathode.Threading;
 
-namespace Cathode.IO;
+namespace Vezel.Cathode.IO;
 
 sealed class SynchronizedStream : Stream
 {

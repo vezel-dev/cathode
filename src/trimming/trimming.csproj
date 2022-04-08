@@ -9,16 +9,16 @@
         <IsPublishable>true</IsPublishable>
         <OutputType>Exe</OutputType>
         <PublishTrimmed>true</PublishTrimmed>
-        <RootNamespace>Cathode.Trimming</RootNamespace>
+        <RootNamespace>Vezel.Cathode.Trimming</RootNamespace>
         <TrimmerDefaultAction>link</TrimmerDefaultAction>
         <UseCurrentRuntimeIdentifier>true</UseCurrentRuntimeIdentifier>
     </PropertyGroup>
 
     <ItemGroup>
-        <TrimmerRootAssembly Include="Cathode" />
-        <TrimmerRootAssembly Include="Cathode.Extensions" />
-        <TrimmerRootAssembly Include="Cathode.Hosting" />
-        <TrimmerRootAssembly Include="Cathode.Testing" />
+        <TrimmerRootAssembly Include="Vezel.Cathode" />
+        <TrimmerRootAssembly Include="Vezel.Cathode.Extensions" />
+        <TrimmerRootAssembly Include="Vezel.Cathode.Hosting" />
+        <TrimmerRootAssembly Include="Vezel.Cathode.Testing" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,8 +1,8 @@
 <Project>
     <ItemGroup>
-        <Using Include="Cathode.Terminal"
+        <Using Include="Vezel.Cathode.Terminal"
                Static="true" />
-        <Using Include="Cathode.Text.Control.ControlSequences"
+        <Using Include="Vezel.Cathode.Text.Control.ControlSequences"
                Static="true" />
     </ItemGroup>
 
@@ -27,9 +27,9 @@
     These imports are required here since NuGet only takes of importing them in
     the PackageReference case.
     -->
-    <Import Project="../core/buildTransitive/Cathode.targets" />
-    <Import Project="../extensions/buildTransitive/Cathode.Extensions.targets" />
-    <Import Project="../hosting/buildTransitive/Cathode.Hosting.targets" />
+    <Import Project="../core/buildTransitive/Vezel.Cathode.targets" />
+    <Import Project="../extensions/buildTransitive/Vezel.Cathode.Extensions.targets" />
+    <Import Project="../hosting/buildTransitive/Vezel.Cathode.Hosting.targets" />
 
     <Import Project="$([MSBuild]::GetPathOfFileAbove('$(MSBuildThisFile)', '$(MSBuildThisFileDirectory)..'))" />
 </Project>

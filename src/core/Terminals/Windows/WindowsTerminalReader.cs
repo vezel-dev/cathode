@@ -1,8 +1,8 @@
-using Cathode.Threading;
+using Vezel.Cathode.Threading;
 using Windows.Win32.Foundation;
 using static Windows.Win32.WindowsPInvoke;
 
-namespace Cathode.Terminals.Windows;
+namespace Vezel.Cathode.Terminals.Windows;
 
 sealed class WindowsTerminalReader : NativeTerminalReader<WindowsVirtualTerminal, SafeHandle>
 {

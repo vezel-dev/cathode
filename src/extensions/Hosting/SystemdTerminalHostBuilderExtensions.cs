@@ -1,9 +1,6 @@
-using Cathode.Extensions.Logging;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Hosting.Systemd;
+using Vezel.Cathode.Extensions.Logging;
 
-namespace Cathode.Extensions.Hosting;
+namespace Vezel.Cathode.Extensions.Hosting;
 
 public static class SystemdTerminalHostBuilderExtensions
 {

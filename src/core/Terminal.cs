@@ -1,8 +1,8 @@
-using Cathode.Terminals.Unix.Linux;
-using Cathode.Terminals.Unix.MacOS;
-using Cathode.Terminals.Windows;
+using Vezel.Cathode.Terminals.Unix.Linux;
+using Vezel.Cathode.Terminals.Unix.MacOS;
+using Vezel.Cathode.Terminals.Windows;
 
-namespace Cathode;
+namespace Vezel.Cathode;
 
 public static class Terminal
 {

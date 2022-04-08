@@ -1,4 +1,4 @@
-namespace Cathode.Terminals.Unix;
+namespace Vezel.Cathode.Terminals.Unix;
 
 sealed class PosixSignalGuard : IDisposable
 {

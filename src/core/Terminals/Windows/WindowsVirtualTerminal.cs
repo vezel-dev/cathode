@@ -3,7 +3,7 @@ using Windows.Win32.Storage.FileSystem;
 using Windows.Win32.System.Console;
 using static Windows.Win32.WindowsPInvoke;
 
-namespace Cathode.Terminals.Windows;
+namespace Vezel.Cathode.Terminals.Windows;
 
 sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
 {

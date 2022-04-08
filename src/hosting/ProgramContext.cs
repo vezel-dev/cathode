@@ -1,4 +1,4 @@
-namespace Cathode.Hosting;
+namespace Vezel.Cathode.Hosting;
 
 public sealed class ProgramContext
 {

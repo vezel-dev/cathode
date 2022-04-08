@@ -1,4 +1,4 @@
-namespace Cathode;
+namespace Vezel.Cathode;
 
 public class TestVirtualTerminal : VirtualTerminal
 {

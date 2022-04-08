@@ -1,4 +1,4 @@
-namespace Cathode.Threading;
+namespace Vezel.Cathode.Threading;
 
 static class SynchronizationExtensions
 {

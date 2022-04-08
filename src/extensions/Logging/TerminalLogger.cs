@@ -1,7 +1,4 @@
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-
-namespace Cathode.Extensions.Logging;
+namespace Vezel.Cathode.Extensions.Logging;
 
 sealed class TerminalLogger : ILogger
 {

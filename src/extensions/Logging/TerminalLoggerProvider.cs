@@ -1,9 +1,6 @@
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+namespace Vezel.Cathode.Extensions.Logging;
 
-namespace Cathode.Extensions.Logging;
-
-[ProviderAlias(nameof(Terminal))]
+[ProviderAlias("Terminal")]
 public sealed class TerminalLoggerProvider : ILoggerProvider, ISupportExternalScope
 {
     readonly ConcurrentDictionary<string, TerminalLogger> _loggers = new();

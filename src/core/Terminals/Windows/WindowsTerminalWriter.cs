@@ -1,7 +1,7 @@
-using Cathode.Threading;
+using Vezel.Cathode.Threading;
 using static Windows.Win32.WindowsPInvoke;
 
-namespace Cathode.Terminals.Windows;
+namespace Vezel.Cathode.Terminals.Windows;
 
 sealed class WindowsTerminalWriter : NativeTerminalWriter<WindowsVirtualTerminal, SafeHandle>
 {

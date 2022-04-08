@@ -1,7 +1,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Cathode.Analyzers.Hosting;
+namespace Vezel.Cathode.Analyzers.Hosting;
 
 [Generator(LanguageNames.CSharp)]
 public sealed class EntryPointGenerator : ISourceGenerator
@@ -17,7 +17,7 @@ public sealed class EntryPointGenerator : ISourceGenerator
         {
             var sema = context.SemanticModel;
 
-            _interface ??= sema.Compilation.GetTypeByMetadataName("Cathode.Hosting.IProgram");
+            _interface ??= sema.Compilation.GetTypeByMetadataName("Vezel.Cathode.Hosting.IProgram");
 
             if (context.Node is ClassDeclarationSyntax cls)
             {
@@ -37,7 +37,7 @@ static class GeneratedProgram
 {{
     static async global::System.Threading.Tasks.Task Main(string[] args)
     {{
-        await global::Cathode.Hosting.ProgramHost.RunAsync<{0}>(args);
+        await global::Vezel.Cathode.Hosting.ProgramHost.RunAsync<{0}>(args);
     }}
 }}";
 

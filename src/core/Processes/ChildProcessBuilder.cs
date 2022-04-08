@@ -1,4 +1,4 @@
-namespace Cathode.Processes;
+namespace Vezel.Cathode.Processes;
 
 public sealed class ChildProcessBuilder
 {

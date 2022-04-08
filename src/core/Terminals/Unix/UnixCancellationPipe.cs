@@ -1,6 +1,6 @@
-using static Cathode.Unix.UnixPInvoke;
+using static Vezel.Cathode.Unix.UnixPInvoke;
 
-namespace Cathode.Terminals.Unix;
+namespace Vezel.Cathode.Terminals.Unix;
 
 sealed class UnixCancellationPipe
 {

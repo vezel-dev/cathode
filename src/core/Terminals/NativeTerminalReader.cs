@@ -1,4 +1,4 @@
-namespace Cathode.Terminals;
+namespace Vezel.Cathode.Terminals;
 
 abstract class NativeTerminalReader<TTerminal, THandle> : TerminalReader
     where TTerminal : NativeVirtualTerminal<THandle>

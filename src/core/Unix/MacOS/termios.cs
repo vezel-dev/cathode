@@ -1,4 +1,4 @@
-namespace Cathode.Unix.MacOS;
+namespace Vezel.Cathode.Unix.MacOS;
 
 [SuppressMessage("Style", "IDE1006")]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300")]

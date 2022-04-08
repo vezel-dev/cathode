@@ -1,4 +1,4 @@
-namespace Cathode.Terminals;
+namespace Vezel.Cathode.Terminals;
 
 abstract class NativeVirtualTerminal<THandle> : SystemVirtualTerminal
 {

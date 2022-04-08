@@ -1,4 +1,4 @@
-namespace Cathode.Unix;
+namespace Vezel.Cathode.Unix;
 
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300")]
 [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310")]

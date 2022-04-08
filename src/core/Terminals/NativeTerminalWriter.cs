@@ -1,4 +1,4 @@
-namespace Cathode.Terminals;
+namespace Vezel.Cathode.Terminals;
 
 abstract class NativeTerminalWriter<TTerminal, THandle> : TerminalWriter
     where TTerminal : NativeVirtualTerminal<THandle>

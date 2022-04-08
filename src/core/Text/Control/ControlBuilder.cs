@@ -1,6 +1,6 @@
-using static Cathode.Text.Control.ControlConstants;
+using static Vezel.Cathode.Text.Control.ControlConstants;
 
-namespace Cathode.Text.Control;
+namespace Vezel.Cathode.Text.Control;
 
 public sealed class ControlBuilder
 {

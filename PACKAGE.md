@@ -12,13 +12,13 @@ platforms that .NET 6+ supports.
 
 This project offers the following packages:
 
-* [Cathode](https://www.nuget.org/packages/Cathode): Provides the core terminal
-  API.
-* [Cathode.Analyzers](https://www.nuget.org/packages/Cathode.Analyzers):
+* [Vezel.Cathode](https://www.nuget.org/packages/Vezel.Cathode): Provides the
+  core terminal API.
+* [Vezel.Cathode.Analyzers](https://www.nuget.org/packages/Vezel.Cathode.Analyzers):
   Provides diagnostic analyzers and source generators.
-* [Cathode.Hosting](https://www.nuget.org/packages/Cathode.Hosting): Provides
-  the terminal hosting model.
-* [Cathode.Extensions](https://www.nuget.org/packages/Cathode.Extensions):
+* [Vezel.Cathode.Hosting](https://www.nuget.org/packages/Vezel.Cathode.Hosting):
+  Provides the terminal hosting model.
+* [Vezel.Cathode.Extensions](https://www.nuget.org/packages/Vezel.Cathode.Extensions):
   Provides terminal hosting and logging for the .NET Generic Host.
 
 See the

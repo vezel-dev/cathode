@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <AssemblyName>Cathode</AssemblyName>
+        <AssemblyName>Vezel.Cathode</AssemblyName>
         <IsPackable>true</IsPackable>
         <PackageDescription>$(PackageDescription)
 
 This package provides the core terminal API.</PackageDescription>
-        <PackageId>Cathode</PackageId>
-        <RootNamespace>Cathode</RootNamespace>
+        <PackageId>Vezel.Cathode</PackageId>
+        <RootNamespace>Vezel.Cathode</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -39,5 +39,5 @@ This package provides the core terminal API.</PackageDescription>
         <PackageReference Include="Wcwidth" />
     </ItemGroup>
 
-    <Import Project="buildTransitive/Cathode.targets" />
+    <Import Project="buildTransitive/Vezel.Cathode.targets" />
 </Project>

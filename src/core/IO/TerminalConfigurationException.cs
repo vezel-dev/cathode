@@ -1,4 +1,4 @@
-namespace Cathode.IO;
+namespace Vezel.Cathode.IO;
 
 public class TerminalConfigurationException : TerminalException
 {

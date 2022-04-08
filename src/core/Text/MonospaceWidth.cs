@@ -1,6 +1,6 @@
 using Wcwidth;
 
-namespace Cathode.Text;
+namespace Vezel.Cathode.Text;
 
 public static class MonospaceWidth
 {

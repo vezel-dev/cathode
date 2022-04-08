@@ -1,7 +1,7 @@
-using Cathode.Threading;
-using static Cathode.Unix.UnixPInvoke;
+using Vezel.Cathode.Threading;
+using static Vezel.Cathode.Unix.UnixPInvoke;
 
-namespace Cathode.Terminals.Unix;
+namespace Vezel.Cathode.Terminals.Unix;
 
 sealed class UnixTerminalWriter : NativeTerminalWriter<UnixVirtualTerminal, int>
 {

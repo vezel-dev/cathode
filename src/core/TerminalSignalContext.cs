@@ -1,4 +1,4 @@
-namespace Cathode;
+namespace Vezel.Cathode;
 
 public sealed class TerminalSignalContext
 {

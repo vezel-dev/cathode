@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <AssemblyName>Cathode.Testing</AssemblyName>
+        <AssemblyName>Vezel.Cathode.Testing</AssemblyName>
         <PackageDescription>$(PackageDescription)
 
 This packages provides testing utilities for terminal applications.</PackageDescription>
-        <PackageId>Cathode.Testing</PackageId>
-        <RootNamespace>Cathode</RootNamespace>
+        <PackageId>Vezel.Cathode.Testing</PackageId>
+        <RootNamespace>Vezel.Cathode</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -16,5 +16,5 @@ This packages provides testing utilities for terminal applications.</PackageDesc
         <ProjectReference Include="../core/core.csproj" />
     </ItemGroup>
 
-    <Import Project="../core/buildTransitive/Cathode.targets" />
+    <Import Project="../core/buildTransitive/Vezel.Cathode.targets" />
 </Project>

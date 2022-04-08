@@ -1,4 +1,4 @@
-namespace Cathode.Processes;
+namespace Vezel.Cathode.Processes;
 
 [SuppressMessage("ApiDesign", "RS0030")]
 [SuppressMessage("Design", "CA1001")]

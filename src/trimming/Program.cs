@@ -1,4 +1,4 @@
-namespace Cathode.Trimming;
+namespace Vezel.Cathode.Trimming;
 
 static class Program
 {

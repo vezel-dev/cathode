@@ -1,6 +1,6 @@
 using Microsoft.CodeAnalysis;
 
-namespace Cathode.Analyzers;
+namespace Vezel.Cathode.Analyzers;
 
 static class DiagnosticDescriptors
 {
@@ -47,7 +47,7 @@ static class DiagnosticDescriptors
             p.SetValue(
                 null,
                 new DiagnosticDescriptor(
-                    $"CATH{id}", attr.Title, attr.Message, "Cathode", attr.Severity, true));
+                    $"CATH{id}", attr.Title, attr.Message, "Vezel.Cathode", attr.Severity, true));
 
             id++;
         }

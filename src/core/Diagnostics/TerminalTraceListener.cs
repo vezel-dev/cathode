@@ -1,4 +1,4 @@
-namespace Cathode.Diagnostics;
+namespace Vezel.Cathode.Diagnostics;
 
 public class TerminalTraceListener : TextWriterTraceListener
 {

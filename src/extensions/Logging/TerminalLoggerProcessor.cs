@@ -1,4 +1,4 @@
-namespace Cathode.Extensions.Logging;
+namespace Vezel.Cathode.Extensions.Logging;
 
 sealed class TerminalLoggerProcessor : IDisposable
 {

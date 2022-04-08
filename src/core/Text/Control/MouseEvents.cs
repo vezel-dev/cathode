@@ -1,4 +1,4 @@
-namespace Cathode.Text.Control;
+namespace Vezel.Cathode.Text.Control;
 
 [Flags]
 public enum MouseEvents

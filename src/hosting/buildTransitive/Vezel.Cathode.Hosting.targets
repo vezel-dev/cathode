@@ -1,10 +1,6 @@
 <Project>
     <ItemGroup Condition="'$(ImplicitUsings)' == 'true' or '$(ImplicitUsings)' == 'enable'">
-        <Using Include="Cathode" />
-        <Using Include="Cathode.IO" />
-        <Using Include="Cathode.Processes" />
-        <Using Include="Cathode.Text" />
-        <Using Include="Cathode.Text.Control" />
+        <Using Include="Vezel.Cathode.Hosting" />
     </ItemGroup>
 
     <ItemGroup>

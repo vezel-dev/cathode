@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <AssemblyName>Cathode.Hosting</AssemblyName>
+        <AssemblyName>Vezel.Cathode.Hosting</AssemblyName>
         <IsPackable>true</IsPackable>
         <PackageDescription>$(PackageDescription)
 
 This package provides the terminal hosting model.</PackageDescription>
-        <PackageId>Cathode.Hosting</PackageId>
-        <RootNamespace>Cathode.Hosting</RootNamespace>
+        <PackageId>Vezel.Cathode.Hosting</PackageId>
+        <RootNamespace>Vezel.Cathode.Hosting</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -19,5 +19,6 @@ This package provides the terminal hosting model.</PackageDescription>
         <ProjectReference Include="../core/core.csproj" />
     </ItemGroup>
 
-    <Import Project="../hosting/buildTransitive/Cathode.Hosting.targets" />
+    <Import Project="../core/buildTransitive/Vezel.Cathode.targets" />
+    <Import Project="buildTransitive/Vezel.Cathode.Hosting.targets" />
 </Project>

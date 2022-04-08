@@ -1,6 +1,6 @@
 using Windows.Win32.Foundation;
 
-namespace Cathode.Terminals.Windows;
+namespace Vezel.Cathode.Terminals.Windows;
 
 static class WindowsTerminalUtility
 {

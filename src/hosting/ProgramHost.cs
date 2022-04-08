@@ -1,4 +1,4 @@
-namespace Cathode.Hosting;
+namespace Vezel.Cathode.Hosting;
 
 [EditorBrowsable(EditorBrowsableState.Never)]
 [SuppressMessage("ApiDesign", "RS0030")]

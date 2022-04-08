@@ -1,10 +1,6 @@
-using Cathode.Extensions.Logging;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.EventLog;
+using Vezel.Cathode.Extensions.Logging;
 
-namespace Cathode.Extensions.Hosting;
+namespace Vezel.Cathode.Extensions.Hosting;
 
 public static class TerminalHost
 {

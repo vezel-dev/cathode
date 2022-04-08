@@ -1,6 +1,6 @@
-using Cathode.Threading;
+using Vezel.Cathode.Threading;
 
-namespace Cathode;
+namespace Vezel.Cathode;
 
 public sealed class TerminalControl
 {

@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <AssemblyName>Cathode.Analyzers</AssemblyName>
+        <AssemblyName>Vezel.Cathode.Analyzers</AssemblyName>
         <BuildOutputTargetFolder>analyzers/dotnet/cs</BuildOutputTargetFolder>
         <DevelopmentDependency>true</DevelopmentDependency>
         <IsPackable>true</IsPackable>
@@ -9,8 +9,8 @@
         <PackageDescription>$(PackageDescription)
 
 This package provides diagnostic analyzers and source generators.</PackageDescription>
-        <PackageId>Cathode.Analyzers</PackageId>
-        <RootNamespace>Cathode.Analyzers</RootNamespace>
+        <PackageId>Vezel.Cathode.Analyzers</PackageId>
+        <RootNamespace>Vezel.Cathode.Analyzers</RootNamespace>
         <TargetFramework>netstandard2.0</TargetFramework>
     </PropertyGroup>
 

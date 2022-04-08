@@ -1,9 +1,9 @@
-using Cathode.Unix;
-using Cathode.Unix.Linux;
-using static Cathode.Unix.Linux.LinuxPInvoke;
-using static Cathode.Unix.UnixPInvoke;
+using Vezel.Cathode.Unix;
+using Vezel.Cathode.Unix.Linux;
+using static Vezel.Cathode.Unix.Linux.LinuxPInvoke;
+using static Vezel.Cathode.Unix.UnixPInvoke;
 
-namespace Cathode.Terminals.Unix.Linux;
+namespace Vezel.Cathode.Terminals.Unix.Linux;
 
 sealed class LinuxVirtualTerminal : UnixVirtualTerminal
 {

@@ -1,6 +1,4 @@
-using Microsoft.Extensions.Logging;
-
-namespace Cathode.Extensions.Logging;
+namespace Vezel.Cathode.Extensions.Logging;
 
 public static class TerminalLoggerWriters
 {
