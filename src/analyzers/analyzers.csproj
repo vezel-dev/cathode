@@ -15,6 +15,11 @@ This package provides diagnostic analyzers and source generators.</PackageDescri
     </PropertyGroup>
 
     <ItemGroup>
+        <Using Include="Microsoft.CodeAnalysis" />
+        <Using Include="Microsoft.CodeAnalysis.CSharp.Syntax" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces"
                           PrivateAssets="all" />
     </ItemGroup>

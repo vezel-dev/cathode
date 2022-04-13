@@ -1,5 +1,3 @@
-using Microsoft.CodeAnalysis;
-
 namespace Vezel.Cathode.Analyzers;
 
 static class DiagnosticDescriptors
