@@ -1,6 +1,6 @@
 namespace Vezel.Cathode.IO;
 
-[SuppressMessage("Performance", "CA1844")]
+[SuppressMessage("", "CA1844")]
 public abstract class TerminalStream : Stream
 {
     // This class and classes inheriting from it should not override Close, Dispose, or DisposeAsync.

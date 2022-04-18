@@ -17,7 +17,7 @@ public sealed class ProgramContext
 
     // The following methods must never throw.
 
-    [SuppressMessage("Design", "CA1031")]
+    [SuppressMessage("", "CA1031")]
     internal void RaiseUnhandledException(Exception exception)
     {
         var ev = UnhandledException;
@@ -37,7 +37,7 @@ public sealed class ProgramContext
         }
     }
 
-    [SuppressMessage("Design", "CA1031")]
+    [SuppressMessage("", "CA1031")]
     internal void RaiseProcessExit()
     {
         var ev = ProcessExiting;

@@ -1,7 +1,7 @@
 namespace Vezel.Cathode.Unix.Linux;
 
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300")]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310")]
+[SuppressMessage("", "SA1300")]
+[SuppressMessage("", "SA1310")]
 static unsafe class LinuxPInvoke
 {
     // c_iflag

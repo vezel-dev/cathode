@@ -24,7 +24,7 @@ public class TestTerminalWriter : TerminalWriter
         TextWriter = new StreamWriter(Stream, Terminal.Encoding);
     }
 
-    [SuppressMessage("Usage", "VSTHRD002")]
+    [SuppressMessage("", "VSTHRD002")]
     protected override sealed int WritePartialCore(ReadOnlySpan<byte> buffer, CancellationToken cancellationToken)
     {
         var len = buffer.Length;

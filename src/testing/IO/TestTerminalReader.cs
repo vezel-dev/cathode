@@ -24,7 +24,7 @@ public class TestTerminalReader : TerminalReader
         TextReader = new StreamReader(Stream, Terminal.Encoding, false);
     }
 
-    [SuppressMessage("Usage", "VSTHRD002")]
+    [SuppressMessage("", "VSTHRD002")]
     protected override sealed int ReadPartialCore(Span<byte> buffer, CancellationToken cancellationToken)
     {
         var len = buffer.Length;

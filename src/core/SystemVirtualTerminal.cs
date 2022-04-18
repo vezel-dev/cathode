@@ -86,7 +86,7 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
 
     public override bool IsRawMode => _rawMode;
 
-    [SuppressMessage("Design", "CA1065")]
+    [SuppressMessage("", "CA1065")]
     public override TerminalSize Size
     {
         get

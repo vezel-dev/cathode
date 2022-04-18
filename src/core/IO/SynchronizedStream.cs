@@ -134,7 +134,7 @@ sealed class SynchronizedStream : Stream
             return _stream.Read(buffer);
     }
 
-    [SuppressMessage("Performance", "CA1835")]
+    [SuppressMessage("", "CA1835")]
     public override async Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
     {
         using (await _lock.EnterAsync(cancellationToken).ConfigureAwait(false))
@@ -203,7 +203,7 @@ sealed class SynchronizedStream : Stream
             _stream.Write(buffer);
     }
 
-    [SuppressMessage("Performance", "CA1835")]
+    [SuppressMessage("", "CA1835")]
     public override async Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
     {
         using (await _lock.EnterAsync(cancellationToken).ConfigureAwait(false))

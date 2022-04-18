@@ -16,18 +16,18 @@ abstract class UnixVirtualTerminal : NativeVirtualTerminal<int>
 
     public override sealed UnixTerminalWriter TerminalOut { get; }
 
-    [SuppressMessage("Style", "IDE0052")]
+    [SuppressMessage("", "IDE0052")]
     readonly PosixSignalRegistration _sigWinch;
 
-    [SuppressMessage("Style", "IDE0052")]
+    [SuppressMessage("", "IDE0052")]
     readonly PosixSignalRegistration _sigCont;
 
-    [SuppressMessage("Style", "IDE0052")]
+    [SuppressMessage("", "IDE0052")]
     readonly PosixSignalRegistration _sigChld;
 
     readonly object _rawLock = new();
 
-    [SuppressMessage("Usage", "CA2214")]
+    [SuppressMessage("", "CA2214")]
     protected UnixVirtualTerminal()
     {
         var inLock = new SemaphoreSlim(1, 1);

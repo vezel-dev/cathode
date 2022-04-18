@@ -2,7 +2,7 @@ namespace Vezel.Cathode.Extensions.Logging;
 
 public static class TerminalLoggingBuilderExtensions
 {
-    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2026")]
+    [UnconditionalSuppressMessage("", "IL2026")]
     public static ILoggingBuilder AddTerminal(
         this ILoggingBuilder builder,
         Action<TerminalLoggerOptions>? configureOptions = null)

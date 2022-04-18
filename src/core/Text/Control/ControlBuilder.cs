@@ -38,7 +38,7 @@ public sealed class ControlBuilder
             AppendSpan(value);
         }
 
-        [SuppressMessage("Style", "IDE0038")]
+        [SuppressMessage("", "IDE0038")]
         public void AppendFormatted<T>(T value, string? format = null)
         {
             if (_formatter != null)

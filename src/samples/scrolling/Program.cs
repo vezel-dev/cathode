@@ -15,7 +15,7 @@ try
 
     var rng = new Random();
 
-    [SuppressMessage("Security", "CA5394")]
+    [SuppressMessage("", "CA5394")]
     byte PickRandom()
     {
         return (byte)rng.Next(byte.MinValue, byte.MaxValue + 1);

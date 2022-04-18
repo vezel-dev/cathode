@@ -1,7 +1,7 @@
 namespace Vezel.Cathode.Processes;
 
-[SuppressMessage("ApiDesign", "RS0030")]
-[SuppressMessage("Design", "CA1001")]
+[SuppressMessage("", "RS0030")]
+[SuppressMessage("", "CA1001")]
 public sealed class ChildProcess
 {
     public int Id { get; }
@@ -29,7 +29,7 @@ public sealed class ChildProcess
 
     readonly TaskCompletionSource _exited = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
-    [SuppressMessage("Design", "CA1031")]
+    [SuppressMessage("", "CA1031")]
     internal ChildProcess(ChildProcessBuilder builder)
     {
         var (redirectIn, redirectOut, redirectError) =

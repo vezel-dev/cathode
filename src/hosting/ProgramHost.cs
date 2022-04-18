@@ -1,14 +1,14 @@
 namespace Vezel.Cathode.Hosting;
 
 [EditorBrowsable(EditorBrowsableState.Never)]
-[SuppressMessage("ApiDesign", "RS0030")]
+[SuppressMessage("", "RS0030")]
 public static class ProgramHost
 {
     // This class is only meant to be used by generated code.
 
     static int _running;
 
-    [SuppressMessage("Design", "CA1031")]
+    [SuppressMessage("", "CA1031")]
     public static async Task RunAsync<TProgram>(ReadOnlyMemory<string> arguments)
         where TProgram : IProgram
     {

@@ -51,7 +51,7 @@ sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
 
     ConsoleState? _original;
 
-    [SuppressMessage("Reliability", "CA2000")]
+    [SuppressMessage("", "CA2000")]
     WindowsVirtualTerminal()
     {
         var inLock = new SemaphoreSlim(1, 1);

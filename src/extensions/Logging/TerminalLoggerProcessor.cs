@@ -6,7 +6,7 @@ sealed class TerminalLoggerProcessor : IDisposable
 
     readonly Thread _thread;
 
-    [SuppressMessage("Design", "CA1031")]
+    [SuppressMessage("", "CA1031")]
     public TerminalLoggerProcessor(int queueSize)
     {
         _queue = new(queueSize);

@@ -1,7 +1,7 @@
 namespace Vezel.Cathode.Unix;
 
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300")]
-[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310")]
+[SuppressMessage("", "SA1300")]
+[SuppressMessage("", "SA1310")]
 static unsafe class UnixPInvoke
 {
     // fd
@@ -44,7 +44,7 @@ static unsafe class UnixPInvoke
     public static extern int isatty(int fildes);
 
     [DllImport("c", CharSet = CharSet.Ansi, SetLastError = true)]
-    [SuppressMessage("Globalization", "CA2101")] // TODO: https://github.com/dotnet/roslyn-analyzers/issues/5479
+    [SuppressMessage("", "CA2101")] // TODO: https://github.com/dotnet/roslyn-analyzers/issues/5479
     public static extern int open(string path, int oflag);
 
     [DllImport("c", SetLastError = true)]

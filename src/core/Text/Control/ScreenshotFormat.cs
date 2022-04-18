@@ -1,6 +1,6 @@
 namespace Vezel.Cathode.Text.Control;
 
-[SuppressMessage("Design", "CA1008")]
+[SuppressMessage("", "CA1008")]
 public enum ScreenshotFormat
 {
     Html = 10,
