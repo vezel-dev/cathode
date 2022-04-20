@@ -21,7 +21,7 @@ sealed class UnixCancellationPipe
     {
         // Note that the runtime sets up a SIGPIPE handler for us.
 
-        Span<int> handles = stackalloc int[] { (int)_client.SafePipeHandle.DangerousGetHandle(), handle };
+        var handles = (stackalloc int[] { (int)_client.SafePipeHandle.DangerousGetHandle(), handle });
 
         using (var registration = cancellationToken.UnsafeRegister(
             state => ((UnixCancellationPipe)state!)._server.WriteByte(42), this))

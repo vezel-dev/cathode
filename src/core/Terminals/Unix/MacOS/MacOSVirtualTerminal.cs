@@ -102,7 +102,7 @@ sealed class MacOSVirtualTerminal : UnixVirtualTerminal
         if (error is int err && err != EAGAIN)
             return false;
 
-        Span<pollfd> fds = stackalloc pollfd[handles.Length];
+        var fds = (stackalloc pollfd[handles.Length]);
 
         for (var i = 0; i < handles.Length; i++)
         {

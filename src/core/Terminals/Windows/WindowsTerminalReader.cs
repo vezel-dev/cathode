@@ -61,7 +61,7 @@ sealed class WindowsTerminalReader : NativeTerminalReader<WindowsVirtualTerminal
         {
             if (_buffered.IsEmpty)
             {
-                Span<char> units = stackalloc char[2];
+                var units = (stackalloc char[2]);
                 var chars = 0;
 
                 fixed (char* p = &MemoryMarshal.GetReference(units))

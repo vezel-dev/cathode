@@ -54,7 +54,7 @@ public sealed class ControlBuilder
                 if (value is ISpanFormattable)
                 {
                     char[]? rented = null;
-                    Span<char> span = stackalloc char[StackBufferSize];
+                    var span = (stackalloc char[StackBufferSize]);
 
                     try
                     {
@@ -291,8 +291,8 @@ public sealed class ControlBuilder
     {
         _ = Math.Clamp(value, 0, 100) == value ? true : throw new ArgumentOutOfRangeException(nameof(value));
 
-        Span<char> stateSpan = stackalloc char[StackBufferSize];
-        Span<char> valueSpan = stackalloc char[StackBufferSize];
+        var stateSpan = (stackalloc char[StackBufferSize]);
+        var valueSpan = (stackalloc char[StackBufferSize]);
 
         _ = ((int)state).TryFormat(stateSpan, out var stateLen);
         _ = value.TryFormat(valueSpan, out var valueLen);
@@ -375,7 +375,7 @@ public sealed class ControlBuilder
     {
         _ = Enum.IsDefined(style) ? true : throw new ArgumentOutOfRangeException(nameof(style));
 
-        Span<char> styleSpan = stackalloc char[StackBufferSize];
+        var styleSpan = (stackalloc char[StackBufferSize]);
 
         _ = ((int)style).TryFormat(styleSpan, out var styleLen);
 
@@ -393,8 +393,8 @@ public sealed class ControlBuilder
         _ = bottom >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(bottom));
         _ = bottom >= top ? true : throw new ArgumentException(null, nameof(bottom));
 
-        Span<char> topSpan = stackalloc char[StackBufferSize];
-        Span<char> bottomSpan = stackalloc char[StackBufferSize];
+        var topSpan = (stackalloc char[StackBufferSize]);
+        var bottomSpan = (stackalloc char[StackBufferSize]);
 
         _ = (top + 1).TryFormat(topSpan, out var topLen);
         _ = (bottom + 1).TryFormat(bottomSpan, out var bottomLen);
@@ -409,7 +409,7 @@ public sealed class ControlBuilder
         if (count == 0)
             return this;
 
-        Span<char> countSpan = stackalloc char[StackBufferSize];
+        var countSpan = (stackalloc char[StackBufferSize]);
 
         _ = count.TryFormat(countSpan, out var countLen);
 
@@ -445,7 +445,7 @@ public sealed class ControlBuilder
     {
         _ = Enum.IsDefined(mode) ? true : throw new ArgumentOutOfRangeException(nameof(mode));
 
-        Span<char> modeSpan = stackalloc char[StackBufferSize];
+        var modeSpan = (stackalloc char[StackBufferSize]);
 
         _ = ((int)mode).TryFormat(modeSpan, out var modeLen);
 
@@ -469,7 +469,7 @@ public sealed class ControlBuilder
         if (count == 0)
             return this;
 
-        Span<char> countSpan = stackalloc char[StackBufferSize];
+        var countSpan = (stackalloc char[StackBufferSize]);
 
         _ = count.TryFormat(countSpan, out var countLen);
 
@@ -491,8 +491,8 @@ public sealed class ControlBuilder
         _ = line >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(line));
         _ = column >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(column));
 
-        Span<char> lineSpan = stackalloc char[StackBufferSize];
-        Span<char> columnSpan = stackalloc char[StackBufferSize];
+        var lineSpan = (stackalloc char[StackBufferSize]);
+        var columnSpan = (stackalloc char[StackBufferSize]);
 
         _ = (line + 1).TryFormat(lineSpan, out var lineLen);
         _ = (column + 1).TryFormat(columnSpan, out var columnLen);
@@ -507,7 +507,7 @@ public sealed class ControlBuilder
         if (count == 0)
             return this;
 
-        Span<char> countSpan = stackalloc char[StackBufferSize];
+        var countSpan = (stackalloc char[StackBufferSize]);
 
         _ = count.TryFormat(countSpan, out var countLen);
 
@@ -546,9 +546,9 @@ public sealed class ControlBuilder
 
     public ControlBuilder SetForegroundColor(byte r, byte g, byte b)
     {
-        Span<char> rSpan = stackalloc char[StackBufferSize];
-        Span<char> gSpan = stackalloc char[StackBufferSize];
-        Span<char> bSpan = stackalloc char[StackBufferSize];
+        var rSpan = (stackalloc char[StackBufferSize]);
+        var gSpan = (stackalloc char[StackBufferSize]);
+        var bSpan = (stackalloc char[StackBufferSize]);
 
         _ = r.TryFormat(rSpan, out var rLen);
         _ = g.TryFormat(gSpan, out var gLen);
@@ -560,9 +560,9 @@ public sealed class ControlBuilder
 
     public ControlBuilder SetBackgroundColor(byte r, byte g, byte b)
     {
-        Span<char> rSpan = stackalloc char[StackBufferSize];
-        Span<char> gSpan = stackalloc char[StackBufferSize];
-        Span<char> bSpan = stackalloc char[StackBufferSize];
+        var rSpan = (stackalloc char[StackBufferSize]);
+        var gSpan = (stackalloc char[StackBufferSize]);
+        var bSpan = (stackalloc char[StackBufferSize]);
 
         _ = r.TryFormat(rSpan, out var rLen);
         _ = g.TryFormat(gSpan, out var gLen);
@@ -574,9 +574,9 @@ public sealed class ControlBuilder
 
     public ControlBuilder SetUnderlineColor(byte r, byte g, byte b)
     {
-        Span<char> rSpan = stackalloc char[StackBufferSize];
-        Span<char> gSpan = stackalloc char[StackBufferSize];
-        Span<char> bSpan = stackalloc char[StackBufferSize];
+        var rSpan = (stackalloc char[StackBufferSize]);
+        var gSpan = (stackalloc char[StackBufferSize]);
+        var bSpan = (stackalloc char[StackBufferSize]);
 
         _ = r.TryFormat(rSpan, out var rLen);
         _ = g.TryFormat(gSpan, out var gLen);
@@ -663,7 +663,7 @@ public sealed class ControlBuilder
     {
         _ = Enum.IsDefined(format) ? true : throw new ArgumentOutOfRangeException(nameof(format));
 
-        Span<char> formatSpan = stackalloc char[StackBufferSize];
+        var formatSpan = (stackalloc char[StackBufferSize]);
 
         _ = ((int)format).TryFormat(formatSpan, out var formatLen);
 
