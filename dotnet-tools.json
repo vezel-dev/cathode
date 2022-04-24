@@ -3,13 +3,13 @@
   "isRoot": true,
   "tools": {
     "dotnet-counters": {
-      "version": "6.0.257301",
+      "version": "6.0.320703",
       "commands": [
         "dotnet-counters"
       ]
     },
     "dotnet-dump": {
-      "version": "6.0.257301",
+      "version": "6.0.320703",
       "commands": [
         "dotnet-dump"
       ]
@@ -21,31 +21,31 @@
       ]
     },
     "dotnet-gcdump": {
-      "version": "6.0.257301",
+      "version": "6.0.320703",
       "commands": [
         "dotnet-gcdump"
       ]
     },
     "dotnet-sos": {
-      "version": "6.0.257301",
+      "version": "6.0.320703",
       "commands": [
         "dotnet-sos"
       ]
     },
     "dotnet-stack": {
-      "version": "6.0.257301",
+      "version": "6.0.320703",
       "commands": [
         "dotnet-stack"
       ]
     },
     "dotnet-symbol": {
-      "version": "1.0.252801",
+      "version": "1.0.321201",
       "commands": [
         "dotnet-symbol"
       ]
     },
     "dotnet-trace": {
-      "version": "6.0.257301",
+      "version": "6.0.320703",
       "commands": [
         "dotnet-trace"
       ]
