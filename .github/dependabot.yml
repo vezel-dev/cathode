@@ -6,12 +6,12 @@ updates:
       schedule:
           interval: daily
           timezone: Europe/Copenhagen
-          time: 12:00
+          time: "12:00"
       labels: []
     - directory: /
       package-ecosystem: nuget
       schedule:
           interval: daily
           timezone: Europe/Copenhagen
-          time: 12:00
+          time: "12:00"
       labels: []
