@@ -2,14 +2,14 @@
 version: 2
 updates:
     - directory: /
-      package-ecosystem: nuget
+      package-ecosystem: github-actions
       schedule:
           interval: daily
           timezone: Europe/Copenhagen
           time: 12:00
       labels: []
     - directory: /
-      package-ecosystem: github-actions
+      package-ecosystem: nuget
       schedule:
           interval: daily
           timezone: Europe/Copenhagen
