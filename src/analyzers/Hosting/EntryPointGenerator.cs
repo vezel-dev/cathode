@@ -65,6 +65,11 @@ static class GeneratedProgram
                     Diagnostic.Create(DiagnosticDescriptors.AvoidSpecifyingEntryPoint, loc, entry));
 
         if (entry == null)
-            context.AddSource("Program.g.cs", string.Format(CultureInfo.InvariantCulture, Program, syms[0].Name));
+            context.AddSource(
+                "Program.g.cs",
+                string.Format(
+                    CultureInfo.InvariantCulture,
+                    Program,
+                    syms[0].ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)));
     }
 }
