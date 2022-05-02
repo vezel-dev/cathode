@@ -1,6 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/microsoft/CsWin32/main/src/Microsoft.Windows.CsWin32/settings.schema.json",
   "className": "WindowsPInvoke",
+  "allowMarshaling": false,
   "wideCharOnly": false,
   "emitSingleFile": true
 }
