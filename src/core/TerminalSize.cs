@@ -39,4 +39,9 @@ public readonly struct TerminalSize : IEquatable<TerminalSize>
     {
         return HashCode.Combine(Width, Height);
     }
+
+    public override string ToString()
+    {
+        return $"{Width}x{Height}";
+    }
 }
