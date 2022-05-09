@@ -31,7 +31,7 @@ jobs:
                   fetch-depth: 0
                   submodules: recursive
             - name: Set up .NET
-              uses: actions/setup-dotnet@v2.0.0
+              uses: actions/setup-dotnet@v2.1.0
             - name: Build project
               run: |
                   dotnet tool restore
