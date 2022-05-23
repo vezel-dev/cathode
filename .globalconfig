@@ -167,6 +167,7 @@ dotnet_diagnostic.SA1602.severity = none
 dotnet_diagnostic.SA1633.severity = none
 
 dotnet_diagnostic.VSTHRD001.severity = none
+dotnet_diagnostic.VSTHRD002.severity = none
 dotnet_diagnostic.VSTHRD003.severity = none
 dotnet_diagnostic.VSTHRD004.severity = none
 dotnet_diagnostic.VSTHRD010.severity = none
@@ -180,5 +181,6 @@ dotnet_diagnostic.VSTHRD106.severity = none
 dotnet_diagnostic.VSTHRD108.severity = none
 dotnet_diagnostic.VSTHRD109.severity = none
 dotnet_diagnostic.VSTHRD110.severity = none
+dotnet_diagnostic.VSTHRD111.severity = none
 dotnet_diagnostic.VSTHRD112.severity = none
 dotnet_diagnostic.VSTHRD113.severity = none
