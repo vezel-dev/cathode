@@ -113,7 +113,7 @@ fix as a separate pull request.
 ### Licensing & Copyright
 
 When you contribute code or documentation, you agree to make it available under
-the project's licensing terms; see [`LICENSE.md`](LICENSE.md).
+the project's licensing terms; see [`LICENSE-0BSD`](LICENSE-0BSD).
 
 Copyright assignment is not necessary when contributing to the project.
 Individual contributors retain copyrights for their contributed code.

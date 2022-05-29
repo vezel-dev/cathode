@@ -13,7 +13,7 @@
 
 <div align="center">
 
-[![License](https://img.shields.io/github/license/vezel-dev/cathode?color=brown)](LICENSE.md)
+[![License](https://img.shields.io/github/license/vezel-dev/cathode?color=brown)](LICENSE-0BSD)
 [![Commits](https://img.shields.io/github/commit-activity/m/vezel-dev/cathode/master?label=commits&color=slateblue)](https://github.com/vezel-dev/cathode/commits/master)
 [![Build](https://img.shields.io/github/workflow/status/vezel-dev/cathode/Build/master)](https://github.com/vezel-dev/cathode/actions/workflows/build.yml)
 [![Discussions](https://img.shields.io/github/discussions/vezel-dev/cathode?color=teal)](https://github.com/vezel-dev/cathode/discussions)
@@ -97,3 +97,8 @@ emulators:
 Even if you are using a terminal emulator that is not listed here, chances are
 that it will work just fine; these are just the ones that are tested regularly
 while developing **Cathode**.
+
+## License
+
+This project is licensed under the terms found in
+[`LICENSE-0BSD`](LICENSE-0BSD).
