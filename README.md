@@ -71,6 +71,9 @@ See the [sample programs](src/samples) for examples of what the API can do. The
 samples can be run with
 [`dotnet example`](https://github.com/patriksvensson/dotnet-example).
 
+For more information, please visit the
+[project home page](https://docs.vezel.dev/cathode).
+
 ## Terminals
 
 This project aims to have excellent support for the following terminal

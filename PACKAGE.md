@@ -26,4 +26,4 @@ See the
 for examples of what the API can do.
 
 For more information, please visit the
-[project page](https://github.com/vezel-dev/cathode).
+[project home page](https://docs.vezel.dev/cathode).
