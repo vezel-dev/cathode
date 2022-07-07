@@ -120,6 +120,7 @@ dotnet_diagnostic.CA1720.severity = none
 dotnet_diagnostic.CA1848.severity = none
 dotnet_diagnostic.CA2225.severity = none
 dotnet_diagnostic.CA2246.severity = none
+dotnet_diagnostic.CA2252.severity = none # TODO: Remove in .NET 7.
 dotnet_diagnostic.CA5392.severity = none
 
 dotnet_diagnostic.IDE0001.severity = error
