@@ -497,7 +497,7 @@ public sealed class ControlBuilder
         _ = (line + 1).TryFormat(lineSpan, out var lineLen);
         _ = (column + 1).TryFormat(columnSpan, out var columnLen);
 
-        return Print(CSI).Print(columnSpan[..columnLen]).Print(";").Print(lineSpan[..lineLen]).Print("H");
+        return Print(CSI).Print(lineSpan[..lineLen]).Print(";").Print(columnSpan[..columnLen]).Print("H");
     }
 
     ControlBuilder MoveCursor(string type, int count)
