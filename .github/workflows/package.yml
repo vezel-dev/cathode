@@ -35,7 +35,6 @@ jobs:
               with:
                   names: |
                       Vezel.Cathode
-                      Vezel.Cathode.Analyzers
                       Vezel.Cathode.Extensions
                       Vezel.Cathode.Hosting
                   keep: 25

@@ -14,8 +14,6 @@ This project offers the following packages:
 
 * [Vezel.Cathode](https://www.nuget.org/packages/Vezel.Cathode): Provides the
   core terminal API.
-* [Vezel.Cathode.Analyzers](https://www.nuget.org/packages/Vezel.Cathode.Analyzers):
-  Provides diagnostic analyzers and source generators.
 * [Vezel.Cathode.Hosting](https://www.nuget.org/packages/Vezel.Cathode.Hosting):
   Provides the terminal hosting model.
 * [Vezel.Cathode.Extensions](https://www.nuget.org/packages/Vezel.Cathode.Extensions):

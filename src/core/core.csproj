@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <AssemblyName>Vezel.Cathode</AssemblyName>
+        <BeforePack>_PackAnalyzer</BeforePack>
         <IsPackable>true</IsPackable>
         <PackageDescription>$(PackageDescription)
 
@@ -21,8 +22,6 @@ This package provides the core terminal API.</PackageDescription>
 
     <ItemGroup>
         <ProjectReference Include="../analyzers/analyzers.csproj"
-                          PrivateAssets="build; contentfiles"
-                          OutputItemType="Analyzer"
                           ReferenceOutputAssembly="false" />
     </ItemGroup>
 
@@ -38,6 +37,21 @@ This package provides the core terminal API.</PackageDescription>
         <PackageReference Include="System.IO.Pipelines" />
         <PackageReference Include="Wcwidth" />
     </ItemGroup>
+
+    <Target Name="_PackAnalyzer">
+        <MSBuild Projects="../analyzers/analyzers.csproj"
+                 Targets="GetTargetPath"
+                 BuildInParallel="$(BuildInParallel)">
+            <Output TaskParameter="TargetOutputs"
+                    ItemName="_AnalyzerPath" />
+        </MSBuild>
+
+        <ItemGroup>
+            <None Include="@(_AnalyzerPath)"
+                  Pack="true"
+                  PackagePath="analyzers/dotnet/cs" />
+        </ItemGroup>
+    </Target>
 
     <Import Project="buildTransitive/Vezel.Cathode.targets" />
 </Project>
