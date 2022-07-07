@@ -133,7 +133,7 @@ public sealed class ChildProcess
             {
                 try
                 {
-                    _process.Kill();
+                    _process.Kill(true);
                 }
                 catch (Exception)
                 {
