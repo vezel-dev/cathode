@@ -20,16 +20,16 @@ static class DiagnosticDescriptors
     }
 
     [Diagnostic(
-        "Avoid multiple classes implementing 'IProgram'",
-        "There must only be one class implementing 'IProgram' within an assembly",
+        "Avoid multiple types implementing 'IProgram'",
+        "There must only be one type implementing 'IProgram' within an assembly",
         DiagnosticSeverity.Error)]
-    public static DiagnosticDescriptor AvoidMultipleProgramClasses { get; private set; } = null!;
+    public static DiagnosticDescriptor AvoidMultipleProgramTypes { get; private set; } = null!;
 
     [Diagnostic(
         "Avoid manually implementing an entry point",
         "Manually-implemented entry point method '{0}' conflicts with the generated entry point",
         DiagnosticSeverity.Error)]
-    public static DiagnosticDescriptor AvoidSpecifyingEntryPoint { get; private set; } = null!;
+    public static DiagnosticDescriptor AvoidImplementingEntryPoint { get; private set; } = null!;
 
     static DiagnosticDescriptors()
     {
