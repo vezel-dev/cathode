@@ -21,7 +21,7 @@
         <PackageVersion Include="Nerdbank.GitVersioning"
                         Version="3.5.86-alpha" />
         <PackageVersion Include="StyleCop.Analyzers"
-                        Version="1.2.0-beta.406" />
+                        Version="1.2.0-beta.435" />
         <PackageVersion Include="System.IO.Pipelines"
                         Version="6.0.2" />
         <PackageVersion Include="Wcwidth"
