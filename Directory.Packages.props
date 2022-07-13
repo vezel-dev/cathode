@@ -13,11 +13,11 @@
         <PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers"
                         Version="17.2.32" />
         <PackageVersion Include="Microsoft.Windows.CsWin32"
-                        Version="0.1.647-beta" />
+                        Version="0.2.10-beta" />
         <PackageVersion Include="Microsoft.Windows.SDK.Win32Docs"
-                        Version="0.1.7-alpha" />
+                        Version="0.1.8-alpha" />
         <PackageVersion Include="Microsoft.Windows.SDK.Win32Metadata"
-                        Version="22.0.14-preview" />
+                        Version="24.0.1-preview" />
         <PackageVersion Include="Nerdbank.GitVersioning"
                         Version="3.5.108" />
         <PackageVersion Include="StyleCop.Analyzers"
