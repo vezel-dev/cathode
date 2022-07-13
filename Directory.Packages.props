@@ -19,7 +19,7 @@
         <PackageVersion Include="Microsoft.Windows.SDK.Win32Metadata"
                         Version="22.0.14-preview" />
         <PackageVersion Include="Nerdbank.GitVersioning"
-                        Version="3.5.86-alpha" />
+                        Version="3.5.108" />
         <PackageVersion Include="StyleCop.Analyzers"
                         Version="1.2.0-beta.435" />
         <PackageVersion Include="System.IO.Pipelines"
