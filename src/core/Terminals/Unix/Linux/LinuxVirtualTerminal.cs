@@ -28,8 +28,7 @@ sealed class LinuxVirtualTerminal : UnixVirtualTerminal
             throw new TerminalNotAttachedException();
 
         // Stash away the original settings the first time we are successfully called.
-        if (_original == null)
-            _original = termios;
+        _original ??= termios;
 
         // These values are usually the default, but we set them just to be safe since UnixTerminalReader would not
         // behave as expected by callers if these values differ.

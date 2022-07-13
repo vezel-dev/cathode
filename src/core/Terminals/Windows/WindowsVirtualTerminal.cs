@@ -122,8 +122,7 @@ sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
             throw new TerminalNotAttachedException();
 
         // Stash away the original modes the first time we are successfully called.
-        if (_original == null)
-            _original = new(inMode, outMode, inCP, outCP);
+        _original ??= new(inMode, outMode, inCP, outCP);
 
         var origIn = inMode;
         var origOut = outMode;
