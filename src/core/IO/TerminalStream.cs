@@ -35,7 +35,7 @@ public abstract class TerminalStream : Stream
 
     public override sealed int Read(byte[] buffer, int offset, int count)
     {
-        ArgumentNullException.ThrowIfNull(buffer);
+        ValidateBufferArguments(buffer, offset, count);
 
         return Read(buffer.AsSpan(offset..count));
     }
