@@ -21,6 +21,10 @@ This package provides the core terminal API.</PackageDescription>
     </ItemGroup>
 
     <ItemGroup>
+        <AdditionalFiles Include="buildTransitive/BannedSymbols.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="../analyzers/analyzers.csproj"
                           ReferenceOutputAssembly="false" />
     </ItemGroup>
@@ -52,6 +56,4 @@ This package provides the core terminal API.</PackageDescription>
                   PackagePath="analyzers/dotnet/cs" />
         </ItemGroup>
     </Target>
-
-    <Import Project="buildTransitive/Vezel.Cathode.targets" />
 </Project>

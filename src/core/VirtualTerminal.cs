@@ -1,3 +1,5 @@
+using Vezel.Cathode.IO;
+
 namespace Vezel.Cathode;
 
 public abstract class VirtualTerminal

@@ -1,3 +1,5 @@
+using Vezel.Cathode.IO;
+
 namespace Vezel.Cathode.Processes;
 
 public sealed class ChildProcessReader

@@ -1,3 +1,4 @@
+using Vezel.Cathode.IO;
 using Vezel.Cathode.Threading;
 using static Vezel.Cathode.Unix.UnixPInvoke;
 

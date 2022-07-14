@@ -16,9 +16,12 @@ This package provides the terminal hosting model.</PackageDescription>
     </ItemGroup>
 
     <ItemGroup>
+        <AdditionalFiles Include="buildTransitive/BannedSymbols.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="../core/core.csproj" />
     </ItemGroup>
 
     <Import Project="../core/buildTransitive/Vezel.Cathode.targets" />
-    <Import Project="buildTransitive/Vezel.Cathode.Hosting.targets" />
 </Project>

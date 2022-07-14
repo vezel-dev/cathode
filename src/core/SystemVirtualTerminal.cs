@@ -1,3 +1,6 @@
+using Vezel.Cathode.IO;
+using Vezel.Cathode.Processes;
+
 namespace Vezel.Cathode;
 
 public abstract class SystemVirtualTerminal : VirtualTerminal

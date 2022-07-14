@@ -1,3 +1,5 @@
+using Vezel.Cathode.IO;
+
 namespace Vezel.Cathode.Terminals;
 
 abstract class NativeTerminalWriter<TTerminal, THandle> : TerminalWriter
