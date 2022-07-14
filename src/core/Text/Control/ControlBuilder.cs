@@ -53,7 +53,7 @@ public sealed class ControlBuilder
             {
                 if (value is ISpanFormattable)
                 {
-                    char[]? rented = null;
+                    var rented = default(char[]);
                     var span = (stackalloc char[StackBufferSize]);
 
                     try
