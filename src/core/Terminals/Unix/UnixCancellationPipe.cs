@@ -21,20 +21,32 @@ sealed class UnixCancellationPipe
     {
         // Note that the runtime sets up a SIGPIPE handler for us.
 
-        var handles = (stackalloc[] { (int)_client.SafePipeHandle.DangerousGetHandle(), handle });
+        var unused = false;
+        var pipeHandle = _client.SafePipeHandle;
 
-        using (var registration = cancellationToken.UnsafeRegister(
-            state => ((UnixCancellationPipe)state!)._server.WriteByte(42), this))
-            if (!_terminal.PollHandles(null, POLLIN, handles))
-                return;
+        pipeHandle.DangerousAddRef(ref unused);
 
-        // Were we canceled?
-        if ((handles[0] & POLLIN) != 0)
+        try
         {
-            // Read the dummy byte that was written to indicate cancellation.
-            _ = _client.ReadByte();
+            var handles = (stackalloc[] { (int)pipeHandle.DangerousGetHandle(), handle });
 
-            throw new OperationCanceledException(cancellationToken);
+            using (var registration = cancellationToken.UnsafeRegister(
+                state => ((UnixCancellationPipe)state!)._server.WriteByte(42), this))
+                if (!_terminal.PollHandles(null, POLLIN, handles))
+                    return;
+
+            // Were we canceled?
+            if ((handles[0] & POLLIN) != 0)
+            {
+                // Read the dummy byte that was written to indicate cancellation.
+                _ = _client.ReadByte();
+
+                throw new OperationCanceledException(cancellationToken);
+            }
+        }
+        finally
+        {
+            pipeHandle.DangerousRelease();
         }
     }
 }
