@@ -38,7 +38,7 @@ public sealed class ChildProcessBuilder
 
     public bool ThrowOnError { get; private set; } = true;
 
-    ChildProcessBuilder Clone()
+    private ChildProcessBuilder Clone()
     {
         return new()
         {

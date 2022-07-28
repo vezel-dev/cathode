@@ -2,7 +2,7 @@ using Vezel.Cathode.Threading;
 
 namespace Vezel.Cathode.IO;
 
-sealed class SynchronizedStream : Stream
+internal sealed class SynchronizedStream : Stream
 {
     // The stream returned by Stream.Synchronized has no async support, has some questionable semantics surrounding
     // BeginRead/EndRead and BeginWrite/EndWrite, and also lacks forwarding for newer method overloads. This class
@@ -11,7 +11,7 @@ sealed class SynchronizedStream : Stream
     // Note that Close, Dispose, and DisposeAsync are intentionally not forwarded as this class is meant to wrap streams
     // that are disposed by other means or are intended to live for the duration of the program.
 
-    sealed class AsyncOperation : IAsyncResult
+    private sealed class AsyncOperation : IAsyncResult
     {
         public bool Read { get; }
 
@@ -58,6 +58,7 @@ sealed class SynchronizedStream : Stream
             using (_lock.Enter())
                 return _stream.Position;
         }
+
         set
         {
             using (_lock.Enter())
@@ -77,9 +78,9 @@ sealed class SynchronizedStream : Stream
         set => _stream.WriteTimeout = value;
     }
 
-    readonly SemaphoreSlim _lock = new(1, 1);
+    private readonly SemaphoreSlim _lock = new(1, 1);
 
-    readonly Stream _stream;
+    private readonly Stream _stream;
 
     public SynchronizedStream(Stream stream)
     {

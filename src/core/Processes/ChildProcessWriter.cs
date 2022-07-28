@@ -5,7 +5,7 @@ namespace Vezel.Cathode.Processes;
 public sealed class ChildProcessWriter
 {
     // This buffer size is arbitrary and only affects performance.
-    const int WriteBufferSize = 4096;
+    private const int WriteBufferSize = 4096;
 
     public Stream Stream { get; }
 

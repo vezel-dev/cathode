@@ -1,10 +1,10 @@
 namespace Vezel.Cathode.Extensions.Logging;
 
-sealed class TerminalLoggerProcessor : IDisposable
+internal sealed class TerminalLoggerProcessor : IDisposable
 {
-    readonly BlockingCollection<TerminalLoggerEntry> _queue;
+    private readonly BlockingCollection<TerminalLoggerEntry> _queue;
 
-    readonly Thread _thread;
+    private readonly Thread _thread;
 
     [SuppressMessage("", "CA1031")]
     public TerminalLoggerProcessor(int queueSize)
@@ -67,7 +67,7 @@ sealed class TerminalLoggerProcessor : IDisposable
         }
     }
 
-    static void Write(TerminalLoggerEntry entry)
+    private static void Write(TerminalLoggerEntry entry)
     {
         entry.Writer.Write(entry.Message.Span);
 

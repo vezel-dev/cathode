@@ -2,7 +2,7 @@ namespace Vezel.Cathode.Unix.MacOS;
 
 [SuppressMessage("", "SA1300")]
 [SuppressMessage("", "SA1310")]
-static unsafe class MacOSPInvoke
+internal static unsafe class MacOSPInvoke
 {
     // c_iflag
 

@@ -3,9 +3,9 @@ using static Windows.Win32.WindowsPInvoke;
 
 namespace Vezel.Cathode.Terminals.Windows;
 
-sealed class WindowsTerminalWriter : NativeTerminalWriter<WindowsVirtualTerminal, SafeHandle>
+internal sealed class WindowsTerminalWriter : NativeTerminalWriter<WindowsVirtualTerminal, SafeHandle>
 {
-    readonly SemaphoreSlim _semaphore;
+    private readonly SemaphoreSlim _semaphore;
 
     public WindowsTerminalWriter(
         WindowsVirtualTerminal terminal,

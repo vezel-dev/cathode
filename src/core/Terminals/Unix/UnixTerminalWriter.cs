@@ -4,9 +4,9 @@ using static Vezel.Cathode.Unix.UnixPInvoke;
 
 namespace Vezel.Cathode.Terminals.Unix;
 
-sealed class UnixTerminalWriter : NativeTerminalWriter<UnixVirtualTerminal, int>
+internal sealed class UnixTerminalWriter : NativeTerminalWriter<UnixVirtualTerminal, int>
 {
-    readonly SemaphoreSlim _semaphore;
+    private readonly SemaphoreSlim _semaphore;
 
     public UnixTerminalWriter(UnixVirtualTerminal terminal, string name, int handle, SemaphoreSlim semaphore)
         : base(terminal, name, handle)

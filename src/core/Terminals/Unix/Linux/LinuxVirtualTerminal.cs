@@ -6,15 +6,15 @@ using static Vezel.Cathode.Unix.UnixPInvoke;
 
 namespace Vezel.Cathode.Terminals.Unix.Linux;
 
-sealed class LinuxVirtualTerminal : UnixVirtualTerminal
+internal sealed class LinuxVirtualTerminal : UnixVirtualTerminal
 {
     // Keep this class in sync with the MacOSVirtualTerminal class.
 
     public static LinuxVirtualTerminal Instance { get; } = new();
 
-    termios? _original;
+    private termios? _original;
 
-    LinuxVirtualTerminal()
+    private LinuxVirtualTerminal()
     {
     }
 
@@ -23,7 +23,7 @@ sealed class LinuxVirtualTerminal : UnixVirtualTerminal
         return ioctl(TerminalOut.Handle, TIOCGWINSZ, out var w) == 0 ? new(w.ws_col, w.ws_row) : null;
     }
 
-    protected override void SetModeCore(bool raw, bool flush)
+    protected override unsafe void SetModeCore(bool raw, bool flush)
     {
         if (tcgetattr(TerminalOut.Handle, out var termios) == -1)
             throw new TerminalNotAttachedException();

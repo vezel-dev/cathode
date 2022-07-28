@@ -17,17 +17,17 @@ public sealed class ChildProcess
 
     public Task<int> Completion { get; }
 
-    readonly Process _process;
+    private readonly Process _process;
 
-    readonly ChildProcessWriter? _in;
+    private readonly ChildProcessWriter? _in;
 
-    readonly ChildProcessReader? _out;
+    private readonly ChildProcessReader? _out;
 
-    readonly ChildProcessReader? _error;
+    private readonly ChildProcessReader? _error;
 
-    readonly TaskCompletionSource<int> _completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
+    private readonly TaskCompletionSource<int> _completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
-    readonly TaskCompletionSource _exited = new(TaskCreationOptions.RunContinuationsAsynchronously);
+    private readonly TaskCompletionSource _exited = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
     [SuppressMessage("", "CA1031")]
     internal ChildProcess(ChildProcessBuilder builder)

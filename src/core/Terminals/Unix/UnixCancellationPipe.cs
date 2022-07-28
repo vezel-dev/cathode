@@ -2,13 +2,14 @@ using static Vezel.Cathode.Unix.UnixPInvoke;
 
 namespace Vezel.Cathode.Terminals.Unix;
 
-sealed class UnixCancellationPipe
+[SuppressMessage("", "CA1001")]
+internal sealed class UnixCancellationPipe
 {
-    readonly UnixVirtualTerminal _terminal;
+    private readonly UnixVirtualTerminal _terminal;
 
-    readonly AnonymousPipeServerStream _server;
+    private readonly AnonymousPipeServerStream _server;
 
-    readonly AnonymousPipeClientStream _client;
+    private readonly AnonymousPipeClientStream _client;
 
     public UnixCancellationPipe(UnixVirtualTerminal terminal)
     {

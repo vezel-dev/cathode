@@ -3,7 +3,7 @@ using static Vezel.Cathode.Unix.UnixPInvoke;
 
 namespace Vezel.Cathode.Terminals.Unix;
 
-abstract class UnixVirtualTerminal : NativeVirtualTerminal<int>
+internal abstract class UnixVirtualTerminal : NativeVirtualTerminal<int>
 {
     public override event Action? Resumed;
 
@@ -18,15 +18,15 @@ abstract class UnixVirtualTerminal : NativeVirtualTerminal<int>
     public override sealed UnixTerminalWriter TerminalOut { get; }
 
     [SuppressMessage("", "IDE0052")]
-    readonly PosixSignalRegistration _sigWinch;
+    private readonly PosixSignalRegistration _sigWinch;
 
     [SuppressMessage("", "IDE0052")]
-    readonly PosixSignalRegistration _sigCont;
+    private readonly PosixSignalRegistration _sigCont;
 
     [SuppressMessage("", "IDE0052")]
-    readonly PosixSignalRegistration _sigChld;
+    private readonly PosixSignalRegistration _sigChld;
 
-    readonly object _rawLock = new();
+    private readonly object _rawLock = new();
 
     [SuppressMessage("", "CA2214")]
     protected UnixVirtualTerminal()

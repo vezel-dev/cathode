@@ -1,10 +1,10 @@
 namespace Vezel.Cathode.Threading;
 
-static class SynchronizationExtensions
+internal static class SynchronizationExtensions
 {
     public readonly struct LockDisposable : IDisposable
     {
-        readonly SemaphoreSlim _semaphore;
+        private readonly SemaphoreSlim _semaphore;
 
         public LockDisposable(SemaphoreSlim semaphore)
         {

@@ -6,7 +6,7 @@ public static class ProgramHost
 {
     // This class is only meant to be used by generated code.
 
-    static int _running;
+    private static int _running;
 
     [SuppressMessage("", "CA1031")]
     public static async Task RunAsync<TProgram>(ReadOnlyMemory<string> arguments)

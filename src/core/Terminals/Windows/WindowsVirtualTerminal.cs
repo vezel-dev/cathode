@@ -6,9 +6,9 @@ using static Windows.Win32.WindowsPInvoke;
 
 namespace Vezel.Cathode.Terminals.Windows;
 
-sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
+internal sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
 {
-    sealed class ConsoleState
+    private sealed class ConsoleState
     {
         public CONSOLE_MODE InMode { get; }
 
@@ -33,6 +33,7 @@ sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
         {
             // Windows does not have a SIGSTOP/SIGCONT concept.
         }
+
         remove
         {
         }
@@ -50,10 +51,10 @@ sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
 
     public override WindowsTerminalWriter TerminalOut { get; }
 
-    ConsoleState? _original;
+    private ConsoleState? _original;
 
     [SuppressMessage("", "CA2000")]
-    WindowsVirtualTerminal()
+    private WindowsVirtualTerminal()
     {
         var inLock = new SemaphoreSlim(1, 1);
         var outLock = new SemaphoreSlim(1, 1);
@@ -111,7 +112,7 @@ sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
             0);
     }
 
-    void SetModeCore(bool raw, bool flush)
+    private void SetModeCore(bool raw, bool flush)
     {
         uint inCP;
         uint outCP;

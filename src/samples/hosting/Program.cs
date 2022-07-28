@@ -1,4 +1,4 @@
-sealed class Program : IProgram
+internal sealed class Program : IProgram
 {
     public static async Task RunAsync(ProgramContext context)
     {

@@ -2,7 +2,7 @@ namespace Vezel.Cathode.Unix.Linux;
 
 [SuppressMessage("", "SA1300")]
 [SuppressMessage("", "SA1310")]
-static unsafe class LinuxPInvoke
+internal static unsafe class LinuxPInvoke
 {
     // c_iflag
 

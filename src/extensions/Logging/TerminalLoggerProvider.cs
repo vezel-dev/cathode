@@ -3,13 +3,13 @@ namespace Vezel.Cathode.Extensions.Logging;
 [ProviderAlias("Terminal")]
 public sealed class TerminalLoggerProvider : ILoggerProvider, ISupportExternalScope
 {
-    readonly ConcurrentDictionary<string, TerminalLogger> _loggers = new();
+    private readonly ConcurrentDictionary<string, TerminalLogger> _loggers = new();
 
-    readonly IOptionsMonitor<TerminalLoggerOptions> _options;
+    private readonly IOptionsMonitor<TerminalLoggerOptions> _options;
 
-    readonly TerminalLoggerProcessor _processor;
+    private readonly TerminalLoggerProcessor _processor;
 
-    IExternalScopeProvider _scopeProvider = NullExternalScopeProvider.Instance;
+    private IExternalScopeProvider _scopeProvider = NullExternalScopeProvider.Instance;
 
     public TerminalLoggerProvider(IOptionsMonitor<TerminalLoggerOptions> options)
     {

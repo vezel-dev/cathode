@@ -12,11 +12,11 @@ public class TestTerminalReader : TerminalReader
 
     public override sealed bool IsInteractive => _isInteractive;
 
-    readonly Pipe _pipe = new(new(pauseWriterThreshold: 0, useSynchronizationContext: false));
+    private readonly Pipe _pipe = new(new(pauseWriterThreshold: 0, useSynchronizationContext: false));
 
-    bool _isValid = true;
+    private bool _isValid = true;
 
-    bool _isInteractive = true;
+    private bool _isInteractive = true;
 
     public TestTerminalReader()
     {

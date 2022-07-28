@@ -2,11 +2,11 @@ using Vezel.Cathode.IO;
 
 namespace Vezel.Cathode.Terminals;
 
-abstract class NativeTerminalWriter<TTerminal, THandle> : TerminalWriter
+internal abstract class NativeTerminalWriter<TTerminal, THandle> : TerminalWriter
     where TTerminal : NativeVirtualTerminal<THandle>
 {
     // Unlike NativeTerminalReader, the buffer size here is arbitrary and only has performance implications.
-    const int WriteBufferSize = 256;
+    private const int WriteBufferSize = 256;
 
     public TTerminal Terminal { get; }
 

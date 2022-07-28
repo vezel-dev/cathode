@@ -22,9 +22,9 @@ public class TestVirtualTerminal : VirtualTerminal
 
     public override sealed TerminalSize Size => _size;
 
-    bool _raw;
+    private bool _raw;
 
-    TerminalSize _size = new(24, 80);
+    private TerminalSize _size = new(24, 80);
 
     public TestVirtualTerminal()
     {

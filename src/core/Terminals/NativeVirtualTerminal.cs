@@ -1,6 +1,6 @@
 namespace Vezel.Cathode.Terminals;
 
-abstract class NativeVirtualTerminal<THandle> : SystemVirtualTerminal
+internal abstract class NativeVirtualTerminal<THandle> : SystemVirtualTerminal
 {
     public abstract bool IsHandleValid(THandle handle, bool write);
 

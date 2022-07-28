@@ -4,13 +4,13 @@ using static Windows.Win32.WindowsPInvoke;
 
 namespace Vezel.Cathode.Terminals.Windows;
 
-sealed class WindowsTerminalReader : NativeTerminalReader<WindowsVirtualTerminal, SafeHandle>
+internal sealed class WindowsTerminalReader : NativeTerminalReader<WindowsVirtualTerminal, SafeHandle>
 {
-    readonly SemaphoreSlim _semaphore;
+    private readonly SemaphoreSlim _semaphore;
 
-    readonly byte[] _buffer;
+    private readonly byte[] _buffer;
 
-    ReadOnlyMemory<byte> _buffered;
+    private ReadOnlyMemory<byte> _buffered;
 
     public WindowsTerminalReader(
         WindowsVirtualTerminal terminal,

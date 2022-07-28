@@ -6,6 +6,8 @@ public static class SystemdTerminalHostBuilderExtensions
 {
     public static IHostBuilder UseTerminalSystemd(this IHostBuilder hostBuilder)
     {
+        ArgumentNullException.ThrowIfNull(hostBuilder);
+
         return SystemdHelpers.IsSystemdService() ?
             hostBuilder.ConfigureServices((ctx, services) =>
                 services

@@ -3,6 +3,7 @@ using Vezel.Cathode.Processes;
 
 namespace Vezel.Cathode;
 
+[SuppressMessage("", "CA1001")]
 public abstract class SystemVirtualTerminal : VirtualTerminal
 {
     public override event Action<TerminalSize>? Resized
@@ -17,6 +18,7 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
                     _resizeEvent.Set();
             }
         }
+
         remove
         {
             lock (_sizeLock)
@@ -63,6 +65,7 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
                 }
             }
         }
+
         remove
         {
             lock (_signalLock)
@@ -114,33 +117,33 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
         }
     }
 
-    readonly object _sizeLock = new();
+    private readonly object _sizeLock = new();
 
-    readonly object _signalLock = new();
+    private readonly object _signalLock = new();
 
-    readonly object _rawLock = new();
+    private readonly object _rawLock = new();
 
-    readonly ManualResetEventSlim _resizeEvent = new();
+    private readonly ManualResetEventSlim _resizeEvent = new();
 
-    readonly HashSet<ChildProcess> _processes = new();
+    private readonly HashSet<ChildProcess> _processes = new();
 
-    Action<TerminalSize>? _resized;
+    private Action<TerminalSize>? _resized;
 
-    Action<TerminalSignalContext>? _signaled;
+    private Action<TerminalSignalContext>? _signaled;
 
-    PosixSignalRegistration? _sigHup;
+    private PosixSignalRegistration? _sigHup;
 
-    PosixSignalRegistration? _sigInt;
+    private PosixSignalRegistration? _sigInt;
 
-    PosixSignalRegistration? _sigQuit;
+    private PosixSignalRegistration? _sigQuit;
 
-    PosixSignalRegistration? _sigTerm;
+    private PosixSignalRegistration? _sigTerm;
 
-    bool _rawMode;
+    private bool _rawMode;
 
-    TerminalSize? _size;
+    private TerminalSize? _size;
 
-    TimeSpan _sizeInterval = TimeSpan.FromMilliseconds(100);
+    private TimeSpan _sizeInterval = TimeSpan.FromMilliseconds(100);
 
     private protected SystemVirtualTerminal()
     {

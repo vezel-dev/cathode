@@ -4,11 +4,11 @@ using static Vezel.Cathode.Unix.UnixPInvoke;
 
 namespace Vezel.Cathode.Terminals.Unix;
 
-sealed class UnixTerminalReader : NativeTerminalReader<UnixVirtualTerminal, int>
+internal sealed class UnixTerminalReader : NativeTerminalReader<UnixVirtualTerminal, int>
 {
-    readonly SemaphoreSlim _semaphore;
+    private readonly SemaphoreSlim _semaphore;
 
-    readonly UnixCancellationPipe _cancellationPipe;
+    private readonly UnixCancellationPipe _cancellationPipe;
 
     public UnixTerminalReader(
         UnixVirtualTerminal terminal,

@@ -1,12 +1,12 @@
 namespace Vezel.Cathode.Terminals.Unix;
 
-sealed class PosixSignalGuard : IDisposable
+internal sealed class PosixSignalGuard : IDisposable
 {
     public bool Signaled => _signaled;
 
-    readonly PosixSignalRegistration _registration;
+    private readonly PosixSignalRegistration _registration;
 
-    volatile bool _signaled;
+    private volatile bool _signaled;
 
     public PosixSignalGuard(PosixSignal signal)
     {

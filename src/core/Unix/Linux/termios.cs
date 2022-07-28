@@ -1,10 +1,11 @@
 namespace Vezel.Cathode.Unix.Linux;
 
+[StructLayout(LayoutKind.Sequential)]
 [SuppressMessage("", "IDE1006")]
 [SuppressMessage("", "SA1300")]
 [SuppressMessage("", "SA1307")]
 [SuppressMessage("", "SA1310")]
-struct termios
+internal struct termios
 {
     public uint c_iflag;
 
@@ -16,8 +17,7 @@ struct termios
 
     public byte c_line;
 
-    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
-    public byte[] c_cc;
+    public unsafe fixed byte c_cc[32];
 
     public uint c_ispeed;
 

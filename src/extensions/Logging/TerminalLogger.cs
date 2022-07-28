@@ -1,16 +1,16 @@
 namespace Vezel.Cathode.Extensions.Logging;
 
-sealed class TerminalLogger : ILogger
+internal sealed class TerminalLogger : ILogger
 {
     public IExternalScopeProvider ScopeProvider { get; set; }
 
-    static readonly ThreadLocal<ControlBuilder> _builder = new(() => new());
+    private static readonly ThreadLocal<ControlBuilder> _builder = new(() => new());
 
-    readonly string _name;
+    private readonly string _name;
 
-    readonly IOptionsMonitor<TerminalLoggerOptions> _options;
+    private readonly IOptionsMonitor<TerminalLoggerOptions> _options;
 
-    readonly TerminalLoggerProcessor _processor;
+    private readonly TerminalLoggerProcessor _processor;
 
     public TerminalLogger(
         string name,

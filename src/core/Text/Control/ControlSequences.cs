@@ -2,13 +2,13 @@ namespace Vezel.Cathode.Text.Control;
 
 public static class ControlSequences
 {
-    delegate void CreateAction<T>(ControlBuilder builder, ReadOnlySpan<T> span);
+    private delegate void CreateAction<T>(ControlBuilder builder, ReadOnlySpan<T> span);
 
-    delegate void CreateAction<T, in TState>(ControlBuilder builder, ReadOnlySpan<T> span, TState state);
+    private delegate void CreateAction<T, in TState>(ControlBuilder builder, ReadOnlySpan<T> span, TState state);
 
-    static readonly ThreadLocal<ControlBuilder> _builder = new(() => new());
+    private static readonly ThreadLocal<ControlBuilder> _builder = new(() => new());
 
-    static string Create<T, TState>(CreateAction<T, TState> action, ReadOnlySpan<T> span, TState state)
+    private static string Create<T, TState>(CreateAction<T, TState> action, ReadOnlySpan<T> span, TState state)
     {
         var cb = _builder.Value!;
 
@@ -24,12 +24,12 @@ public static class ControlSequences
         }
     }
 
-    static string Create<T>(CreateAction<T> action, ReadOnlySpan<T> span)
+    private static string Create<T>(CreateAction<T> action, ReadOnlySpan<T> span)
     {
         return Create(static (cb, span, act) => act(cb, span), span, action);
     }
 
-    static string Create(Action<ControlBuilder> action)
+    private static string Create(Action<ControlBuilder> action)
     {
         return Create(static (cb, _, act) => act(cb), ReadOnlySpan<char>.Empty, action);
     }

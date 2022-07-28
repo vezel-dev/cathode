@@ -1,10 +1,10 @@
 namespace Vezel.Cathode.Extensions.Logging;
 
-sealed class NullExternalScopeProvider : IExternalScopeProvider
+internal sealed class NullExternalScopeProvider : IExternalScopeProvider
 {
     public static NullExternalScopeProvider Instance { get; } = new();
 
-    NullExternalScopeProvider()
+    private NullExternalScopeProvider()
     {
     }
 

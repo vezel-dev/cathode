@@ -3,12 +3,12 @@ namespace Vezel.Cathode.Analyzers.Hosting;
 [Generator(LanguageNames.CSharp)]
 public sealed class EntryPointGenerator : ISourceGenerator
 {
-    sealed class ProgramTypeSyntaxReceiver : ISyntaxContextReceiver
+    private sealed class ProgramTypeSyntaxReceiver : ISyntaxContextReceiver
     {
         public ImmutableArray<INamedTypeSymbol> ProgramSymbols { get; private set; } =
             ImmutableArray<INamedTypeSymbol>.Empty;
 
-        INamedTypeSymbol? _interface;
+        private INamedTypeSymbol? _interface;
 
         public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
         {

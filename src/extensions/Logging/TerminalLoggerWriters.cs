@@ -2,11 +2,11 @@ namespace Vezel.Cathode.Extensions.Logging;
 
 public static class TerminalLoggerWriters
 {
-    readonly ref struct Decorator
+    private readonly ref struct Decorator
     {
-        readonly ControlBuilder _builder;
+        private readonly ControlBuilder _builder;
 
-        readonly bool _set;
+        private readonly bool _set;
 
         public Decorator(ControlBuilder builder, byte r, byte g, byte b)
         {

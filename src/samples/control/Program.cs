@@ -38,7 +38,7 @@ using (var control = Control.Acquire())
 
     await Run("output text", () => OutLine("This should throw."));
     await Run("read a line", () => ReadLine());
-    await Run("switch to raw mode", () => EnableRawMode());
+    await Run("switch to raw mode", EnableRawMode);
 }
 
 await OutLineAsync("Done.");

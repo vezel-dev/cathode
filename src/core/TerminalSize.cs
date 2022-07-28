@@ -15,15 +15,9 @@ public readonly struct TerminalSize : IEquatable<TerminalSize>
         Height = height;
     }
 
-    public static bool operator ==(TerminalSize left, TerminalSize right)
-    {
-        return left.Equals(right);
-    }
+    public static bool operator ==(TerminalSize left, TerminalSize right) => left.Equals(right);
 
-    public static bool operator !=(TerminalSize left, TerminalSize right)
-    {
-        return !left.Equals(right);
-    }
+    public static bool operator !=(TerminalSize left, TerminalSize right) => !left.Equals(right);
 
     public bool Equals(TerminalSize other)
     {

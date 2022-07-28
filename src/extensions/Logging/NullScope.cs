@@ -1,10 +1,10 @@
 namespace Vezel.Cathode.Extensions.Logging;
 
-sealed class NullScope : IDisposable
+internal sealed class NullScope : IDisposable
 {
     public static NullScope Instance { get; } = new();
 
-    NullScope()
+    private NullScope()
     {
     }
 

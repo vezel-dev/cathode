@@ -1,6 +1,7 @@
 namespace Vezel.Cathode.Threading;
 
-sealed class AsyncReaderWriterLockSlim
+[SuppressMessage("", "CA1001")]
+internal sealed class AsyncReaderWriterLockSlim
 {
     // This is a simple, async-compatible, writer-biased reader/writer lock. The assumption is that write sections will
     // be considerably less frequent than read sections and also very short-lived, so new readers will be forced to spin
@@ -9,11 +10,11 @@ sealed class AsyncReaderWriterLockSlim
     // Due to the nature of async/await, this class has no notion of threads. So, read lock recursion is supported while
     // the write lock is not held, but attempting to enter the read lock while holding the write lock will deadlock.
 
-    readonly SemaphoreSlim _semaphore = new(1, 1);
+    private readonly SemaphoreSlim _semaphore = new(1, 1);
 
-    int _state;
+    private int _state;
 
-    bool EnterReadLockCore(CancellationToken cancellationToken)
+    private bool EnterReadLockCore(CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -58,7 +59,7 @@ sealed class AsyncReaderWriterLockSlim
             throw new SynchronizationLockException();
     }
 
-    bool EnterWriteLockCore(CancellationToken cancellationToken)
+    private bool EnterWriteLockCore(CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

@@ -8,14 +8,15 @@ public sealed class ControlBuilder
     [InterpolatedStringHandler]
     public readonly ref struct PrintInterpolatedStringHandler
     {
-        const int StackBufferSize = 256;
+        private const int StackBufferSize = 256;
 
-        readonly ControlBuilder _builder;
+        private readonly ControlBuilder _builder;
 
-        readonly IFormatProvider? _provider;
+        private readonly IFormatProvider? _provider;
 
-        readonly ICustomFormatter? _formatter;
+        private readonly ICustomFormatter? _formatter;
 
+        [SuppressMessage("", "IDE0060")]
         public PrintInterpolatedStringHandler(
             int literalLength,
             int formattedCount,
@@ -28,7 +29,7 @@ public sealed class ControlBuilder
                 (ICustomFormatter?)provider?.GetFormat(typeof(ICustomFormatter)) : null;
         }
 
-        void AppendSpan(ReadOnlySpan<char> span)
+        private void AppendSpan(ReadOnlySpan<char> span)
         {
             _ = _builder.Print(span);
         }
@@ -113,13 +114,13 @@ public sealed class ControlBuilder
         }
     }
 
-    const int StackBufferSize = 32;
+    private const int StackBufferSize = 32;
 
     public ReadOnlySpan<char> Span => _writer.WrittenSpan;
 
-    readonly int _capacity;
+    private readonly int _capacity;
 
-    ArrayBufferWriter<char> _writer;
+    private ArrayBufferWriter<char> _writer;
 
     public ControlBuilder(int capacity = 1024)
     {
@@ -156,11 +157,13 @@ public sealed class ControlBuilder
         return Print((value?.ToString()).AsSpan());
     }
 
+    [SuppressMessage("", "IDE0060")]
     public ControlBuilder Print([InterpolatedStringHandlerArgument("")] ref PrintInterpolatedStringHandler handler)
     {
         return this;
     }
 
+    [SuppressMessage("", "IDE0060")]
     public ControlBuilder Print(
         IFormatProvider? provider,
         [InterpolatedStringHandlerArgument("", "provider")] ref PrintInterpolatedStringHandler handler)
@@ -178,11 +181,13 @@ public sealed class ControlBuilder
         return Print(value).PrintLine();
     }
 
+    [SuppressMessage("", "IDE0060")]
     public ControlBuilder PrintLine([InterpolatedStringHandlerArgument("")] ref PrintInterpolatedStringHandler handler)
     {
         return PrintLine();
     }
 
+    [SuppressMessage("", "IDE0060")]
     public ControlBuilder PrintLine(
         IFormatProvider? provider,
         [InterpolatedStringHandlerArgument("", "provider")] ref PrintInterpolatedStringHandler handler)
@@ -402,7 +407,7 @@ public sealed class ControlBuilder
         return Print(CSI).Print(topSpan[..topLen]).Print(";").Print(bottomSpan[..bottomLen]).Print("r");
     }
 
-    ControlBuilder ModifyText(string type, int count)
+    private ControlBuilder ModifyText(string type, int count)
     {
         _ = count >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(count));
 
@@ -441,7 +446,7 @@ public sealed class ControlBuilder
         return ModifyText("M", count);
     }
 
-    ControlBuilder Clear(string type, ClearMode mode)
+    private ControlBuilder Clear(string type, ClearMode mode)
     {
         _ = Enum.IsDefined(mode) ? true : throw new ArgumentOutOfRangeException(nameof(mode));
 
@@ -462,7 +467,7 @@ public sealed class ControlBuilder
         return Clear("K", mode);
     }
 
-    ControlBuilder MoveBuffer(string type, int count)
+    private ControlBuilder MoveBuffer(string type, int count)
     {
         _ = count >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(count));
 
@@ -500,7 +505,7 @@ public sealed class ControlBuilder
         return Print(CSI).Print(lineSpan[..lineLen]).Print(";").Print(columnSpan[..columnLen]).Print("H");
     }
 
-    ControlBuilder MoveCursor(string type, int count)
+    private ControlBuilder MoveCursor(string type, int count)
     {
         _ = count >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(count));
 

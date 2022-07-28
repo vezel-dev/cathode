@@ -1,0 +1,58 @@
+{
+  "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
+  "settings": {
+    "indentation": {
+      "indentationSize": 4,
+      "tabSize": 4,
+      "useTabs": false
+    },
+    "readabilityRules": {
+      "allowBuiltInTypeAliases": false
+    },
+    "orderingRules": {
+      "elementOrder": [
+        "kind",
+        "constant",
+        "static",
+        "readonly"
+      ],
+      "usingDirectivesPlacement": "outsideNamespace",
+      "systemUsingDirectivesFirst": true,
+      "blankLinesBetweenUsingGroups": "omit"
+    },
+    "namingRules": {
+      "tupleElementNameCasing": "PascalCase",
+      "includeInferredTupleElementNames": false
+    },
+    "maintainabilityRules": {
+      "topLevelTypes": [
+        "class",
+        "enum",
+        "delegate",
+        "interface",
+        "struct"
+      ]
+    },
+    "layoutRules": {
+      "allowDoWhileOnClosingBrace": false,
+      "allowConsecutiveUsings": true,
+      "newlineAtEndOfFile": "require"
+    },
+    "documentationRules": {
+      "companyName": "Vezel",
+      "copyrightText": "Copyright © {companyName} Contributors. Licensed under the Zero-Clause BSD license.",
+      "headerDecoration": "---------------------------------------------------------------------------",
+      "xmlHeader": false,
+      "fileNamingConvention": "stylecop",
+      "documentationCulture": "en-US",
+      "documentExposedElements": true,
+      "documentInternalElements": false,
+      "documentPrivateElements": false,
+      "documentPrivateFields": false,
+      "documentInterfaces": false,
+      "excludeFromPunctuationCheck": [
+        "seealso"
+      ]
+    }
+  }
+}

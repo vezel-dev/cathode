@@ -1,10 +1,11 @@
 namespace Vezel.Cathode.Unix;
 
+[StructLayout(LayoutKind.Sequential)]
 [SuppressMessage("", "IDE1006")]
 [SuppressMessage("", "SA1300")]
 [SuppressMessage("", "SA1307")]
 [SuppressMessage("", "SA1310")]
-struct winsize
+internal struct winsize
 {
     public ushort ws_row;
 

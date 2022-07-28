@@ -6,7 +6,7 @@ public sealed class TerminalControl
 {
     public sealed class AcquireDisposable : IDisposable
     {
-        readonly TerminalControl _control;
+        private readonly TerminalControl _control;
 
         internal AcquireDisposable(TerminalControl control)
         {
@@ -25,7 +25,7 @@ public sealed class TerminalControl
 
     internal readonly struct GuardDisposable : IDisposable
     {
-        readonly TerminalControl _control;
+        private readonly TerminalControl _control;
 
         public GuardDisposable(TerminalControl control)
         {
@@ -38,11 +38,11 @@ public sealed class TerminalControl
         }
     }
 
-    readonly AsyncReaderWriterLockSlim _lock = new();
+    private readonly AsyncReaderWriterLockSlim _lock = new();
 
-    readonly AsyncLocal<object> _current = new();
+    private readonly AsyncLocal<object> _current = new();
 
-    object? _controller;
+    private object? _controller;
 
     internal TerminalControl()
     {

@@ -5,7 +5,7 @@ namespace Vezel.Cathode.Processes;
 public sealed class ChildProcessReader
 {
     // This buffer size is arbitrary and only affects performance.
-    const int ReadBufferSize = 4096;
+    private const int ReadBufferSize = 4096;
 
     public Stream Stream { get; }
 
@@ -15,7 +15,7 @@ public sealed class ChildProcessReader
 
     internal Task Completion { get; }
 
-    readonly Pipe _pipe;
+    private readonly Pipe _pipe;
 
     internal ChildProcessReader(StreamReader reader, int bufferSize)
     {

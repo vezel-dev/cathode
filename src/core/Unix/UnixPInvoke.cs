@@ -2,7 +2,7 @@ namespace Vezel.Cathode.Unix;
 
 [SuppressMessage("", "SA1300")]
 [SuppressMessage("", "SA1310")]
-static unsafe class UnixPInvoke
+internal static unsafe class UnixPInvoke
 {
     // fd
 

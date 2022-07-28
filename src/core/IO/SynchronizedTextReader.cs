@@ -2,7 +2,7 @@ using Vezel.Cathode.Threading;
 
 namespace Vezel.Cathode.IO;
 
-sealed class SynchronizedTextReader : TextReader
+internal sealed class SynchronizedTextReader : TextReader
 {
     // The reader returned by TextReader.Synchronized has no async support and also lacks forwarding for newer method
     // overloads. This class addresses those issues.
@@ -10,9 +10,9 @@ sealed class SynchronizedTextReader : TextReader
     // Note that Close, Dispose, and DisposeAsync are intentionally not forwarded as this class is meant to wrap readers
     // that are disposed by other means or are intended to live for the duration of the program.
 
-    readonly SemaphoreSlim _lock = new(1, 1);
+    private readonly SemaphoreSlim _lock = new(1, 1);
 
-    readonly TextReader _reader;
+    private readonly TextReader _reader;
 
     public SynchronizedTextReader(TextReader reader)
     {

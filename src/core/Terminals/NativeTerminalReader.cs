@@ -2,12 +2,12 @@ using Vezel.Cathode.IO;
 
 namespace Vezel.Cathode.Terminals;
 
-abstract class NativeTerminalReader<TTerminal, THandle> : TerminalReader
+internal abstract class NativeTerminalReader<TTerminal, THandle> : TerminalReader
     where TTerminal : NativeVirtualTerminal<THandle>
 {
     // Note that the buffer size used affects how many characters the Windows console host will allow the user to type
     // in a single line (in cooked mode).
-    const int ReadBufferSize = 4096;
+    private const int ReadBufferSize = 4096;
 
     public TTerminal Terminal { get; }
 

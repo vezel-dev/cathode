@@ -1,9 +1,10 @@
 namespace Vezel.Cathode.Unix;
 
+[StructLayout(LayoutKind.Sequential)]
 [SuppressMessage("", "IDE1006")]
 [SuppressMessage("", "SA1300")]
 [SuppressMessage("", "SA1307")]
-struct pollfd
+internal struct pollfd
 {
     public int fd;
 

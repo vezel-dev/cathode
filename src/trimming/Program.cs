@@ -1,11 +1,3 @@
-namespace Vezel.Cathode.Trimming;
+Console.WriteLine("What are you doing? 👀");
 
-static class Program
-{
-    static int Main()
-    {
-        Terminal.OutLine("What are you doing? 👀");
-
-        return 1;
-    }
-}
+return 1;

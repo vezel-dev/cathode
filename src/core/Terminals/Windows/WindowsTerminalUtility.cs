@@ -3,7 +3,7 @@ using Windows.Win32.Foundation;
 
 namespace Vezel.Cathode.Terminals.Windows;
 
-static class WindowsTerminalUtility
+internal static class WindowsTerminalUtility
 {
     public static void ThrowIfUnexpected(string message)
     {

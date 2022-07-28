@@ -2,7 +2,7 @@ using Vezel.Cathode.Threading;
 
 namespace Vezel.Cathode.IO;
 
-sealed class SynchronizedTextWriter : TextWriter
+internal sealed class SynchronizedTextWriter : TextWriter
 {
     // The writer returned by TextWriter.Synchronized has no async support and also lacks forwarding for newer method
     // overloads. This class addresses those issues.
@@ -22,6 +22,7 @@ sealed class SynchronizedTextWriter : TextWriter
             using (_lock.Enter())
                 return _writer.NewLine;
         }
+
         set
         {
             using (_lock.Enter())
@@ -29,9 +30,9 @@ sealed class SynchronizedTextWriter : TextWriter
         }
     }
 
-    readonly SemaphoreSlim _lock = new(1, 1);
+    private readonly SemaphoreSlim _lock = new(1, 1);
 
-    readonly TextWriter _writer;
+    private readonly TextWriter _writer;
 
     public SynchronizedTextWriter(TextWriter writer)
     {
