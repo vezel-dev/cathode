@@ -27,7 +27,7 @@
         <When Condition="'$(IsPackable)' == 'true'">
             <PropertyGroup>
                 <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-                <IsTrimmable Condition="'$(OutputType)' == 'Library' and '$(DevelopmentDependency)' != 'true'">>true</IsTrimmable>
+                <IsTrimmable Condition="'$(OutputType)' == 'Library'">>true</IsTrimmable>
                 <PackageIcon>cathode.png</PackageIcon>
                 <PackageReadmeFile>PACKAGE.md</PackageReadmeFile>
             </PropertyGroup>
