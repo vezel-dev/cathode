@@ -6,11 +6,12 @@ public static class ControlSequences
 
     private delegate void CreateAction<T, in TState>(ControlBuilder builder, ReadOnlySpan<T> span, TState state);
 
-    private static readonly ThreadLocal<ControlBuilder> _builder = new(() => new());
+    [ThreadStatic]
+    private static ControlBuilder? _builder;
 
     private static string Create<T, TState>(CreateAction<T, TState> action, ReadOnlySpan<T> span, TState state)
     {
-        var cb = _builder.Value!;
+        var cb = _builder ??= new();
 
         try
         {

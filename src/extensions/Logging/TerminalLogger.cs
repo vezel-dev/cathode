@@ -4,7 +4,8 @@ internal sealed class TerminalLogger : ILogger
 {
     public IExternalScopeProvider ScopeProvider { get; set; }
 
-    private static readonly ThreadLocal<ControlBuilder> _builder = new(() => new());
+    [ThreadStatic]
+    private static ControlBuilder? _builder;
 
     private readonly string _name;
 
@@ -53,7 +54,7 @@ internal sealed class TerminalLogger : ILogger
 
         var opts = _options.CurrentValue;
         var now = opts.UseUtcTimestamp ? DateTime.UtcNow : DateTime.Now;
-        var cb = _builder.Value!;
+        var cb = _builder ??= new();
 
         try
         {
