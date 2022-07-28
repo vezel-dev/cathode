@@ -15,7 +15,7 @@
       ]
     },
     "dotnet-example": {
-      "version": "1.6.0",
+      "version": "1.6.1-preview.0.1",
       "commands": [
         "dotnet-example"
       ]
