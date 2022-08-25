@@ -31,7 +31,7 @@ jobs:
               run: |
                   dotnet gpr push pkg/feed/*.nupkg -k ${{ secrets.GITHUB_TOKEN }}
             - name: Prune GitHub packages
-              uses: SmartsquareGmbH/delete-old-packages@v0.4.0
+              uses: SmartsquareGmbH/delete-old-packages@v0.5.0
               with:
                   names: |
                       Vezel.Cathode
