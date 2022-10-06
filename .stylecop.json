@@ -43,7 +43,7 @@
       "copyrightText": "Copyright © {companyName} Contributors. Licensed under the Zero-Clause BSD license.",
       "headerDecoration": "---------------------------------------------------------------------------",
       "xmlHeader": false,
-      "fileNamingConvention": "stylecop",
+      "fileNamingConvention": "metadata",
       "documentationCulture": "en-US",
       "documentExposedElements": true,
       "documentInternalElements": false,
