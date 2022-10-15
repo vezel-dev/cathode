@@ -55,6 +55,7 @@ public static class Terminal
         set => System.SizePollingInterval = value;
     }
 
+    [UnsupportedOSPlatform("windows")]
     public static void GenerateSignal(TerminalSignal signal)
     {
         System.GenerateSignal(signal);
