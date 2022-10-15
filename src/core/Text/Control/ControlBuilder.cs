@@ -118,6 +118,8 @@ public sealed class ControlBuilder
 
     public ReadOnlySpan<char> Span => _writer.WrittenSpan;
 
+    private static readonly CultureInfo _culture = CultureInfo.InvariantCulture;
+
     private readonly int _capacity;
 
     private ArrayBufferWriter<char> _writer;
@@ -299,8 +301,8 @@ public sealed class ControlBuilder
         var stateSpan = (stackalloc char[StackBufferSize]);
         var valueSpan = (stackalloc char[StackBufferSize]);
 
-        _ = ((int)state).TryFormat(stateSpan, out var stateLen);
-        _ = value.TryFormat(valueSpan, out var valueLen);
+        _ = ((int)state).TryFormat(stateSpan, out var stateLen, provider: _culture);
+        _ = value.TryFormat(valueSpan, out var valueLen, provider: _culture);
 
         return Print(OSC).Print("9;4;").Print(stateSpan[..stateLen]).Print(";").Print(valueSpan[..valueLen]).Print(ST);
     }
@@ -382,7 +384,7 @@ public sealed class ControlBuilder
 
         var styleSpan = (stackalloc char[StackBufferSize]);
 
-        _ = ((int)style).TryFormat(styleSpan, out var styleLen);
+        _ = ((int)style).TryFormat(styleSpan, out var styleLen, provider: _culture);
 
         return Print(CSI).Print(styleSpan[..styleLen]).Space().Print("q");
     }
@@ -401,8 +403,8 @@ public sealed class ControlBuilder
         var topSpan = (stackalloc char[StackBufferSize]);
         var bottomSpan = (stackalloc char[StackBufferSize]);
 
-        _ = (top + 1).TryFormat(topSpan, out var topLen);
-        _ = (bottom + 1).TryFormat(bottomSpan, out var bottomLen);
+        _ = (top + 1).TryFormat(topSpan, out var topLen, provider: _culture);
+        _ = (bottom + 1).TryFormat(bottomSpan, out var bottomLen, provider: _culture);
 
         return Print(CSI).Print(topSpan[..topLen]).Print(";").Print(bottomSpan[..bottomLen]).Print("r");
     }
@@ -416,7 +418,7 @@ public sealed class ControlBuilder
 
         var countSpan = (stackalloc char[StackBufferSize]);
 
-        _ = count.TryFormat(countSpan, out var countLen);
+        _ = count.TryFormat(countSpan, out var countLen, provider: _culture);
 
         return Print(CSI).Print(countSpan[..countLen]).Print(type);
     }
@@ -452,7 +454,7 @@ public sealed class ControlBuilder
 
         var modeSpan = (stackalloc char[StackBufferSize]);
 
-        _ = ((int)mode).TryFormat(modeSpan, out var modeLen);
+        _ = ((int)mode).TryFormat(modeSpan, out var modeLen, provider: _culture);
 
         return Print(CSI).Print(modeSpan[..modeLen]).Print(type);
     }
@@ -476,7 +478,7 @@ public sealed class ControlBuilder
 
         var countSpan = (stackalloc char[StackBufferSize]);
 
-        _ = count.TryFormat(countSpan, out var countLen);
+        _ = count.TryFormat(countSpan, out var countLen, provider: _culture);
 
         return Print(CSI).Print(countSpan[..countLen]).Print(type);
     }
@@ -499,8 +501,8 @@ public sealed class ControlBuilder
         var lineSpan = (stackalloc char[StackBufferSize]);
         var columnSpan = (stackalloc char[StackBufferSize]);
 
-        _ = (line + 1).TryFormat(lineSpan, out var lineLen);
-        _ = (column + 1).TryFormat(columnSpan, out var columnLen);
+        _ = (line + 1).TryFormat(lineSpan, out var lineLen, provider: _culture);
+        _ = (column + 1).TryFormat(columnSpan, out var columnLen, provider: _culture);
 
         return Print(CSI).Print(lineSpan[..lineLen]).Print(";").Print(columnSpan[..columnLen]).Print("H");
     }
@@ -514,7 +516,7 @@ public sealed class ControlBuilder
 
         var countSpan = (stackalloc char[StackBufferSize]);
 
-        _ = count.TryFormat(countSpan, out var countLen);
+        _ = count.TryFormat(countSpan, out var countLen, provider: _culture);
 
         return Print(CSI).Print(countSpan[..countLen]).Print(type);
     }
@@ -555,9 +557,9 @@ public sealed class ControlBuilder
         var gSpan = (stackalloc char[StackBufferSize]);
         var bSpan = (stackalloc char[StackBufferSize]);
 
-        _ = r.TryFormat(rSpan, out var rLen);
-        _ = g.TryFormat(gSpan, out var gLen);
-        _ = b.TryFormat(bSpan, out var bLen);
+        _ = r.TryFormat(rSpan, out var rLen, provider: _culture);
+        _ = g.TryFormat(gSpan, out var gLen, provider: _culture);
+        _ = b.TryFormat(bSpan, out var bLen, provider: _culture);
 
         return Print(CSI).Print("38;2;").Print(rSpan[..rLen]).Print(";")
             .Print(gSpan[..gLen]).Print(";").Print(bSpan[..bLen]).Print("m");
@@ -569,9 +571,9 @@ public sealed class ControlBuilder
         var gSpan = (stackalloc char[StackBufferSize]);
         var bSpan = (stackalloc char[StackBufferSize]);
 
-        _ = r.TryFormat(rSpan, out var rLen);
-        _ = g.TryFormat(gSpan, out var gLen);
-        _ = b.TryFormat(bSpan, out var bLen);
+        _ = r.TryFormat(rSpan, out var rLen, provider: _culture);
+        _ = g.TryFormat(gSpan, out var gLen, provider: _culture);
+        _ = b.TryFormat(bSpan, out var bLen, provider: _culture);
 
         return Print(CSI).Print("48;2;").Print(rSpan[..rLen]).Print(";")
             .Print(gSpan[..gLen]).Print(";").Print(bSpan[..bLen]).Print("m");
@@ -583,9 +585,9 @@ public sealed class ControlBuilder
         var gSpan = (stackalloc char[StackBufferSize]);
         var bSpan = (stackalloc char[StackBufferSize]);
 
-        _ = r.TryFormat(rSpan, out var rLen);
-        _ = g.TryFormat(gSpan, out var gLen);
-        _ = b.TryFormat(bSpan, out var bLen);
+        _ = r.TryFormat(rSpan, out var rLen, provider: _culture);
+        _ = g.TryFormat(gSpan, out var gLen, provider: _culture);
+        _ = b.TryFormat(bSpan, out var bLen, provider: _culture);
 
         return Print(CSI).Print("58;2;").Print(rSpan[..rLen]).Print(";")
             .Print(gSpan[..gLen]).Print(";").Print(bSpan[..bLen]).Print("m");
@@ -670,7 +672,7 @@ public sealed class ControlBuilder
 
         var formatSpan = (stackalloc char[StackBufferSize]);
 
-        _ = ((int)format).TryFormat(formatSpan, out var formatLen);
+        _ = ((int)format).TryFormat(formatSpan, out var formatLen, provider: _culture);
 
         return Print(CSI).Print(formatSpan[..formatLen]).Print("i");
     }

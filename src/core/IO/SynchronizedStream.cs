@@ -2,6 +2,7 @@ using Vezel.Cathode.Threading;
 
 namespace Vezel.Cathode.IO;
 
+[SuppressMessage("", "CA2213")]
 internal sealed class SynchronizedStream : Stream
 {
     // The stream returned by Stream.Synchronized has no async support, has some questionable semantics surrounding

@@ -2,6 +2,7 @@ using Vezel.Cathode.Threading;
 
 namespace Vezel.Cathode.IO;
 
+[SuppressMessage("", "CA2213")]
 internal sealed class SynchronizedTextWriter : TextWriter
 {
     // The writer returned by TextWriter.Synchronized has no async support and also lacks forwarding for newer method
