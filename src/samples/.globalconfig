@@ -1,4 +1,3 @@
 global_level = 1
 
-dotnet_diagnostic.CA1812.severity = none # TODO: https://github.com/dotnet/roslyn-analyzers/issues/5628
 dotnet_diagnostic.CA2007.severity = none
