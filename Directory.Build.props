@@ -9,20 +9,16 @@
 
     <PropertyGroup>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <!-- TODO: Switch to latest-all in .NET 7. -->
-        <AnalysisLevel>preview-all</AnalysisLevel>
+        <AnalysisLevel>latest-all</AnalysisLevel>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
         <DebugType>none</DebugType>
         <EnablePackageValidation>true</EnablePackageValidation>
-        <!-- TODO: Remove in .NET 7. -->
-        <EnablePreviewFeatures>true</EnablePreviewFeatures>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
         <ImplicitUsings>true</ImplicitUsings>
         <IsPackable>false</IsPackable>
         <IsPublishable>false</IsPublishable>
-        <!-- TODO: Switch to latest in .NET 7. -->
-        <LangVersion>preview</LangVersion>
+        <LangVersion>latest</LangVersion>
         <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
         <Nullable>enable</Nullable>
         <PackageDescription>$(Description)
