@@ -70,33 +70,6 @@ samples can be run with
 For more information, please visit the
 [project home page](https://docs.vezel.dev/cathode).
 
-## Terminals
-
-This project aims to have excellent support for the following terminal
-emulators:
-
-* [Alacritty](https://alacritty.org)
-* [ConEmu](https://conemu.github.io)
-* [foot](https://codeberg.org/dnkl/foot)
-* [GNOME Terminal](https://help.gnome.org/users/gnome-terminal/stable)
-* [iTerm2](https://iterm2.com)
-* [kitty](https://sw.kovidgoyal.net/kitty)
-* [Konsole](https://konsole.kde.org)
-* [mintty](https://mintty.github.io)
-* [mlterm](http://mlterm.sourceforge.net)
-* [PuTTY](https://www.putty.org)
-* [rxvt-unicode](http://software.schmorp.de/pkg/rxvt-unicode.html)
-* [Terminal.app](https://support.apple.com/guide/terminal/welcome/mac)
-* [Terminology](https://terminolo.gy)
-* [WezTerm](https://wezfurlong.org/wezterm)
-* [Windows Console](https://learn.microsoft.com/en-us/windows/console)
-* [Windows Terminal](https://aka.ms/terminal)
-* [xterm](https://invisible-island.net/xterm)
-
-Even if you are using a terminal emulator that is not listed here, chances are
-that it will work just fine; these are just the ones that are tested regularly
-while developing **Cathode**.
-
 ## License
 
 This project is licensed under the terms found in
