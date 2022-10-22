@@ -10,7 +10,6 @@
         <OutputType>Exe</OutputType>
         <PublishTrimmed>true</PublishTrimmed>
         <RootNamespace>Vezel.Cathode.Trimming</RootNamespace>
-        <TrimmerDefaultAction>link</TrimmerDefaultAction>
         <UseCurrentRuntimeIdentifier>true</UseCurrentRuntimeIdentifier>
     </PropertyGroup>
 
