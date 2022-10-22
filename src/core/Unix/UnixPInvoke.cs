@@ -54,7 +54,7 @@ internal static unsafe class UnixPInvoke
     public static extern nint write(int fildes, void* buf, nuint nbyte);
 
     [DllImport("c", SetLastError = true)]
-    public static extern int ioctl(int fildes, nuint request, out winsize argp);
+    public static extern int ioctl(int fildes, nuint request, out Winsize argp);
 
     [DllImport("c", SetLastError = true)]
     public static extern int kill(int pid, int sig);

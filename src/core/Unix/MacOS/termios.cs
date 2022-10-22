@@ -5,7 +5,7 @@ namespace Vezel.Cathode.Unix.MacOS;
 [SuppressMessage("", "SA1300")]
 [SuppressMessage("", "SA1307")]
 [SuppressMessage("", "SA1310")]
-internal struct termios
+internal struct Termios
 {
     public nuint c_iflag;
 

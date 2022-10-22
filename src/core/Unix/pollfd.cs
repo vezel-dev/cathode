@@ -4,7 +4,7 @@ namespace Vezel.Cathode.Unix;
 [SuppressMessage("", "IDE1006")]
 [SuppressMessage("", "SA1300")]
 [SuppressMessage("", "SA1307")]
-internal struct pollfd
+internal struct Pollfd
 {
     public int fd;
 

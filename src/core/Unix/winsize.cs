@@ -5,7 +5,7 @@ namespace Vezel.Cathode.Unix;
 [SuppressMessage("", "SA1300")]
 [SuppressMessage("", "SA1307")]
 [SuppressMessage("", "SA1310")]
-internal struct winsize
+internal struct Winsize
 {
     public ushort ws_row;
 

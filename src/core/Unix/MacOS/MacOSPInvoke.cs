@@ -161,11 +161,11 @@ internal static unsafe class MacOSPInvoke
     public const int EAGAIN = 35;
 
     [DllImport("c", SetLastError = true)]
-    public static extern int poll(pollfd* fds, uint nfds, int timeout);
+    public static extern int poll(Pollfd* fds, uint nfds, int timeout);
 
     [DllImport("c", SetLastError = true)]
-    public static extern int tcgetattr(int fildes, out termios termios_p);
+    public static extern int tcgetattr(int fildes, out Termios termios_p);
 
     [DllImport("c", SetLastError = true)]
-    public static extern int tcsetattr(int fildes, int optional_actions, in termios termios_p);
+    public static extern int tcsetattr(int fildes, int optional_actions, in Termios termios_p);
 }

@@ -12,7 +12,7 @@ internal sealed class LinuxVirtualTerminal : UnixVirtualTerminal
 
     public static LinuxVirtualTerminal Instance { get; } = new();
 
-    private termios? _original;
+    private Termios? _original;
 
     private LinuxVirtualTerminal()
     {
@@ -102,11 +102,11 @@ internal sealed class LinuxVirtualTerminal : UnixVirtualTerminal
         if (error is int err && err != EAGAIN)
             return false;
 
-        var fds = (stackalloc pollfd[handles.Length]);
+        var fds = (stackalloc Pollfd[handles.Length]);
 
         for (var i = 0; i < handles.Length; i++)
         {
-            fds[i] = new pollfd
+            fds[i] = new Pollfd
             {
                 fd = handles[i],
                 events = events,
@@ -114,7 +114,7 @@ internal sealed class LinuxVirtualTerminal : UnixVirtualTerminal
             };
         }
 
-        fixed (pollfd* p = &MemoryMarshal.GetReference(fds))
+        fixed (Pollfd* p = &MemoryMarshal.GetReference(fds))
         {
             int ret;
 
@@ -137,7 +137,7 @@ internal sealed class LinuxVirtualTerminal : UnixVirtualTerminal
     {
         using var guard = Control.Guard();
 
-        if (_original is termios tios)
+        if (_original is Termios tios)
             _ = tcsetattr(TerminalOut.Handle, TCSAFLUSH, tios);
     }
 }
