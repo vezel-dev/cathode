@@ -59,9 +59,9 @@ public sealed class EntryPointGenerator : IIncrementalGenerator
                     "GeneratedProgram.g.cs",
                     $$"""
                     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute]
-                    static class GeneratedProgram
+                    file static class GeneratedProgram
                     {
-                        static global::System.Threading.Tasks.Task Main(string[] args)
+                        private static global::System.Threading.Tasks.Task Main(string[] args)
                         {
                             return global::Vezel.Cathode.Hosting.ProgramHost.RunAsync<{{name}}>(args);
                         }
