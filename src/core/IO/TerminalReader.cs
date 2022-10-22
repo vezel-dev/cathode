@@ -68,17 +68,14 @@ public abstract class TerminalReader : TerminalHandle
 
     public string? ReadLine(CancellationToken cancellationToken = default)
     {
-        // TODO: Pass on the cancellation token in .NET 7.
         cancellationToken.ThrowIfCancellationRequested();
 
+        // TODO: Should we make more of an effort to honor the cancellation token?
         return TextReader.ReadLine();
     }
 
     public ValueTask<string?> ReadLineAsync(CancellationToken cancellationToken = default)
     {
-        // TODO: Pass on the cancellation token in .NET 7.
-        return cancellationToken.IsCancellationRequested ?
-            ValueTask.FromCanceled<string?>(cancellationToken) :
-            new(TextReader.ReadLineAsync());
+        return TextReader.ReadLineAsync(cancellationToken);
     }
 }
