@@ -75,7 +75,7 @@ For more information, please visit the
 This project aims to have excellent support for the following terminal
 emulators:
 
-* [Alacritty](https://github.com/alacritty/alacritty)
+* [Alacritty](https://alacritty.org)
 * [ConEmu](https://conemu.github.io)
 * [foot](https://codeberg.org/dnkl/foot)
 * [GNOME Terminal](https://help.gnome.org/users/gnome-terminal/stable)
@@ -89,7 +89,7 @@ emulators:
 * [Terminal.app](https://support.apple.com/guide/terminal/welcome/mac)
 * [Terminology](https://terminolo.gy)
 * [WezTerm](https://wezfurlong.org/wezterm)
-* [Windows Console](https://docs.microsoft.com/en-us/windows/console)
+* [Windows Console](https://learn.microsoft.com/en-us/windows/console)
 * [Windows Terminal](https://aka.ms/terminal)
 * [xterm](https://invisible-island.net/xterm)
 
