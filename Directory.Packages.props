@@ -23,7 +23,7 @@
         <PackageVersion Include="StyleCop.Analyzers"
                         Version="1.2.0-beta.435" />
         <PackageVersion Include="System.IO.Pipelines"
-                        Version="6.0.3" />
+                        Version="7.0.0-rc.2.22472.3" />
         <PackageVersion Include="Wcwidth"
                         Version="1.0.0" />
     </ItemGroup>
