@@ -27,12 +27,20 @@ public static class ControlSequences
 
     private static string Create<T>(CreateAction<T> action, scoped ReadOnlySpan<T> span)
     {
-        return Create(static (cb, span, act) => act(cb, span), span, action);
+        return Create(static (cb, span, action) => action(cb, span), span, action);
+    }
+
+    private static string Create<TState>(Action<ControlBuilder, TState> action, TState state)
+    {
+        return Create(
+            static (cb, _, args) => args.Action(cb, args.State),
+            ReadOnlySpan<char>.Empty,
+            (Action: action, State: state));
     }
 
     private static string Create(Action<ControlBuilder> action)
     {
-        return Create(static (cb, _, act) => act(cb), ReadOnlySpan<char>.Empty, action);
+        return Create(static (cb, _, action) => action(cb), ReadOnlySpan<char>.Empty, action);
     }
 
     // Keep methods in sync with the ControlBuilder class.
@@ -109,7 +117,7 @@ public static class ControlSequences
 
     public static string SetOutputBatching(bool enable)
     {
-        return Create(cb => cb.SetOutputBatching(enable));
+        return Create(static (cb, enable) => cb.SetOutputBatching(enable), enable);
     }
 
     public static string SetTitle(scoped ReadOnlySpan<char> title)
@@ -129,27 +137,27 @@ public static class ControlSequences
 
     public static string SetProgress(ProgressState state, int value)
     {
-        return Create(cb => cb.SetProgress(state, value));
+        return Create(static (cb, args) => cb.SetProgress(args.State, args.Value), (State: state, Value: value));
     }
 
     public static string SetCursorKeyMode(CursorKeyMode mode)
     {
-        return Create(cb => cb.SetCursorKeyMode(mode));
+        return Create(static (cb, mode) => cb.SetCursorKeyMode(mode), mode);
     }
 
     public static string SetKeypadMode(KeypadMode mode)
     {
-        return Create(cb => cb.SetKeypadMode(mode));
+        return Create(static (cb, mode) => cb.SetKeypadMode(mode), mode);
     }
 
     public static string SetKeyboardLevel(KeyboardLevel level)
     {
-        return Create(cb => cb.SetKeyboardLevel(level));
+        return Create(static (cb, level) => cb.SetKeyboardLevel(level), level);
     }
 
     public static string SetMouseEvents(MouseEvents events)
     {
-        return Create(cb => cb.SetMouseEvents(events));
+        return Create(static (cb, events) => cb.SetMouseEvents(events), events);
     }
 
     public static string SetMousePointerStyle(scoped ReadOnlySpan<char> style)
@@ -159,112 +167,112 @@ public static class ControlSequences
 
     public static string SetFocusEvents(bool enable)
     {
-        return Create(cb => cb.SetFocusEvents(enable));
+        return Create(static (cb, enable) => cb.SetFocusEvents(enable), enable);
     }
 
     public static string SetBracketedPaste(bool enable)
     {
-        return Create(cb => cb.SetBracketedPaste(enable));
+        return Create(static (cb, enable) => cb.SetBracketedPaste(enable), enable);
     }
 
     public static string SetScreenBuffer(ScreenBuffer buffer)
     {
-        return Create(cb => cb.SetScreenBuffer(buffer));
+        return Create(static (cb, buffer) => cb.SetScreenBuffer(buffer), buffer);
     }
 
     public static string SetInvertedColors(bool enable)
     {
-        return Create(cb => cb.SetInvertedColors(enable));
+        return Create(static (cb, enable) => cb.SetInvertedColors(enable), enable);
     }
 
     public static string SetCursorVisibility(bool visible)
     {
-        return Create(cb => cb.SetCursorVisibility(visible));
+        return Create(static (cb, visible) => cb.SetCursorVisibility(visible), visible);
     }
 
     public static string SetCursorStyle(CursorStyle style)
     {
-        return Create(cb => cb.SetCursorStyle(style));
+        return Create(static (cb, style) => cb.SetCursorStyle(style), style);
     }
 
     public static string SetScrollBarVisibility(bool visible)
     {
-        return Create(cb => cb.SetScrollBarVisibility(visible));
+        return Create(static (cb, visible) => cb.SetScrollBarVisibility(visible), visible);
     }
 
     public static string SetScrollMargin(int top, int bottom)
     {
-        return Create(cb => cb.SetScrollMargin(top, bottom));
+        return Create(static (cb, args) => cb.SetScrollMargin(args.Top, args.Bottom), (Top: top, Bottom: bottom));
     }
 
     public static string InsertCharacters(int count)
     {
-        return Create(cb => cb.InsertCharacters(count));
+        return Create(static (cb, count) => cb.InsertCharacters(count), count);
     }
 
     public static string DeleteCharacters(int count)
     {
-        return Create(cb => cb.DeleteCharacters(count));
+        return Create(static (cb, count) => cb.DeleteCharacters(count), count);
     }
 
     public static string EraseCharacters(int count)
     {
-        return Create(cb => cb.EraseCharacters(count));
+        return Create(static (cb, count) => cb.EraseCharacters(count), count);
     }
 
     public static string InsertLines(int count)
     {
-        return Create(cb => cb.InsertLines(count));
+        return Create(static (cb, count) => cb.InsertLines(count), count);
     }
 
     public static string DeleteLines(int count)
     {
-        return Create(cb => cb.DeleteLines(count));
+        return Create(static (cb, count) => cb.DeleteLines(count), count);
     }
 
     public static string ClearScreen(ClearMode mode = ClearMode.Full)
     {
-        return Create(cb => cb.ClearScreen(mode));
+        return Create(static (cb, mode) => cb.ClearScreen(mode), mode);
     }
 
     public static string ClearLine(ClearMode mode = ClearMode.Full)
     {
-        return Create(cb => cb.ClearLine(mode));
+        return Create(static (cb, mode) => cb.ClearLine(mode), mode);
     }
 
     public static string MoveBufferUp(int count)
     {
-        return Create(cb => cb.MoveBufferUp(count));
+        return Create(static (cb, count) => cb.MoveBufferUp(count), count);
     }
 
     public static string MoveBufferDown(int count)
     {
-        return Create(cb => cb.MoveBufferDown(count));
+        return Create(static (cb, count) => cb.MoveBufferDown(count), count);
     }
 
     public static string MoveCursorTo(int line, int column)
     {
-        return Create(cb => cb.MoveCursorTo(line, column));
+        return Create(static (cb, args) => cb.MoveCursorTo(args.Line, args.Column), (Line: line, Column: column));
     }
 
     public static string MoveCursorUp(int count)
     {
-        return Create(cb => cb.MoveCursorUp(count));
+        return Create(static (cb, count) => cb.MoveCursorUp(count), count);
     }
 
     public static string MoveCursorDown(int count)
     {
-        return Create(cb => cb.MoveCursorDown(count));
+        return Create(static (cb, count) => cb.MoveCursorDown(count), count);
     }
 
     public static string MoveCursorLeft(int count)
     {
-        return Create(cb => cb.MoveCursorLeft(count));
+        return Create(static (cb, count) => cb.MoveCursorLeft(count), count);
     }
 
     public static string MoveCursorRight(int count)
     {
-        return Create(cb => cb.MoveCursorRight(count));
+        return Create(static (cb, count) => cb.MoveCursorRight(count), count);
     }
 
     public static string SaveCursorState()
@@ -279,12 +287,12 @@ public static class ControlSequences
 
     public static string SetForegroundColor(byte r, byte g, byte b)
     {
-        return Create(cb => cb.SetForegroundColor(r, g, b));
+        return Create(static (cb, args) => cb.SetForegroundColor(args.R, args.G, args.B), (R: r, G: g, B: b));
     }
 
     public static string SetBackgroundColor(byte r, byte g, byte b)
     {
-        return Create(cb => cb.SetForegroundColor(r, g, b));
+        return Create(static (cb, args) => cb.SetForegroundColor(args.R, args.G, args.B), (R: r, G: g, B: b));
     }
 
     public static string SetDecorations(
@@ -300,17 +308,28 @@ public static class ControlSequences
         bool overline = false)
     {
         return Create(
-            cb => cb.SetDecorations(
-                intense,
-                faint,
-                italic,
-                underline,
-                blink,
-                invert,
-                invisible,
-                strike,
-                doubleUnderline,
-                overline));
+            static (cb, args) =>
+                cb.SetDecorations(
+                    args.Intense,
+                    args.Faint,
+                    args.Italic,
+                    args.Underline,
+                    args.Blink,
+                    args.Invert,
+                    args.Invisible,
+                    args.Strike,
+                    args.DoubleUnderline,
+                    args.Overline),
+            (Intense: intense,
+             Faint: faint,
+             Italic: italic,
+             Underline: underline,
+             Blink: blink,
+             Invert: invert,
+             Invisible: invisible,
+             Strike: strike,
+             DoubleUnderline: doubleUnderline,
+             Overline: overline));
     }
 
     public static string ResetAttributes()
@@ -330,7 +349,7 @@ public static class ControlSequences
 
     public static string SaveScreenshot(ScreenshotFormat format = ScreenshotFormat.Html)
     {
-        return Create(cb => cb.SaveScreenshot(format));
+        return Create(static (cb, format) => cb.SaveScreenshot(format), format);
     }
 
     public static string SoftReset()
