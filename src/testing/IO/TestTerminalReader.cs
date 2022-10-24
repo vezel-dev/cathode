@@ -25,7 +25,7 @@ public class TestTerminalReader : TerminalReader
     }
 
     [SuppressMessage("", "VSTHRD002")]
-    protected override sealed int ReadPartialCore(Span<byte> buffer, CancellationToken cancellationToken)
+    protected override sealed int ReadPartialCore(scoped Span<byte> buffer, CancellationToken cancellationToken)
     {
         var len = buffer.Length;
         var array = ArrayPool<byte>.Shared.Rent(len);

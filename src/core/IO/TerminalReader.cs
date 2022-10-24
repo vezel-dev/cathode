@@ -6,11 +6,11 @@ public abstract class TerminalReader : TerminalHandle
 
     public abstract TextReader TextReader { get; }
 
-    protected abstract int ReadPartialCore(Span<byte> buffer, CancellationToken cancellationToken);
+    protected abstract int ReadPartialCore(scoped Span<byte> buffer, CancellationToken cancellationToken);
 
     protected abstract ValueTask<int> ReadPartialCoreAsync(Memory<byte> buffer, CancellationToken cancellationToken);
 
-    public int ReadPartial(Span<byte> buffer, CancellationToken cancellationToken = default)
+    public int ReadPartial(scoped Span<byte> buffer, CancellationToken cancellationToken = default)
     {
         var count = ReadPartialCore(buffer, cancellationToken);
 
@@ -29,7 +29,7 @@ public abstract class TerminalReader : TerminalHandle
         return count;
     }
 
-    public int Read(Span<byte> value, CancellationToken cancellationToken = default)
+    public int Read(scoped Span<byte> value, CancellationToken cancellationToken = default)
     {
         var count = 0;
 

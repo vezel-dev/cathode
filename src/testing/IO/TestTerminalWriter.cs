@@ -25,7 +25,8 @@ public class TestTerminalWriter : TerminalWriter
     }
 
     [SuppressMessage("", "VSTHRD002")]
-    protected override sealed int WritePartialCore(ReadOnlySpan<byte> buffer, CancellationToken cancellationToken)
+    protected override sealed int WritePartialCore(
+        scoped ReadOnlySpan<byte> buffer, CancellationToken cancellationToken)
     {
         var len = buffer.Length;
         var array = ArrayPool<byte>.Shared.Rent(len);

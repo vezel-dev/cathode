@@ -30,7 +30,7 @@ public abstract class VirtualTerminal
 
     public abstract void DisableRawMode();
 
-    public int Read(Span<byte> value, CancellationToken cancellationToken = default)
+    public int Read(scoped Span<byte> value, CancellationToken cancellationToken = default)
     {
         return StandardIn.ReadPartial(value, cancellationToken);
     }
@@ -50,7 +50,7 @@ public abstract class VirtualTerminal
         return StandardIn.ReadLineAsync(cancellationToken);
     }
 
-    public void Out(ReadOnlySpan<byte> value, CancellationToken cancellationToken = default)
+    public void Out(scoped ReadOnlySpan<byte> value, CancellationToken cancellationToken = default)
     {
         StandardOut.Write(value, cancellationToken);
     }
@@ -65,7 +65,7 @@ public abstract class VirtualTerminal
         return StandardOut.WriteAsync(value, cancellationToken);
     }
 
-    public void Out(ReadOnlySpan<char> value, CancellationToken cancellationToken = default)
+    public void Out(scoped ReadOnlySpan<char> value, CancellationToken cancellationToken = default)
     {
         StandardOut.Write(value, cancellationToken);
     }
@@ -110,7 +110,7 @@ public abstract class VirtualTerminal
         return StandardOut.WriteLineAsync(value, cancellationToken);
     }
 
-    public void Error(ReadOnlySpan<byte> value, CancellationToken cancellationToken = default)
+    public void Error(scoped ReadOnlySpan<byte> value, CancellationToken cancellationToken = default)
     {
         StandardError.Write(value, cancellationToken);
     }
@@ -125,7 +125,7 @@ public abstract class VirtualTerminal
         return StandardError.WriteAsync(value, cancellationToken);
     }
 
-    public void Error(ReadOnlySpan<char> value, CancellationToken cancellationToken = default)
+    public void Error(scoped ReadOnlySpan<char> value, CancellationToken cancellationToken = default)
     {
         StandardError.Write(value, cancellationToken);
     }

@@ -71,7 +71,7 @@ public static class Terminal
         System.DisableRawMode();
     }
 
-    public static int Read(Span<byte> value, CancellationToken cancellationToken = default)
+    public static int Read(scoped Span<byte> value, CancellationToken cancellationToken = default)
     {
         return System.Read(value, cancellationToken);
     }
@@ -91,7 +91,7 @@ public static class Terminal
         return System.ReadLineAsync(cancellationToken);
     }
 
-    public static void Out(ReadOnlySpan<byte> value, CancellationToken cancellationToken = default)
+    public static void Out(scoped ReadOnlySpan<byte> value, CancellationToken cancellationToken = default)
     {
         System.Out(value, cancellationToken);
     }
@@ -106,7 +106,7 @@ public static class Terminal
         return System.OutAsync(value, cancellationToken);
     }
 
-    public static void Out(ReadOnlySpan<char> value, CancellationToken cancellationToken = default)
+    public static void Out(scoped ReadOnlySpan<char> value, CancellationToken cancellationToken = default)
     {
         System.Out(value, cancellationToken);
     }
@@ -151,7 +151,7 @@ public static class Terminal
         return System.OutLineAsync(value, cancellationToken);
     }
 
-    public static void Error(ReadOnlySpan<byte> value, CancellationToken cancellationToken = default)
+    public static void Error(scoped ReadOnlySpan<byte> value, CancellationToken cancellationToken = default)
     {
         System.Error(value, cancellationToken);
     }
@@ -166,7 +166,7 @@ public static class Terminal
         return System.ErrorAsync(value, cancellationToken);
     }
 
-    public static void Error(ReadOnlySpan<char> value, CancellationToken cancellationToken = default)
+    public static void Error(scoped ReadOnlySpan<char> value, CancellationToken cancellationToken = default)
     {
         System.Error(value, cancellationToken);
     }

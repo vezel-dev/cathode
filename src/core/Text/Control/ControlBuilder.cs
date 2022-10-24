@@ -16,10 +16,9 @@ public sealed class ControlBuilder
 
         private readonly ICustomFormatter? _formatter;
 
-        [SuppressMessage("", "IDE0060")]
         public PrintInterpolatedStringHandler(
-            int literalLength,
-            int formattedCount,
+            [SuppressMessage("", "IDE0060")] int literalLength,
+            [SuppressMessage("", "IDE0060")] int formattedCount,
             ControlBuilder builder,
             IFormatProvider? provider = null)
         {
@@ -29,7 +28,7 @@ public sealed class ControlBuilder
                 (ICustomFormatter?)provider?.GetFormat(typeof(ICustomFormatter)) : null;
         }
 
-        private void AppendSpan(ReadOnlySpan<char> span)
+        private void AppendSpan(scoped ReadOnlySpan<char> span)
         {
             _ = _builder.Print(span);
         }
@@ -108,7 +107,7 @@ public sealed class ControlBuilder
             AppendFormatted((nuint)value, format);
         }
 
-        public void AppendFormatted(ReadOnlySpan<char> value)
+        public void AppendFormatted(scoped ReadOnlySpan<char> value)
         {
             AppendSpan(value);
         }
@@ -147,7 +146,7 @@ public sealed class ControlBuilder
         return Span.ToString();
     }
 
-    public ControlBuilder Print(ReadOnlySpan<char> value)
+    public ControlBuilder Print(scoped ReadOnlySpan<char> value)
     {
         _writer.Write(value);
 
@@ -160,7 +159,8 @@ public sealed class ControlBuilder
     }
 
     [SuppressMessage("", "IDE0060")]
-    public ControlBuilder Print([InterpolatedStringHandlerArgument("")] ref PrintInterpolatedStringHandler handler)
+    public ControlBuilder Print(
+        [InterpolatedStringHandlerArgument("")] scoped ref PrintInterpolatedStringHandler handler)
     {
         return this;
     }
@@ -168,7 +168,7 @@ public sealed class ControlBuilder
     [SuppressMessage("", "IDE0060")]
     public ControlBuilder Print(
         IFormatProvider? provider,
-        [InterpolatedStringHandlerArgument("", "provider")] ref PrintInterpolatedStringHandler handler)
+        [InterpolatedStringHandlerArgument("", nameof(provider))] scoped ref PrintInterpolatedStringHandler handler)
     {
         return this;
     }
@@ -184,7 +184,8 @@ public sealed class ControlBuilder
     }
 
     [SuppressMessage("", "IDE0060")]
-    public ControlBuilder PrintLine([InterpolatedStringHandlerArgument("")] ref PrintInterpolatedStringHandler handler)
+    public ControlBuilder PrintLine(
+        [InterpolatedStringHandlerArgument("")] scoped ref PrintInterpolatedStringHandler handler)
     {
         return PrintLine();
     }
@@ -192,7 +193,7 @@ public sealed class ControlBuilder
     [SuppressMessage("", "IDE0060")]
     public ControlBuilder PrintLine(
         IFormatProvider? provider,
-        [InterpolatedStringHandlerArgument("", "provider")] ref PrintInterpolatedStringHandler handler)
+        [InterpolatedStringHandlerArgument("", nameof(provider))] scoped ref PrintInterpolatedStringHandler handler)
     {
         return PrintLine();
     }
@@ -279,7 +280,7 @@ public sealed class ControlBuilder
         return Print(CSI).Print("?2026").Print(enable ? "h" : "l");
     }
 
-    public ControlBuilder SetTitle(ReadOnlySpan<char> title)
+    public ControlBuilder SetTitle(scoped ReadOnlySpan<char> title)
     {
         return Print(OSC).Print("2;").Print(title).Print(ST);
     }
@@ -313,7 +314,7 @@ public sealed class ControlBuilder
 
         var ch = (char)mode;
 
-        return Print(CSI).Print("?1").Print(MemoryMarshal.CreateReadOnlySpan(ref ch, 1));
+        return Print(CSI).Print("?1").Print(new(ch));
     }
 
     public ControlBuilder SetKeypadMode(KeypadMode mode)
@@ -322,7 +323,7 @@ public sealed class ControlBuilder
 
         var ch = (char)mode;
 
-        return Print(ESC).Print(MemoryMarshal.CreateReadOnlySpan(ref ch, 1));
+        return Print(ESC).Print(new(ch));
     }
 
     public ControlBuilder SetKeyboardLevel(KeyboardLevel level)
@@ -344,7 +345,7 @@ public sealed class ControlBuilder
             .Print(CSI).Print("?1006").Print(events.HasFlag(MouseEvents.Buttons) ? "h" : "l");
     }
 
-    public ControlBuilder SetMousePointerStyle(ReadOnlySpan<char> style)
+    public ControlBuilder SetMousePointerStyle(scoped ReadOnlySpan<char> style)
     {
         return Print(OSC).Print("22;").Print(style).Print(ST);
     }
@@ -365,7 +366,7 @@ public sealed class ControlBuilder
 
         var ch = (char)buffer;
 
-        return Print(CSI).Print("?1049").Print(MemoryMarshal.CreateReadOnlySpan(ref ch, 1));
+        return Print(CSI).Print("?1049").Print(new(ch));
     }
 
     public ControlBuilder SetInvertedColors(bool enable)
@@ -613,7 +614,7 @@ public sealed class ControlBuilder
 
         var i = 0;
 
-        void HandleMode(bool value, ReadOnlySpan<char> code)
+        void HandleMode(bool value, scoped ReadOnlySpan<char> code)
         {
             if (!value)
                 return;
@@ -649,7 +650,7 @@ public sealed class ControlBuilder
         return Print(CSI).Print("0m");
     }
 
-    public ControlBuilder OpenHyperlink(Uri uri, ReadOnlySpan<char> id = default)
+    public ControlBuilder OpenHyperlink(Uri uri, scoped ReadOnlySpan<char> id = default)
     {
         ArgumentNullException.ThrowIfNull(uri);
 

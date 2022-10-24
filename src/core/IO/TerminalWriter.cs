@@ -6,13 +6,13 @@ public abstract class TerminalWriter : TerminalHandle
 
     public abstract TextWriter TextWriter { get; }
 
-    protected abstract int WritePartialCore(ReadOnlySpan<byte> buffer, CancellationToken cancellationToken);
+    protected abstract int WritePartialCore(scoped ReadOnlySpan<byte> buffer, CancellationToken cancellationToken);
 
     protected abstract ValueTask<int> WritePartialCoreAsync(
         ReadOnlyMemory<byte> buffer,
         CancellationToken cancellationToken);
 
-    public int WritePartial(ReadOnlySpan<byte> buffer, CancellationToken cancellationToken = default)
+    public int WritePartial(scoped ReadOnlySpan<byte> buffer, CancellationToken cancellationToken = default)
     {
         var count = WritePartialCore(buffer, cancellationToken);
 
@@ -33,7 +33,7 @@ public abstract class TerminalWriter : TerminalHandle
         return count;
     }
 
-    public void Write(ReadOnlySpan<byte> value, CancellationToken cancellationToken = default)
+    public void Write(scoped ReadOnlySpan<byte> value, CancellationToken cancellationToken = default)
     {
         for (var count = 0; count < value.Length; count += WritePartial(value[count..], cancellationToken))
         {
@@ -55,7 +55,7 @@ public abstract class TerminalWriter : TerminalHandle
         return WriteAsync((ReadOnlyMemory<byte>)value, cancellationToken);
     }
 
-    public void Write(ReadOnlySpan<char> value, CancellationToken cancellationToken = default)
+    public void Write(scoped ReadOnlySpan<char> value, CancellationToken cancellationToken = default)
     {
         var encoding = Terminal.Encoding;
         var len = encoding.GetByteCount(value);

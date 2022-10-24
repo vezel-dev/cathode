@@ -9,7 +9,7 @@ public static class ControlSequences
     [ThreadStatic]
     private static ControlBuilder? _builder;
 
-    private static string Create<T, TState>(CreateAction<T, TState> action, ReadOnlySpan<T> span, TState state)
+    private static string Create<T, TState>(CreateAction<T, TState> action, scoped ReadOnlySpan<T> span, TState state)
     {
         var cb = _builder ??= new();
 
@@ -25,7 +25,7 @@ public static class ControlSequences
         }
     }
 
-    private static string Create<T>(CreateAction<T> action, ReadOnlySpan<T> span)
+    private static string Create<T>(CreateAction<T> action, scoped ReadOnlySpan<T> span)
     {
         return Create(static (cb, span, act) => act(cb, span), span, action);
     }
@@ -35,76 +35,76 @@ public static class ControlSequences
         return Create(static (cb, _, act) => act(cb), ReadOnlySpan<char>.Empty, action);
     }
 
-    // Keep methods in sync with the ControlStringBuilder class.
+    // Keep methods in sync with the ControlBuilder class.
 
     public static string Beep()
     {
-        return Create(cb => cb.Beep());
+        return Create(static cb => cb.Beep());
     }
 
     public static string Backspace()
     {
-        return Create(cb => cb.Backspace());
+        return Create(static cb => cb.Backspace());
     }
 
     public static string HorizontalTab()
     {
-        return Create(cb => cb.HorizontalTab());
+        return Create(static cb => cb.HorizontalTab());
     }
 
     public static string LineFeed()
     {
-        return Create(cb => cb.LineFeed());
+        return Create(static cb => cb.LineFeed());
     }
 
     public static string VerticalTab()
     {
-        return Create(cb => cb.VerticalTab());
+        return Create(static cb => cb.VerticalTab());
     }
 
     public static string FormFeed()
     {
-        return Create(cb => cb.FormFeed());
+        return Create(static cb => cb.FormFeed());
     }
 
     public static string CarriageReturn()
     {
-        return Create(cb => cb.CarriageReturn());
+        return Create(static cb => cb.CarriageReturn());
     }
 
     public static string Substitute()
     {
-        return Create(cb => cb.Substitute());
+        return Create(static cb => cb.Substitute());
     }
 
     public static string Cancel()
     {
-        return Create(cb => cb.Cancel());
+        return Create(static cb => cb.Cancel());
     }
 
     public static string FileSeparator()
     {
-        return Create(cb => cb.FileSeparator());
+        return Create(static cb => cb.FileSeparator());
     }
 
     public static string GroupSeparator()
     {
-        return Create(cb => cb.GroupSeparator());
+        return Create(static cb => cb.GroupSeparator());
     }
 
     public static string RecordSeparator()
     {
-        return Create(cb => cb.RecordSeparator());
+        return Create(static cb => cb.RecordSeparator());
     }
 
     public static string UnitSeparator()
     {
-        return Create(cb => cb.UnitSeparator());
+        return Create(static cb => cb.UnitSeparator());
     }
 
     public static string Space()
     {
-        return Create(cb => cb.Space());
+        return Create(static cb => cb.Space());
     }
 
     public static string SetOutputBatching(bool enable)
@@ -112,19 +112,19 @@ public static class ControlSequences
         return Create(cb => cb.SetOutputBatching(enable));
     }
 
-    public static string SetTitle(ReadOnlySpan<char> title)
+    public static string SetTitle(scoped ReadOnlySpan<char> title)
     {
         return Create(static (cb, title) => cb.SetTitle(title), title);
     }
 
     public static string PushTitle()
     {
-        return Create(cb => cb.PushTitle());
+        return Create(static cb => cb.PushTitle());
     }
 
     public static string PopTitle()
     {
-        return Create(cb => cb.PopTitle());
+        return Create(static cb => cb.PopTitle());
     }
 
     public static string SetProgress(ProgressState state, int value)
@@ -152,7 +152,7 @@ public static class ControlSequences
         return Create(cb => cb.SetMouseEvents(events));
     }
 
-    public static string SetMousePointerStyle(ReadOnlySpan<char> style)
+    public static string SetMousePointerStyle(scoped ReadOnlySpan<char> style)
     {
         return Create(static (cb, style) => cb.SetMousePointerStyle(style), style);
     }
@@ -269,12 +269,12 @@ public static class ControlSequences
 
     public static string SaveCursorState()
     {
-        return Create(cb => cb.SaveCursorState());
+        return Create(static cb => cb.SaveCursorState());
     }
 
     public static string RestoreCursorState()
     {
-        return Create(cb => cb.RestoreCursorState());
+        return Create(static cb => cb.RestoreCursorState());
     }
 
     public static string SetForegroundColor(byte r, byte g, byte b)
@@ -315,17 +315,17 @@ public static class ControlSequences
 
     public static string ResetAttributes()
     {
-        return Create(cb => cb.ResetAttributes());
+        return Create(static cb => cb.ResetAttributes());
     }
 
-    public static string OpenHyperlink(Uri uri, ReadOnlySpan<char> id = default)
+    public static string OpenHyperlink(Uri uri, scoped ReadOnlySpan<char> id = default)
     {
         return Create(static (cb, id, uri) => cb.OpenHyperlink(uri, id), id, uri);
     }
 
     public static string CloseHyperlink()
     {
-        return Create(cb => cb.CloseHyperlink());
+        return Create(static cb => cb.CloseHyperlink());
     }
 
     public static string SaveScreenshot(ScreenshotFormat format = ScreenshotFormat.Html)
@@ -335,11 +335,11 @@ public static class ControlSequences
 
     public static string SoftReset()
     {
-        return Create(cb => cb.SoftReset());
+        return Create(static cb => cb.SoftReset());
     }
 
     public static string FullReset()
     {
-        return Create(cb => cb.FullReset());
+        return Create(static cb => cb.FullReset());
     }
 }

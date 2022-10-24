@@ -13,7 +13,7 @@ public static class MonospaceWidth
         return width == -1 ? null : width;
     }
 
-    public static int? Measure(ReadOnlySpan<char> value)
+    public static int? Measure(scoped ReadOnlySpan<char> value)
     {
         var result = 0;
 

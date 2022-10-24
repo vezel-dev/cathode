@@ -23,7 +23,7 @@ internal sealed class WindowsTerminalReader : NativeTerminalReader<WindowsVirtua
         _buffer = new byte[Cathode.Terminal.Encoding.GetMaxByteCount(2)];
     }
 
-    protected override unsafe int ReadPartialCore(Span<byte> buffer, CancellationToken cancellationToken)
+    protected override unsafe int ReadPartialCore(scoped Span<byte> buffer, CancellationToken cancellationToken)
     {
         using var guard = Terminal.Control.Guard();
 

@@ -51,11 +51,11 @@ public abstract class TerminalStream : Stream
         return ReadAsync(buffer.AsMemory(offset..count), cancellationToken).AsTask();
     }
 
-    public override sealed unsafe int ReadByte()
+    public override sealed int ReadByte()
     {
-        byte value;
+        var span = (stackalloc byte[1]);
 
-        return Read(new Span<byte>(&value, 1)) == 1 ? value : -1;
+        return Read(span) == 1 ? span[0] : -1;
     }
 
     public override sealed void Write(byte[] buffer, int offset, int count)
