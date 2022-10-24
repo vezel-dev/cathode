@@ -18,7 +18,7 @@ public static class TerminalHost
             .ConfigureAppConfiguration((ctx, cfg) =>
             {
                 [UnconditionalSuppressMessage("", "IL2026")]
-                static T GetConfigurationValue<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+                static T? GetConfigurationValue<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
                     HostBuilderContext context, string key, T defaultValue)
                 {
                     return context.Configuration.GetValue(key, defaultValue);

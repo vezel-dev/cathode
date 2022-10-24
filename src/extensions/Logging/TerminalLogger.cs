@@ -26,6 +26,7 @@ internal sealed class TerminalLogger : ILogger
     }
 
     public IDisposable BeginScope<TState>(TState state)
+        where TState : notnull
     {
         return ScopeProvider.Push(state) ?? NullScope.Instance;
     }
