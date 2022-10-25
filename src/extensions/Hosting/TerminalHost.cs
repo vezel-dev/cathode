@@ -4,6 +4,7 @@ namespace Vezel.Cathode.Extensions.Hosting;
 
 public static class TerminalHost
 {
+    [RequiresDynamicCode("Dependency injection may require generating code at runtime.")]
     public static IHostBuilder CreateDefaultBuilder(string[]? args = null)
     {
         return new HostBuilder()

@@ -28,9 +28,15 @@
         <When Condition="'$(IsPackable)' == 'true'">
             <PropertyGroup>
                 <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-                <IsTrimmable Condition="'$(OutputType)' == 'Library'">>true</IsTrimmable>
                 <PackageIcon>cathode.png</PackageIcon>
                 <PackageReadmeFile>PACKAGE.md</PackageReadmeFile>
+            </PropertyGroup>
+
+            <PropertyGroup Condition="'$(OutputType)' == 'Library'">
+                <EnableAotAnalyzer>true</EnableAotAnalyzer>
+                <EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
+                <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+                <IsTrimmable>true</IsTrimmable>
             </PropertyGroup>
 
             <ItemGroup>
