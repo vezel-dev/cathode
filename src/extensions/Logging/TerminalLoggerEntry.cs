@@ -1,6 +1,5 @@
 namespace Vezel.Cathode.Extensions.Logging;
 
-[SuppressMessage("", "CA1815")]
 internal readonly struct TerminalLoggerEntry
 {
     public ReadOnlyMemory<char> Message { get; }

@@ -8,7 +8,6 @@ public static class ProgramHost
 
     private static int _running;
 
-    [SuppressMessage("", "CA1031")]
     public static async Task RunAsync<TProgram>(ReadOnlyMemory<string> arguments)
         where TProgram : IProgram
     {

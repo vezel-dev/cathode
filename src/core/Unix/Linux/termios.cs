@@ -1,8 +1,6 @@
 namespace Vezel.Cathode.Unix.Linux;
 
 [StructLayout(LayoutKind.Sequential)]
-[SuppressMessage("", "IDE1006")]
-[SuppressMessage("", "SA1300")]
 [SuppressMessage("", "SA1307")]
 [SuppressMessage("", "SA1310")]
 internal struct Termios
