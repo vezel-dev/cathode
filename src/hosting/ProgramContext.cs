@@ -8,40 +8,28 @@ public sealed class ProgramContext
 
     public ReadOnlyMemory<string> Arguments { get; }
 
-    public CancellationToken CancellationToken
-    {
-        get
-        {
-            lock (_lock)
-            {
-                // We create the token lazily when the caller wants it because hooking the Signaled event can have
-                // undesirable side effects when running under a debugger.
-                if (!_signaled.CanBeCanceled)
-                {
-                    var cts = new CancellationTokenSource();
-
-                    Terminal.Signaled += ctx =>
-                    {
-                        // We just kind of assume that any event handlers that come after us will not flip it back to
-                        // false. Not much we can do in that case.
-                        ctx.Cancel = true;
-
-                        cts.Cancel();
-                    };
-
-                    _signaled = cts.Token;
-                }
-
-                return _signaled;
-            }
-        }
-    }
+    public CancellationToken CancellationToken => _cancellationToken.Value;
 
     public int ExitCode { get; set; }
 
-    private readonly object _lock = new();
+    private readonly Lazy<CancellationToken> _cancellationToken = new(() =>
+    {
+        // We create the token lazily when the caller wants it because hooking the Signaled event can have undesirable
+        // side effects when running under a debugger.
 
-    private CancellationToken _signaled;
+        var cts = new CancellationTokenSource();
+
+        Terminal.Signaled += ctx =>
+        {
+            // We just kind of assume that any event handlers that come after us will not flip it back to
+            // false. Not much we can do in that case.
+            ctx.Cancel = true;
+
+            cts.Cancel();
+        };
+
+        return cts.Token;
+    });
 
     internal ProgramContext(ReadOnlyMemory<string> arguments)
     {
