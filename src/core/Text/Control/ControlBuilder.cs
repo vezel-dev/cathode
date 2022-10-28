@@ -683,6 +683,33 @@ public sealed class ControlBuilder
         return Print(CSI).Print(formatSpan[..formatLen]).Print("i");
     }
 
+    public ControlBuilder PlayNotes(int volume, int duration, scoped ReadOnlySpan<int> notes)
+    {
+        Check.Range(volume is >= 0 and <= 7, volume);
+        Check.Range(duration >= 0, duration);
+        Check.Argument(notes.Length >= 1, nameof(notes));
+        Check.ForEach(notes, note => Check.Argument(note is >= 1 and <= 25, nameof(notes)));
+
+        var volumeSpan = (stackalloc char[StackBufferSize]);
+        var durationSpan = (stackalloc char[StackBufferSize]);
+
+        _ = volume.TryFormat(volumeSpan, out var volumeLen, provider: _culture);
+        _ = duration.TryFormat(durationSpan, out var durationLen, provider: _culture);
+
+        _ = Print(CSI).Print(volumeSpan[..volumeLen]).Print(";").Print(durationSpan[..durationLen]);
+
+        var noteSpan = (stackalloc char[StackBufferSize]);
+
+        foreach (var note in notes)
+        {
+            _ = note.TryFormat(noteSpan, out var noteLen, provider: _culture);
+
+            _ = Print(";").Print(noteSpan[..noteLen]);
+        }
+
+        return Print(",~");
+    }
+
     public ControlBuilder SoftReset()
     {
         return Print(CSI).Print("!p");

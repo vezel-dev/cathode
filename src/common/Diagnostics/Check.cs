@@ -121,6 +121,13 @@ internal static class Check
             throw new ArgumentException(null);
     }
 
+    // TODO: https://github.com/dotnet/csharplang/issues/1148
+    public static void Argument([DoesNotReturnIf(false)] bool condition, string name)
+    {
+        if (!condition)
+            throw new ArgumentException(null, name);
+    }
+
     public static void Argument<T>(
         [DoesNotReturnIf(false)] bool condition,
         in T value,

@@ -357,6 +357,14 @@ public static class ControlSequences
         return Create(static (cb, format) => cb.SaveScreenshot(format), format);
     }
 
+    public static string PlayNotes(int volume, int duration, scoped ReadOnlySpan<int> notes)
+    {
+        return Create(
+            static (cb, notes, args) => cb.PlayNotes(args.Volume, args.Duration, notes),
+            notes,
+            (Volume: volume, Duration: duration));
+    }
+
     public static string SoftReset()
     {
         return Create(static cb => cb.SoftReset());
