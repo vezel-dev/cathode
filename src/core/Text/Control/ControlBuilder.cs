@@ -340,6 +340,11 @@ public sealed class ControlBuilder
         return Print(CSI).Print(cursor).Print(CSI).Print(function).Print(CSI).Print(other);
     }
 
+    public ControlBuilder SetAutoRepeatMode(bool enable)
+    {
+        return Print(CSI).Print("?8").Print(enable ? "h" : "l");
+    }
+
     public ControlBuilder SetMouseEvents(MouseEvents events)
     {
         return Print(CSI).Print("?1003").Print(events.HasFlag(MouseEvents.Movement) ? "h" : "l")

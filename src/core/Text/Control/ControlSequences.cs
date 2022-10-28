@@ -155,6 +155,11 @@ public static class ControlSequences
         return Create(static (cb, level) => cb.SetKeyboardLevel(level), level);
     }
 
+    public static string SetAutoRepeatMode(bool enable)
+    {
+        return Create(static (cb, enable) => cb.SetAutoRepeatMode(enable), enable);
+    }
+
     public static string SetMouseEvents(MouseEvents events)
     {
         return Create(static (cb, events) => cb.SetMouseEvents(events), events);
