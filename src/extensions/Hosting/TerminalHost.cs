@@ -7,11 +7,18 @@ public static class TerminalHost
     [RequiresDynamicCode("Dependency injection may require generating code at runtime.")]
     public static IHostBuilder CreateDefaultBuilder(string[]? args = null)
     {
-        return new HostBuilder()
-            .UseContentRoot(Environment.CurrentDirectory)
+        var builder = new HostBuilder();
+        var cwd = Environment.CurrentDirectory;
+
+        if (!OperatingSystem.IsWindows() ||
+            !string.Equals(
+                cwd, Environment.GetFolderPath(Environment.SpecialFolder.System), StringComparison.OrdinalIgnoreCase))
+            _ = builder.UseContentRoot(cwd);
+
+        return builder
             .ConfigureHostConfiguration(cfg =>
             {
-                _ = cfg.AddEnvironmentVariables(prefix: "DOTNET_");
+                _ = cfg.AddEnvironmentVariables("DOTNET_");
 
                 if (args != null)
                     _ = cfg.AddCommandLine(args);
@@ -34,7 +41,16 @@ public static class TerminalHost
 
                 if (env.IsDevelopment() && !string.IsNullOrEmpty(env.ApplicationName))
                 {
-                    var asm = Assembly.Load(new AssemblyName(env.ApplicationName));
+                    var asm = default(Assembly);
+
+                    try
+                    {
+                        asm = Assembly.Load(new AssemblyName(env.ApplicationName));
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        // Assembly not found.
+                    }
 
                     if (asm != null)
                         _ = cfg.AddUserSecrets(asm, true, reload);
