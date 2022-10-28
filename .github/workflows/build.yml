@@ -33,7 +33,7 @@ jobs:
                   fetch-depth: 0
                   submodules: recursive
             - name: Set up .NET
-              uses: actions/setup-dotnet@v3.0.2
+              uses: actions/setup-dotnet@v3.0.3
             - name: Build project
               run: |
                   dotnet nuget --version # TODO: https://github.com/NuGet/Home/issues/12159
