@@ -245,6 +245,21 @@ public static class ControlSequences
         return Create(static (cb, mode) => cb.ClearLine(mode), mode);
     }
 
+    public static string SetProtection(bool protect)
+    {
+        return Create(static (cb, protect) => cb.SetProtection(protect), protect);
+    }
+
+    public static string ProtectedClearScreen(ClearMode mode = ClearMode.Full)
+    {
+        return Create(static (cb, mode) => cb.ProtectedClearScreen(mode), mode);
+    }
+
+    public static string ProtectedClearLine(ClearMode mode = ClearMode.Full)
+    {
+        return Create(static (cb, mode) => cb.ProtectedClearLine(mode), mode);
+    }
+
     public static string MoveBufferUp(int count)
     {
         return Create(static (cb, count) => cb.MoveBufferUp(count), count);

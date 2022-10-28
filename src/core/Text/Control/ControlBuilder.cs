@@ -141,11 +141,6 @@ public sealed class ControlBuilder
             _writer.Clear();
     }
 
-    public override string ToString()
-    {
-        return Span.ToString();
-    }
-
     public ControlBuilder Print(scoped ReadOnlySpan<char> value)
     {
         _writer.Write(value);
@@ -475,6 +470,32 @@ public sealed class ControlBuilder
         return Clear("K", mode);
     }
 
+    public ControlBuilder SetProtection(bool protect)
+    {
+        return Print(CSI).Print(protect ? "1" : "0").Print("\"q");
+    }
+
+    private ControlBuilder ProtectedClear(string type, ClearMode mode)
+    {
+        Check.Enum(mode);
+
+        var modeSpan = (stackalloc char[StackBufferSize]);
+
+        _ = ((int)mode).TryFormat(modeSpan, out var modeLen, provider: _culture);
+
+        return Print(CSI).Print("?").Print(modeSpan[..modeLen]).Print(type);
+    }
+
+    public ControlBuilder ProtectedClearScreen(ClearMode mode = ClearMode.Full)
+    {
+        return Clear("J", mode);
+    }
+
+    public ControlBuilder ProtectedClearLine(ClearMode mode = ClearMode.Full)
+    {
+        return Clear("K", mode);
+    }
+
     private ControlBuilder MoveBuffer(string type, int count)
     {
         Check.Range(count >= 0, count);
@@ -718,5 +739,10 @@ public sealed class ControlBuilder
     public ControlBuilder FullReset()
     {
         return Print(ESC).Print("c");
+    }
+
+    public override string ToString()
+    {
+        return Span.ToString();
     }
 }
