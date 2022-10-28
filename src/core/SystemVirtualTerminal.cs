@@ -195,7 +195,10 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
         }
 
         // Do this on the thread pool to avoid breaking internals if an event handler misbehaves.
-        _ = ThreadPool.UnsafeQueueUserWorkItem(state => _resized?.Invoke(size), null);
+        _ = ThreadPool.UnsafeQueueUserWorkItem(
+            static tup => Unsafe.As<SystemVirtualTerminal>(tup.Terminal)._resized?.Invoke(tup.Size),
+            (Terminal: this, Size: size),
+            true);
     }
 
     protected abstract void SetMode(bool raw);

@@ -32,7 +32,7 @@ internal sealed class UnixCancellationPipe
             var handles = (stackalloc[] { (int)pipeHandle.DangerousGetHandle(), handle });
 
             using (var registration = cancellationToken.UnsafeRegister(
-                state => ((UnixCancellationPipe)state!)._server.WriteByte(42), this))
+                static state => Unsafe.As<UnixCancellationPipe>(state!)._server.WriteByte(42), this))
                 if (!_terminal.PollHandles(null, POLLIN, handles))
                     return;
 
