@@ -63,7 +63,7 @@ public sealed class ChildProcessBuilder
 
     public ChildProcessBuilder WithFileName(string fileName)
     {
-        ArgumentNullException.ThrowIfNull(fileName);
+        Check.Null(fileName);
 
         var builder = Clone();
 
@@ -77,7 +77,7 @@ public sealed class ChildProcessBuilder
         if (arguments.IsDefault)
             arguments = ImmutableArray<string>.Empty;
         else
-            _ = arguments.All(a => a != null) ? true : throw new ArgumentException(null, nameof(arguments));
+            Check.ForEach(arguments, arg => Check.Argument(arg != null, arguments));
 
         var builder = Clone();
 
@@ -93,7 +93,7 @@ public sealed class ChildProcessBuilder
 
     public ChildProcessBuilder AddArgument(string argument)
     {
-        ArgumentNullException.ThrowIfNull(argument);
+        Check.Null(argument);
 
         var builder = Clone();
 
@@ -104,8 +104,8 @@ public sealed class ChildProcessBuilder
 
     public ChildProcessBuilder AddArguments(params string[] arguments)
     {
-        ArgumentNullException.ThrowIfNull(arguments);
-        _ = arguments.All(a => a != null) ? true : throw new ArgumentException(null, nameof(arguments));
+        Check.Null(arguments);
+        Check.ForEach(arguments, arg => Check.Argument(arg != null, arguments));
 
         var builder = Clone();
 
@@ -116,9 +116,8 @@ public sealed class ChildProcessBuilder
 
     public ChildProcessBuilder WithVariables(ImmutableDictionary<string, string> environment)
     {
-        ArgumentNullException.ThrowIfNull(environment);
-        _ = environment.All(kvp => kvp.Key != null && kvp.Value != null) ?
-            true : throw new ArgumentException(null, nameof(environment));
+        Check.Null(environment);
+        Check.ForEach(environment, kvp => Check.Argument(kvp.Value != null, environment));
 
         var builder = Clone();
 
@@ -134,8 +133,8 @@ public sealed class ChildProcessBuilder
 
     public ChildProcessBuilder AddVariable(string name, string value)
     {
-        ArgumentNullException.ThrowIfNull(name);
-        ArgumentNullException.ThrowIfNull(value);
+        Check.Null(name);
+        Check.Null(value);
 
         var builder = Clone();
 
@@ -146,8 +145,8 @@ public sealed class ChildProcessBuilder
 
     public ChildProcessBuilder SetVariable(string name, string value)
     {
-        ArgumentNullException.ThrowIfNull(name);
-        ArgumentNullException.ThrowIfNull(value);
+        Check.Null(name);
+        Check.Null(value);
 
         var builder = Clone();
 
@@ -158,7 +157,7 @@ public sealed class ChildProcessBuilder
 
     public ChildProcessBuilder RemoveVariable(string name)
     {
-        ArgumentNullException.ThrowIfNull(name);
+        Check.Null(name);
 
         var builder = Clone();
 
@@ -174,7 +173,7 @@ public sealed class ChildProcessBuilder
 
     public ChildProcessBuilder WithWorkingDirectory(string workingDirectory)
     {
-        ArgumentNullException.ThrowIfNull(workingDirectory);
+        Check.Null(workingDirectory);
 
         var builder = Clone();
 
@@ -194,7 +193,7 @@ public sealed class ChildProcessBuilder
 
     public ChildProcessBuilder WithWindowStyle(ProcessWindowStyle windowStyle)
     {
-        _ = Enum.IsDefined(windowStyle) ? true : throw new ArgumentOutOfRangeException(nameof(windowStyle));
+        Check.Enum(windowStyle);
 
         var builder = Clone();
 
@@ -221,8 +220,8 @@ public sealed class ChildProcessBuilder
 
     public ChildProcessBuilder WithBufferSizes(int standardOut, int standardError)
     {
-        _ = standardOut >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(standardOut));
-        _ = standardError >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(standardError));
+        Check.Range(standardOut >= 0, standardOut);
+        Check.Range(standardError >= 0, standardError);
 
         var builder = Clone();
 

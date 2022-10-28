@@ -6,14 +6,15 @@ public static class SystemdTerminalHostBuilderExtensions
 {
     public static IHostBuilder UseTerminalSystemd(this IHostBuilder hostBuilder)
     {
-        ArgumentNullException.ThrowIfNull(hostBuilder);
+        Check.Null(hostBuilder);
 
-        return SystemdHelpers.IsSystemdService() ?
-            hostBuilder.ConfigureServices((ctx, services) =>
+        if (SystemdHelpers.IsSystemdService())
+            _ = hostBuilder.ConfigureServices((ctx, services) =>
                 services
                     .Configure<TerminalLoggerOptions>(opts => opts.Writer = TerminalLoggerWriters.Systemd)
                     .AddSingleton<ISystemdNotifier, SystemdNotifier>()
-                    .AddSingleton<IHostLifetime, SystemdLifetime>()) :
-            hostBuilder;
+                    .AddSingleton<IHostLifetime, SystemdLifetime>());
+
+        return hostBuilder;
     }
 }

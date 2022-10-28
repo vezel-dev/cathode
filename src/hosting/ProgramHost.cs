@@ -11,8 +11,8 @@ public static class ProgramHost
     public static async Task RunAsync<TProgram>(ReadOnlyMemory<string> arguments)
         where TProgram : IProgram
     {
-        if (Interlocked.Exchange(ref _running, 1) == 1)
-            throw new InvalidOperationException("A program is already running.");
+        Check.Operation(Interlocked.Exchange(ref _running, 1) == 0);
+        Check.ForEach(arguments.Span, arg => Check.Argument(arg != null, arguments));
 
         var context = new ProgramContext(arguments);
         var domain = AppDomain.CurrentDomain;

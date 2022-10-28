@@ -1,4 +1,3 @@
-using Vezel.Cathode.IO;
 using Vezel.Cathode.Processes;
 
 namespace Vezel.Cathode;
@@ -111,7 +110,7 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
         {
             using var guard = Control.Guard();
 
-            _ = value >= TimeSpan.Zero ? true : throw new ArgumentOutOfRangeException(nameof(value));
+            Check.Range(value >= TimeSpan.Zero, value);
 
             _sizeInterval = value;
         }
@@ -207,9 +206,8 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
 
         lock (_rawLock)
         {
-            if (_processes.Count != 0)
-                throw new InvalidOperationException(
-                    "Cannot enable raw mode with non-redirected child processes running.");
+            Check.Operation(
+                _processes.Count == 0, $"Cannot enable raw mode with non-redirected child processes running.");
 
             SetMode(true);
 
@@ -223,9 +221,8 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
 
         lock (_rawLock)
         {
-            if (_processes.Count != 0)
-                throw new InvalidOperationException(
-                    "Cannot disable raw mode with non-redirected child processes running.");
+            Check.Operation(
+                _processes.Count == 0, $"Cannot disable raw mode with non-redirected child processes running.");
 
             SetMode(false);
 
@@ -239,8 +236,7 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
         {
             // The vast majority of programs expect to start in cooked mode. Enforce that we are in cooked mode while
             // any child processes that could be using the terminal are running.
-            if (_rawMode)
-                throw new InvalidOperationException("Cannot start non-redirected child processes in raw mode.");
+            Check.Operation(!_rawMode, $"Cannot start non-redirected child processes in raw mode.");
 
             // Guard here since this locks us into cooked mode until all non-redirected processes are gone.
             using var guard = Control.Guard();

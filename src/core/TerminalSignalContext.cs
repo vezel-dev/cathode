@@ -8,7 +8,7 @@ public sealed class TerminalSignalContext
 
     public TerminalSignalContext(TerminalSignal signal)
     {
-        _ = Enum.IsDefined(signal) ? true : throw new ArgumentOutOfRangeException(nameof(signal));
+        Check.Enum(signal);
 
         Signal = signal;
     }

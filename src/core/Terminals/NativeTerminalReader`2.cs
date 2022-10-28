@@ -1,5 +1,3 @@
-using Vezel.Cathode.IO;
-
 namespace Vezel.Cathode.Terminals;
 
 internal abstract class NativeTerminalReader<TTerminal, THandle> : TerminalReader

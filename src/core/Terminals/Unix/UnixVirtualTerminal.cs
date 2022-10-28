@@ -1,4 +1,3 @@
-using Vezel.Cathode.IO;
 using static Vezel.Cathode.Unix.UnixPInvoke;
 
 namespace Vezel.Cathode.Terminals.Unix;

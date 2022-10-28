@@ -10,6 +10,10 @@ This package provides the terminal hosting model.</PackageDescription>
     </PropertyGroup>
 
     <ItemGroup>
+        <Using Include="Vezel.Cathode.Diagnostics" />
+    </ItemGroup>
+
+    <ItemGroup>
         <None Include="buildTransitive/**"
               Pack="true"
               PackagePath="%(Identity)" />

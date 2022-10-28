@@ -19,8 +19,6 @@ internal static class SynchronizationExtensions
 
     public static LockDisposable Enter(this SemaphoreSlim semaphore, CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(semaphore);
-
         semaphore.Wait(cancellationToken);
 
         return new(semaphore);
@@ -31,8 +29,6 @@ internal static class SynchronizationExtensions
         this SemaphoreSlim semaphore,
         CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(semaphore);
-
         await semaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
 
         return new(semaphore);

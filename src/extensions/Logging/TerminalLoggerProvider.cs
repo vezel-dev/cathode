@@ -13,7 +13,7 @@ public sealed class TerminalLoggerProvider : ILoggerProvider, ISupportExternalSc
 
     public TerminalLoggerProvider(IOptionsMonitor<TerminalLoggerOptions> options)
     {
-        ArgumentNullException.ThrowIfNull(options);
+        Check.Null(options);
 
         _options = options;
         _processor = new(options.CurrentValue.LogQueueSize);
@@ -26,14 +26,14 @@ public sealed class TerminalLoggerProvider : ILoggerProvider, ISupportExternalSc
 
     public ILogger CreateLogger(string categoryName)
     {
-        ArgumentNullException.ThrowIfNull(categoryName);
+        Check.Null(categoryName);
 
         return _loggers.GetOrAdd(categoryName, name => new(name, _options, _processor, _scopeProvider));
     }
 
     public void SetScopeProvider(IExternalScopeProvider scopeProvider)
     {
-        ArgumentNullException.ThrowIfNull(scopeProvider);
+        Check.Null(scopeProvider);
 
         _scopeProvider = scopeProvider;
 

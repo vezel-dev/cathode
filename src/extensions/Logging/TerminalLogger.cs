@@ -43,7 +43,7 @@ internal sealed class TerminalLogger : ILogger
         Exception? exception,
         Func<TState, Exception?, string> formatter)
     {
-        ArgumentNullException.ThrowIfNull(formatter);
+        Check.Null(formatter);
 
         if (!IsEnabled(logLevel))
             return;

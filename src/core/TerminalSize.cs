@@ -8,8 +8,8 @@ public readonly struct TerminalSize : IEquatable<TerminalSize>
 
     public TerminalSize(int width, int height)
     {
-        _ = width >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(width));
-        _ = height >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(height));
+        Check.Range(width >= 0, width);
+        Check.Range(height >= 0, height);
 
         Width = width;
         Height = height;

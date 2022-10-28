@@ -125,7 +125,7 @@ public sealed class ControlBuilder
 
     public ControlBuilder(int capacity = 1024)
     {
-        _ = capacity > 0 ? true : throw new ArgumentOutOfRangeException(nameof(capacity));
+        Check.Range(capacity > 0, capacity);
 
         _capacity = capacity;
         _writer = new(capacity);
@@ -133,7 +133,7 @@ public sealed class ControlBuilder
 
     public void Clear(int reallocateThreshold = 4096)
     {
-        _ = reallocateThreshold >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(reallocateThreshold));
+        Check.Range(reallocateThreshold >= 0, reallocateThreshold);
 
         if (reallocateThreshold != 0 && _writer.Capacity > reallocateThreshold)
             _writer = new(_capacity);
@@ -297,7 +297,8 @@ public sealed class ControlBuilder
 
     public ControlBuilder SetProgress(ProgressState state, int value)
     {
-        _ = Math.Clamp(value, 0, 100) == value ? true : throw new ArgumentOutOfRangeException(nameof(value));
+        Check.Enum(state);
+        Check.Range(Math.Clamp(value, 0, 100) == value, value);
 
         var stateSpan = (stackalloc char[StackBufferSize]);
         var valueSpan = (stackalloc char[StackBufferSize]);
@@ -310,7 +311,7 @@ public sealed class ControlBuilder
 
     public ControlBuilder SetCursorKeyMode(CursorKeyMode mode)
     {
-        _ = Enum.IsDefined(mode) ? true : throw new ArgumentOutOfRangeException(nameof(mode));
+        Check.Enum(mode);
 
         var ch = (char)mode;
 
@@ -319,7 +320,7 @@ public sealed class ControlBuilder
 
     public ControlBuilder SetKeypadMode(KeypadMode mode)
     {
-        _ = Enum.IsDefined(mode) ? true : throw new ArgumentOutOfRangeException(nameof(mode));
+        Check.Enum(mode);
 
         var ch = (char)mode;
 
@@ -362,7 +363,7 @@ public sealed class ControlBuilder
 
     public ControlBuilder SetScreenBuffer(ScreenBuffer buffer)
     {
-        _ = Enum.IsDefined(buffer) ? true : throw new ArgumentOutOfRangeException(nameof(buffer));
+        Check.Enum(buffer);
 
         var ch = (char)buffer;
 
@@ -381,7 +382,7 @@ public sealed class ControlBuilder
 
     public ControlBuilder SetCursorStyle(CursorStyle style)
     {
-        _ = Enum.IsDefined(style) ? true : throw new ArgumentOutOfRangeException(nameof(style));
+        Check.Enum(style);
 
         var styleSpan = (stackalloc char[StackBufferSize]);
 
@@ -397,9 +398,8 @@ public sealed class ControlBuilder
 
     public ControlBuilder SetScrollMargin(int top, int bottom)
     {
-        _ = top >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(top));
-        _ = bottom >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(bottom));
-        _ = bottom >= top ? true : throw new ArgumentException(null, nameof(bottom));
+        Check.Range(top >= 0, top);
+        Check.Range(bottom >= top, bottom);
 
         var topSpan = (stackalloc char[StackBufferSize]);
         var bottomSpan = (stackalloc char[StackBufferSize]);
@@ -412,7 +412,7 @@ public sealed class ControlBuilder
 
     private ControlBuilder ModifyText(string type, int count)
     {
-        _ = count >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(count));
+        Check.Range(count >= 0, count);
 
         if (count == 0)
             return this;
@@ -451,7 +451,7 @@ public sealed class ControlBuilder
 
     private ControlBuilder Clear(string type, ClearMode mode)
     {
-        _ = Enum.IsDefined(mode) ? true : throw new ArgumentOutOfRangeException(nameof(mode));
+        Check.Enum(mode);
 
         var modeSpan = (stackalloc char[StackBufferSize]);
 
@@ -472,7 +472,7 @@ public sealed class ControlBuilder
 
     private ControlBuilder MoveBuffer(string type, int count)
     {
-        _ = count >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(count));
+        Check.Range(count >= 0, count);
 
         if (count == 0)
             return this;
@@ -496,8 +496,8 @@ public sealed class ControlBuilder
 
     public ControlBuilder MoveCursorTo(int line, int column)
     {
-        _ = line >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(line));
-        _ = column >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(column));
+        Check.Range(line >= 0, line);
+        Check.Range(column >= 0, column);
 
         var lineSpan = (stackalloc char[StackBufferSize]);
         var columnSpan = (stackalloc char[StackBufferSize]);
@@ -510,7 +510,7 @@ public sealed class ControlBuilder
 
     private ControlBuilder MoveCursor(string type, int count)
     {
-        _ = count >= 0 ? true : throw new ArgumentOutOfRangeException(nameof(count));
+        Check.Range(count >= 0, count);
 
         if (count == 0)
             return this;
@@ -652,7 +652,7 @@ public sealed class ControlBuilder
 
     public ControlBuilder OpenHyperlink(Uri uri, scoped ReadOnlySpan<char> id = default)
     {
-        ArgumentNullException.ThrowIfNull(uri);
+        Check.Null(uri);
 
         _ = Print(OSC).Print("8;");
 
@@ -669,7 +669,7 @@ public sealed class ControlBuilder
 
     public ControlBuilder SaveScreenshot(ScreenshotFormat format = ScreenshotFormat.Html)
     {
-        _ = Enum.IsDefined(format) ? true : throw new ArgumentOutOfRangeException(nameof(format));
+        Check.Enum(format);
 
         var formatSpan = (stackalloc char[StackBufferSize]);
 

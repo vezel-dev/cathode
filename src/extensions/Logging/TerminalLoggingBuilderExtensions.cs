@@ -5,10 +5,9 @@ public static class TerminalLoggingBuilderExtensions
     [UnconditionalSuppressMessage("", "IL2026")]
     [UnconditionalSuppressMessage("", "IL3050")]
     public static ILoggingBuilder AddTerminal(
-        this ILoggingBuilder builder,
-        Action<TerminalLoggerOptions>? configureOptions = null)
+        this ILoggingBuilder builder, Action<TerminalLoggerOptions>? configureOptions = null)
     {
-        ArgumentNullException.ThrowIfNull(builder);
+        Check.Null(builder);
 
         builder.AddConfiguration();
         builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerProvider, TerminalLoggerProvider>());

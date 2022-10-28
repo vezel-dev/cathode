@@ -1,5 +1,3 @@
-using Vezel.Cathode.IO;
-
 namespace Vezel.Cathode.Diagnostics;
 
 public class TerminalTraceListener : TextWriterTraceListener

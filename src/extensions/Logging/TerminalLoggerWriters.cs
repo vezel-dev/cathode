@@ -28,9 +28,9 @@ public static class TerminalLoggerWriters
         ControlBuilder builder,
         in TerminalLoggerMessage message)
     {
-        ArgumentNullException.ThrowIfNull(options);
-        ArgumentNullException.ThrowIfNull(builder);
-        _ = message.CategoryName != null ? true : throw new ArgumentException(null, nameof(message));
+        Check.Null(options);
+        Check.Null(builder);
+        Check.Argument(message.CategoryName != null, message);
 
         var (lvl, r, g, b) = message.LogLevel switch
         {
@@ -100,9 +100,9 @@ public static class TerminalLoggerWriters
         ControlBuilder builder,
         in TerminalLoggerMessage message)
     {
-        ArgumentNullException.ThrowIfNull(options);
-        ArgumentNullException.ThrowIfNull(builder);
-        _ = message.CategoryName != null ? true : throw new ArgumentException(null, nameof(message));
+        Check.Null(options);
+        Check.Null(builder);
+        Check.Argument(message.CategoryName != null, message);
 
         var lvl = message.LogLevel switch
         {

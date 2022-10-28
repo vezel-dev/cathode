@@ -12,6 +12,9 @@ This package provides the core terminal API.</PackageDescription>
 
     <ItemGroup>
         <Using Include="System.IO.Pipelines" />
+        <Using Include="Vezel.Cathode.Diagnostics" />
+        <Using Include="Vezel.Cathode.IO" />
+        <Using Include="Vezel.Cathode.Threading" />
     </ItemGroup>
 
     <ItemGroup>
@@ -27,6 +30,7 @@ This package provides the core terminal API.</PackageDescription>
     <ItemGroup>
         <ProjectReference Include="../analyzers/analyzers.csproj"
                           ReferenceOutputAssembly="false" />
+        <ProjectReference Include="../common/common.csproj" />
     </ItemGroup>
 
     <ItemGroup>

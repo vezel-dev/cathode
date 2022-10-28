@@ -7,8 +7,7 @@ public sealed class TerminalLoggerOptions
         get => _logQueueSize;
         set
         {
-            if (value < 0)
-                throw new ArgumentOutOfRangeException(nameof(value));
+            Check.Range(value >= 0, value);
 
             _logQueueSize = value;
         }
@@ -19,7 +18,7 @@ public sealed class TerminalLoggerOptions
         get => _logToStandardErrorThreshold;
         set
         {
-            _ = Enum.IsDefined(value) ? true : throw new ArgumentOutOfRangeException(nameof(value));
+            Check.Enum(value);
 
             _logToStandardErrorThreshold = value;
         }
@@ -36,7 +35,7 @@ public sealed class TerminalLoggerOptions
         get => _writer;
         set
         {
-            ArgumentNullException.ThrowIfNull(value);
+            Check.Null(value);
 
             _writer = value;
         }

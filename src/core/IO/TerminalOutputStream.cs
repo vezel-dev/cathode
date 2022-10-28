@@ -10,7 +10,7 @@ public sealed class TerminalOutputStream : TerminalStream
 
     public TerminalOutputStream(TerminalWriter writer)
     {
-        ArgumentNullException.ThrowIfNull(writer);
+        Check.Null(writer);
 
         Writer = writer;
     }

@@ -1,4 +1,3 @@
-using Vezel.Cathode.IO;
 using Windows.Win32.Foundation;
 
 namespace Vezel.Cathode.Terminals.Windows;

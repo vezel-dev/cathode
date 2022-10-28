@@ -1,4 +1,3 @@
-using Vezel.Cathode.Threading;
 using Windows.Win32.Foundation;
 using static Windows.Win32.WindowsPInvoke;
 

@@ -46,7 +46,7 @@ public abstract class TerminalStream : Stream
         int count,
         CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(buffer);
+        Check.Null(buffer);
 
         return ReadAsync(buffer.AsMemory(offset..count), cancellationToken).AsTask();
     }
@@ -71,7 +71,7 @@ public abstract class TerminalStream : Stream
         int count,
         CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(buffer);
+        Check.Null(buffer);
 
         return WriteAsync(buffer.AsMemory(offset..count), cancellationToken).AsTask();
     }

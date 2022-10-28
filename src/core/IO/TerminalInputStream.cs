@@ -10,7 +10,7 @@ public sealed class TerminalInputStream : TerminalStream
 
     public TerminalInputStream(TerminalReader reader)
     {
-        ArgumentNullException.ThrowIfNull(reader);
+        Check.Null(reader);
 
         Reader = reader;
     }

@@ -79,9 +79,9 @@ public sealed class ChildProcess
 
             var code = _process.ExitCode;
 
-            _ = throwOnError && code != 0 ?
-                _completion.TrySetException(new ChildProcessException($"Process exited with code {code}.", code)) :
-                _completion.TrySetResult(code);
+            _ = throwOnError && code != 0
+                ? _completion.TrySetException(new ChildProcessException($"Process exited with code {code}.", code))
+                : _completion.TrySetResult(code);
 
             if (terminal)
                 Terminal.System.ReapProcess(this);

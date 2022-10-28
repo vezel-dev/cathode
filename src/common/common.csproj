@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <AssemblyName>Vezel.Cathode.Common</AssemblyName>
+        <IsPackable>true</IsPackable>
+        <PackageDescription>$(PackageDescription)
+
+This package provides common functionality used by all Cathode packages.</PackageDescription>
+        <PackageId>Vezel.Cathode.Common</PackageId>
+        <RootNamespace>Vezel.Cathode</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Vezel.Cathode" />
+        <InternalsVisibleTo Include="Vezel.Cathode.Extensions" />
+        <InternalsVisibleTo Include="Vezel.Cathode.Hosting" />
+        <InternalsVisibleTo Include="Vezel.Cathode.Testing" />
+    </ItemGroup>
+</Project>

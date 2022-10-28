@@ -8,7 +8,7 @@ internal sealed class NullExternalScopeProvider : IExternalScopeProvider
     {
     }
 
-    public void ForEachScope<TState>(Action<object, TState> callback, TState state)
+    public void ForEachScope<TState>(Action<object?, TState> callback, TState state)
     {
     }
 

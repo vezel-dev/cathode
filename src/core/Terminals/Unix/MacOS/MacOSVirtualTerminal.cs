@@ -1,4 +1,3 @@
-using Vezel.Cathode.IO;
 using Vezel.Cathode.Unix;
 using Vezel.Cathode.Unix.MacOS;
 using static Vezel.Cathode.Unix.MacOS.MacOSPInvoke;

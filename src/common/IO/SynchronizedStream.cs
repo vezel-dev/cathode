@@ -1,3 +1,4 @@
+using Vezel.Cathode.Diagnostics;
 using Vezel.Cathode.Threading;
 
 namespace Vezel.Cathode.IO;
@@ -181,15 +182,18 @@ internal sealed class SynchronizedStream : Stream
 
     public override int EndRead(IAsyncResult asyncResult)
     {
-        ArgumentNullException.ThrowIfNull(asyncResult);
-        _ = asyncResult is AsyncOperation o && o.Read ? true : throw new ArgumentException(null, nameof(asyncResult));
-        _ = !o.Ended ? true : throw new InvalidOperationException();
+        Check.Null(asyncResult);
+
+        var op = asyncResult as AsyncOperation;
+
+        Check.Argument(op?.Read == true, asyncResult);
+        Check.Operation(!op.Ended);
 
         using (_lock.Enter())
         {
-            o.Ended = true;
+            op.Ended = true;
 
-            return _stream.EndRead(o.Result);
+            return _stream.EndRead(op.Result);
         }
     }
 
@@ -250,15 +254,18 @@ internal sealed class SynchronizedStream : Stream
 
     public override void EndWrite(IAsyncResult asyncResult)
     {
-        ArgumentNullException.ThrowIfNull(asyncResult);
-        _ = asyncResult is AsyncOperation o && !o.Read ? true : throw new ArgumentException(null, nameof(asyncResult));
-        _ = !o.Ended ? true : throw new InvalidOperationException();
+        Check.Null(asyncResult);
+
+        var op = asyncResult as AsyncOperation;
+
+        Check.Argument(op?.Read == false, asyncResult);
+        Check.Operation(!op.Ended);
 
         using (_lock.Enter())
         {
-            o.Ended = true;
+            op.Ended = true;
 
-            _stream.EndWrite(o.Result);
+            _stream.EndWrite(op.Result);
         }
     }
 }

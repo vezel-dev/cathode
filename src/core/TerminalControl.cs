@@ -1,5 +1,3 @@
-using Vezel.Cathode.Threading;
-
 namespace Vezel.Cathode;
 
 public sealed class TerminalControl
@@ -54,8 +52,7 @@ public sealed class TerminalControl
 
         try
         {
-            if (_controller != null)
-                throw new InvalidOperationException("Terminal control has already been acquired.");
+            Check.Operation(_controller == null, $"Terminal control has already been acquired.");
 
             _controller = _current.Value = new();
         }
