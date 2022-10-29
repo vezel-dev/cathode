@@ -24,8 +24,8 @@ public sealed class ControlBuilder
         {
             _builder = builder;
             _provider = provider;
-            _formatter = provider is not CultureInfo ?
-                (ICustomFormatter?)provider?.GetFormat(typeof(ICustomFormatter)) : null;
+            _formatter =
+                provider is not CultureInfo ? (ICustomFormatter?)provider?.GetFormat(typeof(ICustomFormatter)) : null;
         }
 
         private void AppendSpan(scoped ReadOnlySpan<char> span)

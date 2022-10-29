@@ -9,10 +9,7 @@ internal static class Check
         private DefaultInterpolatedStringHandler _handler;
 
         public CheckInterpolatedStringHandler(
-            int literalLength,
-            int formattedCount,
-            bool condition,
-            out bool shouldAppend)
+            int literalLength, int formattedCount, bool condition, out bool shouldAppend)
         {
             if (!condition)
             {
@@ -149,6 +146,12 @@ internal static class Check
         ArgumentNullException.ThrowIfNull(value, name);
     }
 
+    public static void Null<T>(ImmutableArray<T> value, [CallerArgumentExpression(nameof(value))] string? name = null)
+    {
+        if (value.IsDefault)
+            throw new ArgumentNullException(name);
+    }
+
     public static void NullOrEmpty(
         [NotNull] string? value, [CallerArgumentExpression(nameof(value))] string? name = null)
     {
@@ -188,21 +191,19 @@ internal static class Check
     }
 
     public static void All<T>(
-        IEnumerable<T> collection,
-        Func<T, bool> predicate,
-        [CallerArgumentExpression(nameof(collection))] string? name = null)
+        IEnumerable<T> value, Func<T, bool> predicate, [CallerArgumentExpression(nameof(value))] string? name = null)
     {
-        foreach (var item in collection)
+        foreach (var item in value)
             if (!predicate(item))
                 throw new ArgumentException(null, name);
     }
 
     public static void All<T>(
-        scoped ReadOnlySpan<T> collection,
+        scoped ReadOnlySpan<T> value,
         Func<T, bool> predicate,
-        [CallerArgumentExpression(nameof(collection))] string? name = null)
+        [CallerArgumentExpression(nameof(value))] string? name = null)
     {
-        foreach (var item in collection)
+        foreach (var item in value)
             if (!predicate(item))
                 throw new ArgumentException(null, name);
     }

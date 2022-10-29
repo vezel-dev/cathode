@@ -92,8 +92,9 @@ internal sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
 
     protected override TerminalSize? QuerySize()
     {
-        return GetConsoleScreenBufferInfo(TerminalOut.Handle, out var info) ?
-            new(info.srWindow.Right - info.srWindow.Left + 1, info.srWindow.Bottom - info.srWindow.Top + 1) : null;
+        return GetConsoleScreenBufferInfo(TerminalOut.Handle, out var info)
+            ? new(info.srWindow.Right - info.srWindow.Left + 1, info.srWindow.Bottom - info.srWindow.Top + 1)
+            : null;
     }
 
     public override void GenerateSignal(TerminalSignal signal)
@@ -165,13 +166,11 @@ internal sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
         {
             var utf8 = (uint)Encoding.UTF8.CodePage;
 
-            if (!SetConsoleCP(utf8) ||
-                !SetConsoleOutputCP(utf8))
+            if (!SetConsoleCP(utf8) || !SetConsoleOutputCP(utf8))
                 throw new TerminalConfigurationException(
                     $"Could not change console code page: {new Win32Exception().Message}");
 
-            if (!SetConsoleMode(TerminalIn.Handle, inMode) ||
-                !SetConsoleMode(TerminalOut.Handle, outMode))
+            if (!SetConsoleMode(TerminalIn.Handle, inMode) || !SetConsoleMode(TerminalOut.Handle, outMode))
                 throw new TerminalConfigurationException(
                     $"Could not change console mode: {new Win32Exception().Message}");
 

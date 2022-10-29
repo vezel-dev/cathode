@@ -46,8 +46,8 @@ internal abstract class NativeTerminalWriter<TTerminal, THandle> : TerminalWrite
         ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken)
     {
         // We currently have no native async support.
-        return cancellationToken.IsCancellationRequested ?
-            ValueTask.FromCanceled<int>(cancellationToken) :
-            new(Task.Run(() => WritePartialNative(buffer.Span, cancellationToken), cancellationToken));
+        return cancellationToken.IsCancellationRequested
+            ? ValueTask.FromCanceled<int>(cancellationToken)
+            : new(Task.Run(() => WritePartialNative(buffer.Span, cancellationToken), cancellationToken));
     }
 }

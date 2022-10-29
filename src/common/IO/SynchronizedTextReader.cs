@@ -87,8 +87,7 @@ internal sealed class SynchronizedTextReader : TextReader
     }
 
     public override async ValueTask<int> ReadBlockAsync(
-        Memory<char> buffer,
-        CancellationToken cancellationToken = default)
+        Memory<char> buffer, CancellationToken cancellationToken = default)
     {
         using (await _lock.EnterAsync(cancellationToken).ConfigureAwait(false))
             return await _reader.ReadBlockAsync(buffer, cancellationToken).ConfigureAwait(false);

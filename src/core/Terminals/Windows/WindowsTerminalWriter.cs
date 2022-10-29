@@ -7,10 +7,7 @@ internal sealed class WindowsTerminalWriter : NativeTerminalWriter<WindowsVirtua
     private readonly SemaphoreSlim _semaphore;
 
     public WindowsTerminalWriter(
-        WindowsVirtualTerminal terminal,
-        string name,
-        SafeHandle handle,
-        SemaphoreSlim semaphore)
+        WindowsVirtualTerminal terminal, string name, SafeHandle handle, SemaphoreSlim semaphore)
         : base(terminal, name, handle)
     {
         _semaphore = semaphore;

@@ -12,10 +12,7 @@ internal sealed class WindowsTerminalReader : NativeTerminalReader<WindowsVirtua
     private ReadOnlyMemory<byte> _buffered;
 
     public WindowsTerminalReader(
-        WindowsVirtualTerminal terminal,
-        string name,
-        SafeHandle handle,
-        SemaphoreSlim semaphore)
+        WindowsVirtualTerminal terminal, string name, SafeHandle handle, SemaphoreSlim semaphore)
         : base(terminal, name, handle)
     {
         _semaphore = semaphore;

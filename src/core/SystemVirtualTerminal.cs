@@ -38,30 +38,30 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
             {
                 _signaled += value;
 
-                if (_signaled != null)
+                if (_signaled == null)
+                    return;
+
+                void HandleSignal(PosixSignalContext context)
                 {
-                    void HandleSignal(PosixSignalContext context)
-                    {
-                        var ctx = new TerminalSignalContext(
-                            context.Signal switch
-                            {
-                                PosixSignal.SIGHUP => TerminalSignal.Close,
-                                PosixSignal.SIGINT => TerminalSignal.Interrupt,
-                                PosixSignal.SIGQUIT => TerminalSignal.Quit,
-                                PosixSignal.SIGTERM => TerminalSignal.Terminate,
-                                _ => throw new NotSupportedException($"Received unexpected signal: {context.Signal}"),
-                            });
+                    var ctx = new TerminalSignalContext(
+                        context.Signal switch
+                        {
+                            PosixSignal.SIGHUP => TerminalSignal.Close,
+                            PosixSignal.SIGINT => TerminalSignal.Interrupt,
+                            PosixSignal.SIGQUIT => TerminalSignal.Quit,
+                            PosixSignal.SIGTERM => TerminalSignal.Terminate,
+                            _ => throw new NotSupportedException($"Received unexpected signal: {context.Signal}"),
+                        });
 
-                        _signaled?.Invoke(ctx);
+                    _signaled?.Invoke(ctx);
 
-                        context.Cancel = ctx.Cancel;
-                    }
-
-                    _sigHup = PosixSignalRegistration.Create(PosixSignal.SIGHUP, HandleSignal);
-                    _sigInt = PosixSignalRegistration.Create(PosixSignal.SIGINT, HandleSignal);
-                    _sigQuit = PosixSignalRegistration.Create(PosixSignal.SIGQUIT, HandleSignal);
-                    _sigTerm = PosixSignalRegistration.Create(PosixSignal.SIGTERM, HandleSignal);
+                    context.Cancel = ctx.Cancel;
                 }
+
+                _sigHup = PosixSignalRegistration.Create(PosixSignal.SIGHUP, HandleSignal);
+                _sigInt = PosixSignalRegistration.Create(PosixSignal.SIGINT, HandleSignal);
+                _sigQuit = PosixSignalRegistration.Create(PosixSignal.SIGQUIT, HandleSignal);
+                _sigTerm = PosixSignalRegistration.Create(PosixSignal.SIGTERM, HandleSignal);
             }
         }
 
@@ -71,18 +71,18 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
             {
                 _signaled -= value;
 
-                if (_signaled == null)
-                {
-                    _sigHup!.Dispose();
-                    _sigInt!.Dispose();
-                    _sigQuit!.Dispose();
-                    _sigTerm!.Dispose();
+                if (_signaled != null)
+                    return;
 
-                    _sigHup = null;
-                    _sigInt = null;
-                    _sigQuit = null;
-                    _sigTerm = null;
-                }
+                _sigHup!.Dispose();
+                _sigInt!.Dispose();
+                _sigQuit!.Dispose();
+                _sigTerm!.Dispose();
+
+                _sigHup = null;
+                _sigInt = null;
+                _sigQuit = null;
+                _sigTerm = null;
             }
         }
     }
@@ -108,9 +108,9 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
         get => _sizeInterval;
         set
         {
-            using var guard = Control.Guard();
-
             Check.Range(value >= TimeSpan.Zero, value);
+
+            using var guard = Control.Guard();
 
             _sizeInterval = value;
         }

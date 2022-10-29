@@ -24,8 +24,7 @@ public class TestTerminalWriter : TerminalWriter
         TextWriter = new StreamWriter(Stream, Terminal.Encoding);
     }
 
-    protected override sealed int WritePartialCore(
-        scoped ReadOnlySpan<byte> buffer)
+    protected override sealed int WritePartialCore(scoped ReadOnlySpan<byte> buffer)
     {
         var len = buffer.Length;
         var array = ArrayPool<byte>.Shared.Rent(len);

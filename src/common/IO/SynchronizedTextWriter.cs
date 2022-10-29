@@ -335,8 +335,7 @@ internal sealed class SynchronizedTextWriter : TextWriter
     }
 
     public override async Task WriteLineAsync(
-        ReadOnlyMemory<char> buffer,
-        CancellationToken cancellationToken = default)
+        ReadOnlyMemory<char> buffer, CancellationToken cancellationToken = default)
     {
         using (await _lock.EnterAsync(cancellationToken).ConfigureAwait(false))
             await _writer.WriteLineAsync(buffer, cancellationToken).ConfigureAwait(false);

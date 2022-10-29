@@ -26,8 +26,7 @@ internal static class SynchronizationExtensions
 
     [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder<>))]
     public static async ValueTask<LockDisposable> EnterAsync(
-        this SemaphoreSlim semaphore,
-        CancellationToken cancellationToken = default)
+        this SemaphoreSlim semaphore, CancellationToken cancellationToken = default)
     {
         await semaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
 

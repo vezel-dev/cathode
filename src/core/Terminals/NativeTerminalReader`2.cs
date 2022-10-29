@@ -45,8 +45,8 @@ internal abstract class NativeTerminalReader<TTerminal, THandle> : TerminalReade
         Memory<byte> buffer, CancellationToken cancellationToken)
     {
         // We currently have no native async support.
-        return cancellationToken.IsCancellationRequested ?
-            ValueTask.FromCanceled<int>(cancellationToken) :
-            new(Task.Run(() => ReadPartialNative(buffer.Span, cancellationToken), cancellationToken));
+        return cancellationToken.IsCancellationRequested
+            ? ValueTask.FromCanceled<int>(cancellationToken)
+            : new(Task.Run(() => ReadPartialNative(buffer.Span, cancellationToken), cancellationToken));
     }
 }

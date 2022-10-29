@@ -44,8 +44,7 @@ internal static class DiagnosticDescriptors
 
             p.SetValue(
                 null,
-                new DiagnosticDescriptor(
-                    $"CATH{id}", attr.Title, attr.Message, "Vezel.Cathode", attr.Severity, true));
+                new DiagnosticDescriptor($"CATH{id}", attr.Title, attr.Message, "Vezel.Cathode", attr.Severity, true));
 
             id++;
         }

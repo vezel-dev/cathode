@@ -156,12 +156,7 @@ internal sealed class SynchronizedStream : Stream
             return _stream.ReadByte();
     }
 
-    public override IAsyncResult BeginRead(
-        byte[] buffer,
-        int offset,
-        int count,
-        AsyncCallback? callback,
-        object? state)
+    public override IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback? callback, object? state)
     {
         _lock.Wait();
 
@@ -229,11 +224,7 @@ internal sealed class SynchronizedStream : Stream
     }
 
     public override IAsyncResult BeginWrite(
-        byte[] buffer,
-        int offset,
-        int count,
-        AsyncCallback? callback,
-        object? state)
+        byte[] buffer, int offset, int count, AsyncCallback? callback, object? state)
     {
         _lock.Wait();
 

@@ -23,10 +23,7 @@ public static class TerminalLoggerWriters
         }
     }
 
-    public static void Default(
-        TerminalLoggerOptions options,
-        ControlBuilder builder,
-        in TerminalLoggerMessage message)
+    public static void Default(TerminalLoggerOptions options, ControlBuilder builder, in TerminalLoggerMessage message)
     {
         Check.Null(options);
         Check.Null(builder);
@@ -95,10 +92,7 @@ public static class TerminalLoggerWriters
         }
     }
 
-    public static void Systemd(
-        TerminalLoggerOptions options,
-        ControlBuilder builder,
-        in TerminalLoggerMessage message)
+    public static void Systemd(TerminalLoggerOptions options, ControlBuilder builder, in TerminalLoggerMessage message)
     {
         Check.Null(options);
         Check.Null(builder);

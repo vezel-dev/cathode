@@ -37,8 +37,7 @@ internal sealed class UnixTerminalReader : NativeTerminalReader<UnixVirtualTermi
 
             // Note that this call may get us suspended by way of a SIGTTIN signal if we are a background process and
             // the handle refers to a terminal.
-            while ((ret = read(Handle, buffer, (nuint)buffer.Length)) == -1 &&
-                Marshal.GetLastPInvokeError() == EINTR)
+            while ((ret = read(Handle, buffer, (nuint)buffer.Length)) == -1 && Marshal.GetLastPInvokeError() == EINTR)
             {
                 // Retry in case we get interrupted by a signal.
             }
