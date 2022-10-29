@@ -2,7 +2,7 @@ namespace Vezel.Cathode.Unix.Linux;
 
 [SuppressMessage("", "SA1300")]
 [SuppressMessage("", "SA1310")]
-internal static unsafe class LinuxPInvoke
+internal static unsafe partial class LinuxPInvoke
 {
     // c_iflag
 
@@ -156,12 +156,12 @@ internal static unsafe class LinuxPInvoke
 
     public const int EAGAIN = 11;
 
-    [DllImport("c", SetLastError = true)]
-    public static extern int poll(Pollfd* fds, nuint nfds, int timeout);
+    [LibraryImport("c", SetLastError = true)]
+    public static partial int poll(Span<Pollfd> fds, nuint nfds, int timeout);
 
-    [DllImport("c", SetLastError = true)]
-    public static extern int tcgetattr(int fildes, out Termios termios_p);
+    [LibraryImport("c", SetLastError = true)]
+    public static partial int tcgetattr(int fildes, out Termios termios_p);
 
-    [DllImport("c", SetLastError = true)]
-    public static extern int tcsetattr(int fildes, int optional_actions, in Termios termios_p);
+    [LibraryImport("c", SetLastError = true)]
+    public static partial int tcsetattr(int fildes, int optional_actions, in Termios termios_p);
 }

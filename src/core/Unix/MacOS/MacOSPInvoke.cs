@@ -2,7 +2,7 @@ namespace Vezel.Cathode.Unix.MacOS;
 
 [SuppressMessage("", "SA1300")]
 [SuppressMessage("", "SA1310")]
-internal static unsafe class MacOSPInvoke
+internal static unsafe partial class MacOSPInvoke
 {
     // c_iflag
 
@@ -160,12 +160,12 @@ internal static unsafe class MacOSPInvoke
 
     public const int EAGAIN = 35;
 
-    [DllImport("c", SetLastError = true)]
-    public static extern int poll(Pollfd* fds, uint nfds, int timeout);
+    [LibraryImport("c", SetLastError = true)]
+    public static partial int poll(Span<Pollfd> fds, uint nfds, int timeout);
 
-    [DllImport("c", SetLastError = true)]
-    public static extern int tcgetattr(int fildes, out Termios termios_p);
+    [LibraryImport("c", SetLastError = true)]
+    public static partial int tcgetattr(int fildes, out Termios termios_p);
 
-    [DllImport("c", SetLastError = true)]
-    public static extern int tcsetattr(int fildes, int optional_actions, in Termios termios_p);
+    [LibraryImport("c", SetLastError = true)]
+    public static partial int tcsetattr(int fildes, int optional_actions, in Termios termios_p);
 }

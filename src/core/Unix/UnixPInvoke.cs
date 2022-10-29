@@ -2,7 +2,7 @@ namespace Vezel.Cathode.Unix;
 
 [SuppressMessage("", "SA1300")]
 [SuppressMessage("", "SA1310")]
-internal static unsafe class UnixPInvoke
+internal static unsafe partial class UnixPInvoke
 {
     // fd
 
@@ -40,22 +40,21 @@ internal static unsafe class UnixPInvoke
 
     public const int EPIPE = 32;
 
-    [DllImport("c", SetLastError = true)]
-    public static extern int isatty(int fildes);
+    [LibraryImport("c", SetLastError = true)]
+    public static partial int isatty(int fildes);
 
-    [DllImport("c", CharSet = CharSet.Ansi, SetLastError = true)]
-    [SuppressMessage("", "CA2101")] // TODO: https://github.com/dotnet/roslyn-analyzers/issues/5479
-    public static extern int open(string path, int oflag);
+    [LibraryImport("c", SetLastError = true, StringMarshalling = StringMarshalling.Utf8)]
+    public static partial int open(string path, int oflag);
 
-    [DllImport("c", SetLastError = true)]
-    public static extern nint read(int fildes, void* buf, nuint nbyte);
+    [LibraryImport("c", SetLastError = true)]
+    public static partial nint read(int fildes, Span<byte> buf, nuint nbyte);
 
-    [DllImport("c", SetLastError = true)]
-    public static extern nint write(int fildes, void* buf, nuint nbyte);
+    [LibraryImport("c", SetLastError = true)]
+    public static partial nint write(int fildes, ReadOnlySpan<byte> buf, nuint nbyte);
 
-    [DllImport("c", SetLastError = true)]
-    public static extern int ioctl(int fildes, nuint request, out Winsize argp);
+    [LibraryImport("c", SetLastError = true)]
+    public static partial int ioctl(int fildes, nuint request, out Winsize argp);
 
-    [DllImport("c", SetLastError = true)]
-    public static extern int kill(int pid, int sig);
+    [LibraryImport("c", SetLastError = true)]
+    public static partial int kill(int pid, int sig);
 }

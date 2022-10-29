@@ -113,18 +113,15 @@ internal sealed class MacOSVirtualTerminal : UnixVirtualTerminal
             };
         }
 
-        fixed (Pollfd* p = &MemoryMarshal.GetReference(fds))
+        int ret;
+
+        while ((ret = poll(fds, (uint)fds.Length, -1)) == -1 && Marshal.GetLastPInvokeError() == EINTR)
         {
-            int ret;
-
-            while ((ret = poll(p, (uint)fds.Length, -1)) == -1 && Marshal.GetLastPInvokeError() == EINTR)
-            {
-                // Retry in case we get interrupted by a signal.
-            }
-
-            if (ret == -1)
-                return false;
+            // Retry in case we get interrupted by a signal.
         }
+
+        if (ret == -1)
+            return false;
 
         for (var i = 0; i < handles.Length; i++)
             handles[i] = fds[i].revents;
