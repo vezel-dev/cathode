@@ -96,7 +96,7 @@ internal sealed class LinuxVirtualTerminal : UnixVirtualTerminal
         return open(name, O_RDWR | O_NOCTTY | O_CLOEXEC);
     }
 
-    public override unsafe bool PollHandles(int? error, short events, scoped Span<int> handles)
+    public override bool PollHandles(int? error, short events, scoped Span<int> handles)
     {
         if (error is int err && err != EAGAIN)
             return false;
