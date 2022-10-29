@@ -77,7 +77,7 @@ public sealed class ChildProcessBuilder
         if (arguments.IsDefault)
             arguments = ImmutableArray<string>.Empty;
         else
-            Check.ForEach(arguments, arg => Check.Argument(arg != null, arguments));
+            Check.All(arguments, static arg => arg != null);
 
         var builder = Clone();
 
@@ -105,7 +105,7 @@ public sealed class ChildProcessBuilder
     public ChildProcessBuilder AddArguments(params string[] arguments)
     {
         Check.Null(arguments);
-        Check.ForEach(arguments, arg => Check.Argument(arg != null, arguments));
+        Check.All(arguments, static arg => arg != null);
 
         var builder = Clone();
 
@@ -117,7 +117,7 @@ public sealed class ChildProcessBuilder
     public ChildProcessBuilder WithVariables(ImmutableDictionary<string, string> environment)
     {
         Check.Null(environment);
-        Check.ForEach(environment, kvp => Check.Argument(kvp.Value != null, environment));
+        Check.All(environment, static kvp => kvp.Value != null);
 
         var builder = Clone();
 

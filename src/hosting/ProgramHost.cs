@@ -11,8 +11,8 @@ public static class ProgramHost
     public static async Task RunAsync<TProgram>(ReadOnlyMemory<string> arguments)
         where TProgram : IProgram
     {
+        Check.All(arguments.Span, static arg => arg != null);
         Check.Operation(Interlocked.Exchange(ref _running, 1) == 0);
-        Check.ForEach(arguments.Span, arg => Check.Argument(arg != null, arguments));
 
         var context = new ProgramContext(arguments);
         var domain = AppDomain.CurrentDomain;

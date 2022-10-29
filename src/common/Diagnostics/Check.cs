@@ -121,16 +121,21 @@ internal static class Check
             throw new ArgumentException(null);
     }
 
-    // TODO: https://github.com/dotnet/csharplang/issues/1148
-    public static void Argument([DoesNotReturnIf(false)] bool condition, string name)
+    public static void Argument<T>(
+        [DoesNotReturnIf(false)] bool condition,
+        in T value,
+        [CallerArgumentExpression(nameof(value))] string? name = null)
     {
+        _ = value;
+
         if (!condition)
             throw new ArgumentException(null, name);
     }
 
+    // TODO: https://github.com/dotnet/csharplang/issues/1148
     public static void Argument<T>(
         [DoesNotReturnIf(false)] bool condition,
-        in T value,
+        scoped ReadOnlySpan<T> value,
         [CallerArgumentExpression(nameof(value))] string? name = null)
     {
         _ = value;
@@ -182,15 +187,23 @@ internal static class Check
             throw new InvalidOperationException(message.ToStringAndClear());
     }
 
-    public static void ForEach<T>(IEnumerable<T> collection, Action<T> action)
+    public static void All<T>(
+        IEnumerable<T> collection,
+        Func<T, bool> predicate,
+        [CallerArgumentExpression(nameof(collection))] string? name = null)
     {
         foreach (var item in collection)
-            action(item);
+            if (!predicate(item))
+                throw new ArgumentException(null, name);
     }
 
-    public static void ForEach<T>(ReadOnlySpan<T> collection, Action<T> action)
+    public static void All<T>(
+        scoped ReadOnlySpan<T> collection,
+        Func<T, bool> predicate,
+        [CallerArgumentExpression(nameof(collection))] string? name = null)
     {
         foreach (var item in collection)
-            action(item);
+            if (!predicate(item))
+                throw new ArgumentException(null, name);
     }
 }

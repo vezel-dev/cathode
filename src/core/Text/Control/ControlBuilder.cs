@@ -709,7 +709,7 @@ public sealed class ControlBuilder
         Check.Range(volume is >= 0 and <= 7, volume);
         Check.Range(duration >= 0, duration);
         Check.Argument(notes.Length >= 1, nameof(notes));
-        Check.ForEach(notes, note => Check.Argument(note is >= 1 and <= 25, nameof(notes)));
+        Check.All(notes, static note => note is >= 1 and <= 25);
 
         var volumeSpan = (stackalloc char[StackBufferSize]);
         var durationSpan = (stackalloc char[StackBufferSize]);
