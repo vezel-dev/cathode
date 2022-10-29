@@ -70,9 +70,9 @@ public static class Terminal
         System.DisableRawMode();
     }
 
-    public static int Read(scoped Span<byte> value, CancellationToken cancellationToken = default)
+    public static int Read(scoped Span<byte> value)
     {
-        return System.Read(value, cancellationToken);
+        return System.Read(value);
     }
 
     public static ValueTask<int> ReadAsync(Memory<byte> value, CancellationToken cancellationToken = default)
@@ -80,9 +80,9 @@ public static class Terminal
         return System.ReadAsync(value, cancellationToken);
     }
 
-    public static string? ReadLine(CancellationToken cancellationToken = default)
+    public static string? ReadLine()
     {
-        return System.ReadLine(cancellationToken);
+        return System.ReadLine();
     }
 
     public static ValueTask<string?> ReadLineAsync(CancellationToken cancellationToken = default)
@@ -90,9 +90,9 @@ public static class Terminal
         return System.ReadLineAsync(cancellationToken);
     }
 
-    public static void Out(scoped ReadOnlySpan<byte> value, CancellationToken cancellationToken = default)
+    public static void Out(scoped ReadOnlySpan<byte> value)
     {
-        System.Out(value, cancellationToken);
+        System.Out(value);
     }
 
     public static ValueTask OutAsync(ReadOnlyMemory<byte> value, CancellationToken cancellationToken = default)
@@ -105,9 +105,9 @@ public static class Terminal
         return System.OutAsync(value, cancellationToken);
     }
 
-    public static void Out(scoped ReadOnlySpan<char> value, CancellationToken cancellationToken = default)
+    public static void Out(scoped ReadOnlySpan<char> value)
     {
-        System.Out(value, cancellationToken);
+        System.Out(value);
     }
 
     public static ValueTask OutAsync(ReadOnlyMemory<char> value, CancellationToken cancellationToken = default)
@@ -120,9 +120,9 @@ public static class Terminal
         return System.OutAsync(value, cancellationToken);
     }
 
-    public static void Out<T>(T value, CancellationToken cancellationToken = default)
+    public static void Out<T>(T value)
     {
-        System.Out(value, cancellationToken);
+        System.Out(value);
     }
 
     public static ValueTask OutAsync<T>(T value, CancellationToken cancellationToken = default)
@@ -130,9 +130,9 @@ public static class Terminal
         return System.OutAsync(value, cancellationToken);
     }
 
-    public static void OutLine(CancellationToken cancellationToken = default)
+    public static void OutLine()
     {
-        System.OutLine(cancellationToken);
+        System.OutLine();
     }
 
     public static ValueTask OutLineAsync(CancellationToken cancellationToken = default)
@@ -140,9 +140,9 @@ public static class Terminal
         return System.OutLineAsync(cancellationToken);
     }
 
-    public static void OutLine<T>(T value, CancellationToken cancellationToken = default)
+    public static void OutLine<T>(T value)
     {
-        System.OutLine(value, cancellationToken);
+        System.OutLine(value);
     }
 
     public static ValueTask OutLineAsync<T>(T value, CancellationToken cancellationToken = default)
@@ -150,9 +150,9 @@ public static class Terminal
         return System.OutLineAsync(value, cancellationToken);
     }
 
-    public static void Error(scoped ReadOnlySpan<byte> value, CancellationToken cancellationToken = default)
+    public static void Error(scoped ReadOnlySpan<byte> value)
     {
-        System.Error(value, cancellationToken);
+        System.Error(value);
     }
 
     public static ValueTask ErrorAsync(ReadOnlyMemory<byte> value, CancellationToken cancellationToken = default)
@@ -165,9 +165,9 @@ public static class Terminal
         return System.ErrorAsync(value, cancellationToken);
     }
 
-    public static void Error(scoped ReadOnlySpan<char> value, CancellationToken cancellationToken = default)
+    public static void Error(scoped ReadOnlySpan<char> value)
     {
-        System.Error(value, cancellationToken);
+        System.Error(value);
     }
 
     public static ValueTask ErrorAsync(ReadOnlyMemory<char> value, CancellationToken cancellationToken = default)
@@ -180,9 +180,9 @@ public static class Terminal
         return System.ErrorAsync(value, cancellationToken);
     }
 
-    public static void Error<T>(T value, CancellationToken cancellationToken = default)
+    public static void Error<T>(T value)
     {
-        System.Error(value, cancellationToken);
+        System.Error(value);
     }
 
     public static ValueTask ErrorAsync<T>(T value, CancellationToken cancellationToken = default)
@@ -190,9 +190,9 @@ public static class Terminal
         return System.ErrorAsync(value, cancellationToken);
     }
 
-    public static void ErrorLine(CancellationToken cancellationToken = default)
+    public static void ErrorLine()
     {
-        System.ErrorLine(cancellationToken);
+        System.ErrorLine();
     }
 
     public static ValueTask ErrorLineAsync(CancellationToken cancellationToken = default)
@@ -200,9 +200,9 @@ public static class Terminal
         return System.ErrorLineAsync(cancellationToken);
     }
 
-    public static void ErrorLine<T>(T value, CancellationToken cancellationToken = default)
+    public static void ErrorLine<T>(T value)
     {
-        System.ErrorLine(value, cancellationToken);
+        System.ErrorLine(value);
     }
 
     public static ValueTask ErrorLineAsync<T>(T value, CancellationToken cancellationToken = default)

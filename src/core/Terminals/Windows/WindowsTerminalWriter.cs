@@ -16,7 +16,7 @@ internal sealed class WindowsTerminalWriter : NativeTerminalWriter<WindowsVirtua
         _semaphore = semaphore;
     }
 
-    protected override unsafe int WritePartialCore(
+    protected override unsafe int WritePartialNative(
         scoped ReadOnlySpan<byte> buffer, CancellationToken cancellationToken)
     {
         using var guard = Terminal.Control.Guard();

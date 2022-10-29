@@ -28,9 +28,9 @@ public abstract class VirtualTerminal
 
     public abstract void DisableRawMode();
 
-    public int Read(scoped Span<byte> value, CancellationToken cancellationToken = default)
+    public int Read(scoped Span<byte> value)
     {
-        return StandardIn.ReadPartial(value, cancellationToken);
+        return StandardIn.ReadPartial(value);
     }
 
     public ValueTask<int> ReadAsync(Memory<byte> value, CancellationToken cancellationToken = default)
@@ -38,9 +38,9 @@ public abstract class VirtualTerminal
         return StandardIn.ReadPartialAsync(value, cancellationToken);
     }
 
-    public string? ReadLine(CancellationToken cancellationToken = default)
+    public string? ReadLine()
     {
-        return StandardIn.ReadLine(cancellationToken);
+        return StandardIn.ReadLine();
     }
 
     public ValueTask<string?> ReadLineAsync(CancellationToken cancellationToken = default)
@@ -48,9 +48,9 @@ public abstract class VirtualTerminal
         return StandardIn.ReadLineAsync(cancellationToken);
     }
 
-    public void Out(scoped ReadOnlySpan<byte> value, CancellationToken cancellationToken = default)
+    public void Out(scoped ReadOnlySpan<byte> value)
     {
-        StandardOut.Write(value, cancellationToken);
+        StandardOut.Write(value);
     }
 
     public ValueTask OutAsync(ReadOnlyMemory<byte> value, CancellationToken cancellationToken = default)
@@ -63,9 +63,9 @@ public abstract class VirtualTerminal
         return StandardOut.WriteAsync(value, cancellationToken);
     }
 
-    public void Out(scoped ReadOnlySpan<char> value, CancellationToken cancellationToken = default)
+    public void Out(scoped ReadOnlySpan<char> value)
     {
-        StandardOut.Write(value, cancellationToken);
+        StandardOut.Write(value);
     }
 
     public ValueTask OutAsync(ReadOnlyMemory<char> value, CancellationToken cancellationToken = default)
@@ -78,9 +78,9 @@ public abstract class VirtualTerminal
         return StandardOut.WriteAsync(value, cancellationToken);
     }
 
-    public void Out<T>(T value, CancellationToken cancellationToken = default)
+    public void Out<T>(T value)
     {
-        StandardOut.Write(value, cancellationToken);
+        StandardOut.Write(value);
     }
 
     public ValueTask OutAsync<T>(T value, CancellationToken cancellationToken = default)
@@ -88,9 +88,9 @@ public abstract class VirtualTerminal
         return StandardOut.WriteAsync(value, cancellationToken);
     }
 
-    public void OutLine(CancellationToken cancellationToken = default)
+    public void OutLine()
     {
-        StandardOut.WriteLine(cancellationToken);
+        StandardOut.WriteLine();
     }
 
     public ValueTask OutLineAsync(CancellationToken cancellationToken = default)
@@ -98,9 +98,9 @@ public abstract class VirtualTerminal
         return StandardOut.WriteLineAsync(cancellationToken);
     }
 
-    public void OutLine<T>(T value, CancellationToken cancellationToken = default)
+    public void OutLine<T>(T value)
     {
-        StandardOut.WriteLine(value, cancellationToken);
+        StandardOut.WriteLine(value);
     }
 
     public ValueTask OutLineAsync<T>(T value, CancellationToken cancellationToken = default)
@@ -108,9 +108,9 @@ public abstract class VirtualTerminal
         return StandardOut.WriteLineAsync(value, cancellationToken);
     }
 
-    public void Error(scoped ReadOnlySpan<byte> value, CancellationToken cancellationToken = default)
+    public void Error(scoped ReadOnlySpan<byte> value)
     {
-        StandardError.Write(value, cancellationToken);
+        StandardError.Write(value);
     }
 
     public ValueTask ErrorAsync(ReadOnlyMemory<byte> value, CancellationToken cancellationToken = default)
@@ -123,9 +123,9 @@ public abstract class VirtualTerminal
         return StandardError.WriteAsync(value, cancellationToken);
     }
 
-    public void Error(scoped ReadOnlySpan<char> value, CancellationToken cancellationToken = default)
+    public void Error(scoped ReadOnlySpan<char> value)
     {
-        StandardError.Write(value, cancellationToken);
+        StandardError.Write(value);
     }
 
     public ValueTask ErrorAsync(ReadOnlyMemory<char> value, CancellationToken cancellationToken = default)
@@ -138,9 +138,9 @@ public abstract class VirtualTerminal
         return StandardError.WriteAsync(value, cancellationToken);
     }
 
-    public void Error<T>(T value, CancellationToken cancellationToken = default)
+    public void Error<T>(T value)
     {
-        StandardError.Write(value, cancellationToken);
+        StandardError.Write(value);
     }
 
     public ValueTask ErrorAsync<T>(T value, CancellationToken cancellationToken = default)
@@ -148,9 +148,9 @@ public abstract class VirtualTerminal
         return StandardError.WriteAsync(value, cancellationToken);
     }
 
-    public void ErrorLine(CancellationToken cancellationToken = default)
+    public void ErrorLine()
     {
-        StandardError.WriteLine(cancellationToken);
+        StandardError.WriteLine();
     }
 
     public ValueTask ErrorLineAsync(CancellationToken cancellationToken = default)
@@ -158,9 +158,9 @@ public abstract class VirtualTerminal
         return StandardError.WriteLineAsync(cancellationToken);
     }
 
-    public void ErrorLine<T>(T value, CancellationToken cancellationToken = default)
+    public void ErrorLine<T>(T value)
     {
-        StandardError.WriteLine(value, cancellationToken);
+        StandardError.WriteLine(value);
     }
 
     public ValueTask ErrorLineAsync<T>(T value, CancellationToken cancellationToken = default)

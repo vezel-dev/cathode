@@ -25,17 +25,14 @@ public class TestTerminalReader : TerminalReader
     }
 
     [SuppressMessage("", "VSTHRD002")]
-    protected override sealed int ReadPartialCore(scoped Span<byte> buffer, CancellationToken cancellationToken)
+    protected override sealed int ReadPartialCore(scoped Span<byte> buffer)
     {
         var len = buffer.Length;
         var array = ArrayPool<byte>.Shared.Rent(len);
 
         try
         {
-            var read = ReadPartialCoreAsync(array.AsMemory(..len), cancellationToken)
-                .AsTask()
-                .GetAwaiter()
-                .GetResult();
+            var read = ReadPartialCoreAsync(array.AsMemory(..len), default).AsTask().GetAwaiter().GetResult();
 
             array.AsSpan(..read).CopyTo(buffer);
 
@@ -48,8 +45,7 @@ public class TestTerminalReader : TerminalReader
     }
 
     protected override sealed async ValueTask<int> ReadPartialCoreAsync(
-        Memory<byte> buffer,
-        CancellationToken cancellationToken)
+        Memory<byte> buffer, CancellationToken cancellationToken)
     {
         if (buffer.IsEmpty || !_isValid)
             return 0;

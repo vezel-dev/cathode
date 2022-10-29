@@ -35,13 +35,19 @@ internal abstract class NativeTerminalWriter<TTerminal, THandle> : TerminalWrite
         IsInteractive = terminal.IsHandleInteractive(handle);
     }
 
-    protected override sealed ValueTask<int> WritePartialCoreAsync(
-        ReadOnlyMemory<byte> buffer,
-        CancellationToken cancellationToken)
+    protected abstract int WritePartialNative(scoped ReadOnlySpan<byte> buffer, CancellationToken cancellationToken);
+
+    protected override sealed int WritePartialCore(scoped ReadOnlySpan<byte> buffer)
     {
-        // We currently have no async support.
+        return WritePartialNative(buffer, default);
+    }
+
+    protected override sealed ValueTask<int> WritePartialCoreAsync(
+        ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken)
+    {
+        // We currently have no native async support.
         return cancellationToken.IsCancellationRequested ?
             ValueTask.FromCanceled<int>(cancellationToken) :
-            new(Task.Run(() => WritePartialCore(buffer.Span, cancellationToken), cancellationToken));
+            new(Task.Run(() => WritePartialNative(buffer.Span, cancellationToken), cancellationToken));
     }
 }

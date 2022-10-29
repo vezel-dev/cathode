@@ -12,7 +12,7 @@ internal sealed class UnixTerminalWriter : NativeTerminalWriter<UnixVirtualTermi
         _semaphore = semaphore;
     }
 
-    protected override int WritePartialCore(
+    protected override int WritePartialNative(
         scoped ReadOnlySpan<byte> buffer, CancellationToken cancellationToken)
     {
         using var guard = Terminal.Control.Guard();

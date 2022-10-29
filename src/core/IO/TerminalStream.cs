@@ -66,10 +66,7 @@ public abstract class TerminalStream : Stream
     }
 
     public override sealed Task WriteAsync(
-        byte[] buffer,
-        int offset,
-        int count,
-        CancellationToken cancellationToken = default)
+        byte[] buffer, int offset, int count, CancellationToken cancellationToken = default)
     {
         Check.Null(buffer);
 

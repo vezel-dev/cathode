@@ -20,7 +20,7 @@ internal sealed class UnixTerminalReader : NativeTerminalReader<UnixVirtualTermi
         _cancellationPipe = cancellationPipe;
     }
 
-    protected override int ReadPartialCore(scoped Span<byte> buffer, CancellationToken cancellationToken)
+    protected override int ReadPartialNative(scoped Span<byte> buffer, CancellationToken cancellationToken)
     {
         using var guard = Terminal.Control.Guard();
 

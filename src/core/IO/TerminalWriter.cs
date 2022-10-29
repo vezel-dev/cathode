@@ -6,15 +6,14 @@ public abstract class TerminalWriter : TerminalHandle
 
     public abstract TextWriter TextWriter { get; }
 
-    protected abstract int WritePartialCore(scoped ReadOnlySpan<byte> buffer, CancellationToken cancellationToken);
+    protected abstract int WritePartialCore(scoped ReadOnlySpan<byte> buffer);
 
     protected abstract ValueTask<int> WritePartialCoreAsync(
-        ReadOnlyMemory<byte> buffer,
-        CancellationToken cancellationToken);
+        ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken);
 
-    public int WritePartial(scoped ReadOnlySpan<byte> buffer, CancellationToken cancellationToken = default)
+    public int WritePartial(scoped ReadOnlySpan<byte> buffer)
     {
-        var count = WritePartialCore(buffer, cancellationToken);
+        var count = WritePartialCore(buffer);
 
         OutputWritten?.Invoke(buffer[..count], this);
 
@@ -23,8 +22,7 @@ public abstract class TerminalWriter : TerminalHandle
 
     [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder<>))]
     public async ValueTask<int> WritePartialAsync(
-        ReadOnlyMemory<byte> buffer,
-        CancellationToken cancellationToken = default)
+        ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken = default)
     {
         var count = await WritePartialCoreAsync(buffer, cancellationToken).ConfigureAwait(false);
 
@@ -33,9 +31,9 @@ public abstract class TerminalWriter : TerminalHandle
         return count;
     }
 
-    public void Write(scoped ReadOnlySpan<byte> value, CancellationToken cancellationToken = default)
+    public void Write(scoped ReadOnlySpan<byte> value)
     {
-        for (var count = 0; count < value.Length; count += WritePartial(value[count..], cancellationToken))
+        for (var count = 0; count < value.Length; count += WritePartial(value[count..]))
         {
         }
     }
@@ -55,7 +53,7 @@ public abstract class TerminalWriter : TerminalHandle
         return WriteAsync((ReadOnlyMemory<byte>)value, cancellationToken);
     }
 
-    public void Write(scoped ReadOnlySpan<char> value, CancellationToken cancellationToken = default)
+    public void Write(scoped ReadOnlySpan<char> value)
     {
         var encoding = Terminal.Encoding;
         var len = encoding.GetByteCount(value);
@@ -67,7 +65,7 @@ public abstract class TerminalWriter : TerminalHandle
 
             _ = encoding.GetBytes(value, span);
 
-            Write(span, cancellationToken);
+            Write(span);
         }
         finally
         {
@@ -101,9 +99,9 @@ public abstract class TerminalWriter : TerminalHandle
         return WriteAsync((ReadOnlyMemory<char>)value, cancellationToken);
     }
 
-    public void Write<T>(T value, CancellationToken cancellationToken = default)
+    public void Write<T>(T value)
     {
-        Write((value?.ToString()).AsSpan(), cancellationToken);
+        Write((value?.ToString()).AsSpan());
     }
 
     public ValueTask WriteAsync<T>(T value, CancellationToken cancellationToken = default)
@@ -111,9 +109,9 @@ public abstract class TerminalWriter : TerminalHandle
         return WriteAsync((value?.ToString()).AsMemory(), cancellationToken);
     }
 
-    public void WriteLine(CancellationToken cancellationToken = default)
+    public void WriteLine()
     {
-        WriteLine(string.Empty, cancellationToken);
+        WriteLine(string.Empty);
     }
 
     public ValueTask WriteLineAsync(CancellationToken cancellationToken = default)
@@ -121,9 +119,9 @@ public abstract class TerminalWriter : TerminalHandle
         return WriteLineAsync(string.Empty, cancellationToken);
     }
 
-    public void WriteLine<T>(T value, CancellationToken cancellationToken = default)
+    public void WriteLine<T>(T value)
     {
-        Write(value?.ToString() + Environment.NewLine, cancellationToken);
+        Write(value?.ToString() + Environment.NewLine);
     }
 
     public ValueTask WriteLineAsync<T>(T value, CancellationToken cancellationToken = default)

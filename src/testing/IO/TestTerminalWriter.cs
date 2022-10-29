@@ -25,17 +25,14 @@ public class TestTerminalWriter : TerminalWriter
     }
 
     protected override sealed int WritePartialCore(
-        scoped ReadOnlySpan<byte> buffer, CancellationToken cancellationToken)
+        scoped ReadOnlySpan<byte> buffer)
     {
         var len = buffer.Length;
         var array = ArrayPool<byte>.Shared.Rent(len);
 
         try
         {
-            return WritePartialCoreAsync(array.AsMemory(..len), cancellationToken)
-                .AsTask()
-                .GetAwaiter()
-                .GetResult();
+            return WritePartialCoreAsync(array.AsMemory(..len), default).AsTask().GetAwaiter().GetResult();
         }
         finally
         {
@@ -44,8 +41,7 @@ public class TestTerminalWriter : TerminalWriter
     }
 
     protected override sealed async ValueTask<int> WritePartialCoreAsync(
-        ReadOnlyMemory<byte> buffer,
-        CancellationToken cancellationToken)
+        ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken)
     {
         if (buffer.IsEmpty || !_isValid)
             return 0;

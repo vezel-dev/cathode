@@ -6,13 +6,13 @@ public abstract class TerminalReader : TerminalHandle
 
     public abstract TextReader TextReader { get; }
 
-    protected abstract int ReadPartialCore(scoped Span<byte> buffer, CancellationToken cancellationToken);
+    protected abstract int ReadPartialCore(scoped Span<byte> buffer);
 
     protected abstract ValueTask<int> ReadPartialCoreAsync(Memory<byte> buffer, CancellationToken cancellationToken);
 
-    public int ReadPartial(scoped Span<byte> buffer, CancellationToken cancellationToken = default)
+    public int ReadPartial(scoped Span<byte> buffer)
     {
-        var count = ReadPartialCore(buffer, cancellationToken);
+        var count = ReadPartialCore(buffer);
 
         InputRead?.Invoke(buffer[..count], this);
 
@@ -29,13 +29,13 @@ public abstract class TerminalReader : TerminalHandle
         return count;
     }
 
-    public int Read(scoped Span<byte> value, CancellationToken cancellationToken = default)
+    public int Read(scoped Span<byte> value)
     {
         var count = 0;
 
         while (count < value.Length)
         {
-            var ret = ReadPartial(value[count..], cancellationToken);
+            var ret = ReadPartial(value[count..]);
 
             // EOF?
             if (ret == 0)
@@ -66,11 +66,8 @@ public abstract class TerminalReader : TerminalHandle
         return count;
     }
 
-    public string? ReadLine(CancellationToken cancellationToken = default)
+    public string? ReadLine()
     {
-        cancellationToken.ThrowIfCancellationRequested();
-
-        // TODO: Should we make more of an effort to honor the cancellation token?
         return TextReader.ReadLine();
     }
 
