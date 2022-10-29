@@ -74,10 +74,8 @@ public sealed class ChildProcessBuilder
 
     public ChildProcessBuilder WithArguments(ImmutableArray<string> arguments)
     {
-        if (arguments.IsDefault)
-            arguments = ImmutableArray<string>.Empty;
-        else
-            Check.All(arguments, static arg => arg != null);
+        Check.Null(arguments);
+        Check.All(arguments, static arg => arg != null);
 
         var builder = Clone();
 
