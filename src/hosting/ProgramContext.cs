@@ -43,17 +43,17 @@ public sealed class ProgramContext
     {
         var ev = UnhandledException;
 
-        if (ev != null)
+        if (ev == null)
+            return;
+
+        foreach (var dg in ev.GetInvocationList())
         {
-            foreach (var dg in ev.GetInvocationList())
+            try
             {
-                try
-                {
-                    ((Action<Exception>)dg).Invoke(exception);
-                }
-                catch (Exception)
-                {
-                }
+                Unsafe.As<Action<Exception>>(dg).Invoke(exception);
+            }
+            catch (Exception)
+            {
             }
         }
     }
@@ -63,17 +63,17 @@ public sealed class ProgramContext
     {
         var ev = ProcessExiting;
 
-        if (ev != null)
+        if (ev == null)
+            return;
+
+        foreach (var dg in ev.GetInvocationList())
         {
-            foreach (var dg in ev.GetInvocationList())
+            try
             {
-                try
-                {
-                    ((Action)dg).Invoke();
-                }
-                catch (Exception)
-                {
-                }
+                Unsafe.As<Action>(dg).Invoke();
+            }
+            catch (Exception)
+            {
             }
         }
     }
