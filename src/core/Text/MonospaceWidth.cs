@@ -27,9 +27,4 @@ public static class MonospaceWidth
 
         return result;
     }
-
-    public static int? Measure(string? value)
-    {
-        return Measure(value.AsSpan());
-    }
 }
