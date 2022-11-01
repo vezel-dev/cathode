@@ -13,6 +13,5 @@ This package provides common functionality used by all Cathode packages.</Packag
         <InternalsVisibleTo Include="Vezel.Cathode" />
         <InternalsVisibleTo Include="Vezel.Cathode.Extensions" />
         <InternalsVisibleTo Include="Vezel.Cathode.Hosting" />
-        <InternalsVisibleTo Include="Vezel.Cathode.Testing" />
     </ItemGroup>
 </Project>

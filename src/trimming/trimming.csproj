@@ -18,7 +18,6 @@
         <TrimmerRootAssembly Include="Vezel.Cathode.Common" />
         <TrimmerRootAssembly Include="Vezel.Cathode.Extensions" />
         <TrimmerRootAssembly Include="Vezel.Cathode.Hosting" />
-        <TrimmerRootAssembly Include="Vezel.Cathode.Testing" />
     </ItemGroup>
 
     <ItemGroup>
@@ -26,6 +25,5 @@
         <ProjectReference Include="../core/core.csproj" />
         <ProjectReference Include="../extensions/extensions.csproj" />
         <ProjectReference Include="../hosting/hosting.csproj" />
-        <ProjectReference Include="../testing/testing.csproj" />
     </ItemGroup>
 </Project>
