@@ -13,7 +13,7 @@
         <PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers"
                         Version="17.3.48" />
         <PackageVersion Include="Microsoft.Windows.CsWin32"
-                        Version="0.2.63-beta" />
+                        Version="0.2.104-beta" />
         <PackageVersion Include="Microsoft.Windows.SDK.Win32Docs"
                         Version="0.1.8-alpha" />
         <PackageVersion Include="Microsoft.Windows.SDK.Win32Metadata"
