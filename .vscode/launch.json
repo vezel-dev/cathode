@@ -37,7 +37,7 @@
         "searchMicrosoftSymbolServer": true,
         "searchNuGetOrgSymbolServer": true
       },
-      "console": "integratedTerminal",
+      "console": "externalTerminal",
       "cwd": "${workspaceFolder}/src/samples/${input:pickSample}",
       "program": "${workspaceFolder}/src/samples/${input:pickSample}/bin/Debug/${input:pickSample}.dll"
     },
@@ -55,7 +55,7 @@
         "searchMicrosoftSymbolServer": true,
         "searchNuGetOrgSymbolServer": true
       },
-      "console": "externalTerminal",
+      "console": "integratedTerminal",
       "cwd": "${workspaceFolder}/src/samples/${input:pickSample}",
       "program": "${workspaceFolder}/src/samples/${input:pickSample}/bin/Debug/${input:pickSample}.dll"
     },
