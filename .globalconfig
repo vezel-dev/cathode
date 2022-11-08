@@ -286,8 +286,7 @@ dotnet_diagnostic.CA2248.severity = error
 dotnet_diagnostic.CA2249.severity = error
 dotnet_diagnostic.CA2250.severity = error
 dotnet_diagnostic.CA2251.severity = error
-# TODO: Set to error in .NET 7.
-dotnet_diagnostic.CA2252.severity = none
+dotnet_diagnostic.CA2252.severity = error
 dotnet_diagnostic.CA2253.severity = error
 dotnet_diagnostic.CA2254.severity = error
 dotnet_diagnostic.CA2255.severity = error
