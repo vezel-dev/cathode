@@ -103,8 +103,8 @@ maintainers are actually interested in merging it.
 While pull requests to clean up messy/hacky code (i.e. refactoring) are welcome,
 we are not likely to accept pull requests that just change code style. Further,
 please make sure that any code you contribute adheres to the style of the
-surrounding code. The [EditorConfig](../.editorconfig) file in the project
-should be helpful for this, as should the `dotnet format` command.
+surrounding code. The [EditorConfig](.editorconfig) file in the project should
+be helpful for this, as should the `dotnet format` command.
 
 Please try to keep your pull request free of unrelated changes. If you need to
 fix another bug in order to make your pull request work, please submit that bug
