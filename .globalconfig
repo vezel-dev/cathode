@@ -66,6 +66,7 @@ csharp_style_prefer_not_pattern = true
 csharp_style_prefer_null_check_over_type_check = true
 csharp_style_prefer_pattern_matching = true
 csharp_style_prefer_range_operator = true
+csharp_style_prefer_readonly_struct = true
 csharp_style_prefer_switch_expression = true
 csharp_style_prefer_top_level_statements = true
 csharp_style_prefer_tuple_swap = true
