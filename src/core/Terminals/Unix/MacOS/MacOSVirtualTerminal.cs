@@ -104,14 +104,11 @@ internal sealed class MacOSVirtualTerminal : UnixVirtualTerminal
         var fds = (stackalloc Pollfd[handles.Length]);
 
         for (var i = 0; i < handles.Length; i++)
-        {
             fds[i] = new Pollfd
             {
                 fd = handles[i],
                 events = events,
-                revents = 0, // Shut up CS0649.
             };
-        }
 
         int ret;
 
