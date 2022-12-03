@@ -43,7 +43,7 @@ public sealed class TerminalLoggerOptions
 
     private int _logQueueSize = 4096;
 
-    private LogLevel _logToStandardErrorThreshold;
+    private LogLevel _logToStandardErrorThreshold = LogLevel.None;
 
     private TerminalLoggerWriter _writer = TerminalLoggerWriters.Default;
 }
