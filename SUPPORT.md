@@ -3,7 +3,7 @@
 Please use one of the following channels for support requests:
 
 [![Discussions](https://img.shields.io/github/discussions/vezel-dev/cathode?color=teal)](https://github.com/vezel-dev/cathode/discussions/categories/questions)
-[![Discord](https://img.shields.io/discord/960716713136095232?color=peru&label=discord)](https://discord.gg/UvAU4KTS8Q)
+[![Discord](https://img.shields.io/discord/960716713136095232?color=peru&label=discord)](https://discord.gg/NSSgCYuf2m)
 
 Do *not* use the
 [issue tracker](https://github.com/vezel-dev/cathode/issues) for support
