@@ -21,8 +21,8 @@ public sealed class ProgramContext
 
         Terminal.Signaled += ctx =>
         {
-            // We just kind of assume that any event handlers that come after us will not flip it back to
-            // false. Not much we can do in that case.
+            // We just kind of assume that any event handlers that come after us will not flip it back to false. Not
+            // much we can do in that case.
             ctx.Cancel = true;
 
             cts.Cancel();
