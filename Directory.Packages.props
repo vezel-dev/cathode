@@ -10,6 +10,8 @@
                                 Version="17.4.33" />
         <GlobalPackageReference Include="Nerdbank.GitVersioning"
                                 Version="3.5.119" />
+        <GlobalPackageReference Include="PolySharp"
+                                Version="1.10.0" />
         <GlobalPackageReference Include="StyleCop.Analyzers"
                                 Version="1.2.0-beta.435" />
     </ItemGroup>
