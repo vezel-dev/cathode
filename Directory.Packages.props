@@ -1,4 +1,19 @@
 <Project>
+    <PropertyGroup>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <GlobalPackageReference Include="Microsoft.SourceLink.GitHub"
+                                Version="1.1.1" />
+        <GlobalPackageReference Include="Microsoft.VisualStudio.Threading.Analyzers"
+                                Version="17.3.48" />
+        <GlobalPackageReference Include="Nerdbank.GitVersioning"
+                                Version="3.5.119" />
+        <GlobalPackageReference Include="StyleCop.Analyzers"
+                                Version="1.2.0-beta.435" />
+    </ItemGroup>
+
     <ItemGroup>
         <PackageVersion Include="Microsoft.CodeAnalysis.BannedApiAnalyzers"
                         Version="3.3.3" />
@@ -8,20 +23,12 @@
                         Version="7.0.0" />
         <PackageVersion Include="Microsoft.Extensions.Hosting.Systemd"
                         Version="7.0.0" />
-        <PackageVersion Include="Microsoft.SourceLink.GitHub"
-                        Version="1.1.1" />
-        <PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers"
-                        Version="17.3.48" />
         <PackageVersion Include="Microsoft.Windows.CsWin32"
                         Version="0.2.104-beta" />
         <PackageVersion Include="Microsoft.Windows.SDK.Win32Docs"
                         Version="0.1.8-alpha" />
         <PackageVersion Include="Microsoft.Windows.SDK.Win32Metadata"
                         Version="37.0.34-preview" />
-        <PackageVersion Include="Nerdbank.GitVersioning"
-                        Version="3.5.119" />
-        <PackageVersion Include="StyleCop.Analyzers"
-                        Version="1.2.0-beta.435" />
         <PackageVersion Include="System.IO.Pipelines"
                         Version="7.0.0" />
         <PackageVersion Include="Wcwidth"
