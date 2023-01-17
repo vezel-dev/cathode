@@ -231,6 +231,6 @@ internal sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
     public override bool IsHandleInteractive(SafeHandle handle)
     {
         // Note that this also returns true for invalid handles.
-        return GetFileType(handle) == FILE_TYPE_CHAR && GetConsoleMode(handle, out _);
+        return GetFileType(handle) == FILE_TYPE.FILE_TYPE_CHAR && GetConsoleMode(handle, out _);
     }
 }
