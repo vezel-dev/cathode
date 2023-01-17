@@ -590,7 +590,8 @@ dotnet_diagnostic.SA1202.severity = none
 dotnet_diagnostic.SA1203.severity = error
 dotnet_diagnostic.SA1204.severity = none
 dotnet_diagnostic.SA1205.severity = error
-dotnet_diagnostic.SA1206.severity = error
+# TODO: https://github.com/DotNetAnalyzers/StyleCopAnalyzers/issues/3527
+dotnet_diagnostic.SA1206.severity = none
 dotnet_diagnostic.SA1207.severity = error
 dotnet_diagnostic.SA1208.severity = error
 dotnet_diagnostic.SA1209.severity = error
