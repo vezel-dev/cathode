@@ -1,9 +1,4 @@
 <Project>
-    <PropertyGroup Condition="'$(DebugSymbols)' == 'true'">
-        <DebugType>embedded</DebugType>
-        <EmbedAllSources>true</EmbedAllSources>
-    </PropertyGroup>
-
     <ItemGroup>
         <Using Include="System.Buffers" />
         <Using Include="System.Collections.Concurrent" />
