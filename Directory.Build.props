@@ -28,6 +28,7 @@ modern terminal emulators. It works on all desktop platforms that .NET supports.
         <PackageLicenseExpression>0BSD</PackageLicenseExpression>
         <PackageOutputPath>$(MSBuildThisFileDirectory)pkg/feed/</PackageOutputPath>
         <PackageProjectUrl>https://docs.vezel.dev/cathode</PackageProjectUrl>
+        <PolySharpIncludeRuntimeSupportedAttributes>true</PolySharpIncludeRuntimeSupportedAttributes>
         <RepositoryUrl>https://github.com/vezel-dev/cathode.git</RepositoryUrl>
         <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
         <TargetFramework>net7.0</TargetFramework>
