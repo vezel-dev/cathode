@@ -1,6 +1,6 @@
 namespace Vezel.Cathode;
 
-public readonly struct TerminalSize : IEquatable<TerminalSize>
+public readonly struct TerminalSize : IEquatable<TerminalSize>, IEqualityOperators<TerminalSize, TerminalSize, bool>
 {
     public int Width { get; }
 
