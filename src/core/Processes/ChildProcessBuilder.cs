@@ -72,21 +72,60 @@ public sealed class ChildProcessBuilder
         return builder;
     }
 
-    public ChildProcessBuilder WithArguments(ImmutableArray<string> arguments)
+    public ChildProcessBuilder WithArguments(params string[] arguments)
+    {
+        return WithArguments(arguments.AsEnumerable());
+    }
+
+    public ChildProcessBuilder WithArguments(IEnumerable<string> arguments)
     {
         Check.Null(arguments);
         Check.All(arguments, static arg => arg != null);
 
         var builder = Clone();
 
-        builder.Arguments = arguments;
+        builder.Arguments = arguments.ToImmutableArray();
 
         return builder;
     }
 
-    public ChildProcessBuilder WithArguments(params string[] arguments)
+    public ChildProcessBuilder SetArgument(int index, string argument)
     {
-        return WithArguments(arguments.ToImmutableArray());
+        Check.Null(argument);
+
+        var builder = Clone();
+
+        builder.Arguments = Arguments.SetItem(index, argument);
+
+        return builder;
+    }
+
+    public ChildProcessBuilder InsertArgument(int index, string argument)
+    {
+        Check.Null(argument);
+
+        var builder = Clone();
+
+        builder.Arguments = Arguments.Insert(index, argument);
+
+        return builder;
+    }
+
+    public ChildProcessBuilder InsertArguments(int index, params string[] arguments)
+    {
+        return InsertArguments(index, arguments.AsEnumerable());
+    }
+
+    public ChildProcessBuilder InsertArguments(int index, IEnumerable<string> arguments)
+    {
+        Check.Null(arguments);
+        Check.All(arguments, static arg => arg != null);
+
+        var builder = Clone();
+
+        builder.Arguments = Arguments.InsertRange(index, arguments);
+
+        return builder;
     }
 
     public ChildProcessBuilder AddArgument(string argument)
@@ -102,6 +141,11 @@ public sealed class ChildProcessBuilder
 
     public ChildProcessBuilder AddArguments(params string[] arguments)
     {
+        return AddArguments(arguments.AsEnumerable());
+    }
+
+    public ChildProcessBuilder AddArguments(IEnumerable<string> arguments)
+    {
         Check.Null(arguments);
         Check.All(arguments, static arg => arg != null);
 
@@ -112,38 +156,48 @@ public sealed class ChildProcessBuilder
         return builder;
     }
 
-    public ChildProcessBuilder WithVariables(ImmutableDictionary<string, string> environment)
+    public ChildProcessBuilder RemoveArgument(int index)
     {
-        Check.Null(environment);
-        Check.All(environment, static kvp => kvp.Value != null);
-
         var builder = Clone();
 
-        builder.Variables = environment;
+        builder.Arguments = Arguments.RemoveAt(index);
 
         return builder;
     }
 
-    public ChildProcessBuilder WithVariables(params (string, string)[] environment)
+    public ChildProcessBuilder RemoveArguments(int index, int count)
     {
-        return WithVariables(environment.ToImmutableDictionary(t => t.Item1, t => t.Item2));
+        var builder = Clone();
+
+        builder.Arguments = Arguments.RemoveRange(index, count);
+
+        return builder;
     }
 
-    public ChildProcessBuilder AddVariable(string name, string value)
+    public ChildProcessBuilder ClearArguments()
     {
-        Check.Null(name);
-        Check.Null(value);
+        return WithArguments();
+    }
+
+    public ChildProcessBuilder WithVariables(params (string Name, string Value)[] variables)
+    {
+        return WithVariables(variables.Select(tup => KeyValuePair.Create(tup.Name, tup.Value)));
+    }
+
+    public ChildProcessBuilder WithVariables(IEnumerable<KeyValuePair<string, string>> variables)
+    {
+        Check.Null(variables);
+        Check.All(variables, static kvp => kvp.Value != null);
 
         var builder = Clone();
 
-        builder.Variables = Variables.Add(name, value);
+        builder.Variables = variables.ToImmutableDictionary();
 
         return builder;
     }
 
     public ChildProcessBuilder SetVariable(string name, string value)
     {
-        Check.Null(name);
         Check.Null(value);
 
         var builder = Clone();
@@ -153,13 +207,73 @@ public sealed class ChildProcessBuilder
         return builder;
     }
 
-    public ChildProcessBuilder RemoveVariable(string name)
+    public ChildProcessBuilder SetVariables(params (string Name, string Value)[] variables)
     {
-        Check.Null(name);
+        return SetVariables(variables.Select(tup => KeyValuePair.Create(tup.Name, tup.Value)));
+    }
+
+    public ChildProcessBuilder SetVariables(IEnumerable<KeyValuePair<string, string>> variables)
+    {
+        Check.Null(variables);
+        Check.All(variables, static kvp => kvp.Value != null);
 
         var builder = Clone();
 
+        builder.Variables = Variables.SetItems(variables);
+
+        return builder;
+    }
+
+    public ChildProcessBuilder AddVariable(string name, string value)
+    {
+        Check.Null(value);
+
+        var builder = Clone();
+
+        builder.Variables = Variables.Add(name, value);
+
+        return builder;
+    }
+
+    public ChildProcessBuilder AddVariables(params (string Name, string Value)[] variables)
+    {
+        return AddVariables(variables.Select(tup => KeyValuePair.Create(tup.Name, tup.Value)));
+    }
+
+    public ChildProcessBuilder AddVariables(IEnumerable<KeyValuePair<string, string>> variables)
+    {
+        Check.Null(variables);
+        Check.All(variables, static kvp => kvp.Value != null);
+
+        var builder = Clone();
+
+        builder.Variables = Variables.AddRange(variables);
+
+        return builder;
+    }
+
+    public ChildProcessBuilder RemoveVariable(string name)
+    {
+        var builder = Clone();
+
         builder.Variables = Variables.Remove(name);
+
+        return builder;
+    }
+
+    public ChildProcessBuilder RemoveVariables(params string[] names)
+    {
+        return RemoveVariables(names.AsEnumerable());
+    }
+
+    public ChildProcessBuilder RemoveVariables(IEnumerable<string> names)
+    {
+        Check.Null(names);
+        Check.All(names, static name => name != null);
+
+        var builder = Clone();
+
+        builder.Variables = Variables.RemoveRange(names);
 
         return builder;
     }
@@ -200,6 +314,11 @@ public sealed class ChildProcessBuilder
         return builder;
     }
 
+    public ChildProcessBuilder WithRedirections(bool allStreams)
+    {
+        return WithRedirections(allStreams, allStreams, allStreams);
+    }
+
     public ChildProcessBuilder WithRedirections(bool standardIn, bool standardOut, bool standardError)
     {
         var builder = Clone();
@@ -211,9 +330,9 @@ public sealed class ChildProcessBuilder
         return builder;
     }
 
-    public ChildProcessBuilder WithRedirections(bool allStreams)
+    public ChildProcessBuilder WithBufferSizes(int allStreams)
     {
-        return WithRedirections(allStreams, allStreams, allStreams);
+        return WithBufferSizes(allStreams, allStreams);
     }
 
     public ChildProcessBuilder WithBufferSizes(int standardOut, int standardError)
@@ -229,9 +348,9 @@ public sealed class ChildProcessBuilder
         return builder;
     }
 
-    public ChildProcessBuilder WithBufferSizes(int allStreams)
+    public ChildProcessBuilder WithEncodings(Encoding? allStreams)
     {
-        return WithBufferSizes(allStreams, allStreams);
+        return WithEncodings(allStreams, allStreams, allStreams);
     }
 
     public ChildProcessBuilder WithEncodings(Encoding? standardIn, Encoding? standardOut, Encoding? standardError)
@@ -243,11 +362,6 @@ public sealed class ChildProcessBuilder
         builder.StandardErrorEncoding = standardError ?? Terminal.Encoding;
 
         return builder;
-    }
-
-    public ChildProcessBuilder WithEncodings(Encoding? allStreams)
-    {
-        return WithEncodings(allStreams, allStreams, allStreams);
     }
 
     public ChildProcessBuilder WithCancellationToken(CancellationToken cancellationToken)
