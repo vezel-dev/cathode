@@ -20,7 +20,7 @@
 
     <ItemGroup>
         <PackageVersion Include="Microsoft.CodeAnalysis.BannedApiAnalyzers"
-                        Version="3.3.3" />
+                        Version="3.3.4" />
         <PackageVersion Include="Microsoft.CodeAnalysis.CSharp"
                         Version="4.4.0" />
         <PackageVersion Include="Microsoft.Extensions.Hosting"
