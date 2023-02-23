@@ -571,8 +571,7 @@ dotnet_diagnostic.SA1124.severity = error
 dotnet_diagnostic.SA1125.severity = error
 dotnet_diagnostic.SA1127.severity = error
 dotnet_diagnostic.SA1128.severity = error
-# TODO: https://github.com/DotNetAnalyzers/StyleCopAnalyzers/issues/3430
-dotnet_diagnostic.SA1129.severity = none
+dotnet_diagnostic.SA1129.severity = error
 dotnet_diagnostic.SA1130.severity = error
 dotnet_diagnostic.SA1131.severity = error
 dotnet_diagnostic.SA1132.severity = error

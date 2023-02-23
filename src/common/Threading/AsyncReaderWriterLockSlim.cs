@@ -30,7 +30,7 @@ internal sealed class AsyncReaderWriterLockSlim
 
     public void EnterReadLock(CancellationToken cancellationToken = default)
     {
-        var wait = new SpinWait();
+        var wait = default(SpinWait);
 
         while (!EnterReadLockCore(cancellationToken))
             wait.SpinOnce();
@@ -70,7 +70,7 @@ internal sealed class AsyncReaderWriterLockSlim
     {
         _semaphore.Wait(cancellationToken);
 
-        var wait = new SpinWait();
+        var wait = default(SpinWait);
 
         // Wait for readers to exit the lock.
         while (!EnterWriteLockCore(cancellationToken))
