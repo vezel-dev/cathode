@@ -39,12 +39,12 @@ public sealed class ProgramContext
     // The following methods must never throw.
 
     [SuppressMessage("", "CA1031")]
-    internal void RaiseUnhandledException(Exception exception)
+    internal bool RaiseUnhandledException(Exception exception)
     {
         var ev = UnhandledException;
 
         if (ev == null)
-            return;
+            return false;
 
         foreach (var dg in ev.GetInvocationList())
         {
@@ -56,6 +56,8 @@ public sealed class ProgramContext
             {
             }
         }
+
+        return true;
     }
 
     [SuppressMessage("", "CA1031")]

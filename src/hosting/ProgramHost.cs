@@ -30,7 +30,12 @@ public static class ProgramHost
 
         domain.UnhandledException += (_, e) =>
         {
-            context.RaiseUnhandledException((Exception)e.ExceptionObject);
+            var ex = (Exception)e.ExceptionObject;
+
+            // The terminal might be in raw mode when this happens and checking IsRawMode is racey. To ensure sensible
+            // output, just always use CRLF here.
+            if (!context.RaiseUnhandledException(ex))
+                Terminal.Error($"Unhandled exception. {ex.ToString().ReplaceLineEndings("\r\n")}\r\n");
 
             // Most users expect ProcessExit to run on both normal and abnormal termination. This call makes that happen
             // and also ensures that the terminal cleanup we do in ProcessExit runs. One unfortunate downside of this
