@@ -144,6 +144,7 @@ internal sealed class SynchronizedStream : Stream
             return await _stream.ReadAsync(buffer, offset, count, cancellationToken).ConfigureAwait(false);
     }
 
+    [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder<>))]
     public override async ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
     {
         using (await _lock.EnterAsync(cancellationToken).ConfigureAwait(false))
@@ -211,6 +212,7 @@ internal sealed class SynchronizedStream : Stream
             await _stream.WriteAsync(buffer, offset, count, cancellationToken).ConfigureAwait(false);
     }
 
+    [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder))]
     public override async ValueTask WriteAsync(ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken = default)
     {
         using (await _lock.EnterAsync(cancellationToken).ConfigureAwait(false))

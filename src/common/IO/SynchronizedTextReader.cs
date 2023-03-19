@@ -50,6 +50,7 @@ internal sealed class SynchronizedTextReader : TextReader
             return await _reader.ReadAsync(buffer, index, count).ConfigureAwait(false);
     }
 
+    [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder<>))]
     public override async ValueTask<int> ReadAsync(Memory<char> buffer, CancellationToken cancellationToken = default)
     {
         using (await _lock.EnterAsync(cancellationToken).ConfigureAwait(false))
@@ -86,6 +87,7 @@ internal sealed class SynchronizedTextReader : TextReader
             return await _reader.ReadBlockAsync(buffer, index, count).ConfigureAwait(false);
     }
 
+    [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder<>))]
     public override async ValueTask<int> ReadBlockAsync(
         Memory<char> buffer, CancellationToken cancellationToken = default)
     {
