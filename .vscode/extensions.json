@@ -1,17 +1,15 @@
 {
   "recommendations": [
+    "chdsbd.github-code-owners",
     "codezombiech.gitignore",
     "davidanson.vscode-markdownlint",
-    "eamodio.gitlens",
     "editorconfig.editorconfig",
-    "github.codespaces",
     "github.vscode-pull-request-github",
-    "hashhar.gitattributes",
-    "jasonnutter.vscode-codeowners",
     "jock.svg",
     "ms-dotnettools.csharp",
     "redhat.vscode-xml",
     "redhat.vscode-yaml",
-    "tintoy.msbuild-project-tools"
+    "tintoy.msbuild-project-tools",
+    "yy0931.gitconfig-lsp"
   ]
 }
