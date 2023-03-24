@@ -179,6 +179,13 @@ public sealed class ChildProcess
             // The process is already gone.
         }
 
-        _process.WaitForExit();
+        try
+        {
+            _process.WaitForExit();
+        }
+        catch (InvalidOperationException)
+        {
+            // The process is already gone. This exception is undocumented but happens in practice.
+        }
     }
 }
