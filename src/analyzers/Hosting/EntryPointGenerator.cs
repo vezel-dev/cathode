@@ -12,7 +12,7 @@ public sealed class EntryPointGenerator : IIncrementalGenerator
                     context.SyntaxProvider
                         .CreateSyntaxProvider(
                             static (node, _) => node is TypeDeclarationSyntax,
-                            static (ctx, _) => (Node: (TypeDeclarationSyntax)ctx.Node, Model: ctx.SemanticModel))
+                            static (ctx, _) => (node: (TypeDeclarationSyntax)ctx.Node, model: ctx.SemanticModel))
                         .Combine(
                             context.MetadataReferencesProvider
                                 .Combine(context.CompilationProvider)
@@ -23,7 +23,7 @@ public sealed class EntryPointGenerator : IIncrementalGenerator
                                     ((IAssemblySymbol?)arr.FirstOrDefault())?.GetTypeByMetadataName(
                                         "Vezel.Cathode.Hosting.IProgram")))
                         .Select(static (tup, ct) =>
-                            (Interface: tup.Right, Candidate: tup.Left.Model.GetDeclaredSymbol(tup.Left.Node, ct)))
+                            (Interface: tup.Right, Candidate: tup.Left.model.GetDeclaredSymbol(tup.Left.node, ct)))
                         .Where(static tup =>
                             tup is (not null, not null) &&
                             tup.Candidate.AllInterfaces.Any(iface =>

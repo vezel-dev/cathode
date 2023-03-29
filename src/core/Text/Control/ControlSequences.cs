@@ -137,7 +137,7 @@ public static class ControlSequences
 
     public static string SetProgress(ProgressState state, int value)
     {
-        return Create(static (cb, args) => cb.SetProgress(args.State, args.Value), (State: state, Value: value));
+        return Create(static (cb, args) => cb.SetProgress(args.state, args.value), (state, value));
     }
 
     public static string SetCursorKeyMode(CursorKeyMode mode)
@@ -207,7 +207,7 @@ public static class ControlSequences
 
     public static string SetScrollMargin(int top, int bottom)
     {
-        return Create(static (cb, args) => cb.SetScrollMargin(args.Top, args.Bottom), (Top: top, Bottom: bottom));
+        return Create(static (cb, args) => cb.SetScrollMargin(args.top, args.bottom), (top, bottom));
     }
 
     public static string InsertCharacters(int count)
@@ -272,7 +272,7 @@ public static class ControlSequences
 
     public static string MoveCursorTo(int line, int column)
     {
-        return Create(static (cb, args) => cb.MoveCursorTo(args.Line, args.Column), (Line: line, Column: column));
+        return Create(static (cb, args) => cb.MoveCursorTo(args.line, args.column), (line, column));
     }
 
     public static string MoveCursorUp(int count)
@@ -307,12 +307,12 @@ public static class ControlSequences
 
     public static string SetForegroundColor(byte r, byte g, byte b)
     {
-        return Create(static (cb, args) => cb.SetForegroundColor(args.R, args.G, args.B), (R: r, G: g, B: b));
+        return Create(static (cb, args) => cb.SetForegroundColor(args.r, args.g, args.b), (r, g, b));
     }
 
     public static string SetBackgroundColor(byte r, byte g, byte b)
     {
-        return Create(static (cb, args) => cb.SetForegroundColor(args.R, args.G, args.B), (R: r, G: g, B: b));
+        return Create(static (cb, args) => cb.SetForegroundColor(args.r, args.g, args.b), (r, g, b));
     }
 
     public static string SetDecorations(
@@ -330,26 +330,26 @@ public static class ControlSequences
         return Create(
             static (cb, args) =>
                 cb.SetDecorations(
-                    args.Intense,
-                    args.Faint,
-                    args.Italic,
-                    args.Underline,
-                    args.Blink,
-                    args.Invert,
-                    args.Invisible,
-                    args.Strike,
-                    args.DoubleUnderline,
-                    args.Overline),
-            (Intense: intense,
-             Faint: faint,
-             Italic: italic,
-             Underline: underline,
-             Blink: blink,
-             Invert: invert,
-             Invisible: invisible,
-             Strike: strike,
-             DoubleUnderline: doubleUnderline,
-             Overline: overline));
+                    args.intense,
+                    args.faint,
+                    args.italic,
+                    args.underline,
+                    args.blink,
+                    args.invert,
+                    args.invisible,
+                    args.strike,
+                    args.doubleUnderline,
+                    args.overline),
+            (intense,
+             faint,
+             italic,
+             underline,
+             blink,
+             invert,
+             invisible,
+             strike,
+             doubleUnderline,
+             overline));
     }
 
     public static string ResetAttributes()
@@ -375,9 +375,7 @@ public static class ControlSequences
     public static string PlayNotes(int volume, int duration, scoped ReadOnlySpan<int> notes)
     {
         return Create(
-            static (cb, notes, args) => cb.PlayNotes(args.Volume, args.Duration, notes),
-            notes,
-            (Volume: volume, Duration: duration));
+            static (cb, notes, args) => cb.PlayNotes(args.volume, args.duration, notes), notes, (volume, duration));
     }
 
     public static string SoftReset()
