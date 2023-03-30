@@ -4,6 +4,7 @@
     "codezombiech.gitignore",
     "davidanson.vscode-markdownlint",
     "editorconfig.editorconfig",
+    "github.vscode-github-actions",
     "github.vscode-pull-request-github",
     "jock.svg",
     "ms-dotnettools.csharp",
