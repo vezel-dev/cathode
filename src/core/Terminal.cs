@@ -105,6 +105,11 @@ public static class Terminal
         return System.OutAsync(value, cancellationToken);
     }
 
+    public static ValueTask OutAsync(byte[]? value, CancellationToken cancellationToken = default)
+    {
+        return System.OutAsync(value, cancellationToken);
+    }
+
     public static void Out(scoped ReadOnlySpan<char> value)
     {
         System.Out(value);
@@ -116,6 +121,16 @@ public static class Terminal
     }
 
     public static ValueTask OutAsync(Memory<char> value, CancellationToken cancellationToken = default)
+    {
+        return System.OutAsync(value, cancellationToken);
+    }
+
+    public static ValueTask OutAsync(char[]? value, CancellationToken cancellationToken = default)
+    {
+        return System.OutAsync(value, cancellationToken);
+    }
+
+    public static ValueTask OutAsync(string? value, CancellationToken cancellationToken = default)
     {
         return System.OutAsync(value, cancellationToken);
     }
@@ -165,6 +180,11 @@ public static class Terminal
         return System.ErrorAsync(value, cancellationToken);
     }
 
+    public static ValueTask ErrorAsync(byte[]? value, CancellationToken cancellationToken = default)
+    {
+        return System.ErrorAsync(value, cancellationToken);
+    }
+
     public static void Error(scoped ReadOnlySpan<char> value)
     {
         System.Error(value);
@@ -176,6 +196,16 @@ public static class Terminal
     }
 
     public static ValueTask ErrorAsync(Memory<char> value, CancellationToken cancellationToken = default)
+    {
+        return System.ErrorAsync(value, cancellationToken);
+    }
+
+    public static ValueTask ErrorAsync(char[]? value, CancellationToken cancellationToken = default)
+    {
+        return System.ErrorAsync(value, cancellationToken);
+    }
+
+    public static ValueTask ErrorAsync(string? value, CancellationToken cancellationToken = default)
     {
         return System.ErrorAsync(value, cancellationToken);
     }

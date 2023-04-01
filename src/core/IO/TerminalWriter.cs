@@ -53,6 +53,11 @@ public abstract class TerminalWriter : TerminalHandle
         return WriteAsync((ReadOnlyMemory<byte>)value, cancellationToken);
     }
 
+    public ValueTask WriteAsync(byte[]? value, CancellationToken cancellationToken = default)
+    {
+        return WriteAsync(value.AsMemory(), cancellationToken);
+    }
+
     public void Write(scoped ReadOnlySpan<char> value)
     {
         var encoding = Terminal.Encoding;
@@ -97,6 +102,16 @@ public abstract class TerminalWriter : TerminalHandle
     public ValueTask WriteAsync(Memory<char> value, CancellationToken cancellationToken = default)
     {
         return WriteAsync((ReadOnlyMemory<char>)value, cancellationToken);
+    }
+
+    public ValueTask WriteAsync(char[]? value, CancellationToken cancellationToken = default)
+    {
+        return WriteAsync(value.AsMemory(), cancellationToken);
+    }
+
+    public ValueTask WriteAsync(string? value, CancellationToken cancellationToken = default)
+    {
+        return WriteAsync(value.AsMemory(), cancellationToken);
     }
 
     public void Write<T>(T value)
