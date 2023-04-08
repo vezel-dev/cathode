@@ -4,11 +4,9 @@ namespace Vezel.Cathode.Text;
 
 public static class MonospaceWidth
 {
-    private const Unicode Version = Unicode.Version_15_0_0;
-
     public static int? Measure(Rune value)
     {
-        var width = UnicodeCalculator.GetWidth(value, Version);
+        var width = UnicodeCalculator.GetWidth(value);
 
         return width == -1 ? null : width;
     }
