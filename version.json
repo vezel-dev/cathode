@@ -6,7 +6,7 @@
   },
   "publicReleaseRefSpec": [
     "^refs/heads/master$",
-    "^refs/tags/.*$"
+    "^refs/tags/v.*$"
   ],
   "cloudBuild": {
     "setVersionVariables": false
