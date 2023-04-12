@@ -21,7 +21,7 @@
 
 </div>
 
----
+--------------------------------------------------------------------------------
 
 **Cathode** is a toolkit for writing terminal-based applications. It is
 effectively a complete replacement for the .NET console APIs.

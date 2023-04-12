@@ -1,34 +1,78 @@
 {
   "$schema": "https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json",
+  "default": true,
+  "MD001": true,
   "MD003": {
     "style": "atx"
   },
   "MD004": {
     "style": "asterisk"
   },
+  "MD005": true,
   "MD007": {
+    "start_indented": false,
+    "start_indent": 4,
     "indent": 4
   },
   "MD009": {
-    "br_spaces": 0
+    "br_spaces": 0,
+    "list_item_empty_lines": false,
+    "strict": true
   },
   "MD010": {
-    "spaces_per_tab": 4
+    "spaces_per_tab": 4,
+    "code_blocks": true,
+    "ignore_code_languages": []
+  },
+  "MD011": true,
+  "MD012": {
+    "maximum": 1
   },
   "MD013": {
+    "line_length": 80,
     "code_blocks": false,
+    "code_block_line_length": 80,
     "headings": false,
-    "tables": false
+    "heading_line_length": 80,
+    "tables": false,
+    "stern": false,
+    "strict": false
   },
+  "MD014": true,
+  "MD018": true,
+  "MD019": true,
+  "MD020": true,
+  "MD021": true,
+  "MD022": {
+    "lines_above": 1,
+    "lines_below": 1
+  },
+  "MD023": true,
   "MD024": {
-    "siblings_only": true
+    "siblings_only": false
   },
   "MD025": {
-    "front_matter_title": ""
+    "front_matter_title": "^\\s*title\\s*[:=]",
+    "level": 1
   },
+  "MD026": {
+    "punctuation": "!,.:;?"
+  },
+  "MD027": true,
+  "MD028": true,
   "MD029": {
     "style": "ordered"
   },
+  "MD030": {
+    "ol_single": 1,
+    "ol_multi": 1,
+    "ul_single": 1,
+    "ul_multi": 1
+  },
+  "MD031": {
+    "list_items": true
+  },
+  "MD032": true,
   "MD033": {
     "allowed_elements": [
       "div",
@@ -37,15 +81,36 @@
       "strong"
     ]
   },
+  "MD034": true,
   "MD035": {
-    "style": "---"
+    "style": "--------------------------------------------------------------------------------"
+  },
+  "MD036": {
+    "punctuation": "!,.:;?"
+  },
+  "MD037": true,
+  "MD038": true,
+  "MD039": true,
+  "MD040": {
+    "allowed_languages": [],
+    "language_only": true
   },
   "MD041": {
-    "front_matter_title": ""
+    "front_matter_title": "^\\s*title\\s*[:=]",
+    "level": 1
   },
+  "MD042": true,
+  "MD043": false,
+  "MD044": {
+    "names": [],
+    "code_blocks": true,
+    "html_elements": true
+  },
+  "MD045": true,
   "MD046": {
     "style": "fenced"
   },
+  "MD047": true,
   "MD048": {
     "style": "backtick"
   },
@@ -54,5 +119,10 @@
   },
   "MD050": {
     "style": "asterisk"
+  },
+  "MD051": true,
+  "MD052": true,
+  "MD053": {
+    "ignored_definitions": []
   }
 }
