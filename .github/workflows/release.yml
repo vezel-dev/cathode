@@ -29,4 +29,4 @@ jobs:
                   dotnet build -c Release
             - name: Upload NuGet packages
               run: |
-                  dotnet nuget push pkg/feed/*.nupkg -k ${{ secrets.NUGET_TOKEN }} -s https://api.nuget.org/v3/index.json
+                  dotnet nuget push pkg/feed/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_TOKEN }} --skip-duplicate
