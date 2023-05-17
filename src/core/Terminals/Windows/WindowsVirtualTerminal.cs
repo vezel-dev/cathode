@@ -66,7 +66,7 @@ internal sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
         {
             return CreateFileW(
                 name,
-                FILE_ACCESS_FLAGS.FILE_GENERIC_READ | FILE_ACCESS_FLAGS.FILE_GENERIC_WRITE,
+                (uint)(FILE_ACCESS_RIGHTS.FILE_GENERIC_READ | FILE_ACCESS_RIGHTS.FILE_GENERIC_WRITE),
                 FILE_SHARE_MODE.FILE_SHARE_READ | FILE_SHARE_MODE.FILE_SHARE_WRITE,
                 new SECURITY_ATTRIBUTES
                 {
@@ -222,7 +222,7 @@ internal sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
         {
             var dummy = 42u;
 
-            return WriteFile(handle, &dummy, 0, &dummy, null);
+            return WriteFile(handle, default, &dummy, null);
         }
 
         return true;

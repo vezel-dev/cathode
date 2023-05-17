@@ -34,8 +34,7 @@ internal sealed class WindowsTerminalReader : NativeTerminalReader<WindowsVirtua
             uint read;
 
             using (_semaphore.Enter(cancellationToken))
-                fixed (byte* p = &MemoryMarshal.GetReference(buffer))
-                    result = ReadFile(Handle, p, (uint)buffer.Length, &read, null);
+                result = ReadFile(Handle, buffer, &read, null);
 
             if (!result && read == 0)
                 WindowsTerminalUtility.ThrowIfUnexpected($"Could not read from {Name}");

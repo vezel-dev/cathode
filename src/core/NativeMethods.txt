@@ -14,6 +14,7 @@ SetConsoleMode
 SetConsoleOutputCP
 WriteFile
 
+FILE_ACCESS_RIGHTS
 FILE_TYPE
 WIN32_ERROR
 

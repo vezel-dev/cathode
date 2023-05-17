@@ -27,8 +27,7 @@ internal sealed class WindowsTerminalWriter : NativeTerminalWriter<WindowsVirtua
         uint written;
 
         using (_semaphore.Enter(cancellationToken))
-            fixed (byte* p = &MemoryMarshal.GetReference(buffer))
-                result = WriteFile(Handle, p, (uint)buffer.Length, &written, null);
+            result = WriteFile(Handle, buffer, &written, null);
 
         if (!result && written == 0)
             WindowsTerminalUtility.ThrowIfUnexpected($"Could not write to {Name}");
