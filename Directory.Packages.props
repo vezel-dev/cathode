@@ -30,7 +30,7 @@
         <PackageVersion Include="Microsoft.Windows.CsWin32"
                         Version="0.2.229-beta" />
         <PackageVersion Include="Microsoft.Windows.SDK.Win32Docs"
-                        Version="0.1.12-alpha" />
+                        Version="0.1.41-alpha" />
         <PackageVersion Include="Microsoft.Windows.SDK.Win32Metadata"
                         Version="41.0.25-preview" />
         <PackageVersion Include="System.IO.Pipelines"
