@@ -28,7 +28,7 @@
         <PackageVersion Include="Microsoft.Extensions.Hosting.Systemd"
                         Version="7.0.0" />
         <PackageVersion Include="Microsoft.Windows.CsWin32"
-                        Version="0.2.229-beta" />
+                        Version="0.3.2-beta" />
         <PackageVersion Include="Microsoft.Windows.SDK.Win32Docs"
                         Version="0.1.41-alpha" />
         <PackageVersion Include="Microsoft.Windows.SDK.Win32Metadata"
