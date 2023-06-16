@@ -36,7 +36,6 @@ jobs:
               uses: actions/setup-dotnet@v3.2.0
             - name: Build project
               run: |
-                  dotnet nuget --version # TODO: https://github.com/NuGet/Home/issues/12159
                   dotnet tool restore
                   dotnet publish -c ${{ matrix.cfg }}
             - name: Run samples
