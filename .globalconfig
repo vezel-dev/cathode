@@ -547,8 +547,7 @@ dotnet_diagnostic.SA1006.severity = none
 dotnet_diagnostic.SA1007.severity = error
 dotnet_diagnostic.SA1008.severity = error
 dotnet_diagnostic.SA1009.severity = error
-# TODO: https://github.com/DotNetAnalyzers/StyleCopAnalyzers/issues/3503
-dotnet_diagnostic.SA1010.severity = none
+dotnet_diagnostic.SA1010.severity = error
 dotnet_diagnostic.SA1011.severity = error
 dotnet_diagnostic.SA1012.severity = error
 dotnet_diagnostic.SA1013.severity = error
@@ -561,8 +560,7 @@ dotnet_diagnostic.SA1019.severity = error
 dotnet_diagnostic.SA1020.severity = error
 dotnet_diagnostic.SA1021.severity = error
 dotnet_diagnostic.SA1022.severity = error
-# TODO: https://github.com/DotNetAnalyzers/StyleCopAnalyzers/issues/3538
-dotnet_diagnostic.SA1023.severity = none
+dotnet_diagnostic.SA1023.severity = error
 dotnet_diagnostic.SA1024.severity = error
 dotnet_diagnostic.SA1025.severity = error
 dotnet_diagnostic.SA1026.severity = error
@@ -615,8 +613,7 @@ dotnet_diagnostic.SA1202.severity = none
 dotnet_diagnostic.SA1203.severity = error
 dotnet_diagnostic.SA1204.severity = none
 dotnet_diagnostic.SA1205.severity = error
-# TODO: https://github.com/DotNetAnalyzers/StyleCopAnalyzers/issues/3527
-dotnet_diagnostic.SA1206.severity = none
+dotnet_diagnostic.SA1206.severity = error
 dotnet_diagnostic.SA1207.severity = error
 dotnet_diagnostic.SA1208.severity = error
 dotnet_diagnostic.SA1209.severity = error
