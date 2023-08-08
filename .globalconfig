@@ -110,6 +110,9 @@ dotnet_style_qualification_for_property = false
 dotnet_style_readonly_field = true
 dotnet_style_require_accessibility_modifiers = always
 
+# TODO: https://github.com/dotnet/roslyn/issues/41640
+dotnet_diagnostic.EnableGenerateDocumentationFile.severity = none
+
 dotnet_diagnostic.CA1000.severity = none
 dotnet_diagnostic.CA1001.severity = error
 dotnet_diagnostic.CA1002.severity = error
