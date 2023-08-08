@@ -30,9 +30,9 @@
         <PackageVersion Include="Microsoft.Windows.CsWin32"
                         Version="0.3.18-beta" />
         <PackageVersion Include="Microsoft.Windows.SDK.Win32Docs"
-                        Version="0.1.41-alpha" />
+                        Version="0.1.42-alpha" />
         <PackageVersion Include="Microsoft.Windows.SDK.Win32Metadata"
-                        Version="53.0.14-preview" />
+                        Version="54.0.44-preview" />
         <PackageVersion Include="System.IO.Pipelines"
                         Version="7.0.0" />
         <PackageVersion Include="Wcwidth"
