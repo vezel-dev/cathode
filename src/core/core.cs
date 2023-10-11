@@ -1,1 +1,2 @@
+[assembly: DisableRuntimeMarshalling]
 [module: SkipLocalsInit]
