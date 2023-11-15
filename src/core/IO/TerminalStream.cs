@@ -72,6 +72,6 @@ public abstract class TerminalStream : Stream
 
     public override sealed void WriteByte(byte value)
     {
-        Write(stackalloc[] { value });
+        Write([value]);
     }
 }

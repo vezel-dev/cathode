@@ -4,7 +4,7 @@ public sealed class ChildProcessBuilder
 {
     public string FileName { get; private set; } = string.Empty;
 
-    public ImmutableArray<string> Arguments { get; private set; } = ImmutableArray<string>.Empty;
+    public ImmutableArray<string> Arguments { get; private set; } = [];
 
     public ImmutableDictionary<string, string> Variables { get; private set; } =
         ImmutableDictionary<string, string>.Empty;

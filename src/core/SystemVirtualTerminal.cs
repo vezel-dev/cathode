@@ -124,7 +124,7 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
 
     private readonly ManualResetEventSlim _resizeEvent = new();
 
-    private readonly HashSet<ChildProcess> _processes = new();
+    private readonly HashSet<ChildProcess> _processes = [];
 
     private Action<TerminalSize>? _resized;
 

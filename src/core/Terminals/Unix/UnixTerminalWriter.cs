@@ -46,7 +46,7 @@ internal sealed class UnixTerminalWriter : NativeTerminalWriter<UnixVirtualTermi
 
                 // The file descriptor might have been configured as non-blocking. Instead of busily trying to write
                 // over and over, poll until we can write and then try again.
-                if (Terminal.PollHandles(err, POLLOUT, stackalloc[] { Handle }))
+                if (Terminal.PollHandles(err, POLLOUT, [Handle]))
                     continue;
 
                 throw new TerminalException($"Could not write to {Name}: {new Win32Exception(err).Message}");

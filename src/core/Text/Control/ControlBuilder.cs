@@ -197,77 +197,77 @@ public sealed class ControlBuilder
 
     public ControlBuilder Null()
     {
-        return Print(stackalloc[] { NUL });
+        return Print([NUL]);
     }
 
     public ControlBuilder Beep()
     {
-        return Print(stackalloc[] { BEL });
+        return Print([BEL]);
     }
 
     public ControlBuilder Backspace()
     {
-        return Print(stackalloc[] { BS });
+        return Print([BS]);
     }
 
     public ControlBuilder HorizontalTab()
     {
-        return Print(stackalloc[] { HT });
+        return Print([HT]);
     }
 
     public ControlBuilder LineFeed()
     {
-        return Print(stackalloc[] { LF });
+        return Print([LF]);
     }
 
     public ControlBuilder VerticalTab()
     {
-        return Print(stackalloc[] { VT });
+        return Print([VT]);
     }
 
     public ControlBuilder FormFeed()
     {
-        return Print(stackalloc[] { FF });
+        return Print([FF]);
     }
 
     public ControlBuilder CarriageReturn()
     {
-        return Print(stackalloc[] { CR });
+        return Print([CR]);
     }
 
     public ControlBuilder Substitute()
     {
-        return Print(stackalloc[] { SUB });
+        return Print([SUB]);
     }
 
     public ControlBuilder Cancel()
     {
-        return Print(stackalloc[] { CAN });
+        return Print([CAN]);
     }
 
     public ControlBuilder FileSeparator()
     {
-        return Print(stackalloc[] { FS });
+        return Print([FS]);
     }
 
     public ControlBuilder GroupSeparator()
     {
-        return Print(stackalloc[] { GS });
+        return Print([GS]);
     }
 
     public ControlBuilder RecordSeparator()
     {
-        return Print(stackalloc[] { RS });
+        return Print([RS]);
     }
 
     public ControlBuilder UnitSeparator()
     {
-        return Print(stackalloc[] { US });
+        return Print([US]);
     }
 
     public ControlBuilder Space()
     {
-        return Print(stackalloc[] { SP });
+        return Print([SP]);
     }
 
     public ControlBuilder SetOutputBatching(bool enable)
@@ -310,7 +310,7 @@ public sealed class ControlBuilder
 
         var ch = (char)mode;
 
-        return Print(CSI).Print("?1").Print(new(ch));
+        return Print(CSI).Print("?1").Print(new(in ch));
     }
 
     public ControlBuilder SetKeypadMode(KeypadMode mode)
@@ -319,7 +319,7 @@ public sealed class ControlBuilder
 
         var ch = (char)mode;
 
-        return Print(ESC).Print(new(ch));
+        return Print(ESC).Print(new(in ch));
     }
 
     public ControlBuilder SetKeyboardLevel(KeyboardLevel level)
@@ -367,7 +367,7 @@ public sealed class ControlBuilder
 
         var ch = (char)buffer;
 
-        return Print(CSI).Print("?1049").Print(new(ch));
+        return Print(CSI).Print("?1049").Print(new(in ch));
     }
 
     public ControlBuilder SetInvertedColors(bool enable)
