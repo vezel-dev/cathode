@@ -6,8 +6,6 @@
     <ItemGroup>
         <GlobalPackageReference Include="DotNet.ReproducibleBuilds"
                                 Version="1.1.1" />
-        <GlobalPackageReference Include="Microsoft.SourceLink.GitHub"
-                                Version="1.1.1" />
         <GlobalPackageReference Include="Microsoft.VisualStudio.Threading.Analyzers"
                                 Version="17.7.30" />
         <GlobalPackageReference Include="Nerdbank.GitVersioning"
