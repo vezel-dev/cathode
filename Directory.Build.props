@@ -30,7 +30,6 @@ modern terminal emulators. It works on all desktop platforms that .NET supports.
         <PackageProjectUrl>https://docs.vezel.dev/cathode</PackageProjectUrl>
         <PolySharpIncludeRuntimeSupportedAttributes>true</PolySharpIncludeRuntimeSupportedAttributes>
         <RepositoryUrl>https://github.com/vezel-dev/cathode.git</RepositoryUrl>
-        <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
         <TargetFramework>net8.0</TargetFramework>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
