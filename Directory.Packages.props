@@ -32,7 +32,7 @@
         <PackageVersion Include="Microsoft.Windows.SDK.Win32Metadata"
                         Version="56.0.13-preview" />
         <PackageVersion Include="System.IO.Pipelines"
-                        Version="7.0.0" />
+                        Version="8.0.0" />
         <PackageVersion Include="Wcwidth"
                         Version="1.0.0" />
     </ItemGroup>
