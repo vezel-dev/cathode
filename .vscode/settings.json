@@ -1,9 +1,8 @@
 {
   "files.exclude": {
+    "out": true,
+    "**/.idea": true,
     "**/.vs": true,
-    "pkg/cache/*[!_._]": true,
-    "pkg/feed/*.nupkg": true,
-    "**/bin": true,
-    "**/obj": true
+    "**/node_modules": true
   }
 }

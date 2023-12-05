@@ -2,7 +2,8 @@
 
 <div align="center">
     <img src="cathode.svg"
-         width="128" />
+         width="128"
+         alt="Cathode" />
 </div>
 
 <p align="center">
@@ -69,6 +70,13 @@ samples can be run with
 
 For more information, please visit the
 [project home page](https://docs.vezel.dev/cathode).
+
+## Building
+
+Simply run `./cake` (a [Bash](https://www.gnu.org/software/bash) script) to
+build artifacts. This will use the `Debug` configuration by default, which is
+suitable for development and debugging. Pass `-c Release` instead to use that
+configuration, resulting in an optimized build.
 
 ## License
 

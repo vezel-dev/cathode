@@ -6,21 +6,21 @@
       "contextType": "build",
       "appliesTo": "/",
       "type": "launch",
-      "command": "dotnet",
-      "args": [
-        "build",
-        "-clp:NoSummary"
-      ]
-    },
-    {
-      "taskLabel": "Clean",
-      "contextType": "clean",
-      "appliesTo": "/",
-      "type": "launch",
-      "command": "dotnet",
-      "args": [
-        "clean",
-        "-clp:NoSummary"
+      "commands": [
+        {
+          "command": "dotnet",
+          "args": [
+            "tool",
+            "restore"
+          ]
+        },
+        {
+          "command": "dotnet",
+          "args": [
+            "cake",
+            "cathode.cake"
+          ]
+        }
       ]
     }
   ]

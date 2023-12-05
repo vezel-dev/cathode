@@ -39,7 +39,7 @@
       },
       "console": "externalTerminal",
       "cwd": "${workspaceFolder}/src/samples/${input:pickSample}",
-      "program": "${workspaceFolder}/src/samples/${input:pickSample}/bin/Debug/${input:pickSample}.dll"
+      "program": "${workspaceFolder}/out/bin/src/samples/${input:pickSample}/debug/${input:pickSample}.dll"
     },
     {
       "name": ".NET: Launch (Integrated)",
@@ -57,7 +57,7 @@
       },
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}/src/samples/${input:pickSample}",
-      "program": "${workspaceFolder}/src/samples/${input:pickSample}/bin/Debug/${input:pickSample}.dll"
+      "program": "${workspaceFolder}/out/bin/src/samples/${input:pickSample}/debug/${input:pickSample}.dll"
     },
     {
       "name": ".NET: Attach",

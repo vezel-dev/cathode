@@ -10,6 +10,7 @@
         <OutputType>Exe</OutputType>
         <PublishTrimmed>true</PublishTrimmed>
         <RootNamespace>Vezel.Cathode.Trimming</RootNamespace>
+        <SelfContained>true</SelfContained>
         <UseCurrentRuntimeIdentifier>true</UseCurrentRuntimeIdentifier>
     </PropertyGroup>
 

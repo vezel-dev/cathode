@@ -1,6 +1,5 @@
-.vs
+/out
 *.user
-/pkg/cache/*/*
-/pkg/feed/*.nupkg
-bin
-obj
+.idea
+.vs
+node_modules
