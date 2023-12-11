@@ -15,11 +15,6 @@ with all terminal emulators that you have access to. Verify that nothing has
 regressed. Also, ensure that the release branch builds and tests successfully on
 [CI](https://github.com/vezel-dev/cathode/actions).
 
-emulators you have access to. Verify that nothing has regressed. Also, ensure that the release branch builds and tests 
-successfully on [CI](https://github.com/vezel-dev/cathode/actions).
-Before tagging a release, build the release branch locally on all platforms that
-you have access to and run the [sample programs](src/samples) with all terminal
-
 Next, run `dotnet nbgv tag` from the release branch to create a release tag,
 followed by `git tag <tag> <tag> -f -m <tag> -s` to sign it, and then push it
 with `git push origin <tag>`. Again, wait for CI to build and test the tag. If
