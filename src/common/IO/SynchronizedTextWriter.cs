@@ -52,6 +52,12 @@ internal sealed class SynchronizedTextWriter : TextWriter
             await _writer.FlushAsync().ConfigureAwait(false);
     }
 
+    public override async Task FlushAsync(CancellationToken cancellationToken)
+    {
+        using (await _lock.EnterAsync(cancellationToken).ConfigureAwait(false))
+            await _writer.FlushAsync(cancellationToken).ConfigureAwait(false);
+    }
+
     public override void Write(char value)
     {
         using (_lock.Enter())
