@@ -305,14 +305,14 @@ public static class ControlSequences
         return Create(static cb => cb.RestoreCursorState());
     }
 
-    public static string SetForegroundColor(byte r, byte g, byte b)
+    public static string SetForegroundColor(Color color)
     {
-        return Create(static (cb, args) => cb.SetForegroundColor(args.r, args.g, args.b), (r, g, b));
+        return Create(static (cb, color) => cb.SetForegroundColor(color), color);
     }
 
-    public static string SetBackgroundColor(byte r, byte g, byte b)
+    public static string SetBackgroundColor(Color color)
     {
-        return Create(static (cb, args) => cb.SetForegroundColor(args.r, args.g, args.b), (r, g, b));
+        return Create(static (cb, color) => cb.SetForegroundColor(color), color);
     }
 
     public static string SetDecorations(

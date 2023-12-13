@@ -8,12 +8,12 @@ public static class TerminalLoggerWriters
 
         private readonly bool _set;
 
-        public Decorator(ControlBuilder builder, byte r, byte g, byte b)
+        public Decorator(ControlBuilder builder, Color color)
         {
             _builder = builder;
             _set = true;
 
-            _ = builder.SetForegroundColor(r, g, b);
+            _ = builder.SetForegroundColor(color);
         }
 
         public void Dispose()
@@ -42,7 +42,7 @@ public static class TerminalLoggerWriters
 
         Decorator Decorate(byte r, byte g, byte b)
         {
-            return options.UseColors ? new(builder, r, g, b) : default;
+            return options.UseColors ? new(builder, Color.FromArgb(byte.MaxValue, r, g, b)) : default;
         }
 
         _ = builder.Print("[");

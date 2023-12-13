@@ -33,7 +33,7 @@ try
                 .SaveCursorState()
                 .MoveCursorTo(0, 0)
                 .ClearLine()
-                .SetForegroundColor(PickRandom(), PickRandom(), PickRandom())
+                .SetForegroundColor(Color.FromArgb(byte.MaxValue, PickRandom(), PickRandom(), PickRandom()))
                 .Print(str.ReplaceLineEndings(string.Empty))
                 .ResetAttributes()
                 .RestoreCursorState());

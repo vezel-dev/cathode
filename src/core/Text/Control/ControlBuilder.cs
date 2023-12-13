@@ -578,43 +578,49 @@ public sealed class ControlBuilder
         return Print(ESC).Print("8");
     }
 
-    public ControlBuilder SetForegroundColor(byte r, byte g, byte b)
+    public ControlBuilder SetForegroundColor(Color color)
     {
+        Check.Argument(color.A == byte.MaxValue, color);
+
         var rSpan = (stackalloc char[StackBufferSize]);
         var gSpan = (stackalloc char[StackBufferSize]);
         var bSpan = (stackalloc char[StackBufferSize]);
 
-        _ = r.TryFormat(rSpan, out var rLen, provider: _culture);
-        _ = g.TryFormat(gSpan, out var gLen, provider: _culture);
-        _ = b.TryFormat(bSpan, out var bLen, provider: _culture);
+        _ = color.R.TryFormat(rSpan, out var rLen, provider: _culture);
+        _ = color.G.TryFormat(gSpan, out var gLen, provider: _culture);
+        _ = color.B.TryFormat(bSpan, out var bLen, provider: _culture);
 
         return Print(CSI).Print("38;2;").Print(rSpan[..rLen]).Print(";")
             .Print(gSpan[..gLen]).Print(";").Print(bSpan[..bLen]).Print("m");
     }
 
-    public ControlBuilder SetBackgroundColor(byte r, byte g, byte b)
+    public ControlBuilder SetBackgroundColor(Color color)
     {
+        Check.Argument(color.A == byte.MaxValue, color);
+
         var rSpan = (stackalloc char[StackBufferSize]);
         var gSpan = (stackalloc char[StackBufferSize]);
         var bSpan = (stackalloc char[StackBufferSize]);
 
-        _ = r.TryFormat(rSpan, out var rLen, provider: _culture);
-        _ = g.TryFormat(gSpan, out var gLen, provider: _culture);
-        _ = b.TryFormat(bSpan, out var bLen, provider: _culture);
+        _ = color.R.TryFormat(rSpan, out var rLen, provider: _culture);
+        _ = color.G.TryFormat(gSpan, out var gLen, provider: _culture);
+        _ = color.B.TryFormat(bSpan, out var bLen, provider: _culture);
 
         return Print(CSI).Print("48;2;").Print(rSpan[..rLen]).Print(";")
             .Print(gSpan[..gLen]).Print(";").Print(bSpan[..bLen]).Print("m");
     }
 
-    public ControlBuilder SetUnderlineColor(byte r, byte g, byte b)
+    public ControlBuilder SetUnderlineColor(Color color)
     {
+        Check.Argument(color.A == byte.MaxValue, color);
+
         var rSpan = (stackalloc char[StackBufferSize]);
         var gSpan = (stackalloc char[StackBufferSize]);
         var bSpan = (stackalloc char[StackBufferSize]);
 
-        _ = r.TryFormat(rSpan, out var rLen, provider: _culture);
-        _ = g.TryFormat(gSpan, out var gLen, provider: _culture);
-        _ = b.TryFormat(bSpan, out var bLen, provider: _culture);
+        _ = color.R.TryFormat(rSpan, out var rLen, provider: _culture);
+        _ = color.G.TryFormat(gSpan, out var gLen, provider: _culture);
+        _ = color.B.TryFormat(bSpan, out var bLen, provider: _culture);
 
         return Print(CSI).Print("58;2;").Print(rSpan[..rLen]).Print(";")
             .Print(gSpan[..gLen]).Print(";").Print(bSpan[..bLen]).Print("m");
