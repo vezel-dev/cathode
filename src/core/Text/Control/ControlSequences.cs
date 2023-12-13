@@ -315,6 +315,11 @@ public static class ControlSequences
         return Create(static (cb, color) => cb.SetForegroundColor(color), color);
     }
 
+    public static string SetUnderlineColor(Color color)
+    {
+        return Create(static (cb, color) => cb.SetUnderlineColor(color), color);
+    }
+
     public static string SetDecorations(
         bool intense = false,
         bool faint = false,
