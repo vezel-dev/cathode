@@ -6,6 +6,7 @@
         <Using Include="System.ComponentModel" />
         <Using Include="System.Diagnostics" />
         <Using Include="System.Diagnostics.CodeAnalysis" />
+        <Using Include="System.Drawing" />
         <Using Include="System.Globalization" />
         <Using Include="System.IO.Pipes" />
         <Using Include="System.Numerics" />

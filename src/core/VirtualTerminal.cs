@@ -2,7 +2,7 @@ namespace Vezel.Cathode;
 
 public abstract class VirtualTerminal
 {
-    public abstract event Action<TerminalSize>? Resized;
+    public abstract event Action<Size>? Resized;
 
     public abstract event Action<TerminalSignalContext>? Signaled;
 
@@ -20,7 +20,7 @@ public abstract class VirtualTerminal
 
     public abstract bool IsRawMode { get; }
 
-    public abstract TerminalSize Size { get; }
+    public abstract Size Size { get; }
 
     public abstract void GenerateSignal(TerminalSignal signal);
 

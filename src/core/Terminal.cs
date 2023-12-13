@@ -6,7 +6,7 @@ namespace Vezel.Cathode;
 
 public static class Terminal
 {
-    public static event Action<TerminalSize>? Resized
+    public static event Action<Size>? Resized
     {
         add => System.Resized += value;
         remove => System.Resized -= value;
@@ -46,7 +46,7 @@ public static class Terminal
 
     public static bool IsRawMode => System.IsRawMode;
 
-    public static TerminalSize Size => System.Size;
+    public static Size Size => System.Size;
 
     public static TimeSpan SizePollingInterval
     {

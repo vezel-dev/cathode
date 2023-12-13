@@ -2,7 +2,7 @@ await OutAsync(
     new ControlBuilder()
         .SetScreenBuffer(ScreenBuffer.Alternate)
         .MoveCursorTo(0, 0)
-        .SetScrollMargin(2, Size.Height));
+        .SetScrollMargin(2, Terminal.Size.Height));
 
 try
 {
@@ -11,7 +11,7 @@ try
             .SetDecorations(intense: true)
             .PrintLine("The last string entered will be displayed here.")
             .ResetAttributes()
-            .PrintLine(new string('-', Size.Width)));
+            .PrintLine(new string('-', Terminal.Size.Width)));
 
     var rng = new Random();
 
@@ -43,6 +43,6 @@ finally
 {
     await OutAsync(
         new ControlBuilder()
-            .SetScrollMargin(0, Size.Height)
+            .SetScrollMargin(0, Terminal.Size.Height)
             .SetScreenBuffer(ScreenBuffer.Main));
 }

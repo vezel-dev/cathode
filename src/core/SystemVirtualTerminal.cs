@@ -5,7 +5,7 @@ namespace Vezel.Cathode;
 [SuppressMessage("", "CA1001")]
 public abstract class SystemVirtualTerminal : VirtualTerminal
 {
-    public override event Action<TerminalSize>? Resized
+    public override event Action<Size>? Resized
     {
         add
         {
@@ -92,11 +92,11 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
     public override bool IsRawMode => _rawMode;
 
     [SuppressMessage("", "CA1065")]
-    public override TerminalSize Size
+    public override Size Size
     {
         get
         {
-            if (QuerySize() is TerminalSize s)
+            if (QuerySize() is { } s)
                 _size = s;
 
             return _size ?? throw new TerminalNotAttachedException();
@@ -126,7 +126,7 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
 
     private readonly HashSet<ChildProcess> _processes = [];
 
-    private Action<TerminalSize>? _resized;
+    private Action<Size>? _resized;
 
     private Action<TerminalSignalContext>? _signaled;
 
@@ -140,7 +140,7 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
 
     private bool _rawMode;
 
-    private TerminalSize? _size;
+    private Size? _size;
 
     private TimeSpan _sizeInterval = TimeSpan.FromMilliseconds(100);
 
@@ -165,11 +165,11 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
         thread.Start();
     }
 
-    protected abstract TerminalSize? QuerySize();
+    protected abstract Size? QuerySize();
 
     protected void RefreshSize()
     {
-        if (QuerySize() is not TerminalSize size)
+        if (QuerySize() is not { } size)
         {
             // These environment variables are usually set by shells. Use them as a fallback.
             if (!int.TryParse(Environment.GetEnvironmentVariable("COLUMNS"), out var columns) ||

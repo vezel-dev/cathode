@@ -90,7 +90,7 @@ internal sealed class WindowsVirtualTerminal : NativeVirtualTerminal<SafeHandle>
         }
     }
 
-    protected override TerminalSize? QuerySize()
+    protected override Size? QuerySize()
     {
         return GetConsoleScreenBufferInfo(TerminalOut.Handle, out var info)
             ? new(info.srWindow.Right - info.srWindow.Left + 1, info.srWindow.Bottom - info.srWindow.Top + 1)

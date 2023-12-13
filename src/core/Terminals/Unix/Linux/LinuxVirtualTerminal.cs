@@ -17,7 +17,7 @@ internal sealed class LinuxVirtualTerminal : UnixVirtualTerminal
     {
     }
 
-    protected override TerminalSize? QuerySize()
+    protected override Size? QuerySize()
     {
         return ioctl(TerminalOut.Handle, TIOCGWINSZ, out var w) == 0 ? new(w.ws_col, w.ws_row) : null;
     }
