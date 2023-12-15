@@ -23,9 +23,9 @@
     These imports are required here since we are not consuming the library as a
     PackageReference item.
     -->
-    <Import Project="../core/buildTransitive/Vezel.Cathode.targets" />
-    <Import Project="../extensions/buildTransitive/Vezel.Cathode.Extensions.targets" />
-    <Import Project="../hosting/buildTransitive/Vezel.Cathode.Hosting.targets" />
+    <Import Project="../core/core.targets" />
+    <Import Project="../extensions/extensions.targets" />
+    <Import Project="../hosting/hosting.targets" />
 
     <Import Project="$([MSBuild]::GetPathOfFileAbove('$(MSBuildThisFile)', '$(MSBuildThisFileDirectory)..'))" />
 </Project>

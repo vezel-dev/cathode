@@ -18,13 +18,13 @@ This package provides the core terminal API.</PackageDescription>
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="buildTransitive/**"
+        <None Include="BannedSymbols.txt"
               Pack="true"
-              PackagePath="%(Identity)" />
+              PackagePath="buildTransitive" />
     </ItemGroup>
 
     <ItemGroup>
-        <AdditionalFiles Include="buildTransitive/BannedSymbols.txt" />
+        <AdditionalFiles Include="BannedSymbols.txt" />
     </ItemGroup>
 
     <ItemGroup>
