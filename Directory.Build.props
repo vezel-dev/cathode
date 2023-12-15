@@ -20,11 +20,11 @@
         <PackRelease>false</PackRelease>
         <PackageDescription>$(Description)
 
-With the Windows console host now supporting virtual terminal sequences, it
-makes little sense for console interaction to still be centered around the old
-Windows console host and the many limitations it had. $(Product) provides an API
-centered around a VT100 terminal with some extensions from later models and
-modern terminal emulators. It works on all desktop platforms that .NET supports.</PackageDescription>
+With Windows Terminal having replaced the old Windows console host, it makes
+little sense for console interaction to still be centered around the old console
+host and the many limitations it had. $(Product) provides an API centered around
+a VT100 terminal with some extensions from later models and modern terminal
+emulators. It works on all desktop platforms that .NET supports.</PackageDescription>
         <PackageLicenseExpression>0BSD</PackageLicenseExpression>
         <PackageProjectUrl>https://docs.vezel.dev/cathode</PackageProjectUrl>
         <PolySharpIncludeRuntimeSupportedAttributes>true</PolySharpIncludeRuntimeSupportedAttributes>

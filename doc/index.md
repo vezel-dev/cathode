@@ -3,12 +3,17 @@
 **Cathode** is a toolkit for writing terminal-based applications. It is
 effectively a complete replacement for the .NET console APIs.
 
-With the Windows console host now supporting virtual terminal sequences, it
-makes little sense for console interaction to still be centered around the old
-Windows console host and the many limitations it had. **Cathode** provides an
-API centered around a [VT100 terminal](https://vt100.net) with some extensions
-from later models and modern terminal emulators. It works on all desktop
-platforms that .NET supports.
+With Windows Terminal having replaced the old Windows console host, it makes
+little sense for console interaction to still be centered around the old console
+host and the many limitations it had. **Cathode** provides an API centered
+around a [VT100 terminal](https://vt100.net) with some extensions from later
+models and modern terminal emulators. It works on all desktop platforms that
+.NET supports.
+
+Please note that, since **Cathode** replaces a very fundamental component of the
+framework, the use of certain framework APIs (e.g. `System.Console`) becomes
+problematic. An analyzer will automatically diagnose usage of such APIs and
+suggest working replacements.
 
 ## Terminals
 
@@ -28,7 +33,6 @@ platforms that .NET supports.
 * [Terminal.app](https://support.apple.com/guide/terminal/welcome/mac)
 * [Terminology](https://terminolo.gy)
 * [WezTerm](https://wezfurlong.org/wezterm)
-* [Windows Console](https://learn.microsoft.com/en-us/windows/console)
 * [Windows Terminal](https://aka.ms/terminal)
 * [xterm](https://invisible-island.net/xterm)
 
