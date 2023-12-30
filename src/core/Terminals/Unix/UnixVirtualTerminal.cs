@@ -76,7 +76,7 @@ internal abstract class UnixVirtualTerminal : NativeVirtualTerminal<int>
                 }
 
                 // Do this on the thread pool to avoid breaking internals if an event handler misbehaves.
-                _ = ThreadPool.UnsafeQueueUserWorkItem(term => term.Resumed?.Invoke(), this, true);
+                _ = ThreadPool.UnsafeQueueUserWorkItem(static term => term.Resumed?.Invoke(), this, true);
             }
 
             // Terminal width/height will definitely have changed for SIGWINCH, and might have changed for SIGCONT. On
