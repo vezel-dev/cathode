@@ -18,15 +18,15 @@ public abstract class VirtualTerminal
 
     public abstract TerminalWriter TerminalOut { get; }
 
-    public abstract bool IsRawMode { get; }
-
     public abstract Size Size { get; }
 
-    public abstract void GenerateSignal(TerminalSignal signal);
+    public abstract bool IsRawMode { get; }
 
     public abstract void EnableRawMode();
 
     public abstract void DisableRawMode();
+
+    public abstract void GenerateSignal(TerminalSignal signal);
 
     public int Read(scoped Span<byte> value)
     {

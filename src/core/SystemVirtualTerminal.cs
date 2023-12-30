@@ -5,7 +5,7 @@ namespace Vezel.Cathode;
 [SuppressMessage("", "CA1001")]
 public abstract class SystemVirtualTerminal : VirtualTerminal
 {
-    public override event Action<Size>? Resized
+    public override sealed event Action<Size>? Resized
     {
         add
         {
@@ -30,7 +30,7 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
         }
     }
 
-    public override event Action<TerminalSignalContext>? Signaled
+    public override sealed event Action<TerminalSignalContext>? Signaled
     {
         add
         {
@@ -41,6 +41,7 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
                 if (_signaled == null)
                     return;
 
+                [SuppressMessage("", "CA1065")]
                 void HandleSignal(PosixSignalContext context)
                 {
                     var ctx = new TerminalSignalContext(
@@ -50,7 +51,7 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
                             PosixSignal.SIGINT => TerminalSignal.Interrupt,
                             PosixSignal.SIGQUIT => TerminalSignal.Quit,
                             PosixSignal.SIGTERM => TerminalSignal.Terminate,
-                            _ => throw new NotSupportedException($"Received unexpected signal: {context.Signal}"),
+                            _ => throw new UnreachableException(),
                         });
 
                     _signaled?.Invoke(ctx);
@@ -89,10 +90,17 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
 
     public TerminalControl Control { get; } = new();
 
-    public override bool IsRawMode => _rawMode;
+    public override sealed bool IsRawMode
+    {
+        get
+        {
+            lock (_rawLock)
+                return GetMode();
+        }
+    }
 
     [SuppressMessage("", "CA1065")]
-    public override Size Size
+    public override sealed Size Size
     {
         get
         {
@@ -138,14 +146,15 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
 
     private PosixSignalRegistration? _sigTerm;
 
-    private bool _rawMode;
-
     private Size? _size;
 
     private TimeSpan _sizeInterval = TimeSpan.FromMilliseconds(100);
 
     private protected SystemVirtualTerminal()
     {
+        // Try to get the terminal size as early as reasonably possible.
+        RefreshSize();
+
         var thread = new Thread(() =>
         {
             while (true)
@@ -165,9 +174,9 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
         thread.Start();
     }
 
-    protected abstract Size? QuerySize();
+    private protected abstract Size? QuerySize();
 
-    protected void RefreshSize()
+    private protected void RefreshSize()
     {
         if (QuerySize() is not { } size)
         {
@@ -196,41 +205,45 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
 
         // Do this on the thread pool to avoid breaking internals if an event handler misbehaves.
         _ = ThreadPool.UnsafeQueueUserWorkItem(
-            static tup => Unsafe.As<SystemVirtualTerminal>(tup.terminal)._resized?.Invoke(tup.size),
-            (terminal: this, size),
-            true);
+            static tup => Unsafe.As<SystemVirtualTerminal>(tup.This)._resized?.Invoke(tup.Size),
+            (This: this, Size: size),
+            preferLocal: true);
     }
 
-    protected abstract void SetMode(bool raw);
+    private protected abstract bool GetMode();
 
-    public override void EnableRawMode()
+    private protected abstract void SetMode(bool raw, bool flush);
+
+    private protected void ChangeRawMode(bool raw, bool flush, Action<SystemVirtualTerminal>? check)
     {
-        using var guard = Control.Guard();
-
         lock (_rawLock)
         {
-            Check.Operation(
-                _processes.Count == 0, $"Cannot enable raw mode with non-redirected child processes running.");
+            check?.Invoke(this);
 
-            SetMode(true);
-
-            _rawMode = true;
+            SetMode(raw, flush);
         }
     }
 
-    public override void DisableRawMode()
+    public override sealed void EnableRawMode()
     {
         using var guard = Control.Guard();
 
-        lock (_rawLock)
-        {
-            Check.Operation(
-                _processes.Count == 0, $"Cannot disable raw mode with non-redirected child processes running.");
+        ChangeRawMode(
+            raw: true,
+            flush: true,
+            static @this => Check.Operation(
+                @this._processes.Count == 0, $"Cannot enable raw mode with non-redirected child processes running."));
+    }
 
-            SetMode(false);
+    public override sealed void DisableRawMode()
+    {
+        using var guard = Control.Guard();
 
-            _rawMode = false;
-        }
+        ChangeRawMode(
+            raw: false,
+            flush: true,
+            static @this => Check.Operation(
+                @this._processes.Count == 0, $"Cannot disable raw mode with non-redirected child processes running."));
     }
 
     internal void StartProcess(Func<ChildProcess> starter)
@@ -239,7 +252,7 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
         {
             // The vast majority of programs expect to start in cooked mode. Enforce that we are in cooked mode while
             // any child processes that could be using the terminal are running.
-            Check.Operation(!_rawMode, $"Cannot start non-redirected child processes in raw mode.");
+            Check.Operation(!IsRawMode, $"Cannot start non-redirected child processes in raw mode.");
 
             // Guard here since this locks us into cooked mode until all non-redirected processes are gone.
             using var guard = Control.Guard();
@@ -260,14 +273,11 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
             try
             {
                 // Child processes may have messed up the terminal settings. Restore them just in case.
-                SetMode(false);
+                SetMode(raw: false, flush: true);
             }
             catch (Exception e) when (e is TerminalNotAttachedException or TerminalConfigurationException)
             {
             }
         }
     }
-
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public abstract void DangerousRestoreSettings();
 }

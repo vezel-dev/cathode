@@ -1,16 +1,15 @@
+using Vezel.Cathode.Native;
+
 namespace Vezel.Cathode.Terminals;
 
-internal abstract class NativeTerminalWriter<TTerminal, THandle> : TerminalWriter
-    where TTerminal : NativeVirtualTerminal<THandle>
+internal abstract class NativeTerminalWriter : TerminalWriter
 {
     // Unlike NativeTerminalReader, the buffer size here is arbitrary and only has performance implications.
     private const int WriteBufferSize = 256;
 
-    public TTerminal Terminal { get; }
+    public NativeVirtualTerminal Terminal { get; }
 
-    public string Name { get; }
-
-    public THandle Handle { get; }
+    public nuint Handle { get; }
 
     public override sealed Stream Stream { get; }
 
@@ -20,10 +19,9 @@ internal abstract class NativeTerminalWriter<TTerminal, THandle> : TerminalWrite
 
     public override sealed bool IsInteractive { get; }
 
-    protected NativeTerminalWriter(TTerminal terminal, string name, THandle handle)
+    protected NativeTerminalWriter(NativeVirtualTerminal terminal, nuint handle)
     {
         Terminal = terminal;
-        Name = name;
         Handle = handle;
         Stream = new SynchronizedStream(new TerminalOutputStream(this));
         TextWriter =
@@ -31,8 +29,8 @@ internal abstract class NativeTerminalWriter<TTerminal, THandle> : TerminalWrite
             {
                 AutoFlush = true,
             });
-        IsValid = terminal.IsHandleValid(handle, true);
-        IsInteractive = terminal.IsHandleInteractive(handle);
+        IsValid = TerminalInterop.IsValid(handle, write: true);
+        IsInteractive = TerminalInterop.IsInteractive(handle);
     }
 
     protected abstract int WritePartialNative(scoped ReadOnlySpan<byte> buffer, CancellationToken cancellationToken);

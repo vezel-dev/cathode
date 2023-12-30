@@ -1,5 +1,4 @@
-using Vezel.Cathode.Terminals.Unix.Linux;
-using Vezel.Cathode.Terminals.Unix.MacOS;
+using Vezel.Cathode.Terminals.Unix;
 using Vezel.Cathode.Terminals.Windows;
 
 namespace Vezel.Cathode;
@@ -27,10 +26,9 @@ public static class Terminal
     public static Encoding Encoding { get; } = new UTF8Encoding(false);
 
     public static SystemVirtualTerminal System { get; } =
-        OperatingSystem.IsLinux() ? LinuxVirtualTerminal.Instance :
-        OperatingSystem.IsMacOS() ? MacOSVirtualTerminal.Instance :
-        OperatingSystem.IsWindows() ? WindowsVirtualTerminal.Instance :
-        throw new PlatformNotSupportedException();
+        OperatingSystem.IsWindows()
+            ? WindowsVirtualTerminal.Instance
+            : UnixVirtualTerminal.Instance;
 
     public static TerminalControl Control => System.Control;
 
@@ -238,11 +236,5 @@ public static class Terminal
     public static ValueTask ErrorLineAsync<T>(T value, CancellationToken cancellationToken = default)
     {
         return System.ErrorLineAsync(value, cancellationToken);
-    }
-
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public static void DangerousRestoreSettings()
-    {
-        System.DangerousRestoreSettings();
     }
 }

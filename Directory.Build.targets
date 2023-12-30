@@ -21,7 +21,7 @@
         <Using Include="System.Text" />
     </ItemGroup>
 
-    <ItemGroup>
+    <ItemGroup Condition="'$(UsingVezelZigSdk)' != 'true'">
         <AdditionalFiles Include="$(MSBuildThisFileDirectory).stylecop.json" />
     </ItemGroup>
 

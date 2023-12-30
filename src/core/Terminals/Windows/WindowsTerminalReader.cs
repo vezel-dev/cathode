@@ -1,14 +1,13 @@
-using static Windows.Win32.WindowsPInvoke;
+using Vezel.Cathode.Native;
 
 namespace Vezel.Cathode.Terminals.Windows;
 
-internal sealed class WindowsTerminalReader : NativeTerminalReader<WindowsVirtualTerminal, SafeHandle>
+internal sealed class WindowsTerminalReader : NativeTerminalReader
 {
     private readonly SemaphoreSlim _semaphore;
 
-    public WindowsTerminalReader(
-        WindowsVirtualTerminal terminal, string name, SafeHandle handle, SemaphoreSlim semaphore)
-        : base(terminal, name, handle)
+    public WindowsTerminalReader(WindowsVirtualTerminal terminal, nuint handle, SemaphoreSlim semaphore)
+        : base(terminal, handle)
     {
         _semaphore = semaphore;
     }
@@ -19,18 +18,17 @@ internal sealed class WindowsTerminalReader : NativeTerminalReader<WindowsVirtua
 
         // If the handle is invalid, just present the illusion to the user that it has been redirected to /dev/null or
         // something along those lines, i.e. return EOF.
-        if (buffer.IsEmpty || !IsValid)
+        if (buffer is [] || !IsValid)
             return 0;
 
-        bool result;
-        uint read;
-
         using (_semaphore.Enter(cancellationToken))
-            result = ReadFile(Handle, buffer, &read, null);
+        {
+            int progress;
 
-        if (!result && read == 0)
-            WindowsTerminalUtility.ThrowIfUnexpected($"Could not read from {Name}");
+            fixed (byte* p = buffer)
+                TerminalInterop.Read(Handle, p, buffer.Length, &progress).ThrowIfError();
 
-        return (int)read;
+            return progress;
+        }
     }
 }

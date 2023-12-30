@@ -1,14 +1,13 @@
-using static Windows.Win32.WindowsPInvoke;
+using Vezel.Cathode.Native;
 
 namespace Vezel.Cathode.Terminals.Windows;
 
-internal sealed class WindowsTerminalWriter : NativeTerminalWriter<WindowsVirtualTerminal, SafeHandle>
+internal sealed class WindowsTerminalWriter : NativeTerminalWriter
 {
     private readonly SemaphoreSlim _semaphore;
 
-    public WindowsTerminalWriter(
-        WindowsVirtualTerminal terminal, string name, SafeHandle handle, SemaphoreSlim semaphore)
-        : base(terminal, name, handle)
+    public WindowsTerminalWriter(WindowsVirtualTerminal terminal, nuint handle, SemaphoreSlim semaphore)
+        : base(terminal, handle)
     {
         _semaphore = semaphore;
     }
@@ -20,18 +19,17 @@ internal sealed class WindowsTerminalWriter : NativeTerminalWriter<WindowsVirtua
 
         // If the handle is invalid, just present the illusion to the user that it has been redirected to /dev/null or
         // something along those lines, i.e. pretend we wrote everything.
-        if (buffer.IsEmpty || !IsValid)
+        if (buffer is [] || !IsValid)
             return buffer.Length;
 
-        bool result;
-        uint written;
-
         using (_semaphore.Enter(cancellationToken))
-            result = WriteFile(Handle, buffer, &written, null);
+        {
+            int progress;
 
-        if (!result && written == 0)
-            WindowsTerminalUtility.ThrowIfUnexpected($"Could not write to {Name}");
+            fixed (byte* p = buffer)
+                TerminalInterop.Write(Handle, p, buffer.Length, &progress).ThrowIfError();
 
-        return (int)written;
+            return progress;
+        }
     }
 }

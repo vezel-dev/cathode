@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <AssemblyName>Vezel.Cathode</AssemblyName>
-        <BeforePack>_PackAnalyzer</BeforePack>
         <IsPackable>true</IsPackable>
         <PackageDescription>$(PackageDescription)
 
@@ -28,36 +27,31 @@ This package provides the core terminal API.</PackageDescription>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="../analyzers/analyzers.csproj"
-                          ReferenceOutputAssembly="false" />
         <ProjectReference Include="../common/common.csproj" />
+        <ProjectReference Include="../native/native.cproj"
+                          ReferenceOutputAssembly="false" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers"
                           PrivateAssets="build; contentfiles" />
-        <PackageReference Include="Microsoft.Windows.CsWin32"
-                          PrivateAssets="all" />
-        <PackageReference Include="Microsoft.Windows.SDK.Win32Docs"
-                          PrivateAssets="all" />
-        <PackageReference Include="Microsoft.Windows.SDK.Win32Metadata"
-                          PrivateAssets="all" />
         <PackageReference Include="System.IO.Pipelines" />
         <PackageReference Include="Wcwidth" />
     </ItemGroup>
 
-    <Target Name="_PackAnalyzer">
-        <MSBuild Projects="../analyzers/analyzers.csproj"
-                 Targets="GetTargetPath"
-                 BuildInParallel="$(BuildInParallel)">
+    <Target Name="_AddNativeLibraries"
+            BeforeTargets="AssignTargetPaths; _GetPackageFiles">
+        <MSBuild Projects="../native/native.cproj"
+                 Targets="_GetNativeLibraries">
             <Output TaskParameter="TargetOutputs"
-                    ItemName="_AnalyzerPath" />
+                    ItemName="_NativeLibrary" />
         </MSBuild>
 
         <ItemGroup>
-            <None Include="@(_AnalyzerPath)"
-                  Pack="true"
-                  PackagePath="analyzers/dotnet/cs" />
+            <Content Include="@(_NativeLibrary)"
+                     Link="runtimes/%(RuntimeIdentifier)/native/%(Filename)%(Extension)"
+                     CopyToOutputDirectory="PreserveNewest"
+                     PackagePath="runtimes/%(RuntimeIdentifier)/native" />
         </ItemGroup>
     </Target>
 </Project>

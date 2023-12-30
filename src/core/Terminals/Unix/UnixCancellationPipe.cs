@@ -1,4 +1,4 @@
-using static Vezel.Cathode.Unix.UnixPInvoke;
+using Vezel.Cathode.Native;
 
 namespace Vezel.Cathode.Terminals.Unix;
 
@@ -18,7 +18,7 @@ internal sealed class UnixCancellationPipe
         _client = new(PipeDirection.In, _server.ClientSafePipeHandle);
     }
 
-    public unsafe void PollWithCancellation(int handle, CancellationToken cancellationToken)
+    public unsafe void PollWithCancellation(nuint handle, CancellationToken cancellationToken)
     {
         // Note that the runtime sets up a SIGPIPE handler for us.
 
@@ -29,15 +29,19 @@ internal sealed class UnixCancellationPipe
 
         try
         {
-            var handles = (stackalloc[] { (int)pipeHandle.DangerousGetHandle(), handle });
+            var handles = stackalloc[]
+            {
+                (nuint)pipeHandle.DangerousGetHandle(),
+                handle,
+            };
+            var results = stackalloc bool[2];
 
             using (var registration = cancellationToken.UnsafeRegister(
-                static state => Unsafe.As<UnixCancellationPipe>(state!)._server.WriteByte(42), this))
-                if (!_terminal.PollHandles(null, POLLIN, handles))
-                    return;
+                static @this => Unsafe.As<UnixCancellationPipe>(@this!)._server.WriteByte(42), this))
+                TerminalInterop.Poll(write: false, handles, results, count: 2);
 
             // Were we canceled?
-            if ((handles[0] & POLLIN) != 0)
+            if (results[0])
             {
                 // Read the dummy byte that was written to indicate cancellation.
                 _ = _client.ReadByte();

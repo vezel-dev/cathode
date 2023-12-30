@@ -1,5 +1,6 @@
 /out
 *.user
+.clangd
 .idea
 .vs
 node_modules

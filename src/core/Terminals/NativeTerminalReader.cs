@@ -1,17 +1,16 @@
+using Vezel.Cathode.Native;
+
 namespace Vezel.Cathode.Terminals;
 
-internal abstract class NativeTerminalReader<TTerminal, THandle> : TerminalReader
-    where TTerminal : NativeVirtualTerminal<THandle>
+internal abstract class NativeTerminalReader : TerminalReader
 {
     // Note that the buffer size used affects how many characters the Windows console host will allow the user to type
     // in a single line (in cooked mode).
     private const int ReadBufferSize = 4096;
 
-    public TTerminal Terminal { get; }
+    public NativeVirtualTerminal Terminal { get; }
 
-    public string Name { get; }
-
-    public THandle Handle { get; }
+    public nuint Handle { get; }
 
     public override sealed Stream Stream { get; }
 
@@ -21,17 +20,16 @@ internal abstract class NativeTerminalReader<TTerminal, THandle> : TerminalReade
 
     public override sealed bool IsInteractive { get; }
 
-    protected NativeTerminalReader(TTerminal terminal, string name, THandle handle)
+    protected NativeTerminalReader(NativeVirtualTerminal terminal, nuint handle)
     {
         Terminal = terminal;
-        Name = name;
         Handle = handle;
         Stream = new SynchronizedStream(new TerminalInputStream(this));
         TextReader =
             new SynchronizedTextReader(
                 new StreamReader(Stream, Cathode.Terminal.Encoding, false, ReadBufferSize, true));
-        IsValid = terminal.IsHandleValid(handle, false);
-        IsInteractive = terminal.IsHandleInteractive(handle);
+        IsValid = TerminalInterop.IsValid(handle, write: false);
+        IsInteractive = TerminalInterop.IsInteractive(handle);
     }
 
     protected abstract int ReadPartialNative(scoped Span<byte> buffer, CancellationToken cancellationToken);

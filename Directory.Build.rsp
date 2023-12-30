@@ -1,3 +1,5 @@
--err
+# TODO: https://github.com/ziglang/zig/issues/13385
+# TODO: https://github.com/ziglang/zig/issues/15398
+#-err
 -nr:false
 -tl

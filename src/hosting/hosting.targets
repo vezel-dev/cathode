@@ -1,9 +1,0 @@
-<Project>
-    <ItemGroup Condition="'$(ImplicitUsings)' == 'true' or '$(ImplicitUsings)' == 'enable'">
-        <Using Include="Vezel.Cathode.Hosting" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <AdditionalFiles Include="$(MSBuildThisFileDirectory)BannedSymbols.txt" />
-    </ItemGroup>
-</Project>

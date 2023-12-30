@@ -11,12 +11,8 @@
         This reference is required since we are not consuming the library as a
         PackageReference item.
         -->
-        <ProjectReference Include="$(MSBuildThisFileDirectory)../analyzers/analyzers.csproj"
-                          OutputItemType="Analyzer"
-                          ReferenceOutputAssembly="false" />
         <ProjectReference Include="$(MSBuildThisFileDirectory)../core/core.csproj" />
         <ProjectReference Include="$(MSBuildThisFileDirectory)../extensions/extensions.csproj" />
-        <ProjectReference Include="$(MSBuildThisFileDirectory)../hosting/hosting.csproj" />
     </ItemGroup>
 
     <!--
@@ -25,7 +21,6 @@
     -->
     <Import Project="../core/core.targets" />
     <Import Project="../extensions/extensions.targets" />
-    <Import Project="../hosting/hosting.targets" />
 
     <Import Project="$([MSBuild]::GetPathOfFileAbove('$(MSBuildThisFile)', '$(MSBuildThisFileDirectory)..'))" />
 </Project>

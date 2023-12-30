@@ -18,13 +18,11 @@
         <TrimmerRootAssembly Include="Vezel.Cathode" />
         <TrimmerRootAssembly Include="Vezel.Cathode.Common" />
         <TrimmerRootAssembly Include="Vezel.Cathode.Extensions" />
-        <TrimmerRootAssembly Include="Vezel.Cathode.Hosting" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="../common/common.csproj" />
         <ProjectReference Include="../core/core.csproj" />
         <ProjectReference Include="../extensions/extensions.csproj" />
-        <ProjectReference Include="../hosting/hosting.csproj" />
     </ItemGroup>
 </Project>

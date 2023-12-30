@@ -1,0 +1,53 @@
+<Project Sdk="Vezel.Zig.Sdk">
+    <PropertyGroup>
+        <AssemblyName>Vezel.Cathode.Native</AssemblyName>
+        <DefineConstants>
+            $(DefineConstants);
+            _GNU_SOURCE;
+            _UNICODE;
+            UNICODE;
+            WIN32_LEAN_AND_MEAN
+        </DefineConstants>
+        <!-- TODO: Remove when -err is re-enabled in Directory.Build.rsp. -->
+        <MSBuildTreatWarningsAsErrors>false</MSBuildTreatWarningsAsErrors>
+        <!-- TODO: https://github.com/vezel-dev/zig-sdk/issues/83 -->
+        <RuntimeIdentifiers>
+            linux-arm;
+            linux-arm64;
+            linux-x64;
+            osx-arm64;
+            osx-x64;
+            win-arm64;
+            win-x86;
+            win-x64
+        </RuntimeIdentifiers>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PreludeHeader Include="cathode.h" />
+    </ItemGroup>
+
+    <Target Name="_GetNativeLibrary"
+            Returns="@(_NativeLibrary)">
+        <ItemGroup>
+            <_NativeLibrary Include="$(TargetPath)"
+                            RuntimeIdentifier="$(RuntimeIdentifier)" />
+        </ItemGroup>
+    </Target>
+
+    <Target Name="_GetNativeLibraries"
+            Returns="@(_NativeLibrary)">
+        <ItemGroup>
+            <_RuntimeIdentifiers Include="$(RuntimeIdentifiers)" />
+            <_Projects Include="$(MSBuildProjectFullPath)"
+                       Properties="RuntimeIdentifier=%(_RuntimeIdentifiers.Identity)" />
+        </ItemGroup>
+
+        <MSBuild Projects="@(_Projects)"
+                 Targets="_GetNativeLibrary"
+                 BuildInParallel="$(BuildInParallel)">
+            <Output TaskParameter="TargetOutputs"
+                    ItemName="_NativeLibrary" />
+        </MSBuild>
+    </Target>
+</Project>

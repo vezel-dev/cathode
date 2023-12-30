@@ -46,19 +46,15 @@ This project offers the following packages:
 | Package | Description | Downloads |
 | -: | - | :- |
 | [![Vezel.Cathode][core-img]][core-pkg] | Provides the core terminal API. | ![Downloads][core-dls] |
-| [![Vezel.Cathode.Hosting][hosting-img]][hosting-pkg] | Provides the terminal hosting model. | ![Downloads][hosting-dls] |
 | [![Vezel.Cathode.Extensions][extensions-img]][extensions-pkg] | Provides terminal hosting and logging for the .NET Generic Host. | ![Downloads][extensions-dls] |
 
 [core-pkg]: https://www.nuget.org/packages/Vezel.Cathode
-[hosting-pkg]: https://www.nuget.org/packages/Vezel.Cathode.Hosting
 [extensions-pkg]: https://www.nuget.org/packages/Vezel.Cathode.Extensions
 
 [core-img]: https://img.shields.io/nuget/v/Vezel.Cathode?label=Vezel.Cathode
-[hosting-img]: https://img.shields.io/nuget/v/Vezel.Cathode.Hosting?label=Vezel.Cathode.Hosting
 [extensions-img]: https://img.shields.io/nuget/v/Vezel.Cathode.Extensions?label=Vezel.Cathode.Extensions
 
 [core-dls]: https://img.shields.io/nuget/dt/Vezel.Cathode?label=
-[hosting-dls]: https://img.shields.io/nuget/dt/Vezel.Cathode.Hosting?label=
 [extensions-dls]: https://img.shields.io/nuget/dt/Vezel.Cathode.Extensions?label=
 
 To install a package, run `dotnet add package <name>`.

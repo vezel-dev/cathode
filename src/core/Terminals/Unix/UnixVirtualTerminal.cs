@@ -1,20 +1,10 @@
-using static Vezel.Cathode.Unix.UnixPInvoke;
-
 namespace Vezel.Cathode.Terminals.Unix;
 
-internal abstract class UnixVirtualTerminal : NativeVirtualTerminal<int>
+internal sealed class UnixVirtualTerminal : NativeVirtualTerminal
 {
     public override event Action? Resumed;
 
-    public override sealed UnixTerminalReader StandardIn { get; }
-
-    public override sealed UnixTerminalWriter StandardOut { get; }
-
-    public override sealed UnixTerminalWriter StandardError { get; }
-
-    public override sealed UnixTerminalReader TerminalIn { get; }
-
-    public override sealed UnixTerminalWriter TerminalOut { get; }
+    public static UnixVirtualTerminal Instance { get; } = new();
 
     [SuppressMessage("", "IDE0052")]
     private readonly PosixSignalRegistration _sigWinch;
@@ -25,34 +15,8 @@ internal abstract class UnixVirtualTerminal : NativeVirtualTerminal<int>
     [SuppressMessage("", "IDE0052")]
     private readonly PosixSignalRegistration _sigChld;
 
-    private readonly object _rawLock = new();
-
-    [SuppressMessage("", "CA2214")]
-    protected UnixVirtualTerminal()
+    public unsafe UnixVirtualTerminal()
     {
-        var inLock = new SemaphoreSlim(1, 1);
-        var outLock = new SemaphoreSlim(1, 1);
-
-        StandardIn = new(this, "standard input", STDIN_FILENO, new(this), inLock);
-        StandardOut = new(this, "standard output", STDOUT_FILENO, outLock);
-        StandardError = new(this, "standard error", STDERR_FILENO, outLock);
-
-        var tty = OpenTerminalHandle("/dev/tty");
-
-        TerminalIn = new(this, "terminal input", tty, new(this), inLock);
-        TerminalOut = new(this, "terminal output", tty, outLock);
-
-        try
-        {
-            // Start in cooked mode.
-            SetModeCore(false, false);
-        }
-        catch (Exception e) when (e is TerminalNotAttachedException or TerminalConfigurationException)
-        {
-        }
-
-        RefreshSize();
-
         void HandleSignal(PosixSignalContext context)
         {
             // If we are being restored from the background (SIGCONT), it is possible and likely that terminal settings
@@ -60,13 +24,12 @@ internal abstract class UnixVirtualTerminal : NativeVirtualTerminal<int>
             //
             // This is a best-effort thing. The reality is that, since this signal handler method gets called in a
             // thread after the process has fully woken up, other code may already be trying to interact with the
-            // terminal again. There is currently nothing we can really do about this race condition.
+            // terminal again. There is nothing we can really do about this race condition.
             if (context.Signal == PosixSignal.SIGCONT)
             {
                 try
                 {
-                    lock (_rawLock)
-                        SetModeCore(IsRawMode, false);
+                    ChangeRawMode(IsRawMode, flush: false, check: null);
                 }
                 catch (Exception e) when (e is TerminalNotAttachedException or TerminalConfigurationException)
                 {
@@ -76,13 +39,13 @@ internal abstract class UnixVirtualTerminal : NativeVirtualTerminal<int>
                 }
 
                 // Do this on the thread pool to avoid breaking internals if an event handler misbehaves.
-                _ = ThreadPool.UnsafeQueueUserWorkItem(static term => term.Resumed?.Invoke(), this, true);
+                _ = ThreadPool.UnsafeQueueUserWorkItem(
+                    static @this => @this.Resumed?.Invoke(), this, preferLocal: true);
             }
 
-            // Terminal width/height will definitely have changed for SIGWINCH, and might have changed for SIGCONT. On
-            // Unix systems, SIGWINCH lets us respond much more quickly to a change in terminal size.
-            if (context.Signal is PosixSignal.SIGWINCH or PosixSignal.SIGCONT)
-                RefreshSize();
+            // Terminal width/height will definitely have changed for SIGWINCH, and might have changed for SIGCONT and
+            // SIGCHLD. On Unix systems, signals let us respond much more quickly to a change in terminal size.
+            RefreshSize();
 
             // Prevent System.Native from overwriting our terminal settings.
             context.Cancel = true;
@@ -94,44 +57,13 @@ internal abstract class UnixVirtualTerminal : NativeVirtualTerminal<int>
         _sigChld = PosixSignalRegistration.Create(PosixSignal.SIGCHLD, HandleSignal);
     }
 
-    public override sealed void GenerateSignal(TerminalSignal signal)
+    protected override UnixTerminalReader CreateReader(nuint handle, SemaphoreSlim semaphore)
     {
-        using var guard = Control.Guard();
-
-        _ = kill(
-            0,
-            signal switch
-            {
-                TerminalSignal.Close => SIGHUP,
-                TerminalSignal.Interrupt => SIGINT,
-                TerminalSignal.Quit => SIGQUIT,
-                TerminalSignal.Terminate => SIGTERM,
-                _ => throw new ArgumentOutOfRangeException(nameof(signal)),
-            });
+        return new(this, handle, new(this), semaphore);
     }
 
-    protected abstract void SetModeCore(bool raw, bool flush);
-
-    protected override sealed void SetMode(bool raw)
+    protected override UnixTerminalWriter CreateWriter(nuint handle, SemaphoreSlim semaphore)
     {
-        // We can be called from signal handlers so we need an additional lock here.
-        lock (_rawLock)
-            SetModeCore(raw, true);
-    }
-
-    public abstract int OpenTerminalHandle(string name);
-
-    public abstract bool PollHandles(int? error, short events, scoped Span<int> handles);
-
-    public override sealed bool IsHandleValid(int handle, bool write)
-    {
-        // We might obtain a negative descriptor (-1) if we fail to open /dev/tty, for example.
-        return handle >= 0;
-    }
-
-    public override sealed bool IsHandleInteractive(int handle)
-    {
-        // Note that this also returns false for invalid descriptors.
-        return isatty(handle) == 1;
+        return new(this, handle, semaphore);
     }
 }

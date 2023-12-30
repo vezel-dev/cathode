@@ -1,56 +1,40 @@
-using static Vezel.Cathode.Unix.UnixPInvoke;
+using Vezel.Cathode.Native;
 
 namespace Vezel.Cathode.Terminals.Unix;
 
-internal sealed class UnixTerminalReader : NativeTerminalReader<UnixVirtualTerminal, int>
+internal sealed class UnixTerminalReader : NativeTerminalReader
 {
     private readonly SemaphoreSlim _semaphore;
 
     private readonly UnixCancellationPipe _cancellationPipe;
 
     public UnixTerminalReader(
-        UnixVirtualTerminal terminal,
-        string name,
-        int handle,
-        UnixCancellationPipe cancellationPipe,
-        SemaphoreSlim semaphore)
-        : base(terminal, name, handle)
+        UnixVirtualTerminal terminal, nuint handle, UnixCancellationPipe cancellationPipe, SemaphoreSlim semaphore)
+        : base(terminal, handle)
     {
         _semaphore = semaphore;
         _cancellationPipe = cancellationPipe;
     }
 
-    protected override int ReadPartialNative(scoped Span<byte> buffer, CancellationToken cancellationToken)
+    protected override unsafe int ReadPartialNative(scoped Span<byte> buffer, CancellationToken cancellationToken)
     {
         using var guard = Terminal.Control.Guard();
 
         // If the descriptor is invalid, just present the illusion to the user that it has been redirected to /dev/null
         // or something along those lines, i.e. return EOF.
-        if (buffer.IsEmpty || !IsValid)
+        if (buffer is [] || !IsValid)
             return 0;
 
         using (_semaphore.Enter(cancellationToken))
         {
             _cancellationPipe.PollWithCancellation(Handle, cancellationToken);
 
-            nint ret;
+            int progress;
 
-            // Note that this call may get us suspended by way of a SIGTTIN signal if we are a background process and
-            // the handle refers to a terminal.
-            while ((ret = read(Handle, buffer, (nuint)buffer.Length)) == -1 && Marshal.GetLastPInvokeError() == EINTR)
-            {
-                // Retry in case we get interrupted by a signal.
-            }
+            fixed (byte* p = buffer)
+                TerminalInterop.Read(Handle, p, buffer.Length, &progress).ThrowIfError();
 
-            if (ret != -1)
-                return (int)ret;
-
-            var err = Marshal.GetLastPInvokeError();
-
-            // EPIPE means the descriptor was probably redirected to a program that ended.
-            return err == EPIPE
-                ? 0
-                : throw new TerminalException($"Could not read from {Name}: {new Win32Exception(err).Message}");
+            return progress;
         }
     }
 }
