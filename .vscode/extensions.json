@@ -1,5 +1,6 @@
 {
   "recommendations": [
+    "cake-build.cake-vscode",
     "chdsbd.github-code-owners",
     "codezombiech.gitignore",
     "davidanson.vscode-markdownlint",
