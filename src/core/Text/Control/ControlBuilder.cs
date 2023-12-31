@@ -699,6 +699,21 @@ public sealed class ControlBuilder
         return Print(OSC).Print("8;;").Print(ST);
     }
 
+    public ControlBuilder SetWorkingDirectory(Uri uri)
+    {
+        Check.Null(uri);
+        Check.Argument(uri.Scheme == Uri.UriSchemeFile, uri);
+
+        return Print(OSC).Print("7").Print(uri).Print(ST);
+    }
+
+    public ControlBuilder SetWorkingDirectory(scoped ReadOnlySpan<char> path)
+    {
+        Check.Argument(!path.IsEmpty, path);
+
+        return Print(OSC).Print("9;9;").Print("\"").Print(path).Print("\"").Print(ST);
+    }
+
     public ControlBuilder BeginShellPrompt()
     {
         return Print(OSC).Print("133;A").Print(ST);

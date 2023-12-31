@@ -367,6 +367,16 @@ public static class ControlSequences
         return Create(static (cb, id, uri) => cb.OpenHyperlink(uri, id), id, uri);
     }
 
+    public static string SetWorkingDirectory(Uri uri)
+    {
+        return Create(static (cb, uri) => cb.SetWorkingDirectory(uri), uri);
+    }
+
+    public static string SetWorkingDirectory(scoped ReadOnlySpan<char> path)
+    {
+        return Create(static (cb, path) => cb.SetWorkingDirectory(path), path);
+    }
+
     public static string CloseHyperlink()
     {
         return Create(static cb => cb.CloseHyperlink());
