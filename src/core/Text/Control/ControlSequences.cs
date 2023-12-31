@@ -372,6 +372,26 @@ public static class ControlSequences
         return Create(static cb => cb.CloseHyperlink());
     }
 
+    public static string BeginShellPrompt()
+    {
+        return Create(static cb => cb.BeginShellPrompt());
+    }
+
+    public static string EndShellPrompt()
+    {
+        return Create(static cb => cb.EndShellPrompt());
+    }
+
+    public static string BeginShellExecution()
+    {
+        return Create(static cb => cb.BeginShellExecution());
+    }
+
+    public static string EndShellExecution(int? code = null)
+    {
+        return Create(static (cb, code) => cb.EndShellExecution(code), code);
+    }
+
     public static string SaveScreenshot(ScreenshotFormat format = ScreenshotFormat.Html)
     {
         return Create(static (cb, format) => cb.SaveScreenshot(format), format);

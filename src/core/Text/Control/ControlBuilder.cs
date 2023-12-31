@@ -699,6 +699,37 @@ public sealed class ControlBuilder
         return Print(OSC).Print("8;;").Print(ST);
     }
 
+    public ControlBuilder BeginShellPrompt()
+    {
+        return Print(OSC).Print("133;A").Print(ST);
+    }
+
+    public ControlBuilder EndShellPrompt()
+    {
+        return Print(OSC).Print("133;B").Print(ST);
+    }
+
+    public ControlBuilder BeginShellExecution()
+    {
+        return Print(OSC).Print("133;C").Print(ST);
+    }
+
+    public ControlBuilder EndShellExecution(int? code = null)
+    {
+        _ = Print(OSC).Print("133;D");
+
+        if (code is { } c)
+        {
+            var codeSpan = (stackalloc char[StackBufferSize]);
+
+            _ = c.TryFormat(codeSpan, out var codeLen, provider: _culture);
+
+            _ = Print(";").Print(codeSpan[..codeLen]);
+        }
+
+        return Print(ST);
+    }
+
     public ControlBuilder SaveScreenshot(ScreenshotFormat format = ScreenshotFormat.Html)
     {
         Check.Enum(format);
