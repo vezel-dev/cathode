@@ -5,6 +5,7 @@ These are helpful resources used in the development of the project:
 * <https://bjh21.me.uk/all-escapes/all-escapes.txt>
 * <https://codeberg.org/dnkl/foot/src/branch/master/doc/foot-ctlseqs.7.scd>
 * <https://conemu.github.io/en/AnsiEscapeCodes.html>
+* <https://contour-terminal.org/vt-extensions>
 * <https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences>
 * <https://en.wikipedia.org/wiki/ANSI_escape_code>
 * <https://en.wikipedia.org/wiki/C0_and_C1_control_codes>
