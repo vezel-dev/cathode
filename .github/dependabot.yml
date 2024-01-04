@@ -8,7 +8,7 @@ updates:
           timezone: Europe/Copenhagen
           time: "12:00"
       labels: []
-    - directory: /
+    - directory: /doc
       package-ecosystem: npm
       schedule:
           interval: daily
