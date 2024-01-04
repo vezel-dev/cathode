@@ -13,7 +13,7 @@
         <GlobalPackageReference Include="PolySharp"
                                 Version="1.14.1" />
         <GlobalPackageReference Include="StyleCop.Analyzers"
-                                Version="1.2.0-beta.507" />
+                                Version="1.2.0-beta.556" />
     </ItemGroup>
 
     <ItemGroup>
