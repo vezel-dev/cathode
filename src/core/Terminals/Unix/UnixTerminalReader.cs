@@ -4,16 +4,14 @@ namespace Vezel.Cathode.Terminals.Unix;
 
 internal sealed class UnixTerminalReader : NativeTerminalReader
 {
+    private readonly UnixCancellationPipe _cancellationPipe = new(write: false);
+
     private readonly SemaphoreSlim _semaphore;
 
-    private readonly UnixCancellationPipe _cancellationPipe;
-
-    public UnixTerminalReader(
-        UnixVirtualTerminal terminal, nuint handle, UnixCancellationPipe cancellationPipe, SemaphoreSlim semaphore)
+    public UnixTerminalReader(UnixVirtualTerminal terminal, nuint handle, SemaphoreSlim semaphore)
         : base(terminal, handle)
     {
         _semaphore = semaphore;
-        _cancellationPipe = cancellationPipe;
     }
 
     protected override unsafe int ReadPartialNative(scoped Span<byte> buffer, CancellationToken cancellationToken)

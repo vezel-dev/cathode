@@ -59,7 +59,7 @@ internal sealed class UnixVirtualTerminal : NativeVirtualTerminal
 
     protected override UnixTerminalReader CreateReader(nuint handle, SemaphoreSlim semaphore)
     {
-        return new(this, handle, new(this), semaphore);
+        return new(this, handle, semaphore);
     }
 
     protected override UnixTerminalWriter CreateWriter(nuint handle, SemaphoreSlim semaphore)

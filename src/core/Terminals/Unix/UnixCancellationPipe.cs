@@ -5,17 +5,17 @@ namespace Vezel.Cathode.Terminals.Unix;
 [SuppressMessage("", "CA1001")]
 internal sealed class UnixCancellationPipe
 {
-    private readonly UnixVirtualTerminal _terminal;
-
     private readonly AnonymousPipeServerStream _server;
 
     private readonly AnonymousPipeClientStream _client;
 
-    public UnixCancellationPipe(UnixVirtualTerminal terminal)
+    private readonly bool _write;
+
+    public UnixCancellationPipe(bool write)
     {
-        _terminal = terminal;
         _server = new(PipeDirection.Out);
         _client = new(PipeDirection.In, _server.ClientSafePipeHandle);
+        _write = write;
     }
 
     public unsafe void PollWithCancellation(nuint handle, CancellationToken cancellationToken)
@@ -38,7 +38,7 @@ internal sealed class UnixCancellationPipe
 
             using (var registration = cancellationToken.UnsafeRegister(
                 static @this => Unsafe.As<UnixCancellationPipe>(@this!)._server.WriteByte(42), this))
-                TerminalInterop.Poll(write: false, handles, results, count: 2);
+                TerminalInterop.Poll(_write, handles, results, count: 2);
 
             // Were we canceled?
             if (results[0])

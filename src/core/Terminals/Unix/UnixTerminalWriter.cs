@@ -4,6 +4,8 @@ namespace Vezel.Cathode.Terminals.Unix;
 
 internal sealed class UnixTerminalWriter : NativeTerminalWriter
 {
+    private readonly UnixCancellationPipe _cancellationPipe = new(write: true);
+
     private readonly SemaphoreSlim _semaphore;
 
     public UnixTerminalWriter(UnixVirtualTerminal terminal, nuint handle, SemaphoreSlim semaphore)
@@ -23,6 +25,8 @@ internal sealed class UnixTerminalWriter : NativeTerminalWriter
 
         using (_semaphore.Enter(cancellationToken))
         {
+            _cancellationPipe.PollWithCancellation(Handle, cancellationToken);
+
             int progress;
 
             fixed (byte* p = buffer)
