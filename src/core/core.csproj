@@ -52,6 +52,11 @@ This package provides the core terminal API.</PackageDescription>
                      Link="runtimes/%(RuntimeIdentifier)/native/%(Filename)%(Extension)"
                      CopyToOutputDirectory="PreserveNewest"
                      PackagePath="runtimes/%(RuntimeIdentifier)/native" />
+            <_NativeLibrarySymbols Include="@(_NativeLibrary->'%(Symbols)')" />
+            <Content Include="@(_NativeLibrarySymbols)"
+                     Link="runtimes/%(RuntimeIdentifier)/native/%(Filename)%(Extension)"
+                     CopyToOutputDirectory="PreserveNewest"
+                     PackagePath="runtimes/%(RuntimeIdentifier)/native" />
         </ItemGroup>
     </Target>
 </Project>
