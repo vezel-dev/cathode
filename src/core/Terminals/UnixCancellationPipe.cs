@@ -1,6 +1,6 @@
 using Vezel.Cathode.Native;
 
-namespace Vezel.Cathode.Terminals.Unix;
+namespace Vezel.Cathode.Terminals;
 
 [SuppressMessage("", "CA1001")]
 internal sealed class UnixCancellationPipe

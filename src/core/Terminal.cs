@@ -1,5 +1,4 @@
-using Vezel.Cathode.Terminals.Unix;
-using Vezel.Cathode.Terminals.Windows;
+using Vezel.Cathode.Terminals;
 
 namespace Vezel.Cathode;
 

@@ -1,4 +1,4 @@
-namespace Vezel.Cathode.Terminals.Unix;
+namespace Vezel.Cathode.Terminals;
 
 internal sealed class UnixVirtualTerminal : NativeVirtualTerminal
 {
@@ -57,13 +57,17 @@ internal sealed class UnixVirtualTerminal : NativeVirtualTerminal
         _sigChld = PosixSignalRegistration.Create(PosixSignal.SIGCHLD, HandleSignal);
     }
 
-    protected override UnixTerminalReader CreateReader(nuint handle, SemaphoreSlim semaphore)
+    protected override NativeTerminalReader CreateReader(nuint handle, SemaphoreSlim semaphore)
     {
-        return new(this, handle, semaphore);
+        var pipe = new UnixCancellationPipe(write: false);
+
+        return new(this, handle, semaphore, cancellationHook: pipe.PollWithCancellation);
     }
 
-    protected override UnixTerminalWriter CreateWriter(nuint handle, SemaphoreSlim semaphore)
+    protected override NativeTerminalWriter CreateWriter(nuint handle, SemaphoreSlim semaphore)
     {
-        return new(this, handle, semaphore);
+        var pipe = new UnixCancellationPipe(write: true);
+
+        return new(this, handle, semaphore, cancellationHook: pipe.PollWithCancellation);
     }
 }

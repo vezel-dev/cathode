@@ -1,4 +1,4 @@
-namespace Vezel.Cathode.Terminals.Windows;
+namespace Vezel.Cathode.Terminals;
 
 internal sealed class WindowsVirtualTerminal : NativeVirtualTerminal
 {
@@ -20,13 +20,13 @@ internal sealed class WindowsVirtualTerminal : NativeVirtualTerminal
     {
     }
 
-    protected override WindowsTerminalReader CreateReader(nuint handle, SemaphoreSlim semaphore)
+    protected override NativeTerminalReader CreateReader(nuint handle, SemaphoreSlim semaphore)
     {
-        return new(this, handle, semaphore);
+        return new(this, handle, semaphore, cancellationHook: null);
     }
 
-    protected override WindowsTerminalWriter CreateWriter(nuint handle, SemaphoreSlim semaphore)
+    protected override NativeTerminalWriter CreateWriter(nuint handle, SemaphoreSlim semaphore)
     {
-        return new(this, handle, semaphore);
+        return new(this, handle, semaphore, cancellationHook: null);
     }
 }
