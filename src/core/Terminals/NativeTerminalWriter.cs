@@ -2,22 +2,22 @@ using Vezel.Cathode.Native;
 
 namespace Vezel.Cathode.Terminals;
 
-internal sealed class NativeTerminalWriter : TerminalWriter
+internal sealed unsafe class NativeTerminalWriter : TerminalWriter
 {
     // Unlike NativeTerminalReader, the buffer size here is arbitrary and only has performance implications.
     private const int WriteBufferSize = 256;
 
     public NativeVirtualTerminal Terminal { get; }
 
-    public nuint Handle { get; }
+    public TerminalInterop.TerminalDescriptor* Descriptor { get; }
 
-    public override sealed Stream Stream { get; }
+    public override Stream Stream { get; }
 
-    public override sealed TextWriter TextWriter { get; }
+    public override TextWriter TextWriter { get; }
 
-    public override sealed bool IsValid { get; }
+    public override bool IsValid { get; }
 
-    public override sealed bool IsInteractive { get; }
+    public override bool IsInteractive { get; }
 
     private readonly SemaphoreSlim _semaphore;
 
@@ -25,12 +25,12 @@ internal sealed class NativeTerminalWriter : TerminalWriter
 
     public NativeTerminalWriter(
         NativeVirtualTerminal terminal,
-        nuint handle,
+        TerminalInterop.TerminalDescriptor* descriptor,
         SemaphoreSlim semaphore,
         Action<nuint, CancellationToken>? cancellationHook)
     {
         Terminal = terminal;
-        Handle = handle;
+        Descriptor = descriptor;
         _semaphore = semaphore;
         _cancellationHook = cancellationHook;
         Stream = new SynchronizedStream(new TerminalOutputStream(this));
@@ -39,11 +39,11 @@ internal sealed class NativeTerminalWriter : TerminalWriter
             {
                 AutoFlush = true,
             });
-        IsValid = TerminalInterop.IsValid(handle, write: true);
-        IsInteractive = TerminalInterop.IsInteractive(handle);
+        IsValid = TerminalInterop.IsValid(descriptor, write: true);
+        IsInteractive = TerminalInterop.IsInteractive(descriptor);
     }
 
-    private unsafe int WritePartialNative(scoped ReadOnlySpan<byte> buffer, CancellationToken cancellationToken)
+    private int WritePartialNative(scoped ReadOnlySpan<byte> buffer, CancellationToken cancellationToken)
     {
         using var guard = Terminal.Control.Guard();
 
@@ -54,12 +54,12 @@ internal sealed class NativeTerminalWriter : TerminalWriter
 
         using (_semaphore.Enter(cancellationToken))
         {
-            _cancellationHook?.Invoke(Handle, cancellationToken);
+            _cancellationHook?.Invoke((nuint)Descriptor, cancellationToken);
 
             int progress;
 
             fixed (byte* p = buffer)
-                TerminalInterop.Write(Handle, p, buffer.Length, &progress).ThrowIfError();
+                TerminalInterop.Write(Descriptor, p, buffer.Length, &progress).ThrowIfError();
 
             return progress;
         }

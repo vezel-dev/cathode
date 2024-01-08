@@ -2,6 +2,11 @@ namespace Vezel.Cathode.Native;
 
 internal static unsafe partial class TerminalInterop
 {
+    [StructLayout(LayoutKind.Sequential)]
+    public struct TerminalDescriptor
+    {
+    }
+
     public enum TerminalException
     {
         None,
@@ -98,19 +103,24 @@ internal static unsafe partial class TerminalInterop
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void Initialize();
 
-    [LibraryImport(Library, EntryPoint = "cathode_get_handles")]
+    [LibraryImport(Library, EntryPoint = "cathode_get_descriptors")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void GetHandles(nuint* stdIn, nuint* stdOut, nuint* stdErr, nuint* ttyIn, nuint* ttyOut);
+    public static partial void GetDescriptors(
+        TerminalDescriptor** stdIn,
+        TerminalDescriptor** stdOut,
+        TerminalDescriptor** stdErr,
+        TerminalDescriptor** ttyIn,
+        TerminalDescriptor** ttyOut);
 
     [LibraryImport(Library, EntryPoint = "cathode_is_valid")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.U1)]
-    public static partial bool IsValid(nuint handle, [MarshalAs(UnmanagedType.U1)] bool write);
+    public static partial bool IsValid(TerminalDescriptor* descriptor, [MarshalAs(UnmanagedType.U1)] bool write);
 
     [LibraryImport(Library, EntryPoint = "cathode_is_interactive")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.U1)]
-    public static partial bool IsInteractive(nuint handle);
+    public static partial bool IsInteractive(TerminalDescriptor* descriptor);
 
     [LibraryImport(Library, EntryPoint = "cathode_query_size")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -133,13 +143,13 @@ internal static unsafe partial class TerminalInterop
 
     [LibraryImport(Library, EntryPoint = "cathode_read")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial TerminalResult Read(nuint handle, byte* buffer, int length, int* progress);
+    public static partial TerminalResult Read(TerminalDescriptor* descriptor, byte* buffer, int length, int* progress);
 
     [LibraryImport(Library, EntryPoint = "cathode_write")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial TerminalResult Write(nuint handle, byte* buffer, int length, int* progress);
+    public static partial TerminalResult Write(TerminalDescriptor* descriptor, byte* buffer, int length, int* progress);
 
     [LibraryImport(Library, EntryPoint = "cathode_poll")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void Poll([MarshalAs(UnmanagedType.U1)] bool write, nuint* handles, bool* results, int count);
+    public static partial void Poll([MarshalAs(UnmanagedType.U1)] bool write, int* fds, bool* results, int count);
 }

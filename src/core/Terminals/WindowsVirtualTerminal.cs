@@ -20,13 +20,8 @@ internal sealed class WindowsVirtualTerminal : NativeVirtualTerminal
     {
     }
 
-    protected override NativeTerminalReader CreateReader(nuint handle, SemaphoreSlim semaphore)
+    protected override unsafe Action<nuint, CancellationToken>? CreateCancellationHook(bool write)
     {
-        return new(this, handle, semaphore, cancellationHook: null);
-    }
-
-    protected override NativeTerminalWriter CreateWriter(nuint handle, SemaphoreSlim semaphore)
-    {
-        return new(this, handle, semaphore, cancellationHook: null);
+        return null;
     }
 }

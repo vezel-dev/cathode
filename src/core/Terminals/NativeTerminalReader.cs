@@ -2,7 +2,7 @@ using Vezel.Cathode.Native;
 
 namespace Vezel.Cathode.Terminals;
 
-internal sealed class NativeTerminalReader : TerminalReader
+internal sealed unsafe class NativeTerminalReader : TerminalReader
 {
     // Note that the buffer size used affects how many characters the Windows console host will allow the user to type
     // in a single line (in cooked mode).
@@ -10,15 +10,15 @@ internal sealed class NativeTerminalReader : TerminalReader
 
     public NativeVirtualTerminal Terminal { get; }
 
-    public nuint Handle { get; }
+    public TerminalInterop.TerminalDescriptor* Descriptor { get; }
 
-    public override sealed Stream Stream { get; }
+    public override Stream Stream { get; }
 
-    public override sealed TextReader TextReader { get; }
+    public override TextReader TextReader { get; }
 
-    public override sealed bool IsValid { get; }
+    public override bool IsValid { get; }
 
-    public override sealed bool IsInteractive { get; }
+    public override bool IsInteractive { get; }
 
     private readonly SemaphoreSlim _semaphore;
 
@@ -26,23 +26,23 @@ internal sealed class NativeTerminalReader : TerminalReader
 
     public NativeTerminalReader(
         NativeVirtualTerminal terminal,
-        nuint handle,
+        TerminalInterop.TerminalDescriptor* descriptor,
         SemaphoreSlim semaphore,
         Action<nuint, CancellationToken>? cancellationHook)
     {
         Terminal = terminal;
-        Handle = handle;
+        Descriptor = descriptor;
         _semaphore = semaphore;
         _cancellationHook = cancellationHook;
         Stream = new SynchronizedStream(new TerminalInputStream(this));
         TextReader =
             new SynchronizedTextReader(
                 new StreamReader(Stream, Cathode.Terminal.Encoding, false, ReadBufferSize, true));
-        IsValid = TerminalInterop.IsValid(handle, write: false);
-        IsInteractive = TerminalInterop.IsInteractive(handle);
+        IsValid = TerminalInterop.IsValid(descriptor, write: false);
+        IsInteractive = TerminalInterop.IsInteractive(descriptor);
     }
 
-    private unsafe int ReadPartialNative(scoped Span<byte> buffer, CancellationToken cancellationToken)
+    private int ReadPartialNative(scoped Span<byte> buffer, CancellationToken cancellationToken)
     {
         using var guard = Terminal.Control.Guard();
 
@@ -53,12 +53,12 @@ internal sealed class NativeTerminalReader : TerminalReader
 
         using (_semaphore.Enter(cancellationToken))
         {
-            _cancellationHook?.Invoke(Handle, cancellationToken);
+            _cancellationHook?.Invoke((nuint)Descriptor, cancellationToken);
 
             int progress;
 
             fixed (byte* p = buffer)
-                TerminalInterop.Read(Handle, p, buffer.Length, &progress).ThrowIfError();
+                TerminalInterop.Read(Descriptor, p, buffer.Length, &progress).ThrowIfError();
 
             return progress;
         }

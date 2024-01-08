@@ -4,17 +4,22 @@
 
 #include "driver-windows.h"
 
-typedef struct {
+struct TerminalDescriptor
+{
     HANDLE handle;
+};
+
+typedef struct {
+    TerminalDescriptor descriptor;
     DWORD original_mode;
     UINT original_code_page;
 } ConsoleState;
 
-static HANDLE stdio_in;
-static HANDLE stdio_out;
-static HANDLE stdio_err;
-static ConsoleState in_state;
-static ConsoleState out_state;
+static TerminalDescriptor stdio_in;
+static TerminalDescriptor stdio_out;
+static TerminalDescriptor stdio_err;
+static ConsoleState con_in;
+static ConsoleState con_out;
 static bool original_state_saved;
 static bool raw_mode;
 
@@ -53,40 +58,43 @@ static HANDLE open_console_handle(const wchar_t *nonnull name)
 [[gnu::constructor]]
 static void constructor(void)
 {
-    stdio_in = open_stdio_handle(STD_INPUT_HANDLE);
-    stdio_out = open_stdio_handle(STD_OUTPUT_HANDLE);
-    stdio_err = open_stdio_handle(STD_ERROR_HANDLE);
-    in_state.handle = open_console_handle(u"CONIN$");
-    out_state.handle = open_console_handle(u"CONOUT$");
+    stdio_in.handle = open_stdio_handle(STD_INPUT_HANDLE);
+    stdio_out.handle = open_stdio_handle(STD_OUTPUT_HANDLE);
+    stdio_err.handle = open_stdio_handle(STD_ERROR_HANDLE);
+    con_in.descriptor.handle = open_console_handle(u"CONIN$");
+    con_out.descriptor.handle = open_console_handle(u"CONOUT$");
 }
 
 [[gnu::destructor]]
 static void destructor(void)
 {
+    HANDLE in = con_in.descriptor.handle;
+    HANDLE out = con_out.descriptor.handle;
+
     if (original_state_saved)
     {
-        SetConsoleMode(in_state.handle, in_state.original_mode);
-        SetConsoleMode(out_state.handle, out_state.original_mode);
+        SetConsoleMode(in, con_in.original_mode);
+        SetConsoleMode(out, con_out.original_mode);
 
-        SetConsoleCP(in_state.original_code_page);
-        SetConsoleOutputCP(out_state.original_code_page);
+        SetConsoleCP(con_in.original_code_page);
+        SetConsoleOutputCP(con_out.original_code_page);
     }
 
     // CloseHandle will throw an exception under a debugger if the given handle is invalid, so check first.
 
-    if (in_state.handle)
-        CloseHandle(in_state.handle);
+    if (in)
+        CloseHandle(in);
 
-    if (out_state.handle)
-        CloseHandle(out_state.handle);
+    if (out)
+        CloseHandle(out);
 }
 
-void cathode_get_handles(
-    size_t *nonnull std_in,
-    size_t *nonnull std_out,
-    size_t *nonnull std_err,
-    size_t *nonnull tty_in,
-    size_t *nonnull tty_out)
+void cathode_get_descriptors(
+    TerminalDescriptor *nonnull *nonnull std_in,
+    TerminalDescriptor *nonnull *nonnull std_out,
+    TerminalDescriptor *nonnull *nonnull std_err,
+    TerminalDescriptor *nonnull *nonnull tty_in,
+    TerminalDescriptor *nonnull *nonnull tty_out)
 {
     assert(std_in);
     assert(std_out);
@@ -94,16 +102,18 @@ void cathode_get_handles(
     assert(tty_in);
     assert(tty_out);
 
-    *std_in = (size_t)stdio_in;
-    *std_out = (size_t)stdio_out;
-    *std_err = (size_t)stdio_err;
-    *tty_in = (size_t)in_state.handle;
-    *tty_out = (size_t)out_state.handle;
+    *std_in = &stdio_in;
+    *std_out = &stdio_out;
+    *std_err = &stdio_err;
+    *tty_in = &con_in.descriptor;
+    *tty_out = &con_out.descriptor;
 }
 
-bool cathode_is_valid(size_t handle, bool write)
+bool cathode_is_valid(const TerminalDescriptor *nonnull descriptor, bool write)
 {
-    if (!handle)
+    assert(descriptor);
+
+    if (!descriptor->handle)
         return false;
 
     // Apparently, for Windows GUI programs, the standard I/O handles will appear to be valid (i.e. not -1 or 0) but
@@ -112,18 +122,20 @@ bool cathode_is_valid(size_t handle, bool write)
     {
         DWORD written;
 
-        return WriteFile((HANDLE)handle, nullptr, 0, &written, nullptr);
+        return WriteFile(descriptor->handle, nullptr, 0, &written, nullptr);
     }
 
     return true;
 }
 
-bool cathode_is_interactive(size_t handle)
+bool cathode_is_interactive(const TerminalDescriptor *nonnull descriptor)
 {
+    assert(descriptor);
+
     DWORD mode;
 
     // Note that this also returns true for invalid handles.
-    return GetFileType((HANDLE)handle) == FILE_TYPE_CHAR && GetConsoleMode((HANDLE)handle, &mode);
+    return GetFileType(descriptor->handle) == FILE_TYPE_CHAR && GetConsoleMode(descriptor->handle, &mode);
 }
 
 bool cathode_query_size(int32_t *nonnull width, int32_t *nonnull height)
@@ -133,7 +145,7 @@ bool cathode_query_size(int32_t *nonnull width, int32_t *nonnull height)
 
     CONSOLE_SCREEN_BUFFER_INFO info;
 
-    if (!GetConsoleScreenBufferInfo(out_state.handle, &info))
+    if (!GetConsoleScreenBufferInfo(con_out.descriptor.handle, &info))
         return false;
 
     *width = info.srWindow.Right - info.srWindow.Left + 1;
@@ -149,14 +161,17 @@ bool cathode_get_mode(void)
 
 TerminalResult cathode_set_mode(bool raw, bool flush)
 {
+    HANDLE in = con_in.descriptor.handle;
+    HANDLE out = con_out.descriptor.handle;
+
     DWORD in_mode;
     DWORD out_mode;
 
     UINT in_code_page;
     UINT out_code_page;
 
-    if (!GetConsoleMode(in_state.handle, &in_mode) ||
-        !GetConsoleMode(out_state.handle, &out_mode) ||
+    if (!GetConsoleMode(in, &in_mode) ||
+        !GetConsoleMode(out, &out_mode) ||
         !(in_code_page = GetConsoleCP()) ||
         !(out_code_page = GetConsoleOutputCP()))
         return (TerminalResult)
@@ -167,11 +182,11 @@ TerminalResult cathode_set_mode(bool raw, bool flush)
     // Stash away the original modes the first time we are successfully called.
     if (!original_state_saved)
     {
-        in_state.original_mode = in_mode;
-        out_state.original_mode = out_mode;
+        con_in.original_mode = in_mode;
+        con_out.original_mode = out_mode;
 
-        in_state.original_code_page = in_code_page;
-        out_state.original_code_page = out_code_page;
+        con_in.original_code_page = in_code_page;
+        con_out.original_code_page = out_code_page;
 
         original_state_saved = true;
     }
@@ -214,7 +229,7 @@ TerminalResult cathode_set_mode(bool raw, bool flush)
         goto done;
     }
 
-    if (!SetConsoleMode(in_state.handle, in_mode) || !SetConsoleMode(out_state.handle, out_mode))
+    if (!SetConsoleMode(in, in_mode) || !SetConsoleMode(out, out_mode))
     {
         result = (TerminalResult)
         {
@@ -226,7 +241,7 @@ TerminalResult cathode_set_mode(bool raw, bool flush)
         goto done;
     }
 
-    if (flush && !FlushConsoleInputBuffer(in_state.handle))
+    if (flush && !FlushConsoleInputBuffer(in))
     {
         result = (TerminalResult)
         {
@@ -250,8 +265,8 @@ done:
 
         // If we failed to configure the console, try to undo partial configuration (if any).
 
-        SetConsoleMode(in_state.handle, orig_in_mode);
-        SetConsoleMode(out_state.handle, orig_out_mode);
+        SetConsoleMode(in, orig_in_mode);
+        SetConsoleMode(out, orig_out_mode);
 
         SetConsoleCP(in_code_page);
         SetConsoleOutputCP(out_code_page);
@@ -295,12 +310,14 @@ TerminalResult cathode_generate_signal(TerminalSignal signal)
     };
 }
 
-TerminalResult cathode_read(size_t handle, uint8_t *nullable buffer, int32_t length, int32_t *nonnull progress)
+TerminalResult cathode_read(
+    const TerminalDescriptor *nonnull descriptor, uint8_t *nullable buffer, int32_t length, int32_t *nonnull progress)
 {
+    assert(descriptor);
     assert(buffer);
     assert(progress);
 
-    BOOL result = ReadFile((HANDLE)handle, buffer, (DWORD)length, (LPDWORD)progress, nullptr);
+    BOOL result = ReadFile(descriptor->handle, buffer, (DWORD)length, (LPDWORD)progress, nullptr);
     DWORD error = GetLastError();
 
     // See driver-unix.c for the error handling rationale.
@@ -317,12 +334,17 @@ TerminalResult cathode_read(size_t handle, uint8_t *nullable buffer, int32_t len
         };
 }
 
-TerminalResult cathode_write(size_t handle, const uint8_t *nullable buffer, int32_t length, int32_t *nonnull progress)
+TerminalResult cathode_write(
+    const TerminalDescriptor *nonnull descriptor,
+    const uint8_t *nullable buffer,
+    int32_t length,
+    int32_t *nonnull progress)
 {
+    assert(descriptor);
     assert(buffer);
     assert(progress);
 
-    BOOL result = WriteFile((HANDLE)handle, buffer, (DWORD)length, (LPDWORD)progress, nullptr);
+    BOOL result = WriteFile(descriptor->handle, buffer, (DWORD)length, (LPDWORD)progress, nullptr);
     DWORD error = GetLastError();
 
     // See driver-unix.c for the error handling rationale.

@@ -10,7 +10,15 @@
 
 #include "driver-unix.h"
 
-static int tty_fd;
+struct TerminalDescriptor
+{
+    int fd;
+};
+
+static TerminalDescriptor stdio_in;
+static TerminalDescriptor stdio_out;
+static TerminalDescriptor stdio_err;
+static TerminalDescriptor tty;
 static struct termios original_termios;
 static bool original_termios_saved;
 static bool raw_mode;
@@ -20,24 +28,27 @@ static atomic bool ttou_seen;
 [[gnu::constructor]]
 static void constructor(void)
 {
-    tty_fd = open("/dev/tty", O_RDWR | O_NOCTTY | O_CLOEXEC);
+    stdio_in.fd = STDIN_FILENO;
+    stdio_out.fd = STDOUT_FILENO;
+    stdio_err.fd = STDERR_FILENO;
+    tty.fd = open("/dev/tty", O_RDWR | O_NOCTTY | O_CLOEXEC);
 }
 
 [[gnu::destructor]]
 static void destructor(void)
 {
     if (original_termios_saved)
-        tcsetattr(tty_fd, TCSAFLUSH, &original_termios);
+        tcsetattr(tty.fd, TCSAFLUSH, &original_termios);
 
-    close(tty_fd);
+    close(tty.fd);
 }
 
-void cathode_get_handles(
-    size_t *nonnull std_in,
-    size_t *nonnull std_out,
-    size_t *nonnull std_err,
-    size_t *nonnull tty_in,
-    size_t *nonnull tty_out)
+void cathode_get_descriptors(
+    TerminalDescriptor *nonnull *nonnull std_in,
+    TerminalDescriptor *nonnull *nonnull std_out,
+    TerminalDescriptor *nonnull *nonnull std_err,
+    TerminalDescriptor *nonnull *nonnull tty_in,
+    TerminalDescriptor *nonnull *nonnull tty_out)
 {
     assert(std_in);
     assert(std_out);
@@ -45,21 +56,24 @@ void cathode_get_handles(
     assert(tty_in);
     assert(tty_out);
 
-    *std_in = STDIN_FILENO;
-    *std_out = STDOUT_FILENO;
-    *std_err = STDERR_FILENO;
-    *tty_in = (size_t)tty_fd;
-    *tty_out = (size_t)tty_fd;
+    *std_in = &stdio_in;
+    *std_out = &stdio_out;
+    *std_err = &stdio_err;
+    *tty_in = *tty_out = &tty;
 }
 
-bool cathode_is_valid(size_t handle, bool)
+bool cathode_is_valid(const TerminalDescriptor *nonnull descriptor, bool)
 {
-    return (int)handle >= 0;
+    assert(descriptor);
+
+    return descriptor->fd >= 0;
 }
 
-bool cathode_is_interactive(size_t handle)
+bool cathode_is_interactive(const TerminalDescriptor *nonnull descriptor)
 {
-    return isatty((int)handle) == 1;
+    assert(descriptor);
+
+    return isatty(descriptor->fd) == 1;
 }
 
 bool cathode_query_size(int32_t *nonnull width, int32_t *nonnull height)
@@ -69,7 +83,7 @@ bool cathode_query_size(int32_t *nonnull width, int32_t *nonnull height)
 
     struct winsize size;
 
-    if (ioctl(tty_fd, TIOCGWINSZ, &size))
+    if (ioctl(tty.fd, TIOCGWINSZ, &size))
         return false;
 
     *width = size.ws_col;
@@ -124,7 +138,7 @@ TerminalResult cathode_set_mode(bool raw, bool flush)
 {
     struct termios termios;
 
-    if (tcgetattr(tty_fd, &termios) == -1)
+    if (tcgetattr(tty.fd, &termios) == -1)
         return (TerminalResult)
         {
             .exception = TerminalException_TerminalNotAttached,
@@ -241,7 +255,7 @@ TerminalResult cathode_set_mode(bool raw, bool flush)
 
     int ret;
 
-    while ((ret = tcsetattr(tty_fd, flush ? TCSAFLUSH : TCSANOW, &termios)) == -1 && errno == EINTR)
+    while ((ret = tcsetattr(tty.fd, flush ? TCSAFLUSH : TCSANOW, &termios)) == -1 && errno == EINTR)
     {
         // Retry in case we get interrupted by a signal. If we are trying to switch to cooked mode and we saw SIGTTOU,
         // it means we are a background process. We will trust that, by the time we actually read or write anything, we
@@ -306,34 +320,10 @@ TerminalResult cathode_generate_signal(TerminalSignal signal)
     };
 }
 
-void cathode_poll(bool write, const size_t *nonnull handles, bool *nullable results, int count)
+TerminalResult cathode_read(
+    const TerminalDescriptor *nonnull descriptor, uint8_t *nullable buffer, int32_t length, int32_t *nonnull progress)
 {
-    assert(handles);
-    assert(count);
-
-    struct pollfd fds[count]; // count is only ever expected to be 1 or 2.
-
-    for (int i = 0; i < count; i++)
-        fds[i] = (struct pollfd)
-        {
-            .fd = (int)handles[i],
-            .events = write ? POLLOUT : POLLIN,
-        };
-
-    int ret;
-
-    while ((ret = poll(fds, (nfds_t)count, -1)) == -1 && errno == EINTR)
-    {
-        // Retry in case we get interrupted by a signal.
-    }
-
-    if (results)
-        for (int i = 0; i < count; i++)
-            results[i] = fds[i].revents & (write ? POLLOUT : POLLIN);
-}
-
-TerminalResult cathode_read(size_t handle, uint8_t *nullable buffer, int32_t length, int32_t *nonnull progress)
-{
+    assert(descriptor);
     assert(buffer);
     assert(progress);
 
@@ -343,7 +333,7 @@ TerminalResult cathode_read(size_t handle, uint8_t *nullable buffer, int32_t len
 
         // Note that this call may get us suspended by way of a SIGTTIN signal if we are a background process and the
         // handle refers to a terminal.
-        while ((ret = read((int)handle, buffer, (size_t)length)) == -1 && errno == EINTR)
+        while ((ret = read(descriptor->fd, buffer, (size_t)length)) == -1 && errno == EINTR)
         {
             // Retry in case we get interrupted by a signal.
         }
@@ -362,7 +352,7 @@ TerminalResult cathode_read(size_t handle, uint8_t *nullable buffer, int32_t len
         // poll until something happens (we can read, or an error occurs) and loop around again.
         if (!success && errno == EAGAIN)
         {
-            cathode_poll(false, &handle, nullptr, 1);
+            cathode_poll(false, &descriptor->fd, nullptr, 1);
 
             continue;
         }
@@ -381,8 +371,13 @@ TerminalResult cathode_read(size_t handle, uint8_t *nullable buffer, int32_t len
     }
 }
 
-TerminalResult cathode_write(size_t handle, const uint8_t *nullable buffer, int32_t length, int32_t *nonnull progress)
+TerminalResult cathode_write(
+    const TerminalDescriptor *nonnull descriptor,
+    const uint8_t *nullable buffer,
+    int32_t length,
+    int32_t *nonnull progress)
 {
+    assert(descriptor);
     assert(buffer);
     assert(progress);
 
@@ -393,7 +388,7 @@ TerminalResult cathode_write(size_t handle, const uint8_t *nullable buffer, int3
         // Note that this call may get us suspended by way of a SIGTTOU signal if we are a background process, the handle
         // refers to a terminal, and the TOSTOP bit is set (we disable TOSTOP but there are ways that it could get set
         // anyway).
-        while ((ret = write((int)handle, buffer, (size_t)length)) == -1 && errno == EINTR)
+        while ((ret = write(descriptor->fd, buffer, (size_t)length)) == -1 && errno == EINTR)
         {
             // Retry in case we get interrupted by a signal.
         }
@@ -412,7 +407,7 @@ TerminalResult cathode_write(size_t handle, const uint8_t *nullable buffer, int3
         // poll until something happens (we can write, or an error occurs) and loop around again.
         if (!success && errno == EAGAIN)
         {
-            cathode_poll(true, &handle, nullptr, 1);
+            cathode_poll(true, &descriptor->fd, nullptr, 1);
 
             continue;
         }
@@ -429,6 +424,32 @@ TerminalResult cathode_write(size_t handle, const uint8_t *nullable buffer, int3
                 .error = errno,
             };
     }
+}
+
+void cathode_poll(bool write, const int *nonnull fds, bool *nullable results, int count)
+{
+    assert(fds);
+    assert(count);
+
+    struct pollfd pfds[count]; // count is only ever expected to be 1 or 2.
+
+    for (int i = 0; i < count; i++)
+        pfds[i] = (struct pollfd)
+        {
+            .fd = fds[i],
+            .events = write ? POLLOUT : POLLIN,
+        };
+
+    int ret;
+
+    while ((ret = poll(pfds, (nfds_t)count, -1)) == -1 && errno == EINTR)
+    {
+        // Retry in case we get interrupted by a signal.
+    }
+
+    if (results)
+        for (int i = 0; i < count; i++)
+            results[i] = pfds[i].revents & (write ? POLLOUT : POLLIN);
 }
 
 #endif

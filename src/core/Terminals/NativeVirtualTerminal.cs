@@ -14,8 +14,6 @@ internal abstract class NativeVirtualTerminal : SystemVirtualTerminal
 
     public override sealed NativeTerminalWriter TerminalOut { get; }
 
-    [SuppressMessage("", "CA2000")]
-    [SuppressMessage("", "CA2214")]
     private protected unsafe NativeVirtualTerminal()
     {
         // Ensure that the native library is fully loaded and initialized before we do anything terminal-related.
@@ -24,13 +22,23 @@ internal abstract class NativeVirtualTerminal : SystemVirtualTerminal
         var inLock = new SemaphoreSlim(1, 1);
         var outLock = new SemaphoreSlim(1, 1);
 
-        nuint stdIn;
-        nuint stdOut;
-        nuint stdErr;
-        nuint ttyIn;
-        nuint ttyOut;
+        TerminalInterop.TerminalDescriptor* stdIn;
+        TerminalInterop.TerminalDescriptor* stdOut;
+        TerminalInterop.TerminalDescriptor* stdErr;
+        TerminalInterop.TerminalDescriptor* ttyIn;
+        TerminalInterop.TerminalDescriptor* ttyOut;
 
-        TerminalInterop.GetHandles(&stdIn, &stdOut, &stdErr, &ttyIn, &ttyOut);
+        TerminalInterop.GetDescriptors(&stdIn, &stdOut, &stdErr, &ttyIn, &ttyOut);
+
+        NativeTerminalReader CreateReader(TerminalInterop.TerminalDescriptor* descriptor, SemaphoreSlim semaphore)
+        {
+            return new(this, descriptor, semaphore, CreateCancellationHook(write: false));
+        }
+
+        NativeTerminalWriter CreateWriter(TerminalInterop.TerminalDescriptor* descriptor, SemaphoreSlim semaphore)
+        {
+            return new(this, descriptor, semaphore, CreateCancellationHook(write: true));
+        }
 
         StandardIn = CreateReader(stdIn, inLock);
         StandardOut = CreateWriter(stdOut, outLock);
@@ -39,9 +47,7 @@ internal abstract class NativeVirtualTerminal : SystemVirtualTerminal
         TerminalOut = CreateWriter(ttyOut, outLock);
     }
 
-    protected abstract NativeTerminalReader CreateReader(nuint handle, SemaphoreSlim semaphore);
-
-    protected abstract NativeTerminalWriter CreateWriter(nuint handle, SemaphoreSlim semaphore);
+    protected abstract Action<nuint, CancellationToken>? CreateCancellationHook(bool write);
 
     private protected override sealed unsafe Size? QuerySize()
     {

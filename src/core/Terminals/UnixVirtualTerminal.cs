@@ -6,13 +6,10 @@ internal sealed class UnixVirtualTerminal : NativeVirtualTerminal
 
     public static UnixVirtualTerminal Instance { get; } = new();
 
-    [SuppressMessage("", "IDE0052")]
     private readonly PosixSignalRegistration _sigWinch;
 
-    [SuppressMessage("", "IDE0052")]
     private readonly PosixSignalRegistration _sigCont;
 
-    [SuppressMessage("", "IDE0052")]
     private readonly PosixSignalRegistration _sigChld;
 
     public unsafe UnixVirtualTerminal()
@@ -57,17 +54,14 @@ internal sealed class UnixVirtualTerminal : NativeVirtualTerminal
         _sigChld = PosixSignalRegistration.Create(PosixSignal.SIGCHLD, HandleSignal);
     }
 
-    protected override NativeTerminalReader CreateReader(nuint handle, SemaphoreSlim semaphore)
+    protected override unsafe Action<nuint, CancellationToken> CreateCancellationHook(bool write)
     {
-        var pipe = new UnixCancellationPipe(write: false);
+        var pipe = new UnixCancellationPipe(write);
 
-        return new(this, handle, semaphore, cancellationHook: pipe.PollWithCancellation);
-    }
-
-    protected override NativeTerminalWriter CreateWriter(nuint handle, SemaphoreSlim semaphore)
-    {
-        var pipe = new UnixCancellationPipe(write: true);
-
-        return new(this, handle, semaphore, cancellationHook: pipe.PollWithCancellation);
+        return (descriptor, cancellationToken) =>
+        {
+            if (cancellationToken.CanBeCanceled)
+                pipe.PollWithCancellation(*(int*)descriptor, cancellationToken);
+        };
     }
 }

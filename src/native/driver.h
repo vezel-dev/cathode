@@ -1,5 +1,7 @@
 #pragma once
 
+typedef struct TerminalDescriptor TerminalDescriptor;
+
 typedef enum {
     TerminalException_None,
     TerminalException_ArgumentOutOfRange,
@@ -25,16 +27,16 @@ typedef enum {
 
 CATHODE_API void cathode_initialize(void);
 
-CATHODE_API void cathode_get_handles(
-    size_t *nonnull std_in,
-    size_t *nonnull std_out,
-    size_t *nonnull std_err,
-    size_t *nonnull tty_in,
-    size_t *nonnull tty_out);
+CATHODE_API void cathode_get_descriptors(
+    TerminalDescriptor *nonnull *nonnull std_in,
+    TerminalDescriptor *nonnull *nonnull std_out,
+    TerminalDescriptor *nonnull *nonnull std_err,
+    TerminalDescriptor *nonnull *nonnull tty_in,
+    TerminalDescriptor *nonnull *nonnull tty_out);
 
-CATHODE_API bool cathode_is_valid(size_t handle, bool write);
+CATHODE_API bool cathode_is_valid(const TerminalDescriptor *nonnull descriptor, bool write);
 
-CATHODE_API bool cathode_is_interactive(size_t handle);
+CATHODE_API bool cathode_is_interactive(const TerminalDescriptor *nonnull descriptor);
 
 CATHODE_API bool cathode_query_size(int32_t *nonnull width, int32_t *nonnull height);
 
@@ -46,7 +48,10 @@ CATHODE_API TerminalResult cathode_set_mode(bool raw, bool flush);
 CATHODE_API TerminalResult cathode_generate_signal(TerminalSignal signal);
 
 CATHODE_API TerminalResult cathode_read(
-    size_t handle, uint8_t *nullable buffer, int32_t length, int32_t *nonnull progress);
+    const TerminalDescriptor *nonnull handle, uint8_t *nullable buffer, int32_t length, int32_t *nonnull progress);
 
 CATHODE_API TerminalResult cathode_write(
-    size_t handle, const uint8_t *nullable buffer, int32_t length, int32_t *nonnull progress);
+    const TerminalDescriptor *nonnull handle,
+    const uint8_t *nullable buffer,
+    int32_t length,
+    int32_t *nonnull progress);

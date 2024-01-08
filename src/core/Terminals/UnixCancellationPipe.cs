@@ -5,6 +5,8 @@ namespace Vezel.Cathode.Terminals;
 [SuppressMessage("", "CA1001")]
 internal sealed class UnixCancellationPipe
 {
+    // TODO: Move this logic to src/native/driver-unix.c.
+
     private readonly AnonymousPipeServerStream _server;
 
     private readonly AnonymousPipeClientStream _client;
@@ -18,7 +20,7 @@ internal sealed class UnixCancellationPipe
         _write = write;
     }
 
-    public unsafe void PollWithCancellation(nuint handle, CancellationToken cancellationToken)
+    public unsafe void PollWithCancellation(int fd, CancellationToken cancellationToken)
     {
         // Note that the runtime sets up a SIGPIPE handler for us.
 
@@ -31,8 +33,8 @@ internal sealed class UnixCancellationPipe
         {
             var handles = stackalloc[]
             {
-                (nuint)pipeHandle.DangerousGetHandle(),
-                handle,
+                (int)pipeHandle.DangerousGetHandle(),
+                fd,
             };
             var results = stackalloc bool[2];
 
