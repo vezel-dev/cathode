@@ -186,9 +186,13 @@ public sealed class ChildProcess
         {
             _process.WaitForExit();
         }
-        catch (InvalidOperationException)
+        catch (SystemException)
         {
-            // The process is already gone. This exception is undocumented but happens in practice.
+            // This method can theoretically throw a wide array of exceptions on Windows because of an internal call to
+            // Marshal.ThrowExceptionForHR() after a Win32 DuplicateHandle() call.
+            //
+            // The documentation also states separately that Win32Exception is a possibility, but it is unclear where
+            // that would come from. (But it derives from SystemException anyway.)
         }
     }
 }
