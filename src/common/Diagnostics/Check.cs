@@ -77,47 +77,6 @@ internal static class Check
         }
     }
 
-    public static class Always
-    {
-        public static void Assert(
-            [DoesNotReturnIf(false)] bool condition,
-            [CallerArgumentExpression(nameof(condition))] string? expression = null)
-        {
-            if (!condition)
-                throw new UnreachableException($"Hard assertion '{expression}' failed.");
-        }
-    }
-
-    public static class Debug
-    {
-        [Conditional("DEBUG")]
-        public static void Assert(
-            [DoesNotReturnIf(false)] bool condition,
-            [CallerArgumentExpression(nameof(condition))] string? expression = null)
-        {
-            if (!condition)
-                throw new UnreachableException($"Debug assertion '{expression}' failed.");
-        }
-    }
-
-    public static class Release
-    {
-        [Conditional("RELEASE")]
-        public static void Assert(
-            [DoesNotReturnIf(false)] bool condition,
-            [CallerArgumentExpression(nameof(condition))] string? expression = null)
-        {
-            if (!condition)
-                throw new UnreachableException($"Release assertion '{expression}' failed.");
-        }
-    }
-
-    public static void Argument([DoesNotReturnIf(false)] bool condition)
-    {
-        if (!condition)
-            throw new ArgumentException(message: null);
-    }
-
     public static void Argument<T>(
         [DoesNotReturnIf(false)] bool condition,
         in T value,
@@ -144,18 +103,6 @@ internal static class Check
     public static void Null([NotNull] object? value, [CallerArgumentExpression(nameof(value))] string? name = null)
     {
         ArgumentNullException.ThrowIfNull(value, name);
-    }
-
-    public static void Null<T>(ImmutableArray<T> value, [CallerArgumentExpression(nameof(value))] string? name = null)
-    {
-        if (value.IsDefault)
-            throw new ArgumentNullException(name);
-    }
-
-    public static void NullOrEmpty(
-        [NotNull] string? value, [CallerArgumentExpression(nameof(value))] string? name = null)
-    {
-        ArgumentException.ThrowIfNullOrEmpty(value, name);
     }
 
     public static void Range<T>(
