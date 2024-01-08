@@ -115,7 +115,7 @@ internal static class Check
     public static void Argument([DoesNotReturnIf(false)] bool condition)
     {
         if (!condition)
-            throw new ArgumentException(null);
+            throw new ArgumentException(message: null);
     }
 
     public static void Argument<T>(
@@ -126,7 +126,7 @@ internal static class Check
         _ = value;
 
         if (!condition)
-            throw new ArgumentException(null, name);
+            throw new ArgumentException(message: null, name);
     }
 
     // TODO: https://github.com/dotnet/csharplang/issues/1148
@@ -138,7 +138,7 @@ internal static class Check
         _ = value;
 
         if (!condition)
-            throw new ArgumentException(null, name);
+            throw new ArgumentException(message: null, name);
     }
 
     public static void Null([NotNull] object? value, [CallerArgumentExpression(nameof(value))] string? name = null)
@@ -195,7 +195,7 @@ internal static class Check
     {
         foreach (var item in value)
             if (!predicate(item))
-                throw new ArgumentException(null, name);
+                throw new ArgumentException(message: null, name);
     }
 
     public static void All<T>(
@@ -205,6 +205,6 @@ internal static class Check
     {
         foreach (var item in value)
             if (!predicate(item))
-                throw new ArgumentException(null, name);
+                throw new ArgumentException(message: null, name);
     }
 }

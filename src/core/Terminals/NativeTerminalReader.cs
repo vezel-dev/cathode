@@ -37,7 +37,12 @@ internal sealed unsafe class NativeTerminalReader : TerminalReader
         Stream = new SynchronizedStream(new TerminalInputStream(this));
         TextReader =
             new SynchronizedTextReader(
-                new StreamReader(Stream, Cathode.Terminal.Encoding, false, ReadBufferSize, true));
+                new StreamReader(
+                    Stream,
+                    Cathode.Terminal.Encoding,
+                    detectEncodingFromByteOrderMarks: false,
+                    ReadBufferSize,
+                    leaveOpen: true));
         IsValid = TerminalInterop.IsValid(descriptor, write: false);
         IsInteractive = TerminalInterop.IsInteractive(descriptor);
     }
@@ -66,7 +71,7 @@ internal sealed unsafe class NativeTerminalReader : TerminalReader
 
     protected override int ReadPartialCore(scoped Span<byte> buffer)
     {
-        return ReadPartialNative(buffer, default);
+        return ReadPartialNative(buffer, CancellationToken.None);
     }
 
     protected override ValueTask<int> ReadPartialCoreAsync(Memory<byte> buffer, CancellationToken cancellationToken)

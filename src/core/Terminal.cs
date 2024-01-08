@@ -22,7 +22,7 @@ public static class Terminal
         remove => System.Resumed -= value;
     }
 
-    public static Encoding Encoding { get; } = new UTF8Encoding(false);
+    public static Encoding Encoding { get; } = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
 
     public static SystemVirtualTerminal System { get; } =
         OperatingSystem.IsWindows()

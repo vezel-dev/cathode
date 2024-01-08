@@ -37,7 +37,7 @@ public static class TerminalLoggerWriters
             LogLevel.Warning => ("WRN", 255, 255, 0),
             LogLevel.Error => ("ERR", 255, 63, 0),
             LogLevel.Critical => ("CRT", 255, 0, 0),
-            _ => throw new ArgumentException(null, nameof(message)),
+            _ => throw new ArgumentException(message: null, nameof(message)),
         };
 
         Decorator Decorate(byte r, byte g, byte b)
@@ -106,7 +106,7 @@ public static class TerminalLoggerWriters
             LogLevel.Warning => "<4>",
             LogLevel.Error => "<3>",
             LogLevel.Critical => "<2>",
-            _ => throw new ArgumentException(null, nameof(message)),
+            _ => throw new ArgumentException(message: null, nameof(message)),
         };
 
         var culture = CultureInfo.InvariantCulture;

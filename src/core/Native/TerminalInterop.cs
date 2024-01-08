@@ -29,7 +29,7 @@ internal static unsafe partial class TerminalInterop
         public readonly void ThrowIfError()
         {
             // For when ArgumentOutOfRangeException is not expected.
-            ThrowIfError((object?)null);
+            ThrowIfError(value: (object?)null);
         }
 
         public readonly void ThrowIfError<T>(in T value, [CallerArgumentExpression(nameof(value))] string? name = null)

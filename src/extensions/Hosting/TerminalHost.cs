@@ -26,18 +26,18 @@ public static class TerminalHost
             .ConfigureAppConfiguration((ctx, cfg) =>
             {
                 [UnconditionalSuppressMessage("", "IL2026")]
-                static T? GetConfigurationValue<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+                static T? GetValueOrDefault<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
                     HostBuilderContext context, string key, T defaultValue)
                 {
                     return context.Configuration.GetValue(key, defaultValue);
                 }
 
-                var reload = GetConfigurationValue(ctx, "hostBuilder:reloadConfigOnChange", true);
+                var reload = GetValueOrDefault(ctx, "hostBuilder:reloadConfigOnChange", true);
                 var env = ctx.HostingEnvironment;
 
                 _ = cfg
-                    .AddJsonFile("appsettings.json", true, reload)
-                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, reload);
+                    .AddJsonFile("appsettings.json", optional: true, reload)
+                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reload);
 
                 if (env.IsDevelopment() && !string.IsNullOrEmpty(env.ApplicationName))
                 {
@@ -53,7 +53,7 @@ public static class TerminalHost
                     }
 
                     if (asm != null)
-                        _ = cfg.AddUserSecrets(asm, true, reload);
+                        _ = cfg.AddUserSecrets(asm, optional: true, reload);
                 }
 
                 _ = cfg.AddEnvironmentVariables();

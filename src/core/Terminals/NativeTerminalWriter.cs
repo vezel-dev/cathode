@@ -35,10 +35,11 @@ internal sealed unsafe class NativeTerminalWriter : TerminalWriter
         _cancellationHook = cancellationHook;
         Stream = new SynchronizedStream(new TerminalOutputStream(this));
         TextWriter =
-            new SynchronizedTextWriter(new StreamWriter(Stream, Cathode.Terminal.Encoding, WriteBufferSize, true)
-            {
-                AutoFlush = true,
-            });
+            new SynchronizedTextWriter(
+                new StreamWriter(Stream, Cathode.Terminal.Encoding, WriteBufferSize, leaveOpen: true)
+                {
+                    AutoFlush = true,
+                });
         IsValid = TerminalInterop.IsValid(descriptor, write: true);
         IsInteractive = TerminalInterop.IsInteractive(descriptor);
     }
@@ -67,7 +68,7 @@ internal sealed unsafe class NativeTerminalWriter : TerminalWriter
 
     protected override int WritePartialCore(scoped ReadOnlySpan<byte> buffer)
     {
-        return WritePartialNative(buffer, default);
+        return WritePartialNative(buffer, CancellationToken.None);
     }
 
     protected override ValueTask<int> WritePartialCoreAsync(

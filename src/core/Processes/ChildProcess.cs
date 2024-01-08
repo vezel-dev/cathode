@@ -1,7 +1,7 @@
 namespace Vezel.Cathode.Processes;
 
-[SuppressMessage("", "RS0030")]
 [SuppressMessage("", "CA1001")]
+[SuppressMessage("", "RS0030")]
 public sealed class ChildProcess
 {
     public int Id { get; }
@@ -35,7 +35,7 @@ public sealed class ChildProcess
         var (redirectIn, redirectOut, redirectError) =
             (builder.RedirectStandardIn, builder.RedirectStandardOut, builder.RedirectStandardError);
 
-        var info = new ProcessStartInfo()
+        var info = new ProcessStartInfo
         {
             FileName = builder.FileName,
             WorkingDirectory = builder.WorkingDirectory,
@@ -133,7 +133,7 @@ public sealed class ChildProcess
             {
                 try
                 {
-                    _process.Kill(true);
+                    _process.Kill(entireProcessTree: true);
                 }
                 catch (Exception)
                 {

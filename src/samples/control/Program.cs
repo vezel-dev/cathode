@@ -18,7 +18,7 @@ static async ValueTask Run(string message, Action action)
                 tcs.SetException(e);
             }
         },
-        null);
+        state: null);
 
     try
     {

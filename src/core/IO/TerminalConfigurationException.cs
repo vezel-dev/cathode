@@ -3,7 +3,7 @@ namespace Vezel.Cathode.IO;
 public class TerminalConfigurationException : TerminalException
 {
     public TerminalConfigurationException()
-        : this("An unknown terminal configuration error occurred.")
+        : this("An unknown terminal configuration exception occurred.")
     {
     }
 
