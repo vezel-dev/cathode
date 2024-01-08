@@ -196,6 +196,7 @@ public sealed class ChildProcess
             .Run();
     }
 
+    [SuppressMessage("", "CA1031")]
     public void Kill(bool entireProcessTree = true)
     {
         try
