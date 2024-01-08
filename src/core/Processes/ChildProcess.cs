@@ -109,17 +109,20 @@ public sealed class ChildProcess
             _in = new(_process.StandardInput);
 
         var tasks = new List<Task>(2);
+        var cancellationToken = builder.CancellationToken;
 
         if (redirectOut)
-            tasks.Add((_out = new(_process.StandardOutput, builder.StandardOutBufferSize)).Completion);
+            tasks.Add(
+                (_out = new(_process.StandardOutput, builder.StandardOutBufferSize, cancellationToken)).Completion);
 
         if (redirectError)
-            tasks.Add((_error = new(_process.StandardError, builder.StandardErrorBufferSize)).Completion);
+            tasks.Add(
+                (_error = new(_process.StandardError, builder.StandardErrorBufferSize, cancellationToken)).Completion);
 
-        // We register the cancellation callback here, after it has started, so that we do not potentially kill the
-        // process prior to or during startup.
-        ctr = builder.CancellationToken.UnsafeRegister(
-            static (state, token) => Unsafe.As<ChildProcess>(state!)._completion.TrySetCanceled(token), this);
+        // We register the cancellation callback here, after the process has started, so that we do not potentially kill
+        // the process prior to or during startup.
+        ctr = cancellationToken.UnsafeRegister(
+            static (@this, token) => Unsafe.As<ChildProcess>(@this!)._completion.TrySetCanceled(token), this);
 
         Completion = Task.Run(async () =>
         {
