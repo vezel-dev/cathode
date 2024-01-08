@@ -201,8 +201,16 @@ public sealed class ChildProcess
     {
         try
         {
-            // TODO: Review exceptions that can be thrown here.
             _process.Kill(entireProcessTree);
+        }
+        catch (Win32Exception ex)
+        {
+            throw new ChildProcessException("Failed to kill child process.", ex);
+        }
+        catch (AggregateException ex)
+        {
+            // This just contains a collection of Win32Exception for each failed process.
+            throw new ChildProcessException("Failed to kill child processes.", ex);
         }
         catch (InvalidOperationException)
         {
