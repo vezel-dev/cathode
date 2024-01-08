@@ -164,9 +164,28 @@ public sealed class ChildProcess
 
     public static ChildProcess Run(string fileName, params string[] arguments)
     {
+        return Run(fileName, arguments.AsEnumerable());
+    }
+
+    public static ChildProcess Run(string fileName, IEnumerable<string> arguments)
+    {
         return new ChildProcessBuilder()
             .WithFileName(fileName)
             .WithArguments(arguments)
+            .Run();
+    }
+
+    public static ChildProcess RunIn(string workingDirectory, string fileName, params string[] arguments)
+    {
+        return RunIn(workingDirectory, fileName, arguments.AsEnumerable());
+    }
+
+    public static ChildProcess RunIn(string workingDirectory, string fileName, IEnumerable<string> arguments)
+    {
+        return new ChildProcessBuilder()
+            .WithFileName(fileName)
+            .WithArguments(arguments)
+            .WithWorkingDirectory(workingDirectory)
             .Run();
     }
 
