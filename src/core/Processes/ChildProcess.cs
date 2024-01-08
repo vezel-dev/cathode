@@ -89,19 +89,26 @@ public sealed class ChildProcess
             _exited.SetResult();
         };
 
-        // If the child process might use the terminal, start it under the raw mode lock since we only allow starting
-        // non-redirected processes in cooked mode and we need to verify our current mode.
-        if (terminal)
+        try
         {
-            Terminal.System.StartProcess(() =>
+            // If the child process might use the terminal, start it under the raw mode lock since we only allow
+            // starting non-redirected processes in cooked mode and we need to verify our current mode.
+            if (terminal)
             {
-                _ = _process.Start();
+                Terminal.System.StartProcess(() =>
+                {
+                    _ = _process.Start();
 
-                return this;
-            });
+                    return this;
+                });
+            }
+            else
+                _ = _process.Start();
         }
-        else
-            _ = _process.Start();
+        catch (Win32Exception ex)
+        {
+            throw new ChildProcessException("Failed to start child process.", ex);
+        }
 
         Id = _process.Id;
 
