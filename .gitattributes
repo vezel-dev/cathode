@@ -1,3 +1,5 @@
 * text
+*.verified.* text eol=lf
 *.ico binary
 *.png binary
+*.zig eol=lf

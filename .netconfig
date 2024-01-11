@@ -1,0 +1,55 @@
+[file "doc/.markdownlint-cli2.jsonc"]
+	url = https://github.com/vezel-dev/.github/blob/master/syn/doc/.markdownlint-cli2.jsonc
+	sha = 7d581ae5eedad5892855cebc673edafad664856b
+	etag = 485e4786a640cfe0b7d29c169baab04e9f2a7c24964ec56b55017bc26a1d796d
+	weak
+[file "doc/.markdownlint.json"]
+	url = https://github.com/vezel-dev/.github/blob/master/syn/doc/.markdownlint.json
+	sha = 7d581ae5eedad5892855cebc673edafad664856b
+	etag = d763492a10cc6e14ba8f8ffe3279eda7964580ed9e18bcd6c7875fe2f53f226b
+	weak
+[file ".editorconfig"]
+	url = https://github.com/vezel-dev/.github/blob/master/syn/.editorconfig
+	sha = 7d581ae5eedad5892855cebc673edafad664856b
+	etag = 8fa5a445045c6e24f51af44560a6449adf8d297f9e0d7412b39e5e39062cde54
+	weak
+[file ".gitattributes"]
+	url = https://github.com/vezel-dev/.github/blob/master/syn/.gitattributes
+	sha = e1d60d738e36f3741104a47c67156614aa5b9d8b
+	etag = 57083d3c73ff7ab2740ab17fd99d31cedcff606818190f9a415d97d27b62e7d4
+	weak
+[file ".gitbook.yaml"]
+	url = https://github.com/vezel-dev/.github/blob/master/syn/.gitbook.yaml
+	sha = 7d581ae5eedad5892855cebc673edafad664856b
+	etag = 66c2b9789da757c440568a36fefd050103c146bfd88f9eb0208961fa6e08b659
+	weak
+[file ".globalconfig"]
+	url = https://github.com/vezel-dev/.github/blob/master/syn/.globalconfig
+	sha = 7d581ae5eedad5892855cebc673edafad664856b
+	etag = 3405ebba188d6ed7dccc083f72e2212603ed57f8382de928dd6c45ad7cd63178
+	weak
+[file ".markdownlint.json"]
+	url = https://github.com/vezel-dev/.github/blob/master/syn/.markdownlint.json
+	sha = 7d581ae5eedad5892855cebc673edafad664856b
+	etag = cf98ac95cf318b52e206b9003e342de9db2ecb7be062eab6edf1681b1f374b3a
+	weak
+[file ".stylecop.json"]
+	url = https://github.com/vezel-dev/.github/blob/master/syn/.stylecop.json
+	sha = 7d581ae5eedad5892855cebc673edafad664856b
+	etag = 45c41b4953e878ab2efc9c18a252a60c4741b14fe274540c8cbffa39744c29a8
+	weak
+[file "LICENSE-0BSD"]
+	url = https://github.com/vezel-dev/.github/blob/master/syn/LICENSE-0BSD
+	sha = 7d581ae5eedad5892855cebc673edafad664856b
+	etag = 4fe195e9c11a20688615d92035ac752eeac4ab3f3d82b20df798ea6dc1b49aab
+	weak
+[file "cake"]
+	url = https://github.com/vezel-dev/.github/blob/master/syn/cake
+	sha = 7d581ae5eedad5892855cebc673edafad664856b
+	etag = e01672adb9650fad761fd21f0e2349afaf9294d5f00825a429ae3060a2f3576f
+	weak
+[file "cake.config"]
+	url = https://github.com/vezel-dev/.github/blob/master/syn/cake.config
+	sha = 7d581ae5eedad5892855cebc673edafad664856b
+	etag = 71fbce2c699768f363332125e11b7e6335672c19932a369f7e146faf579371e9
+	weak

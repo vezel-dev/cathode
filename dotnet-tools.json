@@ -26,6 +26,12 @@
         "dotnet-example"
       ]
     },
+    "dotnet-file": {
+      "version": "1.4.1",
+      "commands": [
+        "dotnet-file"
+      ]
+    },
     "dotnet-gcdump": {
       "version": "8.0.452401",
       "commands": [
