@@ -46,23 +46,24 @@ internal sealed unsafe class NativeTerminalWriter : TerminalWriter
 
     private int WritePartialNative(scoped ReadOnlySpan<byte> buffer, CancellationToken cancellationToken)
     {
-        using var guard = Terminal.Control.Guard();
-
-        // If the descriptor is invalid, just present the illusion to the user that it has been redirected to /dev/null
-        // or something along those lines, i.e. pretend we wrote everything.
-        if (buffer is [] || !IsValid)
-            return buffer.Length;
-
-        using (_semaphore.Enter(cancellationToken))
+        using (Terminal.Control.Guard())
         {
-            _cancellationHook?.Invoke((nuint)Descriptor, cancellationToken);
+            // If the descriptor is invalid, just present the illusion to the user that it has been redirected to /dev/null
+            // or something along those lines, i.e. pretend we wrote everything.
+            if (buffer is [] || !IsValid)
+                return buffer.Length;
 
-            int progress;
+            using (_semaphore.Enter(cancellationToken))
+            {
+                _cancellationHook?.Invoke((nuint)Descriptor, cancellationToken);
 
-            fixed (byte* p = buffer)
-                TerminalInterop.Write(Descriptor, p, buffer.Length, &progress).ThrowIfError();
+                int progress;
 
-            return progress;
+                fixed (byte* p = buffer)
+                    TerminalInterop.Write(Descriptor, p, buffer.Length, &progress).ThrowIfError();
+
+                return progress;
+            }
         }
     }
 

@@ -20,7 +20,7 @@ internal sealed class WindowsVirtualTerminal : NativeVirtualTerminal
     {
     }
 
-    protected override unsafe Action<nuint, CancellationToken>? CreateCancellationHook(bool write)
+    protected override Action<nuint, CancellationToken>? CreateCancellationHook(bool write)
     {
         return null;
     }

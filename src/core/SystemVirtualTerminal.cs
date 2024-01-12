@@ -118,9 +118,8 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
         {
             Check.Range(value >= TimeSpan.Zero, value);
 
-            using var guard = Control.Guard();
-
-            _sizeInterval = value;
+            using (Control.Guard())
+                _sizeInterval = value;
         }
     }
 
@@ -226,24 +225,24 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
 
     public override sealed void EnableRawMode()
     {
-        using var guard = Control.Guard();
-
-        ChangeRawMode(
-            raw: true,
-            flush: true,
-            static @this => Check.Operation(
-                @this._processes.Count == 0, $"Cannot enable raw mode with non-redirected child processes running."));
+        using (Control.Guard())
+            ChangeRawMode(
+                raw: true,
+                flush: true,
+                static @this => Check.Operation(
+                    @this._processes.Count == 0,
+                    $"Cannot enable raw mode with non-redirected child processes running."));
     }
 
     public override sealed void DisableRawMode()
     {
-        using var guard = Control.Guard();
-
-        ChangeRawMode(
-            raw: false,
-            flush: true,
-            static @this => Check.Operation(
-                @this._processes.Count == 0, $"Cannot disable raw mode with non-redirected child processes running."));
+        using (Control.Guard())
+            ChangeRawMode(
+                raw: false,
+                flush: true,
+                static @this => Check.Operation(
+                    @this._processes.Count == 0,
+                    $"Cannot disable raw mode with non-redirected child processes running."));
     }
 
     internal void StartProcess(Func<ChildProcess> starter)
@@ -255,9 +254,8 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
             Check.Operation(!IsRawMode, $"Cannot start non-redirected child processes in raw mode.");
 
             // Guard here since this locks us into cooked mode until all non-redirected processes are gone.
-            using var guard = Control.Guard();
-
-            _ = _processes.Add(starter());
+            using (Control.Guard())
+                _ = _processes.Add(starter());
         }
     }
 

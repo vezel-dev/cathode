@@ -12,7 +12,7 @@ internal sealed class UnixVirtualTerminal : NativeVirtualTerminal
 
     private readonly PosixSignalRegistration _sigChld;
 
-    public unsafe UnixVirtualTerminal()
+    public UnixVirtualTerminal()
     {
         void HandleSignal(PosixSignalContext context)
         {

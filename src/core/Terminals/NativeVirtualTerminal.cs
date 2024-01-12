@@ -69,8 +69,7 @@ internal abstract class NativeVirtualTerminal : SystemVirtualTerminal
 
     public override sealed void GenerateSignal(TerminalSignal signal)
     {
-        using var guard = Control.Guard();
-
-        TerminalInterop.GenerateSignal(signal).ThrowIfError(signal);
+        using (Control.Guard())
+            TerminalInterop.GenerateSignal(signal).ThrowIfError(signal);
     }
 }
