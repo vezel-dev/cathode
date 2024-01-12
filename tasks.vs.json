@@ -17,7 +17,9 @@
         {
           "command": "dotnet",
           "args": [
-            "cake"
+            "cake",
+            "-t",
+            "default-editor"
           ]
         }
       ]

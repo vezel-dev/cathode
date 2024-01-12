@@ -53,3 +53,8 @@
 	sha = 7d581ae5eedad5892855cebc673edafad664856b
 	etag = 71fbce2c699768f363332125e11b7e6335672c19932a369f7e146faf579371e9
 	weak
+[file "tasks.vs.json"]
+	url = https://github.com/vezel-dev/.github/blob/master/syn/tasks.vs.json
+	sha = d3266cef4044ccbe6e51133fcac3a77a5b42dde1
+	etag = e37280c2dccfe881742b68239db201d39758cff1f1c7472f358b7a1164a5771d
+	weak
