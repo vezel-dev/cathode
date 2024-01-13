@@ -78,6 +78,7 @@ csharp_style_var_elsewhere = true
 csharp_style_var_for_built_in_types = true
 csharp_style_var_when_type_is_apparent = true
 csharp_using_directive_placement = outside_namespace
+
 dotnet_code_quality_unused_parameters = all
 dotnet_separate_import_directive_groups = false
 dotnet_sort_system_directives_first = true
@@ -110,6 +111,8 @@ dotnet_style_qualification_for_method = false
 dotnet_style_qualification_for_property = false
 dotnet_style_readonly_field = true
 dotnet_style_require_accessibility_modifiers = always
+
+dotnet_public_api_analyzer.require_api_files = true
 
 dotnet_diagnostic.EnableGenerateDocumentationFile.severity = none # TODO: https://github.com/dotnet/roslyn/issues/41640
 
@@ -522,6 +525,29 @@ dotnet_diagnostic.IDE0305.severity = error
 dotnet_diagnostic.IDE1005.severity = error
 dotnet_diagnostic.IDE1006.severity = error
 
+dotnet_diagnostic.RS0016.severity = error
+dotnet_diagnostic.RS0017.severity = error
+dotnet_diagnostic.RS0022.severity = error
+dotnet_diagnostic.RS0024.severity = error
+dotnet_diagnostic.RS0025.severity = error
+dotnet_diagnostic.RS0026.severity = none
+dotnet_diagnostic.RS0027.severity = error
+dotnet_diagnostic.RS0036.severity = error
+dotnet_diagnostic.RS0037.severity = error
+dotnet_diagnostic.RS0041.severity = error
+dotnet_diagnostic.RS0048.severity = error
+dotnet_diagnostic.RS0050.severity = error
+dotnet_diagnostic.RS0051.severity = none
+dotnet_diagnostic.RS0052.severity = none
+dotnet_diagnostic.RS0053.severity = none
+dotnet_diagnostic.RS0054.severity = none
+dotnet_diagnostic.RS0055.severity = none
+dotnet_diagnostic.RS0056.severity = none
+dotnet_diagnostic.RS0057.severity = none
+dotnet_diagnostic.RS0058.severity = none
+dotnet_diagnostic.RS0059.severity = none
+dotnet_diagnostic.RS0060.severity = none
+dotnet_diagnostic.RS0061.severity = none
 dotnet_diagnostic.RS1001.severity = error
 dotnet_diagnostic.RS1002.severity = error
 dotnet_diagnostic.RS1003.severity = error

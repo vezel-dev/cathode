@@ -25,8 +25,8 @@
 	weak
 [file ".globalconfig"]
 	url = https://github.com/vezel-dev/.github/blob/master/syn/.globalconfig
-	sha = 7d581ae5eedad5892855cebc673edafad664856b
-	etag = 3405ebba188d6ed7dccc083f72e2212603ed57f8382de928dd6c45ad7cd63178
+	sha = e8b6d2e00d7720592fe9740777eafcb219d9a613
+	etag = d9c8f0bf4802deeedff637bbff0e0164bbbc6986bb5c1c8cd4301dde2692fce4
 	weak
 [file ".markdownlint.json"]
 	url = https://github.com/vezel-dev/.github/blob/master/syn/.markdownlint.json
