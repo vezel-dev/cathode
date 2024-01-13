@@ -1,0 +1,38 @@
+#nullable enable
+static Vezel.Cathode.Extensions.Hosting.SystemdTerminalHostBuilderExtensions.UseTerminalSystemd(this Microsoft.Extensions.Hosting.IHostBuilder! hostBuilder) -> Microsoft.Extensions.Hosting.IHostBuilder!
+static Vezel.Cathode.Extensions.Hosting.TerminalHost.CreateDefaultBuilder(string![]? args = null) -> Microsoft.Extensions.Hosting.IHostBuilder!
+static Vezel.Cathode.Extensions.Logging.TerminalLoggerWriters.Default(Vezel.Cathode.Extensions.Logging.TerminalLoggerOptions! options, Vezel.Cathode.Text.Control.ControlBuilder! builder, in Vezel.Cathode.Extensions.Logging.TerminalLoggerMessage message) -> void
+static Vezel.Cathode.Extensions.Logging.TerminalLoggerWriters.Systemd(Vezel.Cathode.Extensions.Logging.TerminalLoggerOptions! options, Vezel.Cathode.Text.Control.ControlBuilder! builder, in Vezel.Cathode.Extensions.Logging.TerminalLoggerMessage message) -> void
+static Vezel.Cathode.Extensions.Logging.TerminalLoggingBuilderExtensions.AddTerminal(this Microsoft.Extensions.Logging.ILoggingBuilder! builder, System.Action<Vezel.Cathode.Extensions.Logging.TerminalLoggerOptions!>? configureOptions = null) -> Microsoft.Extensions.Logging.ILoggingBuilder!
+Vezel.Cathode.Extensions.Hosting.SystemdTerminalHostBuilderExtensions
+Vezel.Cathode.Extensions.Hosting.TerminalHost
+Vezel.Cathode.Extensions.Logging.TerminalLoggerMessage
+Vezel.Cathode.Extensions.Logging.TerminalLoggerMessage.CategoryName.get -> string!
+Vezel.Cathode.Extensions.Logging.TerminalLoggerMessage.EventId.get -> Microsoft.Extensions.Logging.EventId
+Vezel.Cathode.Extensions.Logging.TerminalLoggerMessage.Exception.get -> System.Exception?
+Vezel.Cathode.Extensions.Logging.TerminalLoggerMessage.LogLevel.get -> Microsoft.Extensions.Logging.LogLevel
+Vezel.Cathode.Extensions.Logging.TerminalLoggerMessage.Message.get -> string!
+Vezel.Cathode.Extensions.Logging.TerminalLoggerMessage.TerminalLoggerMessage() -> void
+Vezel.Cathode.Extensions.Logging.TerminalLoggerMessage.Timestamp.get -> System.DateTime
+Vezel.Cathode.Extensions.Logging.TerminalLoggerOptions
+Vezel.Cathode.Extensions.Logging.TerminalLoggerOptions.LogQueueSize.get -> int
+Vezel.Cathode.Extensions.Logging.TerminalLoggerOptions.LogQueueSize.set -> void
+Vezel.Cathode.Extensions.Logging.TerminalLoggerOptions.LogToStandardErrorThreshold.get -> Microsoft.Extensions.Logging.LogLevel
+Vezel.Cathode.Extensions.Logging.TerminalLoggerOptions.LogToStandardErrorThreshold.set -> void
+Vezel.Cathode.Extensions.Logging.TerminalLoggerOptions.SingleLine.get -> bool
+Vezel.Cathode.Extensions.Logging.TerminalLoggerOptions.SingleLine.set -> void
+Vezel.Cathode.Extensions.Logging.TerminalLoggerOptions.TerminalLoggerOptions() -> void
+Vezel.Cathode.Extensions.Logging.TerminalLoggerOptions.UseColors.get -> bool
+Vezel.Cathode.Extensions.Logging.TerminalLoggerOptions.UseColors.set -> void
+Vezel.Cathode.Extensions.Logging.TerminalLoggerOptions.UseUtcTimestamp.get -> bool
+Vezel.Cathode.Extensions.Logging.TerminalLoggerOptions.UseUtcTimestamp.set -> void
+Vezel.Cathode.Extensions.Logging.TerminalLoggerOptions.Writer.get -> Vezel.Cathode.Extensions.Logging.TerminalLoggerWriter!
+Vezel.Cathode.Extensions.Logging.TerminalLoggerOptions.Writer.set -> void
+Vezel.Cathode.Extensions.Logging.TerminalLoggerProvider
+Vezel.Cathode.Extensions.Logging.TerminalLoggerProvider.CreateLogger(string! categoryName) -> Microsoft.Extensions.Logging.ILogger!
+Vezel.Cathode.Extensions.Logging.TerminalLoggerProvider.Dispose() -> void
+Vezel.Cathode.Extensions.Logging.TerminalLoggerProvider.SetScopeProvider(Microsoft.Extensions.Logging.IExternalScopeProvider! scopeProvider) -> void
+Vezel.Cathode.Extensions.Logging.TerminalLoggerProvider.TerminalLoggerProvider(Microsoft.Extensions.Options.IOptionsMonitor<Vezel.Cathode.Extensions.Logging.TerminalLoggerOptions!>! options) -> void
+Vezel.Cathode.Extensions.Logging.TerminalLoggerWriter
+Vezel.Cathode.Extensions.Logging.TerminalLoggerWriters
+Vezel.Cathode.Extensions.Logging.TerminalLoggingBuilderExtensions

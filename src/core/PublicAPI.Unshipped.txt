@@ -1,0 +1,540 @@
+#nullable enable
+abstract Vezel.Cathode.IO.TerminalHandle.IsInteractive.get -> bool
+abstract Vezel.Cathode.IO.TerminalHandle.IsValid.get -> bool
+abstract Vezel.Cathode.IO.TerminalHandle.Stream.get -> System.IO.Stream!
+abstract Vezel.Cathode.IO.TerminalReader.ReadPartialCore(scoped System.Span<byte> buffer) -> int
+abstract Vezel.Cathode.IO.TerminalReader.ReadPartialCoreAsync(System.Memory<byte> buffer, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<int>
+abstract Vezel.Cathode.IO.TerminalReader.TextReader.get -> System.IO.TextReader!
+abstract Vezel.Cathode.IO.TerminalWriter.TextWriter.get -> System.IO.TextWriter!
+abstract Vezel.Cathode.IO.TerminalWriter.WritePartialCore(scoped System.ReadOnlySpan<byte> buffer) -> int
+abstract Vezel.Cathode.IO.TerminalWriter.WritePartialCoreAsync(System.ReadOnlyMemory<byte> buffer, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<int>
+abstract Vezel.Cathode.VirtualTerminal.DisableRawMode() -> void
+abstract Vezel.Cathode.VirtualTerminal.EnableRawMode() -> void
+abstract Vezel.Cathode.VirtualTerminal.GenerateSignal(Vezel.Cathode.TerminalSignal signal) -> void
+abstract Vezel.Cathode.VirtualTerminal.IsRawMode.get -> bool
+abstract Vezel.Cathode.VirtualTerminal.Resized -> System.Action<System.Drawing.Size>?
+abstract Vezel.Cathode.VirtualTerminal.Resumed -> System.Action?
+abstract Vezel.Cathode.VirtualTerminal.Signaled -> System.Action<Vezel.Cathode.TerminalSignalContext!>?
+abstract Vezel.Cathode.VirtualTerminal.Size.get -> System.Drawing.Size
+abstract Vezel.Cathode.VirtualTerminal.StandardError.get -> Vezel.Cathode.IO.TerminalWriter!
+abstract Vezel.Cathode.VirtualTerminal.StandardIn.get -> Vezel.Cathode.IO.TerminalReader!
+abstract Vezel.Cathode.VirtualTerminal.StandardOut.get -> Vezel.Cathode.IO.TerminalWriter!
+abstract Vezel.Cathode.VirtualTerminal.TerminalIn.get -> Vezel.Cathode.IO.TerminalReader!
+abstract Vezel.Cathode.VirtualTerminal.TerminalOut.get -> Vezel.Cathode.IO.TerminalWriter!
+const Vezel.Cathode.Text.Control.ControlConstants.ACK = '\u0006' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.APC = "\u001b_" -> string!
+const Vezel.Cathode.Text.Control.ControlConstants.BEL = '\a' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.BS = '\b' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.CAN = '\u0018' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.CR = '\r' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.CSI = "\u001b[" -> string!
+const Vezel.Cathode.Text.Control.ControlConstants.DC1 = '\u0011' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.DC2 = '\u0012' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.DC3 = '\u0013' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.DC4 = '\u0014' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.DCS = "\u001bP" -> string!
+const Vezel.Cathode.Text.Control.ControlConstants.DEL = '\u007f' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.DLE = '\u0010' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.EM = '\u0019' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.ENQ = '\u0005' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.EOT = '\u0004' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.ESC = '\u001b' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.ETB = '\u0017' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.ETX = '\u0003' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.FF = '\f' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.FS = '\u001c' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.GS = '\u001d' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.HT = '\t' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.LF = '\n' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.NAK = '\u0015' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.NUL = '\0' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.OSC = "\u001b]" -> string!
+const Vezel.Cathode.Text.Control.ControlConstants.PM = "\u001b^" -> string!
+const Vezel.Cathode.Text.Control.ControlConstants.RS = '\u001e' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.SI = '\u000f' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.SO = '\u000e' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.SOH = '\u0001' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.SOS = "\u001bX" -> string!
+const Vezel.Cathode.Text.Control.ControlConstants.SP = ' ' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.ST = "\u001b\\" -> string!
+const Vezel.Cathode.Text.Control.ControlConstants.STX = '\u0002' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.SUB = '\u001a' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.SYN = '\u0016' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.US = '\u001f' -> char
+const Vezel.Cathode.Text.Control.ControlConstants.VT = '\v' -> char
+override sealed Vezel.Cathode.IO.TerminalStream.CanSeek.get -> bool
+override sealed Vezel.Cathode.IO.TerminalStream.Flush() -> void
+override sealed Vezel.Cathode.IO.TerminalStream.Length.get -> long
+override sealed Vezel.Cathode.IO.TerminalStream.Position.get -> long
+override sealed Vezel.Cathode.IO.TerminalStream.Position.set -> void
+override sealed Vezel.Cathode.IO.TerminalStream.Read(byte[]! buffer, int offset, int count) -> int
+override sealed Vezel.Cathode.IO.TerminalStream.ReadAsync(byte[]! buffer, int offset, int count, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<int>!
+override sealed Vezel.Cathode.IO.TerminalStream.ReadByte() -> int
+override sealed Vezel.Cathode.IO.TerminalStream.Seek(long offset, System.IO.SeekOrigin origin) -> long
+override sealed Vezel.Cathode.IO.TerminalStream.SetLength(long value) -> void
+override sealed Vezel.Cathode.IO.TerminalStream.Write(byte[]! buffer, int offset, int count) -> void
+override sealed Vezel.Cathode.IO.TerminalStream.WriteAsync(byte[]! buffer, int offset, int count, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task!
+override sealed Vezel.Cathode.IO.TerminalStream.WriteByte(byte value) -> void
+override sealed Vezel.Cathode.SystemVirtualTerminal.DisableRawMode() -> void
+override sealed Vezel.Cathode.SystemVirtualTerminal.EnableRawMode() -> void
+override sealed Vezel.Cathode.SystemVirtualTerminal.IsRawMode.get -> bool
+override sealed Vezel.Cathode.SystemVirtualTerminal.Resized -> System.Action<System.Drawing.Size>?
+override sealed Vezel.Cathode.SystemVirtualTerminal.Signaled -> System.Action<Vezel.Cathode.TerminalSignalContext!>?
+override sealed Vezel.Cathode.SystemVirtualTerminal.Size.get -> System.Drawing.Size
+override Vezel.Cathode.IO.TerminalInputStream.CanRead.get -> bool
+override Vezel.Cathode.IO.TerminalInputStream.CanWrite.get -> bool
+override Vezel.Cathode.IO.TerminalInputStream.Read(System.Span<byte> buffer) -> int
+override Vezel.Cathode.IO.TerminalInputStream.ReadAsync(System.Memory<byte> buffer, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask<int>
+override Vezel.Cathode.IO.TerminalOutputStream.CanRead.get -> bool
+override Vezel.Cathode.IO.TerminalOutputStream.CanWrite.get -> bool
+override Vezel.Cathode.IO.TerminalOutputStream.Write(System.ReadOnlySpan<byte> buffer) -> void
+override Vezel.Cathode.IO.TerminalOutputStream.WriteAsync(System.ReadOnlyMemory<byte> buffer, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+override Vezel.Cathode.Text.Control.ControlBuilder.ToString() -> string!
+static Vezel.Cathode.Processes.ChildProcess.Run(string! fileName, params string![]! arguments) -> Vezel.Cathode.Processes.ChildProcess!
+static Vezel.Cathode.Processes.ChildProcess.Run(string! fileName, System.Collections.Generic.IEnumerable<string!>! arguments) -> Vezel.Cathode.Processes.ChildProcess!
+static Vezel.Cathode.Processes.ChildProcess.RunIn(string! workingDirectory, string! fileName, params string![]! arguments) -> Vezel.Cathode.Processes.ChildProcess!
+static Vezel.Cathode.Processes.ChildProcess.RunIn(string! workingDirectory, string! fileName, System.Collections.Generic.IEnumerable<string!>! arguments) -> Vezel.Cathode.Processes.ChildProcess!
+static Vezel.Cathode.Terminal.Control.get -> Vezel.Cathode.TerminalControl!
+static Vezel.Cathode.Terminal.DisableRawMode() -> void
+static Vezel.Cathode.Terminal.EnableRawMode() -> void
+static Vezel.Cathode.Terminal.Encoding.get -> System.Text.Encoding!
+static Vezel.Cathode.Terminal.Error(scoped System.ReadOnlySpan<byte> value) -> void
+static Vezel.Cathode.Terminal.Error(scoped System.ReadOnlySpan<char> value) -> void
+static Vezel.Cathode.Terminal.Error<T>(T value) -> void
+static Vezel.Cathode.Terminal.ErrorAsync(byte[]? value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+static Vezel.Cathode.Terminal.ErrorAsync(char[]? value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+static Vezel.Cathode.Terminal.ErrorAsync(string? value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+static Vezel.Cathode.Terminal.ErrorAsync(System.Memory<byte> value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+static Vezel.Cathode.Terminal.ErrorAsync(System.Memory<char> value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+static Vezel.Cathode.Terminal.ErrorAsync(System.ReadOnlyMemory<byte> value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+static Vezel.Cathode.Terminal.ErrorAsync(System.ReadOnlyMemory<char> value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+static Vezel.Cathode.Terminal.ErrorAsync<T>(T value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+static Vezel.Cathode.Terminal.ErrorLine() -> void
+static Vezel.Cathode.Terminal.ErrorLine<T>(T value) -> void
+static Vezel.Cathode.Terminal.ErrorLineAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+static Vezel.Cathode.Terminal.ErrorLineAsync<T>(T value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+static Vezel.Cathode.Terminal.GenerateSignal(Vezel.Cathode.TerminalSignal signal) -> void
+static Vezel.Cathode.Terminal.IsRawMode.get -> bool
+static Vezel.Cathode.Terminal.Out(scoped System.ReadOnlySpan<byte> value) -> void
+static Vezel.Cathode.Terminal.Out(scoped System.ReadOnlySpan<char> value) -> void
+static Vezel.Cathode.Terminal.Out<T>(T value) -> void
+static Vezel.Cathode.Terminal.OutAsync(byte[]? value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+static Vezel.Cathode.Terminal.OutAsync(char[]? value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+static Vezel.Cathode.Terminal.OutAsync(string? value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+static Vezel.Cathode.Terminal.OutAsync(System.Memory<byte> value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+static Vezel.Cathode.Terminal.OutAsync(System.Memory<char> value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+static Vezel.Cathode.Terminal.OutAsync(System.ReadOnlyMemory<byte> value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+static Vezel.Cathode.Terminal.OutAsync(System.ReadOnlyMemory<char> value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+static Vezel.Cathode.Terminal.OutAsync<T>(T value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+static Vezel.Cathode.Terminal.OutLine() -> void
+static Vezel.Cathode.Terminal.OutLine<T>(T value) -> void
+static Vezel.Cathode.Terminal.OutLineAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+static Vezel.Cathode.Terminal.OutLineAsync<T>(T value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+static Vezel.Cathode.Terminal.Read(scoped System.Span<byte> value) -> int
+static Vezel.Cathode.Terminal.ReadAsync(System.Memory<byte> value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask<int>
+static Vezel.Cathode.Terminal.ReadLine() -> string?
+static Vezel.Cathode.Terminal.ReadLineAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask<string?>
+static Vezel.Cathode.Terminal.Resized -> System.Action<System.Drawing.Size>?
+static Vezel.Cathode.Terminal.Resumed -> System.Action?
+static Vezel.Cathode.Terminal.Signaled -> System.Action<Vezel.Cathode.TerminalSignalContext!>?
+static Vezel.Cathode.Terminal.Size.get -> System.Drawing.Size
+static Vezel.Cathode.Terminal.SizePollingInterval.get -> System.TimeSpan
+static Vezel.Cathode.Terminal.SizePollingInterval.set -> void
+static Vezel.Cathode.Terminal.StandardError.get -> Vezel.Cathode.IO.TerminalWriter!
+static Vezel.Cathode.Terminal.StandardIn.get -> Vezel.Cathode.IO.TerminalReader!
+static Vezel.Cathode.Terminal.StandardOut.get -> Vezel.Cathode.IO.TerminalWriter!
+static Vezel.Cathode.Terminal.System.get -> Vezel.Cathode.SystemVirtualTerminal!
+static Vezel.Cathode.Terminal.TerminalIn.get -> Vezel.Cathode.IO.TerminalReader!
+static Vezel.Cathode.Terminal.TerminalOut.get -> Vezel.Cathode.IO.TerminalWriter!
+static Vezel.Cathode.Text.Control.ControlSequences.Backspace() -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.Beep() -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.BeginShellExecution() -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.BeginShellPrompt() -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.Cancel() -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.CarriageReturn() -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.ClearLine(Vezel.Cathode.Text.Control.ClearMode mode = Vezel.Cathode.Text.Control.ClearMode.Full) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.ClearScreen(Vezel.Cathode.Text.Control.ClearMode mode = Vezel.Cathode.Text.Control.ClearMode.Full) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.CloseHyperlink() -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.DeleteCharacters(int count) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.DeleteLines(int count) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.EndShellExecution(int? code = null) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.EndShellPrompt() -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.EraseCharacters(int count) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.FileSeparator() -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.FormFeed() -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.FullReset() -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.GroupSeparator() -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.HorizontalTab() -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.InsertCharacters(int count) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.InsertLines(int count) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.LineFeed() -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.MoveBufferDown(int count) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.MoveBufferUp(int count) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.MoveCursorDown(int count) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.MoveCursorLeft(int count) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.MoveCursorRight(int count) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.MoveCursorTo(int line, int column) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.MoveCursorUp(int count) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.OpenHyperlink(System.Uri! uri, scoped System.ReadOnlySpan<char> id = default(System.ReadOnlySpan<char>)) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.PlayNotes(int volume, int duration, scoped System.ReadOnlySpan<int> notes) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.PopTitle() -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.ProtectedClearLine(Vezel.Cathode.Text.Control.ClearMode mode = Vezel.Cathode.Text.Control.ClearMode.Full) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.ProtectedClearScreen(Vezel.Cathode.Text.Control.ClearMode mode = Vezel.Cathode.Text.Control.ClearMode.Full) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.PushTitle() -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.RecordSeparator() -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.ResetAttributes() -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.RestoreCursorState() -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SaveCursorState() -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SaveScreenshot(Vezel.Cathode.Text.Control.ScreenshotFormat format = Vezel.Cathode.Text.Control.ScreenshotFormat.Html) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SetAutoRepeatMode(bool enable) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SetBackgroundColor(System.Drawing.Color color) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SetBracketedPaste(bool enable) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SetCursorKeyMode(Vezel.Cathode.Text.Control.CursorKeyMode mode) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SetCursorStyle(Vezel.Cathode.Text.Control.CursorStyle style) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SetCursorVisibility(bool visible) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SetDecorations(bool intense = false, bool faint = false, bool italic = false, bool underline = false, bool blink = false, bool invert = false, bool invisible = false, bool strike = false, bool doubleUnderline = false, bool overline = false) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SetFocusEvents(bool enable) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SetForegroundColor(System.Drawing.Color color) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SetInvertedColors(bool enable) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SetKeyboardLevel(Vezel.Cathode.Text.Control.KeyboardLevel level) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SetKeypadMode(Vezel.Cathode.Text.Control.KeypadMode mode) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SetMouseEvents(Vezel.Cathode.Text.Control.MouseEvents events) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SetMousePointerStyle(scoped System.ReadOnlySpan<char> style) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SetOutputBatching(bool enable) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SetProgress(Vezel.Cathode.Text.Control.ProgressState state, int value) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SetProtection(bool protect) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SetScreenBuffer(Vezel.Cathode.Text.Control.ScreenBuffer buffer) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SetScrollBarVisibility(bool visible) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SetScrollMargin(int top, int bottom) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SetTitle(scoped System.ReadOnlySpan<char> title) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SetUnderlineColor(System.Drawing.Color color) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SetWorkingDirectory(scoped System.ReadOnlySpan<char> path) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SetWorkingDirectory(System.Uri! uri) -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.SoftReset() -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.Space() -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.Substitute() -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.UnitSeparator() -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.VerticalTab() -> string!
+static Vezel.Cathode.Text.MonospaceWidth.Measure(scoped System.ReadOnlySpan<char> value) -> int?
+static Vezel.Cathode.Text.MonospaceWidth.Measure(System.Text.Rune value) -> int?
+Vezel.Cathode.Diagnostics.TerminalTraceListener
+Vezel.Cathode.Diagnostics.TerminalTraceListener.TerminalTraceListener(Vezel.Cathode.IO.TerminalWriter! writer) -> void
+Vezel.Cathode.IO.TerminalConfigurationException
+Vezel.Cathode.IO.TerminalConfigurationException.TerminalConfigurationException() -> void
+Vezel.Cathode.IO.TerminalConfigurationException.TerminalConfigurationException(string? message) -> void
+Vezel.Cathode.IO.TerminalConfigurationException.TerminalConfigurationException(string? message, System.Exception? innerException) -> void
+Vezel.Cathode.IO.TerminalException
+Vezel.Cathode.IO.TerminalException.TerminalException() -> void
+Vezel.Cathode.IO.TerminalException.TerminalException(string? message) -> void
+Vezel.Cathode.IO.TerminalException.TerminalException(string? message, System.Exception? innerException) -> void
+Vezel.Cathode.IO.TerminalHandle
+Vezel.Cathode.IO.TerminalHandle.TerminalHandle() -> void
+Vezel.Cathode.IO.TerminalInputStream
+Vezel.Cathode.IO.TerminalInputStream.Reader.get -> Vezel.Cathode.IO.TerminalReader!
+Vezel.Cathode.IO.TerminalInputStream.TerminalInputStream(Vezel.Cathode.IO.TerminalReader! reader) -> void
+Vezel.Cathode.IO.TerminalNotAttachedException
+Vezel.Cathode.IO.TerminalNotAttachedException.TerminalNotAttachedException() -> void
+Vezel.Cathode.IO.TerminalNotAttachedException.TerminalNotAttachedException(string? message) -> void
+Vezel.Cathode.IO.TerminalNotAttachedException.TerminalNotAttachedException(string? message, System.Exception? innerException) -> void
+Vezel.Cathode.IO.TerminalOutputStream
+Vezel.Cathode.IO.TerminalOutputStream.TerminalOutputStream(Vezel.Cathode.IO.TerminalWriter! writer) -> void
+Vezel.Cathode.IO.TerminalOutputStream.Writer.get -> Vezel.Cathode.IO.TerminalWriter!
+Vezel.Cathode.IO.TerminalReader
+Vezel.Cathode.IO.TerminalReader.InputRead -> System.Buffers.SpanAction<byte, Vezel.Cathode.IO.TerminalReader!>?
+Vezel.Cathode.IO.TerminalReader.Read(scoped System.Span<byte> value) -> int
+Vezel.Cathode.IO.TerminalReader.ReadAsync(System.Memory<byte> value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask<int>
+Vezel.Cathode.IO.TerminalReader.ReadLine() -> string?
+Vezel.Cathode.IO.TerminalReader.ReadLineAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask<string?>
+Vezel.Cathode.IO.TerminalReader.ReadPartial(scoped System.Span<byte> buffer) -> int
+Vezel.Cathode.IO.TerminalReader.ReadPartialAsync(System.Memory<byte> buffer, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask<int>
+Vezel.Cathode.IO.TerminalReader.TerminalReader() -> void
+Vezel.Cathode.IO.TerminalStream
+Vezel.Cathode.IO.TerminalWriter
+Vezel.Cathode.IO.TerminalWriter.OutputWritten -> System.Buffers.ReadOnlySpanAction<byte, Vezel.Cathode.IO.TerminalWriter!>?
+Vezel.Cathode.IO.TerminalWriter.TerminalWriter() -> void
+Vezel.Cathode.IO.TerminalWriter.Write(scoped System.ReadOnlySpan<byte> value) -> void
+Vezel.Cathode.IO.TerminalWriter.Write(scoped System.ReadOnlySpan<char> value) -> void
+Vezel.Cathode.IO.TerminalWriter.Write<T>(T value) -> void
+Vezel.Cathode.IO.TerminalWriter.WriteAsync(byte[]? value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.IO.TerminalWriter.WriteAsync(char[]? value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.IO.TerminalWriter.WriteAsync(string? value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.IO.TerminalWriter.WriteAsync(System.Memory<byte> value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.IO.TerminalWriter.WriteAsync(System.Memory<char> value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.IO.TerminalWriter.WriteAsync(System.ReadOnlyMemory<byte> value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.IO.TerminalWriter.WriteAsync(System.ReadOnlyMemory<char> value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.IO.TerminalWriter.WriteAsync<T>(T value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.IO.TerminalWriter.WriteLine() -> void
+Vezel.Cathode.IO.TerminalWriter.WriteLine<T>(T value) -> void
+Vezel.Cathode.IO.TerminalWriter.WriteLineAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.IO.TerminalWriter.WriteLineAsync<T>(T value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.IO.TerminalWriter.WritePartial(scoped System.ReadOnlySpan<byte> buffer) -> int
+Vezel.Cathode.IO.TerminalWriter.WritePartialAsync(System.ReadOnlyMemory<byte> buffer, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask<int>
+Vezel.Cathode.Processes.ChildProcess
+Vezel.Cathode.Processes.ChildProcess.Completion.get -> System.Threading.Tasks.Task<int>!
+Vezel.Cathode.Processes.ChildProcess.Id.get -> int
+Vezel.Cathode.Processes.ChildProcess.Kill(bool entireProcessTree = true) -> void
+Vezel.Cathode.Processes.ChildProcess.StandardError.get -> Vezel.Cathode.Processes.ChildProcessReader!
+Vezel.Cathode.Processes.ChildProcess.StandardIn.get -> Vezel.Cathode.Processes.ChildProcessWriter!
+Vezel.Cathode.Processes.ChildProcess.StandardOut.get -> Vezel.Cathode.Processes.ChildProcessReader!
+Vezel.Cathode.Processes.ChildProcessBuilder
+Vezel.Cathode.Processes.ChildProcessBuilder.AddArgument(string! argument) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.AddArguments(params string![]! arguments) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.AddArguments(System.Collections.Generic.IEnumerable<string!>! arguments) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.AddVariable(string! name, string! value) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.AddVariables(params (string! Name, string! Value)[]! variables) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.AddVariables(System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string!, string!>>! variables) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.Arguments.get -> System.Collections.Immutable.ImmutableArray<string!>
+Vezel.Cathode.Processes.ChildProcessBuilder.CancellationToken.get -> System.Threading.CancellationToken
+Vezel.Cathode.Processes.ChildProcessBuilder.ChildProcessBuilder() -> void
+Vezel.Cathode.Processes.ChildProcessBuilder.ClearArguments() -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.ClearVariables() -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.CreateWindow.get -> bool
+Vezel.Cathode.Processes.ChildProcessBuilder.FileName.get -> string!
+Vezel.Cathode.Processes.ChildProcessBuilder.InsertArgument(int index, string! argument) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.InsertArguments(int index, params string![]! arguments) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.InsertArguments(int index, System.Collections.Generic.IEnumerable<string!>! arguments) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.RedirectStandardError.get -> bool
+Vezel.Cathode.Processes.ChildProcessBuilder.RedirectStandardIn.get -> bool
+Vezel.Cathode.Processes.ChildProcessBuilder.RedirectStandardOut.get -> bool
+Vezel.Cathode.Processes.ChildProcessBuilder.RemoveArgument(int index) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.RemoveArguments(int index, int count) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.RemoveVariable(string! name) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.RemoveVariables(params string![]! names) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.RemoveVariables(System.Collections.Generic.IEnumerable<string!>! names) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.Run() -> Vezel.Cathode.Processes.ChildProcess!
+Vezel.Cathode.Processes.ChildProcessBuilder.SetArgument(int index, string! argument) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.SetVariable(string! name, string! value) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.SetVariables(params (string! Name, string! Value)[]! variables) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.SetVariables(System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string!, string!>>! variables) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.StandardErrorBufferSize.get -> int
+Vezel.Cathode.Processes.ChildProcessBuilder.StandardErrorEncoding.get -> System.Text.Encoding!
+Vezel.Cathode.Processes.ChildProcessBuilder.StandardInEncoding.get -> System.Text.Encoding!
+Vezel.Cathode.Processes.ChildProcessBuilder.StandardOutBufferSize.get -> int
+Vezel.Cathode.Processes.ChildProcessBuilder.StandardOutEncoding.get -> System.Text.Encoding!
+Vezel.Cathode.Processes.ChildProcessBuilder.ThrowOnError.get -> bool
+Vezel.Cathode.Processes.ChildProcessBuilder.Variables.get -> System.Collections.Immutable.ImmutableDictionary<string!, string!>!
+Vezel.Cathode.Processes.ChildProcessBuilder.WindowStyle.get -> System.Diagnostics.ProcessWindowStyle
+Vezel.Cathode.Processes.ChildProcessBuilder.WithArguments(params string![]! arguments) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.WithArguments(System.Collections.Generic.IEnumerable<string!>! arguments) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.WithBufferSizes(int allStreams) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.WithBufferSizes(int standardOut, int standardError) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.WithCancellationToken(System.Threading.CancellationToken cancellationToken) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.WithCreateWindow(bool createWindow) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.WithEncodings(System.Text.Encoding? allStreams) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.WithEncodings(System.Text.Encoding? standardIn, System.Text.Encoding? standardOut, System.Text.Encoding? standardError) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.WithFileName(string! fileName) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.WithRedirections(bool allStreams) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.WithRedirections(bool standardIn, bool standardOut, bool standardError) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.WithThrowOnError(bool throwOnError) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.WithVariables(params (string! Name, string! Value)[]! variables) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.WithVariables(System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string!, string!>>! variables) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.WithWindowStyle(System.Diagnostics.ProcessWindowStyle windowStyle) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.WithWorkingDirectory(string! workingDirectory) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.WorkingDirectory.get -> string!
+Vezel.Cathode.Processes.ChildProcessErrorException
+Vezel.Cathode.Processes.ChildProcessErrorException.ChildProcessErrorException() -> void
+Vezel.Cathode.Processes.ChildProcessErrorException.ChildProcessErrorException(string? message) -> void
+Vezel.Cathode.Processes.ChildProcessErrorException.ChildProcessErrorException(string? message, int exitCode) -> void
+Vezel.Cathode.Processes.ChildProcessErrorException.ChildProcessErrorException(string? message, System.Exception? innerException) -> void
+Vezel.Cathode.Processes.ChildProcessErrorException.ExitCode.get -> int
+Vezel.Cathode.Processes.ChildProcessException
+Vezel.Cathode.Processes.ChildProcessException.ChildProcessException() -> void
+Vezel.Cathode.Processes.ChildProcessException.ChildProcessException(string? message) -> void
+Vezel.Cathode.Processes.ChildProcessException.ChildProcessException(string? message, System.Exception? innerException) -> void
+Vezel.Cathode.Processes.ChildProcessReader
+Vezel.Cathode.Processes.ChildProcessReader.Encoding.get -> System.Text.Encoding!
+Vezel.Cathode.Processes.ChildProcessReader.Stream.get -> System.IO.Stream!
+Vezel.Cathode.Processes.ChildProcessReader.TextReader.get -> System.IO.TextReader!
+Vezel.Cathode.Processes.ChildProcessWriter
+Vezel.Cathode.Processes.ChildProcessWriter.Encoding.get -> System.Text.Encoding!
+Vezel.Cathode.Processes.ChildProcessWriter.Stream.get -> System.IO.Stream!
+Vezel.Cathode.Processes.ChildProcessWriter.TextWriter.get -> System.IO.TextWriter!
+Vezel.Cathode.SystemVirtualTerminal
+Vezel.Cathode.SystemVirtualTerminal.Control.get -> Vezel.Cathode.TerminalControl!
+Vezel.Cathode.SystemVirtualTerminal.SizePollingInterval.get -> System.TimeSpan
+Vezel.Cathode.SystemVirtualTerminal.SizePollingInterval.set -> void
+Vezel.Cathode.Terminal
+Vezel.Cathode.TerminalControl
+Vezel.Cathode.TerminalControl.Acquire(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> Vezel.Cathode.TerminalControl.AcquireDisposable!
+Vezel.Cathode.TerminalControl.AcquireDisposable
+Vezel.Cathode.TerminalControl.AcquireDisposable.Dispose() -> void
+Vezel.Cathode.TerminalSignal
+Vezel.Cathode.TerminalSignal.Close = 0 -> Vezel.Cathode.TerminalSignal
+Vezel.Cathode.TerminalSignal.Interrupt = 1 -> Vezel.Cathode.TerminalSignal
+Vezel.Cathode.TerminalSignal.Quit = 2 -> Vezel.Cathode.TerminalSignal
+Vezel.Cathode.TerminalSignal.Terminate = 3 -> Vezel.Cathode.TerminalSignal
+Vezel.Cathode.TerminalSignalContext
+Vezel.Cathode.TerminalSignalContext.Cancel.get -> bool
+Vezel.Cathode.TerminalSignalContext.Cancel.set -> void
+Vezel.Cathode.TerminalSignalContext.Signal.get -> Vezel.Cathode.TerminalSignal
+Vezel.Cathode.TerminalSignalContext.TerminalSignalContext(Vezel.Cathode.TerminalSignal signal) -> void
+Vezel.Cathode.Text.Control.ClearMode
+Vezel.Cathode.Text.Control.ClearMode.After = 0 -> Vezel.Cathode.Text.Control.ClearMode
+Vezel.Cathode.Text.Control.ClearMode.Before = 1 -> Vezel.Cathode.Text.Control.ClearMode
+Vezel.Cathode.Text.Control.ClearMode.Full = 2 -> Vezel.Cathode.Text.Control.ClearMode
+Vezel.Cathode.Text.Control.ControlBuilder
+Vezel.Cathode.Text.Control.ControlBuilder.Backspace() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.Beep() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.BeginShellExecution() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.BeginShellPrompt() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.Cancel() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.CarriageReturn() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.Clear(int reallocateThreshold = 4096) -> void
+Vezel.Cathode.Text.Control.ControlBuilder.ClearLine(Vezel.Cathode.Text.Control.ClearMode mode = Vezel.Cathode.Text.Control.ClearMode.Full) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.ClearScreen(Vezel.Cathode.Text.Control.ClearMode mode = Vezel.Cathode.Text.Control.ClearMode.Full) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.CloseHyperlink() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.ControlBuilder(int capacity = 1024) -> void
+Vezel.Cathode.Text.Control.ControlBuilder.DeleteCharacters(int count) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.DeleteLines(int count) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.EndShellExecution(int? code = null) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.EndShellPrompt() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.EraseCharacters(int count) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.FileSeparator() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.FormFeed() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.FullReset() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.GroupSeparator() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.HorizontalTab() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.InsertCharacters(int count) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.InsertLines(int count) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.LineFeed() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.MoveBufferDown(int count) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.MoveBufferUp(int count) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.MoveCursorDown(int count) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.MoveCursorLeft(int count) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.MoveCursorRight(int count) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.MoveCursorTo(int line, int column) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.MoveCursorUp(int count) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.Null() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.OpenHyperlink(System.Uri! uri, scoped System.ReadOnlySpan<char> id = default(System.ReadOnlySpan<char>)) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.PlayNotes(int volume, int duration, scoped System.ReadOnlySpan<int> notes) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.PopTitle() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.Print(scoped ref Vezel.Cathode.Text.Control.ControlBuilder.PrintInterpolatedStringHandler handler) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.Print(scoped System.ReadOnlySpan<char> value) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.Print(System.IFormatProvider? provider, scoped ref Vezel.Cathode.Text.Control.ControlBuilder.PrintInterpolatedStringHandler handler) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.Print<T>(T value) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.PrintInterpolatedStringHandler
+Vezel.Cathode.Text.Control.ControlBuilder.PrintInterpolatedStringHandler.AppendFormatted(object? value, string? format = null) -> void
+Vezel.Cathode.Text.Control.ControlBuilder.PrintInterpolatedStringHandler.AppendFormatted(scoped System.ReadOnlySpan<char> value) -> void
+Vezel.Cathode.Text.Control.ControlBuilder.PrintInterpolatedStringHandler.AppendFormatted(string? value) -> void
+Vezel.Cathode.Text.Control.ControlBuilder.PrintInterpolatedStringHandler.AppendFormatted(void* value, string? format = null) -> void
+Vezel.Cathode.Text.Control.ControlBuilder.PrintInterpolatedStringHandler.AppendFormatted<T>(T value, string? format = null) -> void
+Vezel.Cathode.Text.Control.ControlBuilder.PrintInterpolatedStringHandler.AppendLiteral(string! value) -> void
+Vezel.Cathode.Text.Control.ControlBuilder.PrintInterpolatedStringHandler.PrintInterpolatedStringHandler() -> void
+Vezel.Cathode.Text.Control.ControlBuilder.PrintInterpolatedStringHandler.PrintInterpolatedStringHandler(int literalLength, int formattedCount, Vezel.Cathode.Text.Control.ControlBuilder! builder, System.IFormatProvider? provider = null) -> void
+Vezel.Cathode.Text.Control.ControlBuilder.PrintLine() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.PrintLine(scoped ref Vezel.Cathode.Text.Control.ControlBuilder.PrintInterpolatedStringHandler handler) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.PrintLine(System.IFormatProvider? provider, scoped ref Vezel.Cathode.Text.Control.ControlBuilder.PrintInterpolatedStringHandler handler) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.PrintLine<T>(T value) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.ProtectedClearLine(Vezel.Cathode.Text.Control.ClearMode mode = Vezel.Cathode.Text.Control.ClearMode.Full) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.ProtectedClearScreen(Vezel.Cathode.Text.Control.ClearMode mode = Vezel.Cathode.Text.Control.ClearMode.Full) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.PushTitle() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.RecordSeparator() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.ResetAttributes() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.RestoreCursorState() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SaveCursorState() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SaveScreenshot(Vezel.Cathode.Text.Control.ScreenshotFormat format = Vezel.Cathode.Text.Control.ScreenshotFormat.Html) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SetAutoRepeatMode(bool enable) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SetBackgroundColor(System.Drawing.Color color) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SetBracketedPaste(bool enable) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SetCursorKeyMode(Vezel.Cathode.Text.Control.CursorKeyMode mode) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SetCursorStyle(Vezel.Cathode.Text.Control.CursorStyle style) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SetCursorVisibility(bool visible) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SetDecorations(bool intense = false, bool faint = false, bool italic = false, bool underline = false, bool curlyUnderline = false, bool dottedUnderline = false, bool dashedUnderline = false, bool blink = false, bool rapidBlink = false, bool invert = false, bool invisible = false, bool strikethrough = false, bool doubleUnderline = false, bool overline = false) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SetFocusEvents(bool enable) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SetForegroundColor(System.Drawing.Color color) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SetInvertedColors(bool enable) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SetKeyboardLevel(Vezel.Cathode.Text.Control.KeyboardLevel level) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SetKeypadMode(Vezel.Cathode.Text.Control.KeypadMode mode) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SetMouseEvents(Vezel.Cathode.Text.Control.MouseEvents events) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SetMousePointerStyle(scoped System.ReadOnlySpan<char> style) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SetOutputBatching(bool enable) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SetProgress(Vezel.Cathode.Text.Control.ProgressState state, int value) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SetProtection(bool protect) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SetScreenBuffer(Vezel.Cathode.Text.Control.ScreenBuffer buffer) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SetScrollBarVisibility(bool visible) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SetScrollMargin(int top, int bottom) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SetTitle(scoped System.ReadOnlySpan<char> title) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SetUnderlineColor(System.Drawing.Color color) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SetWorkingDirectory(scoped System.ReadOnlySpan<char> path) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SetWorkingDirectory(System.Uri! uri) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.SoftReset() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.Space() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.Span.get -> System.ReadOnlySpan<char>
+Vezel.Cathode.Text.Control.ControlBuilder.Substitute() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.UnitSeparator() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.VerticalTab() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlConstants
+Vezel.Cathode.Text.Control.ControlSequences
+Vezel.Cathode.Text.Control.CursorKeyMode
+Vezel.Cathode.Text.Control.CursorKeyMode.Application = 104 -> Vezel.Cathode.Text.Control.CursorKeyMode
+Vezel.Cathode.Text.Control.CursorKeyMode.Normal = 108 -> Vezel.Cathode.Text.Control.CursorKeyMode
+Vezel.Cathode.Text.Control.CursorStyle
+Vezel.Cathode.Text.Control.CursorStyle.BlinkingBar = 5 -> Vezel.Cathode.Text.Control.CursorStyle
+Vezel.Cathode.Text.Control.CursorStyle.BlinkingBlock = 1 -> Vezel.Cathode.Text.Control.CursorStyle
+Vezel.Cathode.Text.Control.CursorStyle.BlinkingUnderline = 3 -> Vezel.Cathode.Text.Control.CursorStyle
+Vezel.Cathode.Text.Control.CursorStyle.Default = 0 -> Vezel.Cathode.Text.Control.CursorStyle
+Vezel.Cathode.Text.Control.CursorStyle.StaticBar = 6 -> Vezel.Cathode.Text.Control.CursorStyle
+Vezel.Cathode.Text.Control.CursorStyle.StaticBlock = 2 -> Vezel.Cathode.Text.Control.CursorStyle
+Vezel.Cathode.Text.Control.CursorStyle.StaticUnderline = 4 -> Vezel.Cathode.Text.Control.CursorStyle
+Vezel.Cathode.Text.Control.KeyboardLevel
+Vezel.Cathode.Text.Control.KeyboardLevel.Basic = 0 -> Vezel.Cathode.Text.Control.KeyboardLevel
+Vezel.Cathode.Text.Control.KeyboardLevel.Extended = 2 -> Vezel.Cathode.Text.Control.KeyboardLevel
+Vezel.Cathode.Text.Control.KeyboardLevel.Normal = 1 -> Vezel.Cathode.Text.Control.KeyboardLevel
+Vezel.Cathode.Text.Control.KeypadMode
+Vezel.Cathode.Text.Control.KeypadMode.Application = 61 -> Vezel.Cathode.Text.Control.KeypadMode
+Vezel.Cathode.Text.Control.KeypadMode.Numeric = 62 -> Vezel.Cathode.Text.Control.KeypadMode
+Vezel.Cathode.Text.Control.MouseEvents
+Vezel.Cathode.Text.Control.MouseEvents.All = Vezel.Cathode.Text.Control.MouseEvents.Movement | Vezel.Cathode.Text.Control.MouseEvents.Buttons -> Vezel.Cathode.Text.Control.MouseEvents
+Vezel.Cathode.Text.Control.MouseEvents.Buttons = 2 -> Vezel.Cathode.Text.Control.MouseEvents
+Vezel.Cathode.Text.Control.MouseEvents.Movement = 1 -> Vezel.Cathode.Text.Control.MouseEvents
+Vezel.Cathode.Text.Control.MouseEvents.None = 0 -> Vezel.Cathode.Text.Control.MouseEvents
+Vezel.Cathode.Text.Control.ProgressState
+Vezel.Cathode.Text.Control.ProgressState.Error = 2 -> Vezel.Cathode.Text.Control.ProgressState
+Vezel.Cathode.Text.Control.ProgressState.Indeterminate = 3 -> Vezel.Cathode.Text.Control.ProgressState
+Vezel.Cathode.Text.Control.ProgressState.None = 0 -> Vezel.Cathode.Text.Control.ProgressState
+Vezel.Cathode.Text.Control.ProgressState.Running = 1 -> Vezel.Cathode.Text.Control.ProgressState
+Vezel.Cathode.Text.Control.ProgressState.Warning = 4 -> Vezel.Cathode.Text.Control.ProgressState
+Vezel.Cathode.Text.Control.ScreenBuffer
+Vezel.Cathode.Text.Control.ScreenBuffer.Alternate = 104 -> Vezel.Cathode.Text.Control.ScreenBuffer
+Vezel.Cathode.Text.Control.ScreenBuffer.Main = 108 -> Vezel.Cathode.Text.Control.ScreenBuffer
+Vezel.Cathode.Text.Control.ScreenshotFormat
+Vezel.Cathode.Text.Control.ScreenshotFormat.Html = 10 -> Vezel.Cathode.Text.Control.ScreenshotFormat
+Vezel.Cathode.Text.Control.ScreenshotFormat.Png = 12 -> Vezel.Cathode.Text.Control.ScreenshotFormat
+Vezel.Cathode.Text.Control.ScreenshotFormat.Svg = 11 -> Vezel.Cathode.Text.Control.ScreenshotFormat
+Vezel.Cathode.Text.MonospaceWidth
+Vezel.Cathode.VirtualTerminal
+Vezel.Cathode.VirtualTerminal.Error(scoped System.ReadOnlySpan<byte> value) -> void
+Vezel.Cathode.VirtualTerminal.Error(scoped System.ReadOnlySpan<char> value) -> void
+Vezel.Cathode.VirtualTerminal.Error<T>(T value) -> void
+Vezel.Cathode.VirtualTerminal.ErrorAsync(byte[]? value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.VirtualTerminal.ErrorAsync(char[]? value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.VirtualTerminal.ErrorAsync(string? value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.VirtualTerminal.ErrorAsync(System.Memory<byte> value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.VirtualTerminal.ErrorAsync(System.Memory<char> value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.VirtualTerminal.ErrorAsync(System.ReadOnlyMemory<byte> value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.VirtualTerminal.ErrorAsync(System.ReadOnlyMemory<char> value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.VirtualTerminal.ErrorAsync<T>(T value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.VirtualTerminal.ErrorLine() -> void
+Vezel.Cathode.VirtualTerminal.ErrorLine<T>(T value) -> void
+Vezel.Cathode.VirtualTerminal.ErrorLineAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.VirtualTerminal.ErrorLineAsync<T>(T value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.VirtualTerminal.Out(scoped System.ReadOnlySpan<byte> value) -> void
+Vezel.Cathode.VirtualTerminal.Out(scoped System.ReadOnlySpan<char> value) -> void
+Vezel.Cathode.VirtualTerminal.Out<T>(T value) -> void
+Vezel.Cathode.VirtualTerminal.OutAsync(byte[]? value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.VirtualTerminal.OutAsync(char[]? value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.VirtualTerminal.OutAsync(string? value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.VirtualTerminal.OutAsync(System.Memory<byte> value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.VirtualTerminal.OutAsync(System.Memory<char> value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.VirtualTerminal.OutAsync(System.ReadOnlyMemory<byte> value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.VirtualTerminal.OutAsync(System.ReadOnlyMemory<char> value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.VirtualTerminal.OutAsync<T>(T value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.VirtualTerminal.OutLine() -> void
+Vezel.Cathode.VirtualTerminal.OutLine<T>(T value) -> void
+Vezel.Cathode.VirtualTerminal.OutLineAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.VirtualTerminal.OutLineAsync<T>(T value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.VirtualTerminal.Read(scoped System.Span<byte> value) -> int
+Vezel.Cathode.VirtualTerminal.ReadAsync(System.Memory<byte> value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask<int>
+Vezel.Cathode.VirtualTerminal.ReadLine() -> string?
+Vezel.Cathode.VirtualTerminal.ReadLineAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask<string?>
+Vezel.Cathode.VirtualTerminal.VirtualTerminal() -> void

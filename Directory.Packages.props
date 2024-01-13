@@ -9,6 +9,8 @@
     </ItemGroup>
 
     <ItemGroup Condition="'$(UsingVezelZigSdk)' != 'true'">
+        <GlobalPackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers"
+                                Version="3.3.4" />
         <GlobalPackageReference Include="Microsoft.VisualStudio.Threading.Analyzers"
                                 Version="17.8.14" />
         <GlobalPackageReference Include="Nerdbank.GitVersioning"
