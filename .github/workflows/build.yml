@@ -53,7 +53,7 @@ jobs:
                       --skip width
             - name: Upload artifacts
               if: always()
-              uses: actions/upload-artifact@v4.0.0
+              uses: actions/upload-artifact@v4.1.0
               with:
                   name: ${{ github.workflow }}-${{ github.run_number }}-${{ github.run_attempt }}-${{ matrix.os }}-${{ matrix.cfg }}
                   path: |
