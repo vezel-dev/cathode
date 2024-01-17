@@ -1,7 +1,10 @@
-await OutAsync("Reading cooked input: ");
-await OutLineAsync(await ReadLineAsync());
+await OutAsync("Reading cooked input and cancelling after 5 seconds: ");
 
-await OutLineAsync("Entering raw mode and reading input. Then canceling after 5 seconds.");
+using var cts1 = new CancellationTokenSource(delay: TimeSpan.FromSeconds(5));
+
+await OutLineAsync(await ReadLineAsync(cts1.Token));
+
+await OutLineAsync("Entering raw mode and reading input. Then cancelling after 5 seconds.");
 await OutLineAsync();
 
 var array = new byte[1];
@@ -14,7 +17,7 @@ try
     {
         await Task.Delay(TimeSpan.FromSeconds(5));
 
-        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+        using var cts2 = new CancellationTokenSource(delay: TimeSpan.FromSeconds(5));
 
         await OutAsync($"Round {i}...\r\n");
 
@@ -22,7 +25,7 @@ try
         {
             try
             {
-                if (await ReadAsync(array, cts.Token) == 0)
+                if (await ReadAsync(array, cts2.Token) == 0)
                     break;
             }
             catch (OperationCanceledException)

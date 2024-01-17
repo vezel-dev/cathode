@@ -1,6 +1,6 @@
 await OutLineAsync("Launching 'bash'...");
 
-using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+using var cts = new CancellationTokenSource(delay: TimeSpan.FromSeconds(10));
 
 var bash =
     new ChildProcessBuilder()
