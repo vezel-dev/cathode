@@ -2,4 +2,4 @@
 
 #include "driver.h"
 
-// Currently no OS-specific APIs.
+CATHODE_API void cathode_cancel(TerminalDescriptor *nonnull descriptor);

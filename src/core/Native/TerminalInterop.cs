@@ -11,6 +11,7 @@ internal static unsafe partial class TerminalInterop
     {
         None,
         ArgumentOutOfRange,
+        OperationCanceled,
         PlatformNotSupported,
         TerminalNotAttached,
         TerminalConfiguration,
@@ -28,11 +29,11 @@ internal static unsafe partial class TerminalInterop
 
         public readonly void ThrowIfError()
         {
-            // For when ArgumentOutOfRangeException is not expected.
+            // For when ArgumentOutOfRangeException and/or OperationCanceledException are not expected.
             ThrowIfError(value: (object?)null);
         }
 
-        public readonly void ThrowIfError<T>(in T value, [CallerArgumentExpression(nameof(value))] string? name = null)
+        public readonly void ThrowIfError<T>(T value, [CallerArgumentExpression(nameof(value))] string? name = null)
         {
             _ = value;
 
@@ -43,6 +44,8 @@ internal static unsafe partial class TerminalInterop
             {
                 case TerminalException.ArgumentOutOfRange:
                     throw new ArgumentOutOfRangeException(name);
+                case TerminalException.OperationCanceled:
+                    throw new OperationCanceledException(Unsafe.As<T, CancellationToken>(ref value));
                 case TerminalException.PlatformNotSupported:
                     throw new PlatformNotSupportedException();
                 case TerminalException.TerminalNotAttached:
@@ -152,4 +155,8 @@ internal static unsafe partial class TerminalInterop
     [LibraryImport(Library, EntryPoint = "cathode_poll")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void Poll([MarshalAs(UnmanagedType.U1)] bool write, int* fds, bool* results, int count);
+
+    [LibraryImport(Library, EntryPoint = "cathode_cancel")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void Cancel(TerminalDescriptor* descriptor);
 }

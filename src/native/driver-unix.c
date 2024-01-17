@@ -321,7 +321,7 @@ TerminalResult cathode_generate_signal(TerminalSignal signal)
 }
 
 TerminalResult cathode_read(
-    const TerminalDescriptor *nonnull descriptor, uint8_t *nullable buffer, int32_t length, int32_t *nonnull progress)
+    TerminalDescriptor *nonnull descriptor, uint8_t *nullable buffer, int32_t length, int32_t *nonnull progress)
 {
     assert(descriptor);
     assert(buffer);
@@ -372,10 +372,7 @@ TerminalResult cathode_read(
 }
 
 TerminalResult cathode_write(
-    const TerminalDescriptor *nonnull descriptor,
-    const uint8_t *nullable buffer,
-    int32_t length,
-    int32_t *nonnull progress)
+    TerminalDescriptor *nonnull descriptor, const uint8_t *nullable buffer, int32_t length, int32_t *nonnull progress)
 {
     assert(descriptor);
     assert(buffer);
@@ -385,9 +382,9 @@ TerminalResult cathode_write(
     {
         ssize_t ret;
 
-        // Note that this call may get us suspended by way of a SIGTTOU signal if we are a background process, the handle
-        // refers to a terminal, and the TOSTOP bit is set (we disable TOSTOP but there are ways that it could get set
-        // anyway).
+        // Note that this call may get us suspended by way of a SIGTTOU signal if we are a background process, the
+        // handle refers to a terminal, and the TOSTOP bit is set (we disable TOSTOP but there are ways that it could
+        // get set anyway).
         while ((ret = write(descriptor->fd, buffer, (size_t)length)) == -1 && errno == EINTR)
         {
             // Retry in case we get interrupted by a signal.

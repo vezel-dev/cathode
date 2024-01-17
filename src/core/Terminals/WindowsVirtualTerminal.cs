@@ -1,3 +1,5 @@
+using Vezel.Cathode.Native;
+
 namespace Vezel.Cathode.Terminals;
 
 internal sealed class WindowsVirtualTerminal : NativeVirtualTerminal
@@ -20,8 +22,14 @@ internal sealed class WindowsVirtualTerminal : NativeVirtualTerminal
     {
     }
 
-    protected override Action<nuint, CancellationToken>? CreateCancellationHook(bool write)
+    internal override unsafe IDisposable? ArrangeCancellation(
+        TerminalInterop.TerminalDescriptor* descriptor, bool write, CancellationToken cancellationToken)
     {
-        return null;
+        return cancellationToken.CanBeCanceled
+            ? cancellationToken.UnsafeRegister(
+                static descriptor =>
+                    TerminalInterop.Cancel((TerminalInterop.TerminalDescriptor*)Unsafe.Unbox<nuint>(descriptor!)),
+                (nuint)descriptor)
+            : null;
     }
 }

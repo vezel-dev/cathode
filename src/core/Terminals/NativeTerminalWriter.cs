@@ -21,18 +21,12 @@ internal sealed unsafe class NativeTerminalWriter : TerminalWriter
 
     private readonly SemaphoreSlim _semaphore;
 
-    private readonly Action<nuint, CancellationToken>? _cancellationHook;
-
     public NativeTerminalWriter(
-        NativeVirtualTerminal terminal,
-        TerminalInterop.TerminalDescriptor* descriptor,
-        SemaphoreSlim semaphore,
-        Action<nuint, CancellationToken>? cancellationHook)
+        NativeVirtualTerminal terminal, TerminalInterop.TerminalDescriptor* descriptor, SemaphoreSlim semaphore)
     {
         Terminal = terminal;
         Descriptor = descriptor;
         _semaphore = semaphore;
-        _cancellationHook = cancellationHook;
         Stream = new SynchronizedStream(new TerminalOutputStream(this));
         TextWriter =
             new SynchronizedTextWriter(
@@ -55,14 +49,15 @@ internal sealed unsafe class NativeTerminalWriter : TerminalWriter
 
             using (_semaphore.Enter(cancellationToken))
             {
-                _cancellationHook?.Invoke((nuint)Descriptor, cancellationToken);
+                using (Terminal.ArrangeCancellation(Descriptor, write: true, cancellationToken))
+                {
+                    int progress;
 
-                int progress;
+                    fixed (byte* p = buffer)
+                        TerminalInterop.Write(Descriptor, p, buffer.Length, &progress).ThrowIfError(cancellationToken);
 
-                fixed (byte* p = buffer)
-                    TerminalInterop.Write(Descriptor, p, buffer.Length, &progress).ThrowIfError();
-
-                return progress;
+                    return progress;
+                }
             }
         }
     }

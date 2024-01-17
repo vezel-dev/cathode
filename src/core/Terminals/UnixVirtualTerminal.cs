@@ -1,3 +1,5 @@
+using Vezel.Cathode.Native;
+
 namespace Vezel.Cathode.Terminals;
 
 internal sealed class UnixVirtualTerminal : NativeVirtualTerminal
@@ -5,6 +7,10 @@ internal sealed class UnixVirtualTerminal : NativeVirtualTerminal
     public override event Action? Resumed;
 
     public static UnixVirtualTerminal Instance { get; } = new();
+
+    private readonly UnixCancellationPipe _readPipe = new(write: false);
+
+    private readonly UnixCancellationPipe _writePipe = new(write: true);
 
     private readonly PosixSignalRegistration _sigWinch;
 
@@ -54,14 +60,12 @@ internal sealed class UnixVirtualTerminal : NativeVirtualTerminal
         _sigChld = PosixSignalRegistration.Create(PosixSignal.SIGCHLD, HandleSignal);
     }
 
-    protected override unsafe Action<nuint, CancellationToken> CreateCancellationHook(bool write)
+    internal override unsafe IDisposable? ArrangeCancellation(
+        TerminalInterop.TerminalDescriptor* descriptor, bool write, CancellationToken cancellationToken)
     {
-        var pipe = new UnixCancellationPipe(write);
+        if (cancellationToken.CanBeCanceled)
+            (write ? _writePipe : _readPipe).PollWithCancellation(*(int*)descriptor, cancellationToken);
 
-        return (descriptor, cancellationToken) =>
-        {
-            if (cancellationToken.CanBeCanceled)
-                pipe.PollWithCancellation(*(int*)descriptor, cancellationToken);
-        };
+        return null;
     }
 }

@@ -9,7 +9,8 @@ struct TerminalDescriptor
     HANDLE handle;
 };
 
-typedef struct {
+typedef struct
+{
     TerminalDescriptor descriptor;
     DWORD original_mode;
     UINT original_code_page;
@@ -38,7 +39,6 @@ static HANDLE open_console_handle(const wchar_t *nonnull name)
     SECURITY_ATTRIBUTES attrs =
     {
         .nLength = sizeof(SECURITY_ATTRIBUTES),
-        .lpSecurityDescriptor = nullptr,
         .bInheritHandle = true,
     };
 
@@ -310,14 +310,10 @@ TerminalResult cathode_generate_signal(TerminalSignal signal)
     };
 }
 
-TerminalResult cathode_read(
-    const TerminalDescriptor *nonnull descriptor, uint8_t *nullable buffer, int32_t length, int32_t *nonnull progress)
+static TerminalResult create_io_result(BOOL result, const int32_t *nonnull progress)
 {
-    assert(descriptor);
-    assert(buffer);
     assert(progress);
 
-    BOOL result = ReadFile(descriptor->handle, buffer, (DWORD)length, (LPDWORD)progress, nullptr);
     DWORD error = GetLastError();
 
     // See driver-unix.c for the error handling rationale.
@@ -326,39 +322,43 @@ TerminalResult cathode_read(
         {
             .exception = TerminalException_None,
         }
-        : (TerminalResult)
-        {
-            .exception = TerminalException_Terminal,
-            .message = u"Could not read from input handle.",
-            .error = (int32_t)error,
-        };
+        : error == ERROR_OPERATION_ABORTED
+            ? (TerminalResult)
+            {
+                .exception = TerminalException_OperationCanceled,
+            }
+            : (TerminalResult)
+            {
+                .exception = TerminalException_Terminal,
+                .message = u"Could not read from input handle.",
+                .error = (int32_t)error,
+            };
+}
+
+TerminalResult cathode_read(
+    TerminalDescriptor *nonnull descriptor, uint8_t *nullable buffer, int32_t length, int32_t *nonnull progress)
+{
+    assert(descriptor);
+    assert(buffer);
+    assert(progress);
+
+    return create_io_result(ReadFile(descriptor->handle, buffer, (DWORD)length, (LPDWORD)progress, nullptr), progress);
 }
 
 TerminalResult cathode_write(
-    const TerminalDescriptor *nonnull descriptor,
-    const uint8_t *nullable buffer,
-    int32_t length,
-    int32_t *nonnull progress)
+    TerminalDescriptor *nonnull descriptor, const uint8_t *nullable buffer, int32_t length, int32_t *nonnull progress)
 {
     assert(descriptor);
     assert(buffer);
     assert(progress);
 
-    BOOL result = WriteFile(descriptor->handle, buffer, (DWORD)length, (LPDWORD)progress, nullptr);
-    DWORD error = GetLastError();
+    return create_io_result(WriteFile(descriptor->handle, buffer, (DWORD)length, (LPDWORD)progress, nullptr), progress);
+}
 
-    // See driver-unix.c for the error handling rationale.
-    return result || *progress || error == ERROR_HANDLE_EOF || error == ERROR_BROKEN_PIPE || error == ERROR_NO_DATA
-        ? (TerminalResult)
-        {
-            .exception = TerminalException_None,
-        }
-        : (TerminalResult)
-        {
-            .exception = TerminalException_Terminal,
-            .message = u"Could not write to output handle.",
-            .error = (int32_t)error,
-        };
+void cathode_cancel(TerminalDescriptor *nonnull descriptor)
+{
+    // This is a best-effort situation; nothing we can do if this fails.
+    CancelIoEx(descriptor->handle, nullptr);
 }
 
 #endif

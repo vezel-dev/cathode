@@ -32,12 +32,12 @@ internal abstract class NativeVirtualTerminal : SystemVirtualTerminal
 
         NativeTerminalReader CreateReader(TerminalInterop.TerminalDescriptor* descriptor, SemaphoreSlim semaphore)
         {
-            return new(this, descriptor, semaphore, CreateCancellationHook(write: false));
+            return new(this, descriptor, semaphore);
         }
 
         NativeTerminalWriter CreateWriter(TerminalInterop.TerminalDescriptor* descriptor, SemaphoreSlim semaphore)
         {
-            return new(this, descriptor, semaphore, CreateCancellationHook(write: true));
+            return new(this, descriptor, semaphore);
         }
 
         StandardIn = CreateReader(stdIn, inLock);
@@ -47,7 +47,8 @@ internal abstract class NativeVirtualTerminal : SystemVirtualTerminal
         TerminalOut = CreateWriter(ttyOut, outLock);
     }
 
-    protected abstract Action<nuint, CancellationToken>? CreateCancellationHook(bool write);
+    internal abstract unsafe IDisposable? ArrangeCancellation(
+        TerminalInterop.TerminalDescriptor* descriptor, bool write, CancellationToken cancellationToken);
 
     private protected override sealed unsafe Size? QuerySize()
     {

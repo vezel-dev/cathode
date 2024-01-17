@@ -22,18 +22,12 @@ internal sealed unsafe class NativeTerminalReader : TerminalReader
 
     private readonly SemaphoreSlim _semaphore;
 
-    private readonly Action<nuint, CancellationToken>? _cancellationHook;
-
     public NativeTerminalReader(
-        NativeVirtualTerminal terminal,
-        TerminalInterop.TerminalDescriptor* descriptor,
-        SemaphoreSlim semaphore,
-        Action<nuint, CancellationToken>? cancellationHook)
+        NativeVirtualTerminal terminal, TerminalInterop.TerminalDescriptor* descriptor, SemaphoreSlim semaphore)
     {
         Terminal = terminal;
         Descriptor = descriptor;
         _semaphore = semaphore;
-        _cancellationHook = cancellationHook;
         Stream = new SynchronizedStream(new TerminalInputStream(this));
         TextReader =
             new SynchronizedTextReader(
@@ -58,14 +52,15 @@ internal sealed unsafe class NativeTerminalReader : TerminalReader
 
             using (_semaphore.Enter(cancellationToken))
             {
-                _cancellationHook?.Invoke((nuint)Descriptor, cancellationToken);
+                using (Terminal.ArrangeCancellation(Descriptor, write: false, cancellationToken))
+                {
+                    int progress;
 
-                int progress;
+                    fixed (byte* p = buffer)
+                        TerminalInterop.Read(Descriptor, p, buffer.Length, &progress).ThrowIfError(cancellationToken);
 
-                fixed (byte* p = buffer)
-                    TerminalInterop.Read(Descriptor, p, buffer.Length, &progress).ThrowIfError();
-
-                return progress;
+                    return progress;
+                }
             }
         }
     }

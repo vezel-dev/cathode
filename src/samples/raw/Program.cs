@@ -14,8 +14,7 @@ try
         if (await ReadAsync(array) == 0)
             break;
 
-        await OutAsync($"0x{array[0]:x2}");
-        await OutAsync("\r\n");
+        await OutAsync($"0x{array[0]:x2}\r\n");
     }
 }
 finally

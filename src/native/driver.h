@@ -2,23 +2,27 @@
 
 typedef struct TerminalDescriptor TerminalDescriptor;
 
-typedef enum {
+typedef enum
+{
     TerminalException_None,
     TerminalException_ArgumentOutOfRange,
+    TerminalException_OperationCanceled,
     TerminalException_PlatformNotSupported,
     TerminalException_TerminalNotAttached,
     TerminalException_TerminalConfiguration,
     TerminalException_Terminal,
 } TerminalException;
 
-typedef struct {
+typedef struct
+{
     TerminalException exception;
     const uint16_t *nullable message; // TODO: This should be char16_t.
     int32_t error;
 } TerminalResult;
 
 // Keep in sync with src/core/TerminalSignal.cs (public API).
-typedef enum {
+typedef enum
+{
     TerminalSignal_Close,
     TerminalSignal_Interrupt,
     TerminalSignal_Quit,
@@ -48,10 +52,7 @@ CATHODE_API TerminalResult cathode_set_mode(bool raw, bool flush);
 CATHODE_API TerminalResult cathode_generate_signal(TerminalSignal signal);
 
 CATHODE_API TerminalResult cathode_read(
-    const TerminalDescriptor *nonnull handle, uint8_t *nullable buffer, int32_t length, int32_t *nonnull progress);
+    TerminalDescriptor *nonnull descriptor, uint8_t *nullable buffer, int32_t length, int32_t *nonnull progress);
 
 CATHODE_API TerminalResult cathode_write(
-    const TerminalDescriptor *nonnull handle,
-    const uint8_t *nullable buffer,
-    int32_t length,
-    int32_t *nonnull progress);
+    TerminalDescriptor *nonnull descriptor, const uint8_t *nullable buffer, int32_t length, int32_t *nonnull progress);
