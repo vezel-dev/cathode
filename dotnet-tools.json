@@ -8,6 +8,12 @@
         "dotnet-cake"
       ]
     },
+    "dotnet-config": {
+      "version": "1.0.6",
+      "commands": [
+        "dotnet-config"
+      ]
+    },
     "dotnet-counters": {
       "version": "8.0.452401",
       "commands": [
