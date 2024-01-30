@@ -2,7 +2,7 @@
     <PropertyGroup>
         <AssemblyName>Vezel.Cathode</AssemblyName>
         <IsPackable>true</IsPackable>
-        <PackageDescription>$(PackageDescription)
+        <PackageDescription>$(Description)
 
 This package provides the core terminal API.</PackageDescription>
         <PackageId>Vezel.Cathode</PackageId>

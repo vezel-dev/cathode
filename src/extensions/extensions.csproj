@@ -2,7 +2,7 @@
     <PropertyGroup>
         <AssemblyName>Vezel.Cathode.Extensions</AssemblyName>
         <IsPackable>true</IsPackable>
-        <PackageDescription>$(PackageDescription)
+        <PackageDescription>$(Description)
 
 This package provides terminal hosting and logging for the .NET Generic Host.</PackageDescription>
         <PackageId>Vezel.Cathode.Extensions</PackageId>

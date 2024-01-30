@@ -2,7 +2,7 @@
     <PropertyGroup>
         <AssemblyName>Vezel.Cathode.Common</AssemblyName>
         <IsPackable>true</IsPackable>
-        <PackageDescription>$(PackageDescription)
+        <PackageDescription>$(Description)
 
 This package provides common functionality used by all Cathode packages.</PackageDescription>
         <PackageId>Vezel.Cathode.Common</PackageId>
