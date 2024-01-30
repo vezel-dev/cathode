@@ -17,7 +17,7 @@ env:
 jobs:
     release:
         if: github.repository == 'vezel-dev/cathode'
-        runs-on: windows-2022
+        runs-on: ubuntu-22.04
         steps:
             - name: Clone repository
               uses: actions/checkout@v4.1.1
@@ -37,7 +37,7 @@ jobs:
               if: always()
               uses: actions/upload-artifact@v4.3.0
               with:
-                  name: ${{ github.workflow }}-${{ github.run_number }}-${{ github.run_attempt }}-windows-2022-Release
+                  name: ${{ github.workflow }}-${{ github.run_number }}-${{ github.run_attempt }}
                   path: |
                       out/log
                       out/pkg
