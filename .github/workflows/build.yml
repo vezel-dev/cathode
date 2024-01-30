@@ -22,7 +22,10 @@ jobs:
             matrix:
                 os:
                     - macos-13
+                    - macos-14
+                    - ubuntu-20.04
                     - ubuntu-22.04
+                    - windows-2019
                     - windows-2022
                 cfg:
                     - Debug
