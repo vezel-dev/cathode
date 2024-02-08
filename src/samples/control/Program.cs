@@ -1,4 +1,4 @@
-static async ValueTask Run(string message, Action action)
+static async ValueTask RunAsync(string message, Action action)
 {
     var tcs = new TaskCompletionSource();
 
@@ -36,9 +36,9 @@ using (var control = Control.Acquire())
 {
     await OutLineAsync("Trying to output text in control context...");
 
-    await Run("output text", () => OutLine("This should throw."));
-    await Run("read a line", () => ReadLine());
-    await Run("switch to raw mode", EnableRawMode);
+    await RunAsync("output text", () => OutLine("This should throw."));
+    await RunAsync("read a line", () => ReadLine());
+    await RunAsync("switch to raw mode", EnableRawMode);
 }
 
 await OutLineAsync("Done.");
