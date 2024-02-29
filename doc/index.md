@@ -40,6 +40,7 @@ multiplexers, and libraries:
 * [Tilix](https://gnunn1.github.io/tilix-web)
 * [tmux](https://github.com/tmux/tmux/wiki)
 * [VTE](https://gitlab.gnome.org/GNOME/vte)
+* [Warp](https://www.warp.dev)
 * [WezTerm](https://wezfurlong.org/wezterm)
 * [Windows Terminal](https://aka.ms/terminal)
 * [Xfce Terminal](https://docs.xfce.org/apps/terminal/start)
