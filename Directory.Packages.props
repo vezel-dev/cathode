@@ -7,7 +7,7 @@
         <GlobalPackageReference Include="DotNet.ReproducibleBuilds"
                                 Version="1.1.1" />
         <GlobalPackageReference Include="Microsoft.Build.CopyOnWrite"
-                                Version="1.0.302" />
+                                Version="1.0.315" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(UsingVezelZigSdk)' != 'true'">
