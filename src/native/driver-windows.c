@@ -200,19 +200,19 @@ TerminalResult cathode_set_mode(bool raw, bool flush)
     out_mode &= (DWORD)~ENABLE_LVB_GRID_WORLDWIDE;
     out_mode |= ENABLE_PROCESSED_OUTPUT | ENABLE_WRAP_AT_EOL_OUTPUT | ENABLE_VIRTUAL_TERMINAL_PROCESSING;
 
-    DWORD in_mode_extra = ENABLE_PROCESSED_INPUT | ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT;
-    DWORD out_mode_extra = DISABLE_NEWLINE_AUTO_RETURN;
+    DWORD in_mode_cooked = ENABLE_PROCESSED_INPUT | ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT;
+    DWORD out_mode_raw = DISABLE_NEWLINE_AUTO_RETURN;
 
-    // Enable/disable features that depend on cooked/raw mode.
-    if (!raw)
+    // Enable/disable features that depend on raw/cooked mode.
+    if (raw)
     {
-        in_mode |= in_mode_extra;
-        out_mode |= out_mode_extra;
+        in_mode &= ~in_mode_cooked;
+        out_mode |= out_mode_raw;
     }
     else
     {
-        in_mode &= ~in_mode_extra;
-        out_mode &= ~out_mode_extra;
+        in_mode |= in_mode_cooked;
+        out_mode &= ~out_mode_raw;
     }
 
     TerminalResult result;

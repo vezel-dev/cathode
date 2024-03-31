@@ -164,8 +164,7 @@ TerminalResult cathode_set_mode(bool raw, bool flush)
     termios.c_cflag &= (tcflag_t)~(CSTOPB | PARENB | PARODD | HUPCL | CLOCAL | CRTSCTS);
 #if defined(ZIG_OS_LINUX)
     termios.c_cflag &= (tcflag_t)~CMSPAR;
-#endif
-#if defined(ZIG_OS_MACOS)
+#elif defined(ZIG_OS_MACOS)
     termios.c_cflag &= (tcflag_t)~(CDTR_IFLOW | CDSR_OFLOW | MDMBUF);
 #endif
     termios.c_lflag &= (tcflag_t)~(FLUSHO | EXTPROC);
@@ -179,8 +178,7 @@ TerminalResult cathode_set_mode(bool raw, bool flush)
     termios.c_oflag &= (tcflag_t)~(OCRNL | ONOCR | ONLRET);
 #if defined(ZIG_OS_LINUX)
     termios.c_oflag &= (tcflag_t)~OLCUC;
-#endif
-#if defined(ZIG_OS_MACOS)
+#elif defined(ZIG_OS_MACOS)
     termios.c_oflag &= (tcflag_t)~ONOEOT;
 #endif
     termios.c_cflag &= (tcflag_t)~CSIZE;
@@ -188,35 +186,32 @@ TerminalResult cathode_set_mode(bool raw, bool flush)
     termios.c_lflag &= (tcflag_t)~(ECHONL | NOFLSH | ECHOPRT | PENDIN);
 #if defined(ZIG_OS_LINUX)
     termios.c_lflag &= (tcflag_t)~XCASE;
-#endif
-#if defined(ZIG_OS_MACOS)
+#elif defined(ZIG_OS_MACOS)
     termios.c_lflag &= (tcflag_t)~ALTWERASE;
 #endif
 
-    tcflag_t iflag = BRKINT | ICRNL | IXON;
-    tcflag_t oflag = OPOST | ONLCR;
-    tcflag_t lflag = ISIG | ICANON | ECHO | ECHOE | ECHOK | ECHOCTL | ECHOKE | IEXTEN;
+    tcflag_t iflag_cooked = BRKINT | ICRNL | IXON;
+    tcflag_t oflag_cooked = OPOST | ONLCR;
+    tcflag_t lflag_cooked = ISIG | ICANON | ECHO | ECHOE | ECHOK | ECHOCTL | ECHOKE | IEXTEN;
+    tcflag_t lflag_raw = TOSTOP;
+#if defined(ZIG_OS_MACOS)
+    lflag_raw |= NOKERNINFO;
+#endif
 
     // Finally, enable/disable features that depend on raw/cooked mode.
     if (raw)
     {
-        termios.c_iflag &= ~iflag;
-        termios.c_oflag &= ~oflag;
-        termios.c_lflag &= ~lflag;
-        termios.c_lflag |= TOSTOP;
-#if defined(ZIG_OS_MACOS)
-        termios.c_lflag |= NOKERNINFO;
-#endif
+        termios.c_iflag &= ~iflag_cooked;
+        termios.c_oflag &= ~oflag_cooked;
+        termios.c_lflag &= ~lflag_cooked;
+        termios.c_lflag |= lflag_raw;
     }
     else
     {
-        termios.c_iflag |= iflag;
-        termios.c_oflag |= oflag;
-        termios.c_lflag |= lflag;
-        termios.c_lflag &= (tcflag_t)~TOSTOP;
-#if defined(ZIG_OS_MACOS)
-        termios.c_lflag &= (tcflag_t)~NOKERNINFO;
-#endif
+        termios.c_iflag |= iflag_cooked;
+        termios.c_oflag |= oflag_cooked;
+        termios.c_lflag |= lflag_cooked;
+        termios.c_lflag &= ~lflag_raw;
     }
 
     if (!raw)
