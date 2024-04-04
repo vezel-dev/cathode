@@ -1,7 +1,7 @@
 [file "doc/.markdownlint-cli2.jsonc"]
 	url = https://github.com/vezel-dev/.github/blob/master/syn/doc/.markdownlint-cli2.jsonc
-	sha = 7d581ae5eedad5892855cebc673edafad664856b
-	etag = 485e4786a640cfe0b7d29c169baab04e9f2a7c24964ec56b55017bc26a1d796d
+	sha = 79a34107efedda78605993004caf9c116f4d0205
+	etag = 8580c99a1177ec3fac0ad7d6f1036783746f26946c9e1d8a70b7c6aef965aa98
 	weak
 [file "doc/.markdownlint.json"]
 	url = https://github.com/vezel-dev/.github/blob/master/syn/doc/.markdownlint.json
