@@ -40,7 +40,7 @@
     },
     "documentationRules": {
       "companyName": "Vezel",
-      "copyrightText": "Copyright © {companyName} Contributors. Licensed under the Zero-Clause BSD License.",
+      "copyrightText": "Copyright © {companyName} Contributors. Licensed under the terms found in the repository license file.",
       "headerDecoration": "---------------------------------------------------------------------------",
       "xmlHeader": false,
       "fileNamingConvention": "metadata",

@@ -35,8 +35,8 @@
 	weak
 [file ".stylecop.json"]
 	url = https://github.com/vezel-dev/.github/blob/master/syn/.stylecop.json
-	sha = 843f34128afef9feee7e200a09871d8cf46d4637
-	etag = 7e9d4601916a771495bb6c8e6ac9c2143c0aee9a1498e01f09525872fce21a52
+	sha = 7564f93a3f323078847afab4f4dab53d1e83ba89
+	etag = 80305e980785a5aa4b5d64f4fc68f408b8b2093cb010d9f6b76943a4290511ca
 	weak
 [file "LICENSE-0BSD"]
 	url = https://github.com/vezel-dev/.github/blob/master/syn/LICENSE-0BSD
