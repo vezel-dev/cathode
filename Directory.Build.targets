@@ -28,15 +28,7 @@
     <Choose>
         <When Condition="'$(IsPackable)' == 'true'">
             <PropertyGroup>
-                <PackageIcon>cathode.png</PackageIcon>
-                <PackageReadmeFile>PACKAGE.md</PackageReadmeFile>
-            </PropertyGroup>
-
-            <PropertyGroup Condition="'$(OutputType)' == 'Library'">
-                <EnableAotAnalyzer>true</EnableAotAnalyzer>
-                <EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
-                <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
-                <IsTrimmable>true</IsTrimmable>
+                <IsAotCompatible Condition="'$(OutputType)' == 'Library'">true</IsAotCompatible>
             </PropertyGroup>
 
             <ItemGroup>

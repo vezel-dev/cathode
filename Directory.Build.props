@@ -20,8 +20,10 @@
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <PackRelease>false</PackRelease>
+        <PackageIcon>cathode.png</PackageIcon>
         <PackageLicenseExpression>0BSD</PackageLicenseExpression>
         <PackageProjectUrl>https://docs.vezel.dev/cathode</PackageProjectUrl>
+        <PackageReadmeFile>PACKAGE.md</PackageReadmeFile>
         <PolySharpIncludeRuntimeSupportedAttributes>true</PolySharpIncludeRuntimeSupportedAttributes>
         <PublishRelease>false</PublishRelease>
         <RepositoryUrl>https://github.com/vezel-dev/cathode.git</RepositoryUrl>
