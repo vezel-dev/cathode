@@ -45,8 +45,8 @@
 	weak
 [file "cake"]
 	url = https://github.com/vezel-dev/.github/blob/master/syn/cake
-	sha = 7d581ae5eedad5892855cebc673edafad664856b
-	etag = e01672adb9650fad761fd21f0e2349afaf9294d5f00825a429ae3060a2f3576f
+	sha = a562349156aa1bdc7aae6d27d97ec3b65ed1f46e
+	etag = 489a346ad3142e1a33252e5f1c32bb9d450abaa6c5393449748f70122414cbf0
 	weak
 [file "cake.config"]
 	url = https://github.com/vezel-dev/.github/blob/master/syn/cake.config
