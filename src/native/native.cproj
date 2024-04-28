@@ -10,11 +10,13 @@
         </DefineConstants>
         <!-- TODO: Remove when -err is re-enabled in Directory.Build.rsp. -->
         <MSBuildTreatWarningsAsErrors>false</MSBuildTreatWarningsAsErrors>
-        <!-- TODO: https://github.com/vezel-dev/zig-sdk/issues/83 -->
         <RuntimeIdentifiers>
             linux-arm;
             linux-arm64;
             linux-x64;
+            linux-musl-arm;
+            linux-musl-arm64;
+            linux-musl-x64;
             osx-arm64;
             osx-x64;
             win-arm64;
