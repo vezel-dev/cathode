@@ -10,8 +10,8 @@
 	weak
 [file ".editorconfig"]
 	url = https://github.com/vezel-dev/.github/blob/master/syn/.editorconfig
-	sha = 7d581ae5eedad5892855cebc673edafad664856b
-	etag = 8fa5a445045c6e24f51af44560a6449adf8d297f9e0d7412b39e5e39062cde54
+	sha = 25cfbb6a508a9fcf8444ef283ddfe7b2e5121bca
+	etag = df90691e6bc4d301e82e508fca55eed234028a335c3615cf916db00cb4a053f1
 	weak
 [file ".gitattributes"]
 	url = https://github.com/vezel-dev/.github/blob/master/syn/.gitattributes
