@@ -1,67 +1,67 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: Build
 on:
-    push:
-        branches-ignore:
-            - dependabot/**
-    pull_request:
-    workflow_dispatch:
+  push:
+    branches-ignore:
+      - dependabot/**
+  pull_request:
+  workflow_dispatch:
 permissions:
-    contents: read
+  contents: read
 defaults:
-    run:
-        shell: bash
+  run:
+    shell: bash
 env:
-    DOTNET_CLI_TELEMETRY_OPTOUT: true
-    DOTNET_GENERATE_ASPNET_CERTIFICATE: false
-    DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_GENERATE_ASPNET_CERTIFICATE: false
+  DOTNET_NOLOGO: true
 jobs:
-    build:
-        strategy:
-            fail-fast: false
-            matrix:
-                os:
-                    - macos-13
-                    - macos-14
-                    - ubuntu-20.04
-                    - ubuntu-22.04
-                    - windows-2019
-                    - windows-2022
-                cfg:
-                    - Debug
-                    - Release
-        runs-on: ${{ matrix.os }}
-        steps:
-            - name: Clone repository
-              uses: actions/checkout@v4.1.4
-              with:
-                  fetch-depth: 0
-                  submodules: recursive
-            - name: Set up .NET
-              uses: actions/setup-dotnet@v4.0.0
-            - name: Set up Node.js
-              uses: actions/setup-node@v4.0.2
-              with:
-                  node-version-file: doc/package.json
-            - name: Run Cake
-              run: |
-                  ./cake -c ${{ matrix.cfg }}
-            - name: Run samples
-              run: |
-                  dotnet example --all \
-                      --skip cancellation \
-                      --skip control \
-                      --skip cursor \
-                      --skip raw \
-                      --skip scrolling \
-                      --skip signals \
-                      --skip width
-            - name: Upload artifacts
-              if: always()
-              uses: actions/upload-artifact@v4.3.3
-              with:
-                  name: ${{ github.workflow }}-${{ github.run_number }}-${{ github.run_attempt }}-${{ matrix.os }}-${{ matrix.cfg }}
-                  path: |
-                      out/log
-                      out/pkg
-                      out/pub
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-13
+          - macos-14
+          - ubuntu-20.04
+          - ubuntu-22.04
+          - windows-2019
+          - windows-2022
+        cfg:
+          - Debug
+          - Release
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4.1.4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4.0.0
+      - name: Set up Node.js
+        uses: actions/setup-node@v4.0.2
+        with:
+          node-version-file: doc/package.json
+      - name: Run Cake
+        run: |
+          ./cake -c ${{ matrix.cfg }}
+      - name: Run samples
+        run: |
+          dotnet example --all \
+              --skip cancellation \
+              --skip control \
+              --skip cursor \
+              --skip raw \
+              --skip scrolling \
+              --skip signals \
+              --skip width
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4.3.3
+        with:
+          name: ${{ github.workflow }}-${{ github.run_number }}-${{ github.run_attempt }}-${{ matrix.os }}-${{ matrix.cfg }}
+          path: |
+            out/log
+            out/pkg
+            out/pub
