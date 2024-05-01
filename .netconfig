@@ -20,8 +20,8 @@
 	weak
 [file ".gitbook.yaml"]
 	url = https://github.com/vezel-dev/.github/blob/master/syn/.gitbook.yaml
-	sha = 7d581ae5eedad5892855cebc673edafad664856b
-	etag = 66c2b9789da757c440568a36fefd050103c146bfd88f9eb0208961fa6e08b659
+	sha = 25cfbb6a508a9fcf8444ef283ddfe7b2e5121bca
+	etag = 2c61aa3283d489333ffbd76b9d6653482e6fcb8f9b22eed965f569f4bed2cbb0
 	weak
 [file ".globalconfig"]
 	url = https://github.com/vezel-dev/.github/blob/master/syn/.globalconfig
