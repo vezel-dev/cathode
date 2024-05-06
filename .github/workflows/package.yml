@@ -5,7 +5,9 @@ on:
     branches:
       - master
 permissions:
+  attestations: write
   contents: read
+  id-token: write
   packages: write
 defaults:
   run:
@@ -34,6 +36,9 @@ jobs:
       - name: Run Cake
         run: |
           ./cake upload-core-github
+      - uses: actions/attest-build-provenance@v1.0.0
+        with:
+          subject-path: out/pkg/debug/*.nupkg
       - name: Upload artifacts
         if: always()
         uses: actions/upload-artifact@v4.3.3
