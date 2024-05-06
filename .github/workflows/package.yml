@@ -36,7 +36,8 @@ jobs:
       - name: Run Cake
         run: |
           ./cake upload-core-github
-      - uses: actions/attest-build-provenance@v1.0.0
+      - name: Attest packages
+        uses: actions/attest-build-provenance@v1.0.0
         with:
           subject-path: out/pkg/debug/*.nupkg
       - name: Upload artifacts
