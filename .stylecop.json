@@ -40,8 +40,8 @@
     },
     "documentationRules": {
       "companyName": "Vezel",
-      "copyrightText": "Copyright © {companyName} Contributors. Licensed under the terms found in the repository license file.",
-      "headerDecoration": "---------------------------------------------------------------------------",
+      "copyrightText": "SPDX-License-Identifier: 0BSD",
+      "headerDecoration": "",
       "xmlHeader": false,
       "fileNamingConvention": "metadata",
       "documentationCulture": "en-US",

@@ -25,8 +25,8 @@
 	weak
 [file ".globalconfig"]
 	url = https://github.com/vezel-dev/.github/blob/master/syn/.globalconfig
-	sha = e8b6d2e00d7720592fe9740777eafcb219d9a613
-	etag = d9c8f0bf4802deeedff637bbff0e0164bbbc6986bb5c1c8cd4301dde2692fce4
+	sha = 262d7be2a896f65309d9e5e17268156b249869c5
+	etag = 4690845209e0695006d591bc944fe99f4fce2ffd3a7ee440cfb4c75d530b062c
 	weak
 [file ".markdownlint.json"]
 	url = https://github.com/vezel-dev/.github/blob/master/syn/.markdownlint.json
@@ -35,8 +35,8 @@
 	weak
 [file ".stylecop.json"]
 	url = https://github.com/vezel-dev/.github/blob/master/syn/.stylecop.json
-	sha = 7564f93a3f323078847afab4f4dab53d1e83ba89
-	etag = 80305e980785a5aa4b5d64f4fc68f408b8b2093cb010d9f6b76943a4290511ca
+	sha = 1d33365aede3d3f3f449ad6d3943ea216db25659
+	etag = 95937069a9ce08abdbeb2ba63b68ca29a66ac81a62962eb72b2098e3a67131c2
 	weak
 [file "LICENSE-0BSD"]
 	url = https://github.com/vezel-dev/.github/blob/master/syn/LICENSE-0BSD
