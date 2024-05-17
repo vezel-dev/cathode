@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: 0BSD
+
 await OutLineAsync("Available commands:");
 await OutLineAsync();
 await OutLineAsync("  visible: Toggle cursor visibility.");

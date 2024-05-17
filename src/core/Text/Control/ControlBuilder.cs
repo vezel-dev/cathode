@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: 0BSD
+
 using static Vezel.Cathode.Text.Control.ControlConstants;
 
 namespace Vezel.Cathode.Text.Control;

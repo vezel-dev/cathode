@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: 0BSD
+
 namespace Vezel.Cathode.IO;
 
 public sealed class TerminalInputStream : TerminalStream

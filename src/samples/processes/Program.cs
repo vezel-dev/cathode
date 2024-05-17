@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: 0BSD
+
 await OutLineAsync("Launching 'bash'...");
 
 using var cts = new CancellationTokenSource(delay: TimeSpan.FromSeconds(10));

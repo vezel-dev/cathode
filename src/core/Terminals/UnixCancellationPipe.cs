@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: 0BSD
+
 using Vezel.Cathode.Native;
 
 namespace Vezel.Cathode.Terminals;

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: 0BSD
+
 await OutAsync(
     new ControlBuilder()
         .SetForegroundColor(Color.Red)

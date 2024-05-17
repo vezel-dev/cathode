@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: 0BSD
+
 while (true)
 {
     await OutAsync("String: ");

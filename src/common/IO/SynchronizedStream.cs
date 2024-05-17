@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: 0BSD
+
 using Vezel.Cathode.Diagnostics;
 using Vezel.Cathode.Threading;
 

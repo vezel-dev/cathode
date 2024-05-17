@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: 0BSD
+
 #if defined(ZIG_OS_WINDOWS)
 
 #include <windows.h>

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: 0BSD
+
 static async ValueTask RunAsync(string message, Action action)
 {
     var tcs = new TaskCompletionSource();

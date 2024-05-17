@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: 0BSD
+
 using Vezel.Cathode.Extensions.Logging;
 
 namespace Vezel.Cathode.Extensions.Hosting;

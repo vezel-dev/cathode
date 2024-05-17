@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: 0BSD
+
 namespace Vezel.Cathode.Threading;
 
 internal static class SynchronizationExtensions

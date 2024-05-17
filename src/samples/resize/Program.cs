@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: 0BSD
+
 await OutLineAsync("Listening for resize events.");
 await OutLineAsync();
 

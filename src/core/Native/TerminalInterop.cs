@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: 0BSD
+
 namespace Vezel.Cathode.Native;
 
 internal static unsafe partial class TerminalInterop

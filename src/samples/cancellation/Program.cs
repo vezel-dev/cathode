@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: 0BSD
+
 await OutAsync("Reading cooked input and cancelling after 5 seconds: ");
 
 using var cts1 = new CancellationTokenSource(delay: TimeSpan.FromSeconds(5));

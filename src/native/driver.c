@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: 0BSD
+
 #include "driver.h"
 
 void cathode_initialize(void)

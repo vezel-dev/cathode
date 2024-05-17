@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: 0BSD
+
 await OutLineAsync("Entering raw mode.");
 await OutLineAsync();
 
