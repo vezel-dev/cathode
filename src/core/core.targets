@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: 0BSD -->
+
 <Project>
     <ItemGroup Condition="'$(ImplicitUsings)' == 'true' or '$(ImplicitUsings)' == 'enable'">
         <Using Include="Vezel.Cathode" />
