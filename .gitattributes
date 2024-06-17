@@ -3,3 +3,4 @@
 *.ico binary
 *.png binary
 *.zig eol=lf
+*.zon eol=lf
