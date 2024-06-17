@@ -19,6 +19,7 @@
 [![Build](https://img.shields.io/github/actions/workflow/status/vezel-dev/cathode/build.yml?branch=master)](https://github.com/vezel-dev/cathode/actions/workflows/build.yml)
 [![Discussions](https://img.shields.io/github/discussions/vezel-dev/cathode?color=teal)](https://github.com/vezel-dev/cathode/discussions)
 [![Discord](https://img.shields.io/badge/discord-chat-7289da?logo=discord)](https://discord.gg/wtzCfaX2Nj)
+[![Zulip](https://img.shields.io/badge/zulip-chat-394069?logo=zulip)](https://vezel.zulipchat.com)
 
 </div>
 
