@@ -15,8 +15,8 @@
 	weak
 [file ".gitattributes"]
 	url = https://github.com/vezel-dev/.github/blob/master/syn/.gitattributes
-	sha = b8eab18e13d0f2a0b59ca179378d488e5b7d27cb
-	etag = f2a79dbd60628d2022614ccd48cb1d437fc6be1140215719fc52788df76d5d39
+	sha = 0ff05334db6d820dd16428e1aad477ed83ca10ef
+	etag = 0a6a1f6373760bc1c03e09e1efeeb77109705f11b159afd759e11550b45ee950
 	weak
 [file ".gitbook.yaml"]
 	url = https://github.com/vezel-dev/.github/blob/master/syn/.gitbook.yaml
