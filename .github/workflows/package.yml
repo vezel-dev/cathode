@@ -42,7 +42,7 @@ jobs:
           subject-path: out/pkg/debug/*.nupkg
       - name: Upload artifacts
         if: always()
-        uses: actions/upload-artifact@v4.3.3
+        uses: actions/upload-artifact@v4.3.4
         with:
           name: ${{ github.workflow }}-${{ github.run_number }}-${{ github.run_attempt }}
           path: |
