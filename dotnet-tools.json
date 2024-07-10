@@ -33,7 +33,7 @@
       ]
     },
     "dotnet-file": {
-      "version": "1.4.1",
+      "version": "1.6.2",
       "commands": [
         "dotnet-file"
       ]
