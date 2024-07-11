@@ -401,7 +401,7 @@ public sealed class ControlBuilder
     public ControlBuilder SetScrollMargin(int top, int bottom)
     {
         Check.Range(top >= 0, top);
-        Check.Range(bottom >= top, bottom);
+        Check.Range(bottom > top, bottom);
 
         var topSpan = (stackalloc char[StackBufferSize]);
         var bottomSpan = (stackalloc char[StackBufferSize]);
