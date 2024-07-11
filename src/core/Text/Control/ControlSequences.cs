@@ -212,6 +212,11 @@ public static class ControlSequences
         return Create(static (cb, args) => cb.SetScrollMargin(args.top, args.bottom), (top, bottom));
     }
 
+    public static string ResetScrollMargin()
+    {
+        return Create(static cb => cb.ResetScrollMargin());
+    }
+
     public static string InsertCharacters(int count)
     {
         return Create(static (cb, count) => cb.InsertCharacters(count), count);

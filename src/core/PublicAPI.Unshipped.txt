@@ -183,6 +183,7 @@ static Vezel.Cathode.Text.Control.ControlSequences.ProtectedClearScreen(Vezel.Ca
 static Vezel.Cathode.Text.Control.ControlSequences.PushTitle() -> string!
 static Vezel.Cathode.Text.Control.ControlSequences.RecordSeparator() -> string!
 static Vezel.Cathode.Text.Control.ControlSequences.ResetAttributes() -> string!
+static Vezel.Cathode.Text.Control.ControlSequences.ResetScrollMargin() -> string!
 static Vezel.Cathode.Text.Control.ControlSequences.RestoreCursorState() -> string!
 static Vezel.Cathode.Text.Control.ControlSequences.SaveCursorState() -> string!
 static Vezel.Cathode.Text.Control.ControlSequences.SaveScreenshot(Vezel.Cathode.Text.Control.ScreenshotFormat format = Vezel.Cathode.Text.Control.ScreenshotFormat.Html) -> string!
@@ -430,6 +431,7 @@ Vezel.Cathode.Text.Control.ControlBuilder.ProtectedClearScreen(Vezel.Cathode.Tex
 Vezel.Cathode.Text.Control.ControlBuilder.PushTitle() -> Vezel.Cathode.Text.Control.ControlBuilder!
 Vezel.Cathode.Text.Control.ControlBuilder.RecordSeparator() -> Vezel.Cathode.Text.Control.ControlBuilder!
 Vezel.Cathode.Text.Control.ControlBuilder.ResetAttributes() -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.ResetScrollMargin() -> Vezel.Cathode.Text.Control.ControlBuilder!
 Vezel.Cathode.Text.Control.ControlBuilder.RestoreCursorState() -> Vezel.Cathode.Text.Control.ControlBuilder!
 Vezel.Cathode.Text.Control.ControlBuilder.SaveCursorState() -> Vezel.Cathode.Text.Control.ControlBuilder!
 Vezel.Cathode.Text.Control.ControlBuilder.SaveScreenshot(Vezel.Cathode.Text.Control.ScreenshotFormat format = Vezel.Cathode.Text.Control.ScreenshotFormat.Html) -> Vezel.Cathode.Text.Control.ControlBuilder!

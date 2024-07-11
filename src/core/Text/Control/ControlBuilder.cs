@@ -412,6 +412,11 @@ public sealed class ControlBuilder
         return Print(CSI).Print(topSpan[..topLen]).Print(";").Print(bottomSpan[..bottomLen]).Print("r");
     }
 
+    public ControlBuilder ResetScrollMargin()
+    {
+        return Print(CSI).Print(";r");
+    }
+
     private ControlBuilder ModifyText(string type, int count)
     {
         Check.Range(count >= 0, count);
