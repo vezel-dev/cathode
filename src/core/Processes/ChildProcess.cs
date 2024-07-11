@@ -48,8 +48,11 @@ public sealed class ChildProcess
             RedirectStandardError = redirectError,
         };
 
-        foreach (var arg in builder.Arguments)
-            info.ArgumentList.Add(arg);
+        if (builder.JoinArguments)
+            info.Arguments = string.Join(" ", builder.Arguments);
+        else
+            foreach (var arg in builder.Arguments)
+                info.ArgumentList.Add(arg);
 
         foreach (var (name, value) in builder.Variables)
             info.Environment.Add(name, value);

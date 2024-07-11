@@ -294,6 +294,7 @@ Vezel.Cathode.Processes.ChildProcessBuilder.FileName.get -> string!
 Vezel.Cathode.Processes.ChildProcessBuilder.InsertArgument(int index, string! argument) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.InsertArguments(int index, params string![]! arguments) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.InsertArguments(int index, System.Collections.Generic.IEnumerable<string!>! arguments) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.JoinArguments.get -> bool
 Vezel.Cathode.Processes.ChildProcessBuilder.RedirectStandardError.get -> bool
 Vezel.Cathode.Processes.ChildProcessBuilder.RedirectStandardIn.get -> bool
 Vezel.Cathode.Processes.ChildProcessBuilder.RedirectStandardOut.get -> bool
@@ -324,6 +325,7 @@ Vezel.Cathode.Processes.ChildProcessBuilder.WithCreateWindow(bool createWindow) 
 Vezel.Cathode.Processes.ChildProcessBuilder.WithEncodings(System.Text.Encoding? allStreams) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.WithEncodings(System.Text.Encoding? standardIn, System.Text.Encoding? standardOut, System.Text.Encoding? standardError) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.WithFileName(string! fileName) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.WithJoinArguments(bool joinArguments) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.WithRedirections(bool allStreams) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.WithRedirections(bool standardIn, bool standardOut, bool standardError) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.WithThrowOnError(bool throwOnError) -> Vezel.Cathode.Processes.ChildProcessBuilder!

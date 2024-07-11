@@ -8,6 +8,8 @@ public sealed class ChildProcessBuilder
 
     public ImmutableArray<string> Arguments { get; private set; } = [];
 
+    public bool JoinArguments { get; private set; }
+
     public ImmutableDictionary<string, string> Variables { get; private set; } =
         ImmutableDictionary<string, string>.Empty;
 
@@ -46,6 +48,7 @@ public sealed class ChildProcessBuilder
         {
             FileName = FileName,
             Arguments = Arguments,
+            JoinArguments = JoinArguments,
             Variables = Variables,
             WorkingDirectory = WorkingDirectory,
             CreateWindow = CreateWindow,
@@ -179,6 +182,15 @@ public sealed class ChildProcessBuilder
     public ChildProcessBuilder ClearArguments()
     {
         return WithArguments();
+    }
+
+    public ChildProcessBuilder WithJoinArguments(bool joinArguments)
+    {
+        var builder = Clone();
+
+        builder.JoinArguments = joinArguments;
+
+        return builder;
     }
 
     public ChildProcessBuilder WithVariables(params (string Name, string Value)[] variables)
