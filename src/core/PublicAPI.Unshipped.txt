@@ -464,6 +464,7 @@ Vezel.Cathode.Text.Control.ControlBuilder.SetWorkingDirectory(System.Uri! uri) -
 Vezel.Cathode.Text.Control.ControlBuilder.SoftReset() -> Vezel.Cathode.Text.Control.ControlBuilder!
 Vezel.Cathode.Text.Control.ControlBuilder.Space() -> Vezel.Cathode.Text.Control.ControlBuilder!
 Vezel.Cathode.Text.Control.ControlBuilder.Span.get -> System.ReadOnlySpan<char>
+Vezel.Cathode.Text.Control.ControlBuilder.Memory.get -> System.ReadOnlyMemory<char>
 Vezel.Cathode.Text.Control.ControlBuilder.Substitute() -> Vezel.Cathode.Text.Control.ControlBuilder!
 Vezel.Cathode.Text.Control.ControlBuilder.UnitSeparator() -> Vezel.Cathode.Text.Control.ControlBuilder!
 Vezel.Cathode.Text.Control.ControlBuilder.VerticalTab() -> Vezel.Cathode.Text.Control.ControlBuilder!

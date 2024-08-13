@@ -119,6 +119,8 @@ public sealed class ControlBuilder
 
     public ReadOnlySpan<char> Span => _writer.WrittenSpan;
 
+    public ReadOnlyMemory<char> Memory => _writer.WrittenMemory;
+
     private static readonly CultureInfo _culture = CultureInfo.InvariantCulture;
 
     private readonly int _capacity;
