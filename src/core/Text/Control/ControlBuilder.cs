@@ -152,11 +152,6 @@ public sealed class ControlBuilder
         return this;
     }
 
-    public ControlBuilder Print<T>(T value)
-    {
-        return Print((value?.ToString()).AsSpan());
-    }
-
     [SuppressMessage("", "IDE0060")]
     public ControlBuilder Print(
         [InterpolatedStringHandlerArgument("")] scoped ref PrintInterpolatedStringHandler handler)
@@ -172,14 +167,14 @@ public sealed class ControlBuilder
         return this;
     }
 
+    public ControlBuilder PrintLine(scoped ReadOnlySpan<char> value)
+    {
+        return Print(value).PrintLine();
+    }
+
     public ControlBuilder PrintLine()
     {
         return Print(Environment.NewLine);
-    }
-
-    public ControlBuilder PrintLine<T>(T value)
-    {
-        return Print(value).PrintLine();
     }
 
     [SuppressMessage("", "IDE0060")]
@@ -323,7 +318,7 @@ public sealed class ControlBuilder
 
         var ch = (char)mode;
 
-        return Print(ESC).Print(new(in ch));
+        return Print([ESC]).Print(new(in ch));
     }
 
     public ControlBuilder SetKeyboardLevel(KeyboardLevel level)
@@ -579,12 +574,12 @@ public sealed class ControlBuilder
 
     public ControlBuilder SaveCursorState()
     {
-        return Print(ESC).Print("7");
+        return Print([ESC]).Print("7");
     }
 
     public ControlBuilder RestoreCursorState()
     {
-        return Print(ESC).Print("8");
+        return Print([ESC]).Print("8");
     }
 
     public ControlBuilder SetForegroundColor(Color color)
@@ -700,7 +695,7 @@ public sealed class ControlBuilder
         if (!id.IsEmpty)
             _ = Print("id=").Print(id);
 
-        return Print(";").Print(uri).Print(ST);
+        return Print(";").Print(uri.ToString()).Print(ST);
     }
 
     public ControlBuilder CloseHyperlink()
@@ -713,7 +708,7 @@ public sealed class ControlBuilder
         Check.Null(uri);
         Check.Argument(uri.Scheme == Uri.UriSchemeFile, uri);
 
-        return Print(OSC).Print("7").Print(uri).Print(ST);
+        return Print(OSC).Print("7").Print(uri.ToString()).Print(ST);
     }
 
     public ControlBuilder SetWorkingDirectory(scoped ReadOnlySpan<char> path)
@@ -799,7 +794,7 @@ public sealed class ControlBuilder
 
     public ControlBuilder FullReset()
     {
-        return Print(ESC).Print("c");
+        return Print([ESC]).Print("c");
     }
 
     public override string ToString()

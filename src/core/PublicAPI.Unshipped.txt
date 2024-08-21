@@ -415,7 +415,6 @@ Vezel.Cathode.Text.Control.ControlBuilder.PopTitle() -> Vezel.Cathode.Text.Contr
 Vezel.Cathode.Text.Control.ControlBuilder.Print(scoped ref Vezel.Cathode.Text.Control.ControlBuilder.PrintInterpolatedStringHandler handler) -> Vezel.Cathode.Text.Control.ControlBuilder!
 Vezel.Cathode.Text.Control.ControlBuilder.Print(scoped System.ReadOnlySpan<char> value) -> Vezel.Cathode.Text.Control.ControlBuilder!
 Vezel.Cathode.Text.Control.ControlBuilder.Print(System.IFormatProvider? provider, scoped ref Vezel.Cathode.Text.Control.ControlBuilder.PrintInterpolatedStringHandler handler) -> Vezel.Cathode.Text.Control.ControlBuilder!
-Vezel.Cathode.Text.Control.ControlBuilder.Print<T>(T value) -> Vezel.Cathode.Text.Control.ControlBuilder!
 Vezel.Cathode.Text.Control.ControlBuilder.PrintInterpolatedStringHandler
 Vezel.Cathode.Text.Control.ControlBuilder.PrintInterpolatedStringHandler.AppendFormatted(object? value, string? format = null) -> void
 Vezel.Cathode.Text.Control.ControlBuilder.PrintInterpolatedStringHandler.AppendFormatted(scoped System.ReadOnlySpan<char> value) -> void
@@ -427,8 +426,8 @@ Vezel.Cathode.Text.Control.ControlBuilder.PrintInterpolatedStringHandler.PrintIn
 Vezel.Cathode.Text.Control.ControlBuilder.PrintInterpolatedStringHandler.PrintInterpolatedStringHandler(int literalLength, int formattedCount, Vezel.Cathode.Text.Control.ControlBuilder! builder, System.IFormatProvider? provider = null) -> void
 Vezel.Cathode.Text.Control.ControlBuilder.PrintLine() -> Vezel.Cathode.Text.Control.ControlBuilder!
 Vezel.Cathode.Text.Control.ControlBuilder.PrintLine(scoped ref Vezel.Cathode.Text.Control.ControlBuilder.PrintInterpolatedStringHandler handler) -> Vezel.Cathode.Text.Control.ControlBuilder!
+Vezel.Cathode.Text.Control.ControlBuilder.PrintLine(scoped System.ReadOnlySpan<char> value) -> Vezel.Cathode.Text.Control.ControlBuilder!
 Vezel.Cathode.Text.Control.ControlBuilder.PrintLine(System.IFormatProvider? provider, scoped ref Vezel.Cathode.Text.Control.ControlBuilder.PrintInterpolatedStringHandler handler) -> Vezel.Cathode.Text.Control.ControlBuilder!
-Vezel.Cathode.Text.Control.ControlBuilder.PrintLine<T>(T value) -> Vezel.Cathode.Text.Control.ControlBuilder!
 Vezel.Cathode.Text.Control.ControlBuilder.ProtectedClearLine(Vezel.Cathode.Text.Control.ClearMode mode = Vezel.Cathode.Text.Control.ClearMode.Full) -> Vezel.Cathode.Text.Control.ControlBuilder!
 Vezel.Cathode.Text.Control.ControlBuilder.ProtectedClearScreen(Vezel.Cathode.Text.Control.ClearMode mode = Vezel.Cathode.Text.Control.ClearMode.Full) -> Vezel.Cathode.Text.Control.ControlBuilder!
 Vezel.Cathode.Text.Control.ControlBuilder.PushTitle() -> Vezel.Cathode.Text.Control.ControlBuilder!

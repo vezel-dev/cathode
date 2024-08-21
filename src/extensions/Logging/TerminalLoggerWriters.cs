@@ -65,7 +65,7 @@ public static class TerminalLoggerWriters
         _ = builder.Print("][");
 
         using (_ = Decorate(0, 155, 155))
-            _ = builder.Print(message.EventId);
+            _ = builder.Print(message.EventId.ToString());
 
         _ = builder.Print("] ");
 
