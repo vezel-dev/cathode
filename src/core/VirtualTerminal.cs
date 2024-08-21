@@ -60,7 +60,52 @@ public abstract class VirtualTerminal
         StandardOut.Write(value);
     }
 
+    public void Out(scoped Span<byte> value)
+    {
+        StandardOut.Write(value);
+    }
+
+    public void Out(ReadOnlyMemory<byte> value)
+    {
+        StandardOut.Write(value);
+    }
+
+    public void Out(Memory<byte> value)
+    {
+        StandardOut.Write(value);
+    }
+
+    public void Out(byte[]? value)
+    {
+        StandardOut.Write(value);
+    }
+
     public void Out(scoped ReadOnlySpan<char> value)
+    {
+        StandardOut.Write(value);
+    }
+
+    public void Out(scoped Span<char> value)
+    {
+        StandardOut.Write(value);
+    }
+
+    public void Out(ReadOnlyMemory<char> value)
+    {
+        StandardOut.Write(value);
+    }
+
+    public void Out(Memory<char> value)
+    {
+        StandardOut.Write(value);
+    }
+
+    public void Out(char[]? value)
+    {
+        StandardOut.Write(value);
+    }
+
+    public void Out(string? value)
     {
         StandardOut.Write(value);
     }
@@ -135,7 +180,52 @@ public abstract class VirtualTerminal
         StandardError.Write(value);
     }
 
+    public void Error(scoped Span<byte> value)
+    {
+        StandardError.Write(value);
+    }
+
+    public void Error(ReadOnlyMemory<byte> value)
+    {
+        StandardError.Write(value);
+    }
+
+    public void Error(Memory<byte> value)
+    {
+        StandardError.Write(value);
+    }
+
+    public void Error(byte[]? value)
+    {
+        StandardError.Write(value);
+    }
+
     public void Error(scoped ReadOnlySpan<char> value)
+    {
+        StandardError.Write(value);
+    }
+
+    public void Error(scoped Span<char> value)
+    {
+        StandardError.Write(value);
+    }
+
+    public void Error(ReadOnlyMemory<char> value)
+    {
+        StandardError.Write(value);
+    }
+
+    public void Error(Memory<char> value)
+    {
+        StandardError.Write(value);
+    }
+
+    public void Error(char[]? value)
+    {
+        StandardError.Write(value);
+    }
+
+    public void Error(string? value)
     {
         StandardError.Write(value);
     }

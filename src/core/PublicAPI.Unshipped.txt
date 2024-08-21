@@ -94,8 +94,17 @@ static Vezel.Cathode.IO.TerminalIOExtensions.Read(this Vezel.Cathode.IO.Terminal
 static Vezel.Cathode.IO.TerminalIOExtensions.ReadAsync(this Vezel.Cathode.IO.TerminalReader! reader, System.Memory<byte> value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask<int>
 static Vezel.Cathode.IO.TerminalIOExtensions.ReadLine(this Vezel.Cathode.IO.TerminalReader! reader) -> string?
 static Vezel.Cathode.IO.TerminalIOExtensions.ReadLineAsync(this Vezel.Cathode.IO.TerminalReader! reader, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask<string?>
+static Vezel.Cathode.IO.TerminalIOExtensions.Write(this Vezel.Cathode.IO.TerminalWriter! writer, byte[]? value) -> void
+static Vezel.Cathode.IO.TerminalIOExtensions.Write(this Vezel.Cathode.IO.TerminalWriter! writer, char[]? value) -> void
 static Vezel.Cathode.IO.TerminalIOExtensions.Write(this Vezel.Cathode.IO.TerminalWriter! writer, scoped System.ReadOnlySpan<byte> value) -> void
 static Vezel.Cathode.IO.TerminalIOExtensions.Write(this Vezel.Cathode.IO.TerminalWriter! writer, scoped System.ReadOnlySpan<char> value) -> void
+static Vezel.Cathode.IO.TerminalIOExtensions.Write(this Vezel.Cathode.IO.TerminalWriter! writer, scoped System.Span<byte> value) -> void
+static Vezel.Cathode.IO.TerminalIOExtensions.Write(this Vezel.Cathode.IO.TerminalWriter! writer, scoped System.Span<char> value) -> void
+static Vezel.Cathode.IO.TerminalIOExtensions.Write(this Vezel.Cathode.IO.TerminalWriter! writer, string? value) -> void
+static Vezel.Cathode.IO.TerminalIOExtensions.Write(this Vezel.Cathode.IO.TerminalWriter! writer, System.Memory<byte> value) -> void
+static Vezel.Cathode.IO.TerminalIOExtensions.Write(this Vezel.Cathode.IO.TerminalWriter! writer, System.Memory<char> value) -> void
+static Vezel.Cathode.IO.TerminalIOExtensions.Write(this Vezel.Cathode.IO.TerminalWriter! writer, System.ReadOnlyMemory<byte> value) -> void
+static Vezel.Cathode.IO.TerminalIOExtensions.Write(this Vezel.Cathode.IO.TerminalWriter! writer, System.ReadOnlyMemory<char> value) -> void
 static Vezel.Cathode.IO.TerminalIOExtensions.Write<T>(this Vezel.Cathode.IO.TerminalWriter! writer, T value) -> void
 static Vezel.Cathode.IO.TerminalIOExtensions.WriteAsync(this Vezel.Cathode.IO.TerminalWriter! writer, byte[]? value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
 static Vezel.Cathode.IO.TerminalIOExtensions.WriteAsync(this Vezel.Cathode.IO.TerminalWriter! writer, char[]? value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
@@ -117,8 +126,17 @@ static Vezel.Cathode.Terminal.Control.get -> Vezel.Cathode.TerminalControl!
 static Vezel.Cathode.Terminal.DisableRawMode() -> void
 static Vezel.Cathode.Terminal.EnableRawMode() -> void
 static Vezel.Cathode.Terminal.Encoding.get -> System.Text.Encoding!
+static Vezel.Cathode.Terminal.Error(byte[]? value) -> void
+static Vezel.Cathode.Terminal.Error(char[]? value) -> void
 static Vezel.Cathode.Terminal.Error(scoped System.ReadOnlySpan<byte> value) -> void
 static Vezel.Cathode.Terminal.Error(scoped System.ReadOnlySpan<char> value) -> void
+static Vezel.Cathode.Terminal.Error(scoped System.Span<byte> value) -> void
+static Vezel.Cathode.Terminal.Error(scoped System.Span<char> value) -> void
+static Vezel.Cathode.Terminal.Error(string? value) -> void
+static Vezel.Cathode.Terminal.Error(System.Memory<byte> value) -> void
+static Vezel.Cathode.Terminal.Error(System.Memory<char> value) -> void
+static Vezel.Cathode.Terminal.Error(System.ReadOnlyMemory<byte> value) -> void
+static Vezel.Cathode.Terminal.Error(System.ReadOnlyMemory<char> value) -> void
 static Vezel.Cathode.Terminal.Error<T>(T value) -> void
 static Vezel.Cathode.Terminal.ErrorAsync(byte[]? value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
 static Vezel.Cathode.Terminal.ErrorAsync(char[]? value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
@@ -134,8 +152,17 @@ static Vezel.Cathode.Terminal.ErrorLineAsync(System.Threading.CancellationToken 
 static Vezel.Cathode.Terminal.ErrorLineAsync<T>(T value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
 static Vezel.Cathode.Terminal.GenerateSignal(Vezel.Cathode.TerminalSignal signal) -> void
 static Vezel.Cathode.Terminal.IsRawMode.get -> bool
+static Vezel.Cathode.Terminal.Out(byte[]? value) -> void
+static Vezel.Cathode.Terminal.Out(char[]? value) -> void
 static Vezel.Cathode.Terminal.Out(scoped System.ReadOnlySpan<byte> value) -> void
 static Vezel.Cathode.Terminal.Out(scoped System.ReadOnlySpan<char> value) -> void
+static Vezel.Cathode.Terminal.Out(scoped System.Span<byte> value) -> void
+static Vezel.Cathode.Terminal.Out(scoped System.Span<char> value) -> void
+static Vezel.Cathode.Terminal.Out(string? value) -> void
+static Vezel.Cathode.Terminal.Out(System.Memory<byte> value) -> void
+static Vezel.Cathode.Terminal.Out(System.Memory<char> value) -> void
+static Vezel.Cathode.Terminal.Out(System.ReadOnlyMemory<byte> value) -> void
+static Vezel.Cathode.Terminal.Out(System.ReadOnlyMemory<char> value) -> void
 static Vezel.Cathode.Terminal.Out<T>(T value) -> void
 static Vezel.Cathode.Terminal.OutAsync(byte[]? value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
 static Vezel.Cathode.Terminal.OutAsync(char[]? value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
@@ -508,8 +535,17 @@ Vezel.Cathode.Text.Control.ScreenshotFormat.Png = 12 -> Vezel.Cathode.Text.Contr
 Vezel.Cathode.Text.Control.ScreenshotFormat.Svg = 11 -> Vezel.Cathode.Text.Control.ScreenshotFormat
 Vezel.Cathode.Text.MonospaceWidth
 Vezel.Cathode.VirtualTerminal
+Vezel.Cathode.VirtualTerminal.Error(byte[]? value) -> void
+Vezel.Cathode.VirtualTerminal.Error(char[]? value) -> void
 Vezel.Cathode.VirtualTerminal.Error(scoped System.ReadOnlySpan<byte> value) -> void
 Vezel.Cathode.VirtualTerminal.Error(scoped System.ReadOnlySpan<char> value) -> void
+Vezel.Cathode.VirtualTerminal.Error(scoped System.Span<byte> value) -> void
+Vezel.Cathode.VirtualTerminal.Error(scoped System.Span<char> value) -> void
+Vezel.Cathode.VirtualTerminal.Error(string? value) -> void
+Vezel.Cathode.VirtualTerminal.Error(System.Memory<byte> value) -> void
+Vezel.Cathode.VirtualTerminal.Error(System.Memory<char> value) -> void
+Vezel.Cathode.VirtualTerminal.Error(System.ReadOnlyMemory<byte> value) -> void
+Vezel.Cathode.VirtualTerminal.Error(System.ReadOnlyMemory<char> value) -> void
 Vezel.Cathode.VirtualTerminal.Error<T>(T value) -> void
 Vezel.Cathode.VirtualTerminal.ErrorAsync(byte[]? value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
 Vezel.Cathode.VirtualTerminal.ErrorAsync(char[]? value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
@@ -523,8 +559,17 @@ Vezel.Cathode.VirtualTerminal.ErrorLine() -> void
 Vezel.Cathode.VirtualTerminal.ErrorLine<T>(T value) -> void
 Vezel.Cathode.VirtualTerminal.ErrorLineAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
 Vezel.Cathode.VirtualTerminal.ErrorLineAsync<T>(T value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
+Vezel.Cathode.VirtualTerminal.Out(byte[]? value) -> void
+Vezel.Cathode.VirtualTerminal.Out(char[]? value) -> void
 Vezel.Cathode.VirtualTerminal.Out(scoped System.ReadOnlySpan<byte> value) -> void
 Vezel.Cathode.VirtualTerminal.Out(scoped System.ReadOnlySpan<char> value) -> void
+Vezel.Cathode.VirtualTerminal.Out(scoped System.Span<byte> value) -> void
+Vezel.Cathode.VirtualTerminal.Out(scoped System.Span<char> value) -> void
+Vezel.Cathode.VirtualTerminal.Out(string? value) -> void
+Vezel.Cathode.VirtualTerminal.Out(System.Memory<byte> value) -> void
+Vezel.Cathode.VirtualTerminal.Out(System.Memory<char> value) -> void
+Vezel.Cathode.VirtualTerminal.Out(System.ReadOnlyMemory<byte> value) -> void
+Vezel.Cathode.VirtualTerminal.Out(System.ReadOnlyMemory<char> value) -> void
 Vezel.Cathode.VirtualTerminal.Out<T>(T value) -> void
 Vezel.Cathode.VirtualTerminal.OutAsync(byte[]? value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
 Vezel.Cathode.VirtualTerminal.OutAsync(char[]? value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask

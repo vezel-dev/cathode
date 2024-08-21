@@ -80,6 +80,26 @@ public static class TerminalIOExtensions
         }
     }
 
+    public static void Write(this TerminalWriter writer, scoped Span<byte> value)
+    {
+        writer.Write((ReadOnlySpan<byte>)value);
+    }
+
+    public static void Write(this TerminalWriter writer, ReadOnlyMemory<byte> value)
+    {
+        writer.Write(value.Span);
+    }
+
+    public static void Write(this TerminalWriter writer, Memory<byte> value)
+    {
+        writer.Write((ReadOnlyMemory<byte>)value);
+    }
+
+    public static void Write(this TerminalWriter writer, byte[]? value)
+    {
+        writer.Write(value.AsSpan());
+    }
+
     public static void Write(this TerminalWriter writer, scoped ReadOnlySpan<char> value)
     {
         var encoding = Terminal.Encoding;
@@ -98,6 +118,31 @@ public static class TerminalIOExtensions
         {
             ArrayPool<byte>.Shared.Return(array);
         }
+    }
+
+    public static void Write(this TerminalWriter writer, scoped Span<char> value)
+    {
+        writer.Write((ReadOnlySpan<char>)value);
+    }
+
+    public static void Write(this TerminalWriter writer, ReadOnlyMemory<char> value)
+    {
+        writer.Write(value.Span);
+    }
+
+    public static void Write(this TerminalWriter writer, Memory<char> value)
+    {
+        writer.Write((ReadOnlyMemory<char>)value);
+    }
+
+    public static void Write(this TerminalWriter writer, char[]? value)
+    {
+        writer.Write(value.AsMemory());
+    }
+
+    public static void Write(this TerminalWriter writer, string? value)
+    {
+        writer.Write(value.AsMemory());
     }
 
     public static ValueTask WriteAsync<T>(

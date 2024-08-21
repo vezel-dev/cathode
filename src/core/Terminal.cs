@@ -99,7 +99,52 @@ public static class Terminal
         System.Out(value);
     }
 
+    public static void Out(scoped Span<byte> value)
+    {
+        System.Out(value);
+    }
+
+    public static void Out(ReadOnlyMemory<byte> value)
+    {
+        System.Out(value);
+    }
+
+    public static void Out(Memory<byte> value)
+    {
+        System.Out(value);
+    }
+
+    public static void Out(byte[]? value)
+    {
+        System.Out(value);
+    }
+
     public static void Out(scoped ReadOnlySpan<char> value)
+    {
+        System.Out(value);
+    }
+
+    public static void Out(scoped Span<char> value)
+    {
+        System.Out(value);
+    }
+
+    public static void Out(ReadOnlyMemory<char> value)
+    {
+        System.Out(value);
+    }
+
+    public static void Out(Memory<char> value)
+    {
+        System.Out(value);
+    }
+
+    public static void Out(char[]? value)
+    {
+        System.Out(value);
+    }
+
+    public static void Out(string? value)
     {
         System.Out(value);
     }
@@ -174,7 +219,52 @@ public static class Terminal
         System.Error(value);
     }
 
+    public static void Error(scoped Span<byte> value)
+    {
+        System.Error(value);
+    }
+
+    public static void Error(ReadOnlyMemory<byte> value)
+    {
+        System.Error(value);
+    }
+
+    public static void Error(Memory<byte> value)
+    {
+        System.Error(value);
+    }
+
+    public static void Error(byte[]? value)
+    {
+        System.Error(value);
+    }
+
     public static void Error(scoped ReadOnlySpan<char> value)
+    {
+        System.Error(value);
+    }
+
+    public static void Error(scoped Span<char> value)
+    {
+        System.Error(value);
+    }
+
+    public static void Error(ReadOnlyMemory<char> value)
+    {
+        System.Error(value);
+    }
+
+    public static void Error(Memory<char> value)
+    {
+        System.Error(value);
+    }
+
+    public static void Error(char[]? value)
+    {
+        System.Error(value);
+    }
+
+    public static void Error(string? value)
     {
         System.Error(value);
     }
