@@ -167,14 +167,14 @@ public sealed class ControlBuilder
         return this;
     }
 
-    public ControlBuilder PrintLine(scoped ReadOnlySpan<char> value)
-    {
-        return Print(value).PrintLine();
-    }
-
     public ControlBuilder PrintLine()
     {
         return Print(Environment.NewLine);
+    }
+
+    public ControlBuilder PrintLine(scoped ReadOnlySpan<char> value)
+    {
+        return Print(value).PrintLine();
     }
 
     [SuppressMessage("", "IDE0060")]
@@ -309,7 +309,7 @@ public sealed class ControlBuilder
 
         var ch = (char)mode;
 
-        return Print(CSI).Print("?1").Print(new(in ch));
+        return Print(CSI).Print("?1").Print([ch]);
     }
 
     public ControlBuilder SetKeypadMode(KeypadMode mode)
@@ -318,7 +318,7 @@ public sealed class ControlBuilder
 
         var ch = (char)mode;
 
-        return Print([ESC]).Print(new(in ch));
+        return Print([ESC]).Print([ch]);
     }
 
     public ControlBuilder SetKeyboardLevel(KeyboardLevel level)
@@ -366,7 +366,7 @@ public sealed class ControlBuilder
 
         var ch = (char)buffer;
 
-        return Print(CSI).Print("?1049").Print(new(in ch));
+        return Print(CSI).Print("?1049").Print([ch]);
     }
 
     public ControlBuilder SetInvertedColors(bool enable)
