@@ -160,12 +160,102 @@ public abstract class VirtualTerminal
         StandardOut.WriteLine(value);
     }
 
+    public void OutLine(scoped ReadOnlySpan<byte> value)
+    {
+        StandardOut.WriteLine(value);
+    }
+
+    public void OutLine(scoped Span<byte> value)
+    {
+        StandardOut.WriteLine(value);
+    }
+
+    public void OutLine(ReadOnlyMemory<byte> value)
+    {
+        StandardOut.WriteLine(value);
+    }
+
+    public void OutLine(Memory<byte> value)
+    {
+        StandardOut.WriteLine(value);
+    }
+
+    public void OutLine(byte[]? value)
+    {
+        StandardOut.WriteLine(value);
+    }
+
+    public void OutLine(scoped ReadOnlySpan<char> value)
+    {
+        StandardOut.WriteLine(value);
+    }
+
+    public void OutLine(scoped Span<char> value)
+    {
+        StandardOut.WriteLine(value);
+    }
+
+    public void OutLine(ReadOnlyMemory<char> value)
+    {
+        StandardOut.WriteLine(value);
+    }
+
+    public void OutLine(Memory<char> value)
+    {
+        StandardOut.WriteLine(value);
+    }
+
+    public void OutLine(char[]? value)
+    {
+        StandardOut.WriteLine(value);
+    }
+
+    public void OutLine(string? value)
+    {
+        StandardOut.WriteLine(value);
+    }
+
     public ValueTask OutLineAsync(CancellationToken cancellationToken = default)
     {
         return StandardOut.WriteLineAsync(cancellationToken);
     }
 
     public ValueTask OutLineAsync<T>(T value, CancellationToken cancellationToken = default)
+    {
+        return StandardOut.WriteLineAsync(value, cancellationToken);
+    }
+
+    public ValueTask OutLineAsync(ReadOnlyMemory<byte> value, CancellationToken cancellationToken = default)
+    {
+        return StandardOut.WriteLineAsync(value, cancellationToken);
+    }
+
+    public ValueTask OutLineAsync(Memory<byte> value, CancellationToken cancellationToken = default)
+    {
+        return StandardOut.WriteLineAsync(value, cancellationToken);
+    }
+
+    public ValueTask OutLineAsync(byte[]? value, CancellationToken cancellationToken = default)
+    {
+        return StandardOut.WriteLineAsync(value, cancellationToken);
+    }
+
+    public ValueTask OutLineAsync(ReadOnlyMemory<char> value, CancellationToken cancellationToken = default)
+    {
+        return StandardOut.WriteLineAsync(value, cancellationToken);
+    }
+
+    public ValueTask OutLineAsync(Memory<char> value, CancellationToken cancellationToken = default)
+    {
+        return StandardOut.WriteLineAsync(value, cancellationToken);
+    }
+
+    public ValueTask OutLineAsync(char[]? value, CancellationToken cancellationToken = default)
+    {
+        return StandardOut.WriteLineAsync(value, cancellationToken);
+    }
+
+    public ValueTask OutLineAsync(string? value, CancellationToken cancellationToken = default)
     {
         return StandardOut.WriteLineAsync(value, cancellationToken);
     }
@@ -280,12 +370,102 @@ public abstract class VirtualTerminal
         StandardError.WriteLine(value);
     }
 
+    public void ErrorLine(scoped ReadOnlySpan<byte> value)
+    {
+        StandardError.WriteLine(value);
+    }
+
+    public void ErrorLine(scoped Span<byte> value)
+    {
+        StandardError.WriteLine(value);
+    }
+
+    public void ErrorLine(ReadOnlyMemory<byte> value)
+    {
+        StandardError.WriteLine(value);
+    }
+
+    public void ErrorLine(Memory<byte> value)
+    {
+        StandardError.WriteLine(value);
+    }
+
+    public void ErrorLine(byte[]? value)
+    {
+        StandardError.WriteLine(value);
+    }
+
+    public void ErrorLine(scoped ReadOnlySpan<char> value)
+    {
+        StandardError.WriteLine(value);
+    }
+
+    public void ErrorLine(scoped Span<char> value)
+    {
+        StandardError.WriteLine(value);
+    }
+
+    public void ErrorLine(ReadOnlyMemory<char> value)
+    {
+        StandardError.WriteLine(value);
+    }
+
+    public void ErrorLine(Memory<char> value)
+    {
+        StandardError.WriteLine(value);
+    }
+
+    public void ErrorLine(char[]? value)
+    {
+        StandardError.WriteLine(value);
+    }
+
+    public void ErrorLine(string? value)
+    {
+        StandardError.WriteLine(value);
+    }
+
     public ValueTask ErrorLineAsync(CancellationToken cancellationToken = default)
     {
         return StandardError.WriteLineAsync(cancellationToken);
     }
 
     public ValueTask ErrorLineAsync<T>(T value, CancellationToken cancellationToken = default)
+    {
+        return StandardError.WriteLineAsync(value, cancellationToken);
+    }
+
+    public ValueTask ErrorLineAsync(ReadOnlyMemory<byte> value, CancellationToken cancellationToken = default)
+    {
+        return StandardError.WriteLineAsync(value, cancellationToken);
+    }
+
+    public ValueTask ErrorLineAsync(Memory<byte> value, CancellationToken cancellationToken = default)
+    {
+        return StandardError.WriteLineAsync(value, cancellationToken);
+    }
+
+    public ValueTask ErrorLineAsync(byte[]? value, CancellationToken cancellationToken = default)
+    {
+        return StandardError.WriteLineAsync(value, cancellationToken);
+    }
+
+    public ValueTask ErrorLineAsync(ReadOnlyMemory<char> value, CancellationToken cancellationToken = default)
+    {
+        return StandardError.WriteLineAsync(value, cancellationToken);
+    }
+
+    public ValueTask ErrorLineAsync(Memory<char> value, CancellationToken cancellationToken = default)
+    {
+        return StandardError.WriteLineAsync(value, cancellationToken);
+    }
+
+    public ValueTask ErrorLineAsync(char[]? value, CancellationToken cancellationToken = default)
+    {
+        return StandardError.WriteLineAsync(value, cancellationToken);
+    }
+
+    public ValueTask ErrorLineAsync(string? value, CancellationToken cancellationToken = default)
     {
         return StandardError.WriteLineAsync(value, cancellationToken);
     }

@@ -199,12 +199,102 @@ public static class Terminal
         System.OutLine(value);
     }
 
+    public static void OutLine(scoped ReadOnlySpan<byte> value)
+    {
+        System.OutLine(value);
+    }
+
+    public static void OutLine(scoped Span<byte> value)
+    {
+        System.OutLine(value);
+    }
+
+    public static void OutLine(ReadOnlyMemory<byte> value)
+    {
+        System.OutLine(value);
+    }
+
+    public static void OutLine(Memory<byte> value)
+    {
+        System.OutLine(value);
+    }
+
+    public static void OutLine(byte[]? value)
+    {
+        System.OutLine(value);
+    }
+
+    public static void OutLine(scoped ReadOnlySpan<char> value)
+    {
+        System.OutLine(value);
+    }
+
+    public static void OutLine(scoped Span<char> value)
+    {
+        System.OutLine(value);
+    }
+
+    public static void OutLine(ReadOnlyMemory<char> value)
+    {
+        System.OutLine(value);
+    }
+
+    public static void OutLine(Memory<char> value)
+    {
+        System.OutLine(value);
+    }
+
+    public static void OutLine(char[]? value)
+    {
+        System.OutLine(value);
+    }
+
+    public static void OutLine(string? value)
+    {
+        System.OutLine(value);
+    }
+
     public static ValueTask OutLineAsync(CancellationToken cancellationToken = default)
     {
         return System.OutLineAsync(cancellationToken);
     }
 
     public static ValueTask OutLineAsync<T>(T value, CancellationToken cancellationToken = default)
+    {
+        return System.OutLineAsync(value, cancellationToken);
+    }
+
+    public static ValueTask OutLineAsync(ReadOnlyMemory<byte> value, CancellationToken cancellationToken = default)
+    {
+        return System.OutLineAsync(value, cancellationToken);
+    }
+
+    public static ValueTask OutLineAsync(Memory<byte> value, CancellationToken cancellationToken = default)
+    {
+        return System.OutLineAsync(value, cancellationToken);
+    }
+
+    public static ValueTask OutLineAsync(byte[]? value, CancellationToken cancellationToken = default)
+    {
+        return System.OutLineAsync(value, cancellationToken);
+    }
+
+    public static ValueTask OutLineAsync(ReadOnlyMemory<char> value, CancellationToken cancellationToken = default)
+    {
+        return System.OutLineAsync(value, cancellationToken);
+    }
+
+    public static ValueTask OutLineAsync(Memory<char> value, CancellationToken cancellationToken = default)
+    {
+        return System.OutLineAsync(value, cancellationToken);
+    }
+
+    public static ValueTask OutLineAsync(char[]? value, CancellationToken cancellationToken = default)
+    {
+        return System.OutLineAsync(value, cancellationToken);
+    }
+
+    public static ValueTask OutLineAsync(string? value, CancellationToken cancellationToken = default)
     {
         return System.OutLineAsync(value, cancellationToken);
     }
@@ -319,12 +409,102 @@ public static class Terminal
         System.ErrorLine(value);
     }
 
+    public static void ErrorLine(scoped ReadOnlySpan<byte> value)
+    {
+        System.ErrorLine(value);
+    }
+
+    public static void ErrorLine(scoped Span<byte> value)
+    {
+        System.ErrorLine(value);
+    }
+
+    public static void ErrorLine(ReadOnlyMemory<byte> value)
+    {
+        System.ErrorLine(value);
+    }
+
+    public static void ErrorLine(Memory<byte> value)
+    {
+        System.ErrorLine(value);
+    }
+
+    public static void ErrorLine(byte[]? value)
+    {
+        System.ErrorLine(value);
+    }
+
+    public static void ErrorLine(scoped ReadOnlySpan<char> value)
+    {
+        System.ErrorLine(value);
+    }
+
+    public static void ErrorLine(scoped Span<char> value)
+    {
+        System.ErrorLine(value);
+    }
+
+    public static void ErrorLine(ReadOnlyMemory<char> value)
+    {
+        System.ErrorLine(value);
+    }
+
+    public static void ErrorLine(Memory<char> value)
+    {
+        System.ErrorLine(value);
+    }
+
+    public static void ErrorLine(char[]? value)
+    {
+        System.ErrorLine(value);
+    }
+
+    public static void ErrorLine(string? value)
+    {
+        System.ErrorLine(value);
+    }
+
     public static ValueTask ErrorLineAsync(CancellationToken cancellationToken = default)
     {
         return System.ErrorLineAsync(cancellationToken);
     }
 
     public static ValueTask ErrorLineAsync<T>(T value, CancellationToken cancellationToken = default)
+    {
+        return System.ErrorLineAsync(value, cancellationToken);
+    }
+
+    public static ValueTask ErrorLineAsync(ReadOnlyMemory<byte> value, CancellationToken cancellationToken = default)
+    {
+        return System.ErrorLineAsync(value, cancellationToken);
+    }
+
+    public static ValueTask ErrorLineAsync(Memory<byte> value, CancellationToken cancellationToken = default)
+    {
+        return System.ErrorLineAsync(value, cancellationToken);
+    }
+
+    public static ValueTask ErrorLineAsync(byte[]? value, CancellationToken cancellationToken = default)
+    {
+        return System.ErrorLineAsync(value, cancellationToken);
+    }
+
+    public static ValueTask ErrorLineAsync(ReadOnlyMemory<char> value, CancellationToken cancellationToken = default)
+    {
+        return System.ErrorLineAsync(value, cancellationToken);
+    }
+
+    public static ValueTask ErrorLineAsync(Memory<char> value, CancellationToken cancellationToken = default)
+    {
+        return System.ErrorLineAsync(value, cancellationToken);
+    }
+
+    public static ValueTask ErrorLineAsync(char[]? value, CancellationToken cancellationToken = default)
+    {
+        return System.ErrorLineAsync(value, cancellationToken);
+    }
+
+    public static ValueTask ErrorLineAsync(string? value, CancellationToken cancellationToken = default)
     {
         return System.ErrorLineAsync(value, cancellationToken);
     }

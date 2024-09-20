@@ -230,22 +230,203 @@ public static class TerminalIOExtensions
 
     public static void WriteLine(this TerminalWriter writer)
     {
-        writer.WriteLine(string.Empty);
+        writer.Write(Environment.NewLine);
     }
 
     public static void WriteLine<T>(this TerminalWriter writer, T value)
     {
-        writer.Write(value?.ToString() + Environment.NewLine);
+        writer.Write(value);
+        writer.WriteLine();
+    }
+
+    public static void WriteLine(this TerminalWriter writer, scoped ReadOnlySpan<byte> value)
+    {
+        writer.Write(value);
+        writer.WriteLine();
+    }
+
+    public static void WriteLine(this TerminalWriter writer, scoped Span<byte> value)
+    {
+        writer.Write(value);
+        writer.WriteLine();
+    }
+
+    public static void WriteLine(this TerminalWriter writer, ReadOnlyMemory<byte> value)
+    {
+        writer.Write(value);
+        writer.WriteLine();
+    }
+
+    public static void WriteLine(this TerminalWriter writer, Memory<byte> value)
+    {
+        writer.Write(value);
+        writer.WriteLine();
+    }
+
+    public static void WriteLine(this TerminalWriter writer, byte[]? value)
+    {
+        writer.Write(value);
+        writer.WriteLine();
+    }
+
+    public static void WriteLine(this TerminalWriter writer, scoped ReadOnlySpan<char> value)
+    {
+        writer.Write(value);
+        writer.WriteLine();
+    }
+
+    public static void WriteLine(this TerminalWriter writer, scoped Span<char> value)
+    {
+        writer.Write(value);
+        writer.WriteLine();
+    }
+
+    public static void WriteLine(this TerminalWriter writer, ReadOnlyMemory<char> value)
+    {
+        writer.Write(value);
+        writer.WriteLine();
+    }
+
+    public static void WriteLine(this TerminalWriter writer, Memory<char> value)
+    {
+        writer.Write(value);
+        writer.WriteLine();
+    }
+
+    public static void WriteLine(this TerminalWriter writer, char[]? value)
+    {
+        writer.Write(value);
+        writer.WriteLine();
+    }
+
+    public static void WriteLine(this TerminalWriter writer, string? value)
+    {
+        writer.Write(value);
+        writer.WriteLine();
     }
 
     public static ValueTask WriteLineAsync(this TerminalWriter writer, CancellationToken cancellationToken = default)
     {
-        return writer.WriteLineAsync(string.Empty, cancellationToken);
+        return writer.WriteAsync(Environment.NewLine, cancellationToken);
     }
 
     public static ValueTask WriteLineAsync<T>(
         this TerminalWriter writer, T value, CancellationToken cancellationToken = default)
     {
-        return writer.WriteAsync(value?.ToString() + Environment.NewLine, cancellationToken);
+        Check.Null(writer);
+
+        return WriteLineAsync();
+
+        [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder))]
+        async ValueTask WriteLineAsync()
+        {
+            await writer.WriteAsync(value, cancellationToken).ConfigureAwait(false);
+            await writer.WriteLineAsync(cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    public static ValueTask WriteLineAsync(
+        this TerminalWriter writer, ReadOnlyMemory<byte> value, CancellationToken cancellationToken = default)
+    {
+        Check.Null(writer);
+
+        return WriteLineAsync();
+
+        [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder))]
+        async ValueTask WriteLineAsync()
+        {
+            await writer.WriteAsync(value, cancellationToken).ConfigureAwait(false);
+            await writer.WriteLineAsync(cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    public static ValueTask WriteLineAsync(
+        this TerminalWriter writer, Memory<byte> value, CancellationToken cancellationToken = default)
+    {
+        Check.Null(writer);
+
+        return WriteLineAsync();
+
+        [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder))]
+        async ValueTask WriteLineAsync()
+        {
+            await writer.WriteAsync(value, cancellationToken).ConfigureAwait(false);
+            await writer.WriteLineAsync(cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    public static ValueTask WriteLineAsync(
+        this TerminalWriter writer, byte[]? value, CancellationToken cancellationToken = default)
+    {
+        Check.Null(writer);
+
+        return WriteLineAsync();
+
+        [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder))]
+        async ValueTask WriteLineAsync()
+        {
+            await writer.WriteAsync(value, cancellationToken).ConfigureAwait(false);
+            await writer.WriteLineAsync(cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    public static ValueTask WriteLineAsync(
+        this TerminalWriter writer, ReadOnlyMemory<char> value, CancellationToken cancellationToken = default)
+    {
+        Check.Null(writer);
+
+        return WriteLineAsync();
+
+        [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder))]
+        async ValueTask WriteLineAsync()
+        {
+            await writer.WriteAsync(value, cancellationToken).ConfigureAwait(false);
+            await writer.WriteLineAsync(cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    public static ValueTask WriteLineAsync(
+        this TerminalWriter writer, Memory<char> value, CancellationToken cancellationToken = default)
+    {
+        Check.Null(writer);
+
+        return WriteLineAsync();
+
+        [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder))]
+        async ValueTask WriteLineAsync()
+        {
+            await writer.WriteAsync(value, cancellationToken).ConfigureAwait(false);
+            await writer.WriteLineAsync(cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    public static ValueTask WriteLineAsync(
+        this TerminalWriter writer, char[]? value, CancellationToken cancellationToken = default)
+    {
+        Check.Null(writer);
+
+        return WriteLineAsync();
+
+        [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder))]
+        async ValueTask WriteLineAsync()
+        {
+            await writer.WriteAsync(value, cancellationToken).ConfigureAwait(false);
+            await writer.WriteLineAsync(cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    public static ValueTask WriteLineAsync(
+        this TerminalWriter writer, string? value, CancellationToken cancellationToken = default)
+    {
+        Check.Null(writer);
+
+        return WriteLineAsync();
+
+        [AsyncMethodBuilder(typeof(PoolingAsyncValueTaskMethodBuilder))]
+        async ValueTask WriteLineAsync()
+        {
+            await writer.WriteAsync(value, cancellationToken).ConfigureAwait(false);
+            await writer.WriteLineAsync(cancellationToken).ConfigureAwait(false);
+        }
     }
 }
