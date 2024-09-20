@@ -91,5 +91,13 @@
   "MD052": true,
   "MD053": {
     "ignored_definitions": []
-  }
+  },
+  "MD054": {
+    "url_inline": false
+  },
+  "MD055": {
+    "style": "leading_and_trailing"
+  },
+  "MD056": true,
+  "MD058": true
 }

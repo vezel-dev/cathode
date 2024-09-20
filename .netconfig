@@ -30,8 +30,8 @@
 	weak
 [file ".markdownlint.json"]
 	url = https://github.com/vezel-dev/.github/blob/master/syn/.markdownlint.json
-	sha = 7d581ae5eedad5892855cebc673edafad664856b
-	etag = cf98ac95cf318b52e206b9003e342de9db2ecb7be062eab6edf1681b1f374b3a
+	sha = 72ec690564533b1ad756f452be9b3ea5075ad124
+	etag = 6d74ad50782defb281b210a627cae9d255cbb419cdc705b0571f1653dbe02300
 	weak
 [file ".stylecop.json"]
 	url = https://github.com/vezel-dev/.github/blob/master/syn/.stylecop.json
