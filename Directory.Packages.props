@@ -16,7 +16,7 @@
         <GlobalPackageReference Include="Microsoft.VisualStudio.Threading.Analyzers"
                                 Version="17.11.20" />
         <GlobalPackageReference Include="Nerdbank.GitVersioning"
-                                Version="3.6.143" />
+                                Version="3.6.146" />
         <GlobalPackageReference Include="PolySharp"
                                 Version="1.14.1" />
         <GlobalPackageReference Include="StyleCop.Analyzers"
