@@ -136,9 +136,9 @@ static Vezel.Cathode.IO.TerminalIOExtensions.WriteLineAsync(this Vezel.Cathode.I
 static Vezel.Cathode.IO.TerminalIOExtensions.WriteLineAsync(this Vezel.Cathode.IO.TerminalWriter! writer, System.ReadOnlyMemory<char> value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
 static Vezel.Cathode.IO.TerminalIOExtensions.WriteLineAsync(this Vezel.Cathode.IO.TerminalWriter! writer, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
 static Vezel.Cathode.IO.TerminalIOExtensions.WriteLineAsync<T>(this Vezel.Cathode.IO.TerminalWriter! writer, T value, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask
-static Vezel.Cathode.Processes.ChildProcess.Run(string! fileName, params string![]! arguments) -> Vezel.Cathode.Processes.ChildProcess!
+static Vezel.Cathode.Processes.ChildProcess.Run(string! fileName, params System.ReadOnlySpan<string!> arguments) -> Vezel.Cathode.Processes.ChildProcess!
 static Vezel.Cathode.Processes.ChildProcess.Run(string! fileName, System.Collections.Generic.IEnumerable<string!>! arguments) -> Vezel.Cathode.Processes.ChildProcess!
-static Vezel.Cathode.Processes.ChildProcess.RunIn(string! workingDirectory, string! fileName, params string![]! arguments) -> Vezel.Cathode.Processes.ChildProcess!
+static Vezel.Cathode.Processes.ChildProcess.RunIn(string! workingDirectory, string! fileName, params System.ReadOnlySpan<string!> arguments) -> Vezel.Cathode.Processes.ChildProcess!
 static Vezel.Cathode.Processes.ChildProcess.RunIn(string! workingDirectory, string! fileName, System.Collections.Generic.IEnumerable<string!>! arguments) -> Vezel.Cathode.Processes.ChildProcess!
 static Vezel.Cathode.Terminal.Control.get -> Vezel.Cathode.TerminalControl!
 static Vezel.Cathode.Terminal.DisableRawMode() -> void
@@ -361,10 +361,10 @@ Vezel.Cathode.Processes.ChildProcess.StandardIn.get -> Vezel.Cathode.Processes.C
 Vezel.Cathode.Processes.ChildProcess.StandardOut.get -> Vezel.Cathode.Processes.ChildProcessReader!
 Vezel.Cathode.Processes.ChildProcessBuilder
 Vezel.Cathode.Processes.ChildProcessBuilder.AddArgument(string! argument) -> Vezel.Cathode.Processes.ChildProcessBuilder!
-Vezel.Cathode.Processes.ChildProcessBuilder.AddArguments(params string![]! arguments) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.AddArguments(params System.ReadOnlySpan<string!> arguments) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.AddArguments(System.Collections.Generic.IEnumerable<string!>! arguments) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.AddVariable(string! name, string! value) -> Vezel.Cathode.Processes.ChildProcessBuilder!
-Vezel.Cathode.Processes.ChildProcessBuilder.AddVariables(params (string! Name, string! Value)[]! variables) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.AddVariables(params System.ReadOnlySpan<(string! Name, string! Value)> variables) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.AddVariables(System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string!, string!>>! variables) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.Arguments.get -> System.Collections.Immutable.ImmutableArray<string!>
 Vezel.Cathode.Processes.ChildProcessBuilder.CancellationToken.get -> System.Threading.CancellationToken
@@ -374,7 +374,7 @@ Vezel.Cathode.Processes.ChildProcessBuilder.ClearVariables() -> Vezel.Cathode.Pr
 Vezel.Cathode.Processes.ChildProcessBuilder.CreateWindow.get -> bool
 Vezel.Cathode.Processes.ChildProcessBuilder.FileName.get -> string!
 Vezel.Cathode.Processes.ChildProcessBuilder.InsertArgument(int index, string! argument) -> Vezel.Cathode.Processes.ChildProcessBuilder!
-Vezel.Cathode.Processes.ChildProcessBuilder.InsertArguments(int index, params string![]! arguments) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.InsertArguments(int index, params System.ReadOnlySpan<string!> arguments) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.InsertArguments(int index, System.Collections.Generic.IEnumerable<string!>! arguments) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.JoinArguments.get -> bool
 Vezel.Cathode.Processes.ChildProcessBuilder.RedirectStandardError.get -> bool
@@ -383,12 +383,12 @@ Vezel.Cathode.Processes.ChildProcessBuilder.RedirectStandardOut.get -> bool
 Vezel.Cathode.Processes.ChildProcessBuilder.RemoveArgument(int index) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.RemoveArguments(int index, int count) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.RemoveVariable(string! name) -> Vezel.Cathode.Processes.ChildProcessBuilder!
-Vezel.Cathode.Processes.ChildProcessBuilder.RemoveVariables(params string![]! names) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.RemoveVariables(params System.ReadOnlySpan<string!> names) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.RemoveVariables(System.Collections.Generic.IEnumerable<string!>! names) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.Run() -> Vezel.Cathode.Processes.ChildProcess!
 Vezel.Cathode.Processes.ChildProcessBuilder.SetArgument(int index, string! argument) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.SetVariable(string! name, string! value) -> Vezel.Cathode.Processes.ChildProcessBuilder!
-Vezel.Cathode.Processes.ChildProcessBuilder.SetVariables(params (string! Name, string! Value)[]! variables) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.SetVariables(params System.ReadOnlySpan<(string! Name, string! Value)> variables) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.SetVariables(System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string!, string!>>! variables) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.StandardErrorBufferSize.get -> int
 Vezel.Cathode.Processes.ChildProcessBuilder.StandardErrorEncoding.get -> System.Text.Encoding!
@@ -398,7 +398,7 @@ Vezel.Cathode.Processes.ChildProcessBuilder.StandardOutEncoding.get -> System.Te
 Vezel.Cathode.Processes.ChildProcessBuilder.ThrowOnError.get -> bool
 Vezel.Cathode.Processes.ChildProcessBuilder.Variables.get -> System.Collections.Immutable.ImmutableDictionary<string!, string!>!
 Vezel.Cathode.Processes.ChildProcessBuilder.WindowStyle.get -> System.Diagnostics.ProcessWindowStyle
-Vezel.Cathode.Processes.ChildProcessBuilder.WithArguments(params string![]! arguments) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.WithArguments(params System.ReadOnlySpan<string!> arguments) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.WithArguments(System.Collections.Generic.IEnumerable<string!>! arguments) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.WithBufferSizes(int allStreams) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.WithBufferSizes(int standardOut, int standardError) -> Vezel.Cathode.Processes.ChildProcessBuilder!
@@ -411,7 +411,7 @@ Vezel.Cathode.Processes.ChildProcessBuilder.WithJoinArguments(bool joinArguments
 Vezel.Cathode.Processes.ChildProcessBuilder.WithRedirections(bool allStreams) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.WithRedirections(bool standardIn, bool standardOut, bool standardError) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.WithThrowOnError(bool throwOnError) -> Vezel.Cathode.Processes.ChildProcessBuilder!
-Vezel.Cathode.Processes.ChildProcessBuilder.WithVariables(params (string! Name, string! Value)[]! variables) -> Vezel.Cathode.Processes.ChildProcessBuilder!
+Vezel.Cathode.Processes.ChildProcessBuilder.WithVariables(params System.ReadOnlySpan<(string! Name, string! Value)> variables) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.WithVariables(System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string!, string!>>! variables) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.WithWindowStyle(System.Diagnostics.ProcessWindowStyle windowStyle) -> Vezel.Cathode.Processes.ChildProcessBuilder!
 Vezel.Cathode.Processes.ChildProcessBuilder.WithWorkingDirectory(string! workingDirectory) -> Vezel.Cathode.Processes.ChildProcessBuilder!

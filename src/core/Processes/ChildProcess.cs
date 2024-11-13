@@ -174,9 +174,9 @@ public sealed class ChildProcess
         });
     }
 
-    public static ChildProcess Run(string fileName, params string[] arguments)
+    public static ChildProcess Run(string fileName, params ReadOnlySpan<string> arguments)
     {
-        return Run(fileName, arguments.AsEnumerable());
+        return Run(fileName, arguments.ToArray().AsEnumerable());
     }
 
     public static ChildProcess Run(string fileName, IEnumerable<string> arguments)
@@ -187,9 +187,9 @@ public sealed class ChildProcess
             .Run();
     }
 
-    public static ChildProcess RunIn(string workingDirectory, string fileName, params string[] arguments)
+    public static ChildProcess RunIn(string workingDirectory, string fileName, params ReadOnlySpan<string> arguments)
     {
-        return RunIn(workingDirectory, fileName, arguments.AsEnumerable());
+        return RunIn(workingDirectory, fileName, arguments.ToArray().AsEnumerable());
     }
 
     public static ChildProcess RunIn(string workingDirectory, string fileName, IEnumerable<string> arguments)

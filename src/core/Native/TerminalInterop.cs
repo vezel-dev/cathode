@@ -91,7 +91,7 @@ internal static unsafe partial class TerminalInterop
                         ? $"lib{name}.dylib"
                         : $"lib{name}.so";
 
-                bool TryLoad(out nint handle, params string[] paths)
+                bool TryLoad(out nint handle, params ReadOnlySpan<string> paths)
                 {
                     return NativeLibrary.TryLoad(Path.Combine([directory, .. paths, fileName]), out handle);
                 }

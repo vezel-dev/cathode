@@ -77,9 +77,9 @@ public sealed class ChildProcessBuilder
         return builder;
     }
 
-    public ChildProcessBuilder WithArguments(params string[] arguments)
+    public ChildProcessBuilder WithArguments(params ReadOnlySpan<string> arguments)
     {
-        return WithArguments(arguments.AsEnumerable());
+        return WithArguments(arguments.ToArray().AsEnumerable());
     }
 
     public ChildProcessBuilder WithArguments(IEnumerable<string> arguments)
@@ -116,9 +116,9 @@ public sealed class ChildProcessBuilder
         return builder;
     }
 
-    public ChildProcessBuilder InsertArguments(int index, params string[] arguments)
+    public ChildProcessBuilder InsertArguments(int index, params ReadOnlySpan<string> arguments)
     {
-        return InsertArguments(index, arguments.AsEnumerable());
+        return InsertArguments(index, arguments.ToArray().AsEnumerable());
     }
 
     public ChildProcessBuilder InsertArguments(int index, IEnumerable<string> arguments)
@@ -144,9 +144,9 @@ public sealed class ChildProcessBuilder
         return builder;
     }
 
-    public ChildProcessBuilder AddArguments(params string[] arguments)
+    public ChildProcessBuilder AddArguments(params ReadOnlySpan<string> arguments)
     {
-        return AddArguments(arguments.AsEnumerable());
+        return AddArguments(arguments.ToArray().AsEnumerable());
     }
 
     public ChildProcessBuilder AddArguments(IEnumerable<string> arguments)
@@ -193,9 +193,9 @@ public sealed class ChildProcessBuilder
         return builder;
     }
 
-    public ChildProcessBuilder WithVariables(params (string Name, string Value)[] variables)
+    public ChildProcessBuilder WithVariables(params ReadOnlySpan<(string Name, string Value)> variables)
     {
-        return WithVariables(variables.Select(tup => KeyValuePair.Create(tup.Name, tup.Value)));
+        return WithVariables(variables.ToArray().Select(tup => KeyValuePair.Create(tup.Name, tup.Value)));
     }
 
     public ChildProcessBuilder WithVariables(IEnumerable<KeyValuePair<string, string>> variables)
@@ -221,9 +221,9 @@ public sealed class ChildProcessBuilder
         return builder;
     }
 
-    public ChildProcessBuilder SetVariables(params (string Name, string Value)[] variables)
+    public ChildProcessBuilder SetVariables(params ReadOnlySpan<(string Name, string Value)> variables)
     {
-        return SetVariables(variables.Select(tup => KeyValuePair.Create(tup.Name, tup.Value)));
+        return SetVariables(variables.ToArray().Select(tup => KeyValuePair.Create(tup.Name, tup.Value)));
     }
 
     public ChildProcessBuilder SetVariables(IEnumerable<KeyValuePair<string, string>> variables)
@@ -249,9 +249,9 @@ public sealed class ChildProcessBuilder
         return builder;
     }
 
-    public ChildProcessBuilder AddVariables(params (string Name, string Value)[] variables)
+    public ChildProcessBuilder AddVariables(params ReadOnlySpan<(string Name, string Value)> variables)
     {
-        return AddVariables(variables.Select(tup => KeyValuePair.Create(tup.Name, tup.Value)));
+        return AddVariables(variables.ToArray().Select(tup => KeyValuePair.Create(tup.Name, tup.Value)));
     }
 
     public ChildProcessBuilder AddVariables(IEnumerable<KeyValuePair<string, string>> variables)
@@ -275,9 +275,9 @@ public sealed class ChildProcessBuilder
         return builder;
     }
 
-    public ChildProcessBuilder RemoveVariables(params string[] names)
+    public ChildProcessBuilder RemoveVariables(params ReadOnlySpan<string> names)
     {
-        return RemoveVariables(names.AsEnumerable());
+        return RemoveVariables(names.ToArray().AsEnumerable());
     }
 
     public ChildProcessBuilder RemoveVariables(IEnumerable<string> names)
