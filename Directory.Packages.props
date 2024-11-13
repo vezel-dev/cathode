@@ -29,9 +29,9 @@
         <PackageVersion Include="Microsoft.CodeAnalysis.CSharp"
                         Version="4.11.0" />
         <PackageVersion Include="Microsoft.Extensions.Hosting"
-                        Version="8.0.1" />
+                        Version="9.0.0" />
         <PackageVersion Include="Microsoft.Extensions.Hosting.Systemd"
-                        Version="8.0.1" />
+                        Version="9.0.0" />
         <PackageVersion Include="System.IO.Pipelines"
                         Version="9.0.0" />
         <PackageVersion Include="Wcwidth"
