@@ -14,7 +14,7 @@
         <GlobalPackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers"
                                 Version="3.3.4" />
         <GlobalPackageReference Include="Microsoft.VisualStudio.Threading.Analyzers"
-                                Version="17.11.20" />
+                                Version="17.12.19" />
         <GlobalPackageReference Include="Nerdbank.GitVersioning"
                                 Version="3.6.146" />
         <GlobalPackageReference Include="PolySharp"
