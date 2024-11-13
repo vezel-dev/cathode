@@ -125,11 +125,11 @@ public abstract class SystemVirtualTerminal : VirtualTerminal
         }
     }
 
-    private readonly object _sizeLock = new();
+    private readonly Lock _sizeLock = new();
 
-    private readonly object _signalLock = new();
+    private readonly Lock _signalLock = new();
 
-    private readonly object _rawLock = new();
+    private readonly Lock _rawLock = new();
 
     private readonly ManualResetEventSlim _resizeEvent = new();
 
