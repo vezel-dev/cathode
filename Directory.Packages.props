@@ -1,5 +1,6 @@
 <Project>
     <PropertyGroup>
+        <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
         <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     </PropertyGroup>
 
