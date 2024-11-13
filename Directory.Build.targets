@@ -12,6 +12,7 @@
         <Using Include="System.Diagnostics.CodeAnalysis" />
         <Using Include="System.Drawing" />
         <Using Include="System.Globalization" />
+        <Using Include="System.IO.Pipelines" />
         <Using Include="System.IO.Pipes" />
         <Using Include="System.Numerics" />
         <Using Include="System.Reflection" />

@@ -10,7 +10,6 @@ This package provides the core terminal API.</PackageDescription>
     </PropertyGroup>
 
     <ItemGroup>
-        <Using Include="System.IO.Pipelines" />
         <Using Include="Vezel.Cathode.Diagnostics" />
         <Using Include="Vezel.Cathode.IO" />
         <Using Include="Vezel.Cathode.Threading" />
@@ -35,7 +34,6 @@ This package provides the core terminal API.</PackageDescription>
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers"
                           PrivateAssets="build; contentfiles" />
-        <PackageReference Include="System.IO.Pipelines" />
         <PackageReference Include="Wcwidth" />
     </ItemGroup>
 
