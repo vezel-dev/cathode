@@ -168,6 +168,12 @@ internal sealed class SynchronizedTextWriter : TextWriter
             _writer.Write(format, arg0, arg1, arg2);
     }
 
+    public override void Write(string format, params ReadOnlySpan<object?> arg)
+    {
+        using (_lock.Enter())
+            _writer.Write(format, arg);
+    }
+
     public override void Write(string format, params object?[] arg)
     {
         using (_lock.Enter())
@@ -316,6 +322,12 @@ internal sealed class SynchronizedTextWriter : TextWriter
     {
         using (_lock.Enter())
             _writer.WriteLine(format, arg0, arg1, arg2);
+    }
+
+    public override void WriteLine(string format, params ReadOnlySpan<object?> arg)
+    {
+        using (_lock.Enter())
+            _writer.WriteLine(format, arg);
     }
 
     public override void WriteLine(string format, params object?[] arg)
