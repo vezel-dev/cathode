@@ -4,8 +4,6 @@
         <DefineConstants>
             $(DefineConstants);
             _GNU_SOURCE;
-            _UNICODE;
-            UNICODE;
             WIN32_LEAN_AND_MEAN
         </DefineConstants>
         <!-- TODO: Remove when -err is re-enabled in Directory.Build.rsp. -->

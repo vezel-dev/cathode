@@ -30,6 +30,7 @@
         <RepositoryUrl>https://github.com/vezel-dev/cathode.git</RepositoryUrl>
         <TargetFramework>net9.0</TargetFramework>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <UnicodeEnvironment>true</UnicodeEnvironment>
     </PropertyGroup>
 
     <PropertyGroup>
