@@ -58,7 +58,7 @@ public static class ControlConstants
 
     public const char SUB = '\x1a';
 
-    public const char ESC = '\x1b';
+    public const char ESC = '\e';
 
     public const char FS = '\x1c';
 
@@ -74,17 +74,17 @@ public static class ControlConstants
 
     // We cannot use char constants in constant interpolated strings...
 
-    public const string DCS = "\x1bP";
+    public const string DCS = "\eP";
 
-    public const string SOS = "\x1bX";
+    public const string SOS = "\eX";
 
-    public const string CSI = "\x1b[";
+    public const string CSI = "\e[";
 
-    public const string OSC = "\x1b]";
+    public const string OSC = "\e]";
 
-    public const string PM = "\x1b^";
+    public const string PM = "\e^";
 
-    public const string APC = "\x1b_";
+    public const string APC = "\e_";
 
-    public const string ST = "\x1b\\";
+    public const string ST = "\e\\";
 }
