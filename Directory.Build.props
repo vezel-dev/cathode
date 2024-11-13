@@ -20,6 +20,7 @@
         <IsPublishable>false</IsPublishable>
         <LanguageStandard>gnu23</LanguageStandard>
         <LangVersion>latest</LangVersion>
+        <MicrosoftExtensions>true</MicrosoftExtensions>
         <Nullable>enable</Nullable>
         <PackRelease>false</PackRelease>
         <PackageIcon>cathode.png</PackageIcon>
