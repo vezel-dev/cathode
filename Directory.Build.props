@@ -18,6 +18,7 @@
         <ImplicitUsings>true</ImplicitUsings>
         <IsPackable>false</IsPackable>
         <IsPublishable>false</IsPublishable>
+        <LanguageStandard>gnu23</LanguageStandard>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <PackRelease>false</PackRelease>
