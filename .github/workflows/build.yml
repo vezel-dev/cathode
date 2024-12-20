@@ -29,6 +29,7 @@ jobs:
           - ubuntu-24.04
           - windows-2019
           - windows-2022
+          - windows-2025
         cfg:
           - Debug
           - Release
