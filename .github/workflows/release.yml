@@ -27,7 +27,7 @@ jobs:
           fetch-depth: 0
           submodules: recursive
       - name: Set up .NET
-        uses: actions/setup-dotnet@v4.1.0
+        uses: actions/setup-dotnet@v4.2.0
       - name: Set up Node.js
         uses: actions/setup-node@v4.1.0
         with:
