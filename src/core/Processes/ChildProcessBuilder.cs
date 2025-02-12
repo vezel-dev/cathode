@@ -89,7 +89,7 @@ public sealed class ChildProcessBuilder
 
         var builder = Clone();
 
-        builder.Arguments = arguments.ToImmutableArray();
+        builder.Arguments = [.. arguments];
 
         return builder;
     }
