@@ -7,6 +7,6 @@
   },
   "msbuild-sdks": {
     "Microsoft.Build.Traversal": "4.1.82",
-    "Vezel.Zig.Sdk": "5.2.12"
+    "Vezel.Zig.Sdk": "6.0.93"
   }
 }
