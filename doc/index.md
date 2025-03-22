@@ -25,6 +25,7 @@ multiplexers, and libraries:
 * [ConEmu](https://conemu.github.io)
 * [Contour](https://contour-terminal.org)
 * [foot](https://codeberg.org/dnkl/foot)
+* [Ghostty](https://ghostty.org)
 * [GNOME Terminal](https://help.gnome.org/users/gnome-terminal/stable)
 * [Guake](http://guake.org)
 * [hterm](https://hterm.org)
