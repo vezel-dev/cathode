@@ -36,6 +36,7 @@ multiplexers, and libraries:
 * [mlterm](http://mlterm.sourceforge.net)
 * [PuTTY](https://www.putty.org)
 * [rxvt-unicode](http://software.schmorp.de/pkg/rxvt-unicode.html)
+* [sakura](https://www.pleyades.net/david/projects/sakura)
 * [Terminal.app](https://support.apple.com/guide/terminal/welcome/mac)
 * [Terminology](https://terminolo.gy)
 * [Tilix](https://gnunn1.github.io/tilix-web)
