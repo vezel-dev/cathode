@@ -103,7 +103,7 @@ static bool is_extended(const struct sigaction *nonnull action)
 {
     assert(action);
 
-    return action->sa_flags & SA_SIGINFO;
+    return action->sa_flags & (int)SA_SIGINFO;
 }
 
 static bool is_default(const struct sigaction *nonnull action)
@@ -236,7 +236,7 @@ TerminalResult cathode_set_mode(bool raw, bool flush)
                 // If a non-default handler already exists, maintain its mask and flags (although we must remove
                 // SA_RESTART as that would defeat the purpose of this whole exercise).
                 ttou.sa_mask = original_ttou.sa_mask;
-                ttou.sa_flags = original_ttou.sa_flags & ~SA_RESTART;
+                ttou.sa_flags = original_ttou.sa_flags & ~(int)SA_RESTART;
             }
 
             // Ensure that we receive full signal information (SA_SIGINFO) so that we can chain to an existing handler.
