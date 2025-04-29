@@ -36,7 +36,7 @@ jobs:
         run: |
           ./cake upload-core-nuget -c Release
       - name: Attest packages
-        uses: actions/attest-build-provenance@v2.2.3
+        uses: actions/attest-build-provenance@v2.3.0
         with:
           subject-path: out/pkg/release/*.nupkg
       - name: Upload artifacts
