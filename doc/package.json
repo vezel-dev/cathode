@@ -5,7 +5,7 @@
     "node": ">=20.0.0"
   },
   "devDependencies": {
-    "markdownlint-cli2": "0.18.0"
+    "markdownlint-cli2": "0.18.1"
   },
   "scripts": {
     "build": "npx markdownlint-cli2"
