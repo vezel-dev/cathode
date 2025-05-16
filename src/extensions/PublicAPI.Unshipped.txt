@@ -36,3 +36,4 @@ Vezel.Cathode.Extensions.Logging.TerminalLoggerProvider.TerminalLoggerProvider(M
 Vezel.Cathode.Extensions.Logging.TerminalLoggerWriter
 Vezel.Cathode.Extensions.Logging.TerminalLoggerWriters
 Vezel.Cathode.Extensions.Logging.TerminalLoggingBuilderExtensions
+virtual Vezel.Cathode.Extensions.Logging.TerminalLoggerWriter.Invoke(Vezel.Cathode.Extensions.Logging.TerminalLoggerOptions! options, Vezel.Cathode.Text.Control.ControlBuilder! builder, in Vezel.Cathode.Extensions.Logging.TerminalLoggerMessage message) -> void
