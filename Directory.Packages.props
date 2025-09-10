@@ -30,7 +30,7 @@
         <PackageVersion Include="Microsoft.CodeAnalysis.CSharp"
                         Version="4.11.0" />
         <PackageVersion Include="Microsoft.Extensions.Hosting"
-                        Version="9.0.8" />
+                        Version="9.0.9" />
         <PackageVersion Include="Microsoft.Extensions.Hosting.Systemd"
                         Version="9.0.8" />
         <PackageVersion Include="Wcwidth"
