@@ -6,7 +6,7 @@
 
     <ItemGroup>
         <GlobalPackageReference Include="DotNet.ReproducibleBuilds"
-                                Version="1.2.25" />
+                                Version="1.2.39" />
         <GlobalPackageReference Include="Microsoft.Build.CopyOnWrite"
                                 Version="1.0.334" />
     </ItemGroup>
