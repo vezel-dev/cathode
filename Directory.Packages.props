@@ -34,6 +34,6 @@
         <PackageVersion Include="Microsoft.Extensions.Hosting.Systemd"
                         Version="9.0.10" />
         <PackageVersion Include="Wcwidth"
-                        Version="3.0.0" />
+                        Version="4.0.1" />
     </ItemGroup>
 </Project>
