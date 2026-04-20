@@ -46,7 +46,7 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@v5.2.0
       - name: Set up Node.js
-        uses: actions/setup-node@v6.3.0
+        uses: actions/setup-node@v6.4.0
         with:
           node-version-file: doc/package.json
       - name: Run Cake
